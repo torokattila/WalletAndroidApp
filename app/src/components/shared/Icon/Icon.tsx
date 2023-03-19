@@ -1,0 +1,31 @@
+import React, { FC } from 'react';
+import { SvgProps } from 'react-native-svg';
+import { Close } from './close';
+import { ErrorTriangle } from './error-triangle';
+import { Eye } from './eye';
+import { EyeOutlined } from './eye-outlined';
+import { SuccessTick } from './success-tick';
+
+type IconType = 'close' | 'error-triangle' | 'eye' | 'eye-outlined' | 'success-tick';
+
+type IconProps = SvgProps & {
+  type: IconType;
+  iconColor?: string;
+};
+
+export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
+  switch (type) {
+    case 'close':
+      return <Close iconColor={iconColor} {...props} />;
+    case 'error-triangle':
+      return <ErrorTriangle iconColor={iconColor} {...props} />;
+    case 'eye':
+      return <Eye iconColor={iconColor} {...props} />;
+    case 'eye-outlined':
+      return <EyeOutlined iconColor={iconColor} {...props} />;
+    case 'success-tick':
+      return <SuccessTick iconColor={iconColor} {...props} />;
+    default:
+      return;
+  }
+};

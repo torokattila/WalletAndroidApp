@@ -1,0 +1,58 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "esModuleInterop": true,
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@styles/*": [
+        "styles/*"
+      ],
+      "@navigation/*": [
+        "navigation/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
+      "@model/*": [
+        "model/*"
+      ],
+      "@core/*": [
+        "core/*"
+      ],
+      "@stores/*": [
+        "stores/*"
+      ],
+    },
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "inlineSources": true,
+    "sourceRoot": "/"
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "typeRoots": [
+    "./types"
+  ]
+}
