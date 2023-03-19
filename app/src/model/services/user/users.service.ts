@@ -1,11 +1,12 @@
 import {
+  addDoc,
+  collection,
   doc,
   documentId,
   DocumentReference,
   getDoc,
   getDocs,
   query,
-  setDoc,
   Timestamp,
   updateDoc,
   where,
@@ -78,54 +79,28 @@ export class UserService extends BaseService<UserModel> {
       return null;
     }
 
-    return userSnapshots[0].data();
+    return userSnapshots.docs[0].data();
   }
 
-  // async createUserWithEmailAndPassword(
-  //   firstname: string,
-  //   lastname: string,
-  //   email: string,
-  //   password: string
-  // ): Promise<User> {
-  //   const user = await this.authService.registration(email, password);
-
-  //   return this.createUser(user.uid, email, password);
-  // }
-
   async createUser(
-    // userId: string,
     email: string,
     password: string,
     firstname: string,
     lastname: string
-    // fullname?: { firstname: string; lastname: string }
   ): Promise<User> {
-    // const id = await this.getUserId();
-    // const user = await this.getUserByUserId(id);
-    const savedUser = await this.authService.registration(email, password);
-    console.log('savedUser: ', savedUser);
-    const user = await this.getUserByUserId(savedUser.uid);
-    console.log('user: ', user);
-    const userRef = doc(getDB(), 'users', user.id) as DocumentReference<UserModel>;
+    await this.authService.registration(email, password);
 
-    if (user) {
-      await updateDoc(userRef, {
-        userIds: user?.userIds ? [...user.userIds, user.userId] : [user.userId],
-      });
-    } else {
-      const userData: Partial<UserModel> = {
-        userIds: [user.userId],
-        email,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
-      };
+    const usersCollectionRef = collection(getDB(), 'users');
+    const insertedUser = await addDoc(usersCollectionRef, {
+      email,
+      firstname,
+      lastname,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    });
+    await this.setUserId(insertedUser?.id);
 
-      userData.firstname = firstname;
-      userData.lastname = lastname;
-
-      await setDoc(userRef, userData);
-    }
-
+    const userRef = doc(getDB(), 'users', insertedUser?.id) as DocumentReference<UserModel>;
     const userSnapshot = await getDoc(userRef);
 
     return userSnapshot.data();

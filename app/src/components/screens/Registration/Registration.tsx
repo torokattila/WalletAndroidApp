@@ -117,6 +117,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                   setEmail(e.nativeEvent.text)
                 }
                 hasError={!!errors.email}
+                autoCapitalize="none"
                 placeholder={errors.email ? errors.email : i18n.t('EmailAddressLabel')}
                 placeholderTextColor={errors.email ? theme.colors.red : theme.colors.purple[200]}
                 returnKeyType="next"
