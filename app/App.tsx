@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { StatusBar } from 'react-native';
+import { RootSiblingParent } from 'react-native-root-siblings';
 import i18n from 'i18n-js';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { AuthProvider } from '@hooks/useAuth';
@@ -37,29 +38,31 @@ const App = (): JSX.Element => {
 
   return (
     <ThemeProvider>
-      <NavigationContainer
-        ref={navigationRef}
-        onReady={() => {
-          routeNameRef.current = navigationRef?.getCurrentRoute()?.name;
-        }}
-        onStateChange={handleNavigationChange}
-      >
-        <AuthProvider>
-          <UserIdProvider>
-            <UserProvider>
-              <StatusBar barStyle="default" animated={true} />
-              <Navigation />
-            </UserProvider>
-          </UserIdProvider>
-          <ToastNotification
-            isVisible={toastNotification.visible}
-            type={toastNotification.toastType}
-            title={toastNotification.toastTitle}
-            subtitle={toastNotification.toastSubtitle}
-            onHideToast={toastNotification.hide}
-          />
-        </AuthProvider>
-      </NavigationContainer>
+      <RootSiblingParent>
+        <NavigationContainer
+          ref={navigationRef}
+          onReady={() => {
+            routeNameRef.current = navigationRef?.getCurrentRoute()?.name;
+          }}
+          onStateChange={handleNavigationChange}
+        >
+          <AuthProvider>
+            <UserIdProvider>
+              <UserProvider>
+                <StatusBar barStyle="default" animated={true} />
+                <Navigation />
+              </UserProvider>
+            </UserIdProvider>
+            <ToastNotification
+              isVisible={toastNotification.visible}
+              type={toastNotification.toastType}
+              title={toastNotification.toastTitle}
+              subtitle={toastNotification.toastSubtitle}
+              onHideToast={toastNotification.hide}
+            />
+          </AuthProvider>
+        </NavigationContainer>
+      </RootSiblingParent>
     </ThemeProvider>
   );
 };

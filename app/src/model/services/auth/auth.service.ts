@@ -10,19 +10,10 @@ export class AuthService {
 
     const { user } = userCredential;
 
-    if (user && !user.emailVerified) {
-      await firebase.sendEmailVerification(user);
-    }
-
     return user;
   }
 
-  async registration(
-    firstname: string,
-    lastname: string,
-    email: string,
-    password: string
-  ): Promise<firebase.User> {
+  async registration(email: string, password: string): Promise<firebase.User> {
     const userCredential = await firebase.createUserWithEmailAndPassword(
       this.auth,
       email,
@@ -30,10 +21,6 @@ export class AuthService {
     );
 
     const { user } = userCredential;
-
-    if (user && !user.emailVerified) {
-      await firebase.sendEmailVerification(user);
-    }
 
     return user;
   }
@@ -82,12 +69,6 @@ export class AuthService {
         throw error;
       }
     }
-  }
-
-  async sendVerificationEmail(): Promise<void> {
-    const user = await this.getCurrentUser();
-
-    await firebase.sendEmailVerification(user);
   }
 
   private async deleteUser(userId: string): Promise<void> {

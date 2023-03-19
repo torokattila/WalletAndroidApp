@@ -81,44 +81,47 @@ export class UserService extends BaseService<UserModel> {
     return userSnapshots[0].data();
   }
 
-  async createUserWithEmailAndPassword(
-    firstname: string,
-    lastname: string,
-    email: string,
-    password: string
-  ): Promise<User> {
-    const user = await this.authService.registration(firstname, lastname, email, password);
+  // async createUserWithEmailAndPassword(
+  //   firstname: string,
+  //   lastname: string,
+  //   email: string,
+  //   password: string
+  // ): Promise<User> {
+  //   const user = await this.authService.registration(email, password);
 
-    return this.createUser(user.uid, email);
-  }
+  //   return this.createUser(user.uid, email, password);
+  // }
 
   async createUser(
-    userId: string,
+    // userId: string,
     email: string,
-    fullname?: { firstname: string; lastname: string }
+    password: string,
+    firstname: string,
+    lastname: string
+    // fullname?: { firstname: string; lastname: string }
   ): Promise<User> {
-    const id = await this.getUserId();
-    const user = await this.getUserByUserId(id);
-    const userRef = doc(getDB(), 'users', id) as DocumentReference<UserModel>;
+    // const id = await this.getUserId();
+    // const user = await this.getUserByUserId(id);
+    const savedUser = await this.authService.registration(email, password);
+    console.log('savedUser: ', savedUser);
+    const user = await this.getUserByUserId(savedUser.uid);
+    console.log('user: ', user);
+    const userRef = doc(getDB(), 'users', user.id) as DocumentReference<UserModel>;
 
     if (user) {
       await updateDoc(userRef, {
-        userIds: user?.userIds ? [...user.userIds, userId] : [userId],
+        userIds: user?.userIds ? [...user.userIds, user.userId] : [user.userId],
       });
     } else {
       const userData: Partial<UserModel> = {
-        userIds: [userId],
+        userIds: [user.userId],
         email,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
       };
 
-      if (fullname) {
-        const { firstname, lastname } = fullname;
-
-        userData.firstname = firstname;
-        userData.lastname = lastname;
-      }
+      userData.firstname = firstname;
+      userData.lastname = lastname;
 
       await setDoc(userRef, userData);
     }
@@ -144,7 +147,7 @@ export class UserService extends BaseService<UserModel> {
   }
 
   private async getUserId() {
-    const STORAGE_KEY = 'cliendId';
+    const STORAGE_KEY = 'clientId';
 
     try {
       let userId = await AsyncStorage.getItem(STORAGE_KEY);

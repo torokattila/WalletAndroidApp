@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useRef } from 'react';
 import i18n from 'i18n-js';
 import {
   KeyboardAvoidingView,
@@ -44,13 +44,18 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
     setPassword,
     isPassword,
     setIsPassword,
-    confirmPassword,
-    setConfirmPassword,
-    isConfirmPassword,
-    setIsConfirmPassword,
+    passwordConfirm,
+    setPasswordConfirm,
+    isPasswordConfirm,
+    setIsPasswordConfirm,
     handleSubmit,
     errors,
   } = useRegistration();
+
+  const lastnameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const passwordConfirmRef = useRef(null);
 
   return (
     <Container>
@@ -86,8 +91,12 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 placeholderTextColor={
                   errors.firstname ? theme.colors.red : theme.colors.purple[200]
                 }
+                returnKeyType="next"
+                blurOnSubmit={false}
+                onSubmitEditing={() => lastnameRef.current.focus()}
               />
               <StyledTextInput
+                ref={lastnameRef}
                 inputMode="text"
                 value={lastname}
                 onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
@@ -96,8 +105,12 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 hasError={!!errors.lastname}
                 placeholder={errors.lastname ? errors.lastname : i18n.t('LastNameLabel')}
                 placeholderTextColor={errors.lastname ? theme.colors.red : theme.colors.purple[200]}
+                returnKeyType="next"
+                blurOnSubmit={false}
+                onSubmitEditing={() => emailRef.current.focus()}
               />
               <StyledTextInput
+                ref={emailRef}
                 inputMode="email"
                 value={email}
                 onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
@@ -106,9 +119,13 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 hasError={!!errors.email}
                 placeholder={errors.email ? errors.email : i18n.t('EmailAddressLabel')}
                 placeholderTextColor={errors.email ? theme.colors.red : theme.colors.purple[200]}
+                returnKeyType="next"
+                blurOnSubmit={false}
+                onSubmitEditing={() => passwordRef.current.focus()}
               />
               <View>
                 <StyledTextInput
+                  ref={passwordRef}
                   secureTextEntry={isPassword}
                   value={password}
                   onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
@@ -119,6 +136,9 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                   placeholderTextColor={
                     errors.password ? theme.colors.red : theme.colors.purple[200]
                   }
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => passwordConfirmRef.current.focus()}
                 />
                 <StyledIconButton onPress={() => setIsPassword(!isPassword)}>
                   <Icon
@@ -129,10 +149,11 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
               </View>
               <View>
                 <StyledTextInput
-                  secureTextEntry={isConfirmPassword}
-                  value={confirmPassword}
+                  ref={passwordConfirmRef}
+                  secureTextEntry={isPasswordConfirm}
+                  value={passwordConfirm}
                   onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                    setConfirmPassword(e.nativeEvent.text)
+                    setPasswordConfirm(e.nativeEvent.text)
                   }
                   hasError={!!errors.passwordConfirm}
                   placeholder={
@@ -142,9 +163,9 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                     errors.passwordConfirm ? theme.colors.red : theme.colors.purple[200]
                   }
                 />
-                <StyledIconButton onPress={() => setIsConfirmPassword(!isConfirmPassword)}>
+                <StyledIconButton onPress={() => setIsPasswordConfirm(!isPasswordConfirm)}>
                   <Icon
-                    type={isConfirmPassword ? 'eye' : 'eye-outlined'}
+                    type={isPasswordConfirm ? 'eye' : 'eye-outlined'}
                     iconColor={theme.colors.purple[100]}
                   />
                 </StyledIconButton>

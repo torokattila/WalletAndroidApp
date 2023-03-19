@@ -19,6 +19,9 @@ export const Hungarian = {
     PasswordConfirmRequired: 'A jelszó megerősítése kötelező!',
     PasswordsDoNotMatch: 'A jelszavak nem egyeznek!',
   },
+  ToastNotification: {
+    SomethingWentWrong: 'Valami hiba történt, kérjük próbálja újra!',
+  },
 };
 
 export const English = {
@@ -41,5 +44,8 @@ export const English = {
     PasswordRequired: 'Password is requried!',
     PasswordConfirmRequired: 'Password confirm is required!',
     PasswordsDoNotMatch: 'Passwords do not match!',
+  },
+  ToastNotification: {
+    SomethingWentWrong: 'Something went wrong, please try again!',
   },
 };

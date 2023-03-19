@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import * as Yup from 'yup';
 import i18n from 'i18n-js';
+import { UserService } from '@model/services';
+import { useToastNotificationStore } from '@stores/toastNotification.store';
 
 const useRegistration = () => {
   const [firstname, setFirstname] = useState('');
@@ -8,16 +10,19 @@ const useRegistration = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPassword, setIsPassword] = useState(true);
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isConfirmPassword, setIsConfirmPassword] = useState(true);
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [isPasswordConfirm, setIsPasswordConfirm] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const toast = useToastNotificationStore();
+  const userService = new UserService();
 
   const registeredUser = {
     firstname,
     lastname,
     email,
     password,
-    confirmPassword,
+    passwordConfirm,
   };
 
   const RegistrationSchema = Yup.object().shape({
@@ -52,7 +57,20 @@ const useRegistration = () => {
     const isFormVerified = await verifyForm();
 
     if (isFormVerified) {
-    } else {
+      try {
+        await userService.createUser(email, password, firstname, lastname);
+
+        toast.show({
+          type: 'success',
+          title: 'Success!',
+        });
+      } catch (error) {
+        console.error('error: ', error);
+        toast.show({
+          type: 'error',
+          title: i18n.t('ToastNotification.SomethingWentWrong'),
+        });
+      }
     }
   };
 
@@ -67,10 +85,10 @@ const useRegistration = () => {
     setPassword,
     isPassword,
     setIsPassword,
-    confirmPassword,
-    setConfirmPassword,
-    isConfirmPassword,
-    setIsConfirmPassword,
+    passwordConfirm,
+    setPasswordConfirm,
+    isPasswordConfirm,
+    setIsPasswordConfirm,
     errors,
     handleSubmit,
   };

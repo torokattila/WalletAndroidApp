@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useRef } from 'react';
 import i18n from 'i18n-js';
 import {
   KeyboardAvoidingView,
@@ -44,6 +44,8 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
     errors,
   } = useLogin();
 
+  const passwordRef = useRef(null);
+
   return (
     <Container contentContainerStyle={scrollViewStyle}>
       <StyledLinearGradient
@@ -71,9 +73,13 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
                 inputMode="email"
                 placeholder={errors.email ? errors.email : i18n.t('EmailAddressLabel')}
                 placeholderTextColor={errors.email ? theme.colors.red : theme.colors.purple[200]}
+                returnKeyType="next"
+                blurOnSubmit={false}
+                onSubmitEditing={() => passwordRef.current.focus()}
               />
               <View>
                 <StyledTextInput
+                  ref={passwordRef}
                   value={password}
                   onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
                     setPassword(e.nativeEvent.text)
