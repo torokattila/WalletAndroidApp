@@ -59,17 +59,33 @@ const useRegistration = () => {
     if (isFormVerified) {
       try {
         await userService.createUser(email, password, firstname, lastname);
-
-        toast.show({
-          type: 'success',
-          title: 'Success!',
-        });
       } catch (error) {
-        console.error('error: ', error);
-        toast.show({
-          type: 'error',
-          title: i18n.t('ToastNotification.SomethingWentWrong'),
-        });
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            toast.show({
+              type: 'error',
+              title: i18n.t('ToastNotification.EmailAlreadyExists'),
+            });
+            return;
+          case 'auth/invalid-email':
+            toast.show({
+              type: 'error',
+              title: i18n.t('ToastNotification.InvalidEmailTitle'),
+            });
+            return;
+          case 'auth/weak-password':
+            toast.show({
+              type: 'error',
+              title: i18n.t('ToastNotification.PasswordTooShortTitle'),
+            });
+            return;
+          default:
+            toast.show({
+              type: 'error',
+              title: i18n.t('ToastNotification.SomethingWentWrong'),
+            });
+            return;
+        }
       }
     }
   };

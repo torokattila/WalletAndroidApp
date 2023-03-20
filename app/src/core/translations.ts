@@ -20,6 +20,9 @@ export const Hungarian = {
     PasswordsDoNotMatch: 'A jelszavak nem egyeznek!',
   },
   ToastNotification: {
+    EmailAlreadyExists: 'Már létezik felhasználó ilyen email címmel!',
+    InvalidEmailTitle: 'Az email cím formátuma nem megfelelő!',
+    PasswordTooShortTitle: 'A jelszónak legalább 6 karakter hosszúnak kell lennie!',
     SomethingWentWrong: 'Valami hiba történt, kérjük próbálja újra!',
   },
 };
@@ -46,6 +49,9 @@ export const English = {
     PasswordsDoNotMatch: 'Passwords do not match!',
   },
   ToastNotification: {
+    EmailAlreadyExists: 'A User with this email address already exists!',
+    InvalidEmailTitle: 'Incorrect email address!',
+    PasswordTooShortTitle: 'The password must be at least 6 characters long!',
     SomethingWentWrong: 'Something went wrong, please try again!',
   },
 };
