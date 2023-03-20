@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 export const Eye: FC<{ iconColor: string }> = ({ iconColor, ...props }) => (
-  <Svg width={26} height={26} {...props}>
+  <Svg width={26} height={26} viewBox="0 0 26 26" {...props}>
     <Path
       stroke="none"
       fillRule="nonzero"

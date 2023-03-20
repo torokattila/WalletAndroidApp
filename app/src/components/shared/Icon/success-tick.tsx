@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 export const SuccessTick: FC<{ iconColor: string }> = ({ iconColor, ...props }) => (
-  <Svg width={28} height={28} {...props}>
+  <Svg width={28} height={28} viewBox="0 0 28 28" {...props}>
     <Path
       stroke="none"
       fillRule="nonzero"
