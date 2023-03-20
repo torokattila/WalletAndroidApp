@@ -23,6 +23,7 @@ export const Hungarian = {
     EmailAlreadyExists: 'Már létezik felhasználó ilyen email címmel!',
     InvalidEmailTitle: 'Az email cím formátuma nem megfelelő!',
     PasswordTooShortTitle: 'A jelszónak legalább 6 karakter hosszúnak kell lennie!',
+    InvalidCredentialsTitle: 'Invalid credentials',
     SomethingWentWrong: 'Valami hiba történt, kérjük próbálja újra!',
   },
 };
@@ -52,6 +53,7 @@ export const English = {
     EmailAlreadyExists: 'A User with this email address already exists!',
     InvalidEmailTitle: 'Incorrect email address!',
     PasswordTooShortTitle: 'The password must be at least 6 characters long!',
+    InvalidCredentialsTitle: 'Invalid credentials',
     SomethingWentWrong: 'Something went wrong, please try again!',
   },
 };

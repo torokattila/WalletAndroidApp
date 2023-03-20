@@ -59,6 +59,12 @@ const useRegistration = () => {
     if (isFormVerified) {
       try {
         await userService.createUser(email, password, firstname, lastname);
+        setFirstname('');
+        setLastname('');
+        setPassword('');
+        setPasswordConfirm('');
+        setIsPassword(true);
+        setIsPasswordConfirm(true);
       } catch (error) {
         switch (error.code) {
           case 'auth/email-already-in-use':
