@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
           .then(() => {
             unsubscribe();
 
-            if (user.emailVerified) {
+            if (user) {
               setIsLoggedIn(true);
             } else {
               setIsLoggedIn(false);
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
       (user) => {
         setError(undefined);
 
-        if (user && user.emailVerified) {
+        if (user) {
           setIsLoggedIn(true);
         } else {
           setIsLoggedIn(false);
