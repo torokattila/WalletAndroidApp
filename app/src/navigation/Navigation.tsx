@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { User } from '@model/domain/user';
 import { useUser } from '@hooks/useUser';
 import { AuthStack } from './AuthStack';
+import { TabStack } from './Tabs';
 
 export type RootStackParams = {
   Root: {};
@@ -35,6 +36,14 @@ export const Navigation: FC = () => {
       <RootStack.Screen
         name="Auth"
         component={AuthStack}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <RootStack.Screen
+        name="Root"
+        component={TabStack}
         options={{
           headerShown: false,
           gestureEnabled: false,

@@ -14,6 +14,7 @@ declare module 'styled-components' {
       green: ColorRange;
       red: string;
       white: string;
+      black: string;
     };
   }
 }
@@ -31,5 +32,6 @@ export const theme: DefaultTheme = {
     },
     red: '#E23D3D',
     white: '#fff',
+    black: '#000',
   },
 };
