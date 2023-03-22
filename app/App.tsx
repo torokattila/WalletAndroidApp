@@ -13,6 +13,7 @@ import { getLocale } from '@core/translation-utils';
 import { ThemeProvider } from '@styles/provider';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { ToastNotification } from '@components/shared';
+import { NavigationInterceptorProvider } from '@hooks/useNavigationInterceptor';
 
 const App = (): JSX.Element => {
   const navigationRef = useNavigationContainerRef();
@@ -49,8 +50,10 @@ const App = (): JSX.Element => {
           <AuthProvider>
             <UserIdProvider>
               <UserProvider>
-                <StatusBar barStyle="default" animated={true} />
-                <Navigation />
+                <NavigationInterceptorProvider>
+                  <StatusBar barStyle="default" animated={true} />
+                  <Navigation />
+                </NavigationInterceptorProvider>
               </UserProvider>
             </UserIdProvider>
             <ToastNotification

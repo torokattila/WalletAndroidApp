@@ -51,8 +51,6 @@ const useLogin = () => {
         setPassword('');
         setIsPassword(true);
       } catch (error) {
-        console.log(error.code);
-
         switch (error.code) {
           case 'auth/user-not-found':
           case 'auth/wrong-password':

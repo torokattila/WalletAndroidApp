@@ -69,6 +69,12 @@ export class UserService extends BaseService<UserModel> {
       await this.setUserId(userSnapshots.docs[0].id);
       return userSnapshots.docs[0].data();
     }
+
+    const resultUser = userSnapshots.docs[0].data();
+
+    await this.setUserId(resultUser.id);
+
+    return resultUser;
   }
 
   async getUserByUserId(userId: string): Promise<User> {
@@ -88,7 +94,7 @@ export class UserService extends BaseService<UserModel> {
     firstname: string,
     lastname: string
   ): Promise<User> {
-    await this.authService.registration(email, password);
+    const registeredUser = await this.authService.registration(email, password);
 
     const usersCollectionRef = collection(getDB(), 'users');
     const insertedUser = await addDoc(usersCollectionRef, {
@@ -97,6 +103,7 @@ export class UserService extends BaseService<UserModel> {
       lastname,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
+      userIds: [registeredUser.uid],
     });
     await this.setUserId(insertedUser?.id);
 

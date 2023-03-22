@@ -23,7 +23,7 @@ export const Hungarian = {
     EmailAlreadyExists: 'Már létezik felhasználó ilyen email címmel!',
     InvalidEmailTitle: 'Az email cím formátuma nem megfelelő!',
     PasswordTooShortTitle: 'A jelszónak legalább 6 karakter hosszúnak kell lennie!',
-    InvalidCredentialsTitle: 'Invalid credentials',
+    InvalidCredentialsTitle: 'Az email vagy a jelszó nem megfelelő',
     SomethingWentWrong: 'Valami hiba történt, kérjük próbálja újra!',
   },
 };
