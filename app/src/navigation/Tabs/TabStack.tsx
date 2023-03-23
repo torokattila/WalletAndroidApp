@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { theme } from '@styles/theme';
 import { Home, Incomes, Profile, Purchases } from '@components/screens';
+import { TabIcon } from '@components/TabIcon';
 
 export type TabStackParams = {
   Home: {};
@@ -46,7 +47,14 @@ export const TabStack: FC = () => (
       paddingBottom: 50,
     }}
   >
-    <BottomTabs.Screen name="Home" component={Home} />
+    <BottomTabs.Screen
+      name="Home"
+      component={Home}
+      options={{
+        // eslint-disable-next-line react/no-unstable-nested-components
+        tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="home" />,
+      }}
+    />
     <BottomTabs.Screen name="Profile" component={Profile} />
     <BottomTabs.Screen name="Incomes" component={Incomes} />
     <BottomTabs.Screen name="Purchases" component={Purchases} />

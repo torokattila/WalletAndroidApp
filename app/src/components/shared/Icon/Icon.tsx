@@ -4,9 +4,16 @@ import { Close } from './close';
 import { ErrorTriangle } from './error-triangle';
 import { Eye } from './eye';
 import { EyeOutlined } from './eye-outlined';
+import { Home } from './home';
 import { SuccessTick } from './success-tick';
 
-type IconType = 'close' | 'error-triangle' | 'eye' | 'eye-outlined' | 'success-tick';
+export type IconType =
+  | 'close'
+  | 'error-triangle'
+  | 'eye'
+  | 'eye-outlined'
+  | 'success-tick'
+  | 'home';
 
 type IconProps = SvgProps & {
   type: IconType;
@@ -23,6 +30,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Eye iconColor={iconColor} {...props} />;
     case 'eye-outlined':
       return <EyeOutlined iconColor={iconColor} {...props} />;
+    case 'home':
+      return <Home iconColor={iconColor} {...props} />;
     case 'success-tick':
       return <SuccessTick iconColor={iconColor} {...props} />;
     default:
