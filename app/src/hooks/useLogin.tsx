@@ -47,9 +47,9 @@ const useLogin = () => {
     if (isFormVerified) {
       try {
         await authService.loginWithEmailAndPassword(email, password);
-        setEmail('');
-        setPassword('');
-        setIsPassword(true);
+        // setEmail('');
+        // setPassword('');
+        // setIsPassword(true);
       } catch (error) {
         switch (error.code) {
           case 'auth/user-not-found':

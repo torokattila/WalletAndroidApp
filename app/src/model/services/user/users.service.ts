@@ -7,6 +7,7 @@ import {
   getDoc,
   getDocs,
   query,
+  QueryDocumentSnapshot,
   Timestamp,
   updateDoc,
   where,
@@ -70,7 +71,7 @@ export class UserService extends BaseService<UserModel> {
       return userSnapshots.docs[0].data();
     }
 
-    const resultUser = userSnapshots.docs[0].data();
+    const resultUser = this.format(userSnapshots.docs[0]);
 
     await this.setUserId(resultUser.id);
 
@@ -154,5 +155,11 @@ export class UserService extends BaseService<UserModel> {
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  private format(userSnapsot: QueryDocumentSnapshot<UserModel>): User {
+    const user = userSnapsot.data();
+
+    return new User({ ...user, id: userSnapsot.id });
   }
 }
