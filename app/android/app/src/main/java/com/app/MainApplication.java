@@ -8,7 +8,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
-import java.util.List;
+import java.util.*;
+import com.swmansion.reanimated.ReanimatedPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -47,6 +48,10 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;
+  }
+
+  protected List<ReactPackage> getPackages() {
+    return Arrays.<ReactPackage>asList(new ReanimatedPackage());
   }
 
   @Override

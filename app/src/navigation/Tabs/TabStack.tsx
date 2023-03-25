@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { theme } from '@styles/theme';
 import { Home, Incomes, Profile, Purchases } from '@components/screens';
 import { TabIcon } from '@components/TabIcon';
+import { TabButton } from '@components/TabButton';
 
 export type TabStackParams = {
   Home: {};
@@ -52,6 +53,7 @@ export const TabStack: FC = () => (
       name="Home"
       component={Home}
       options={{
+        tabBarButton: (props) => <TabButton {...props} />,
         tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="home" />,
       }}
     />
@@ -59,6 +61,7 @@ export const TabStack: FC = () => (
       name="Profile"
       component={Profile}
       options={{
+        tabBarButton: (props) => <TabButton {...props} />,
         tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="profile" />,
       }}
     />
@@ -66,6 +69,7 @@ export const TabStack: FC = () => (
       name="Incomes"
       component={Incomes}
       options={{
+        tabBarButton: (props) => <TabButton {...props} />,
         tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="income" />,
       }}
     />
@@ -73,6 +77,7 @@ export const TabStack: FC = () => (
       name="Purchases"
       component={Purchases}
       options={{
+        tabBarButton: (props) => <TabButton {...props} />,
         tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="purchase" />,
       }}
     />
