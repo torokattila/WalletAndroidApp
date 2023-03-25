@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React, { FC } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { theme } from '@styles/theme';
@@ -51,12 +52,29 @@ export const TabStack: FC = () => (
       name="Home"
       component={Home}
       options={{
-        // eslint-disable-next-line react/no-unstable-nested-components
         tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="home" />,
       }}
     />
-    <BottomTabs.Screen name="Profile" component={Profile} />
-    <BottomTabs.Screen name="Incomes" component={Incomes} />
-    <BottomTabs.Screen name="Purchases" component={Purchases} />
+    <BottomTabs.Screen
+      name="Profile"
+      component={Profile}
+      options={{
+        tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="profile" />,
+      }}
+    />
+    <BottomTabs.Screen
+      name="Incomes"
+      component={Incomes}
+      options={{
+        tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="income" />,
+      }}
+    />
+    <BottomTabs.Screen
+      name="Purchases"
+      component={Purchases}
+      options={{
+        tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="purchase" />,
+      }}
+    />
   </BottomTabs.Navigator>
 );
