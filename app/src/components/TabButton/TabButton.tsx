@@ -33,8 +33,8 @@ export const TabButton: FC<BottomTabBarButtonProps> = ({ children, ...props }) =
   }, [props.accessibilityState.selected]);
 
   return (
-    <TouchableOpacity {...props}>
-      <Container style={contentStyle}>
+    <TouchableOpacity style={contentStyle} {...props}>
+      <Container>
         <TabButtonHighlight active={props.accessibilityState.selected} style={backgroundStyle} />
         {children}
       </Container>

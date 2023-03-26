@@ -14,6 +14,5 @@ export const TabButtonHighlight = styled(Animated.View)<{ active: boolean }>`
   position: absolute;
   width: 54px;
   height: 54px;
-  background-color: ${({ active, theme }) => (active ? theme.colors.purple[100] : 'transparent')};
-  border-radius: 10px;
+  border-radius: 20px;
 `;
