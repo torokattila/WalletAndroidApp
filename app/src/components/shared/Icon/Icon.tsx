@@ -9,6 +9,7 @@ import { Income } from './income';
 import { Profile } from './profile';
 import { Purchase } from './purchase';
 import { SuccessTick } from './success-tick';
+import { Visa } from './visa';
 
 export type IconType =
   | 'close'
@@ -16,10 +17,11 @@ export type IconType =
   | 'eye'
   | 'eye-outlined'
   | 'income'
+  | 'home'
   | 'profile'
   | 'purchase'
   | 'success-tick'
-  | 'home';
+  | 'visa';
 
 type IconProps = SvgProps & {
   type: IconType;
@@ -46,6 +48,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Purchase iconColor={iconColor} {...props} />;
     case 'success-tick':
       return <SuccessTick iconColor={iconColor} {...props} />;
+    case 'visa':
+      return <Visa iconColor={iconColor} {...props} />;
     default:
       return;
   }
