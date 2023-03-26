@@ -7,6 +7,7 @@ import {
   getDoc,
   getDocs,
   query,
+  Timestamp,
   where,
 } from 'firebase/firestore';
 import { getDB } from '@model/firebase-config';
@@ -18,6 +19,8 @@ export type IncomeModel = {
   id: string;
   userId: string;
   amount: number;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 };
 
 export class IncomeService extends BaseService<IncomeModel> {
@@ -33,6 +36,8 @@ export class IncomeService extends BaseService<IncomeModel> {
     const insertedIncome = await addDoc(incomesCollectionRef, {
       userId,
       amount,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
     });
 
     const currentUser = await this.userService.getUserByUserId(userId);

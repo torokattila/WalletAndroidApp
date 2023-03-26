@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
+import { Container } from './Incomes.styles';
 
 export const Incomes: FC = () => (
-  <View>
+  <Container>
     <Text>Incomes</Text>
-  </View>
+  </Container>
 );
