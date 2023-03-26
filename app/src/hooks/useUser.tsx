@@ -10,6 +10,7 @@ import { User } from '@model/domain';
 import { UserService } from '@model/services';
 import { useUserId } from './useUserId';
 import { useAuth } from './useAuth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type UserContextProps = {
   user: User;
@@ -34,6 +35,8 @@ const UserContext = createContext<UserContextProps>({
   retry: () => Promise.resolve(),
 });
 
+const STORAGE_KEY = 'clientId';
+
 export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
   const userService = new UserService();
 
@@ -49,7 +52,8 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     setError(undefined);
 
     try {
-      const currentUser = await userService.getCurrentUser();
+      const id = await AsyncStorage.getItem(STORAGE_KEY);
+      const currentUser = await userService.getUserByUserId(id);
 
       setUser(currentUser);
 
@@ -77,6 +81,7 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   useEffect(() => {
+    fetchUser();
     if (!isAuthLoading && isLoggedIn) {
       fetchUser();
     } else if (!isAuthLoading) {

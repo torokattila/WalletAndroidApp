@@ -25,7 +25,6 @@ export const NavigationInterceptorProvider = ({ children }) => {
   const [redirectPath, setRedirectPath] = useState<Redirect>({
     routes: [{ name: 'Root' }],
   });
-  const [prevState, setPrevState] = useState(user);
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
   const redirect = () => {
@@ -41,12 +40,7 @@ export const NavigationInterceptorProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (prevState?.id !== user?.id) {
-      setPrevState(user);
-      setRedirectPath({ routes: [{ name: 'Root' }] });
-
-      user && redirect();
-    }
+    user && redirect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, redirectPath]);
 
