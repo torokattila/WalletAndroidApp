@@ -52,8 +52,12 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     setError(undefined);
 
     try {
-      const id = await AsyncStorage.getItem(STORAGE_KEY);
-      const currentUser = await userService.getUserByUserId(id);
+      let currentUser: User = await userService.getCurrentUser();
+
+      if (!currentUser) {
+        const id = await AsyncStorage.getItem(STORAGE_KEY);
+        currentUser = await userService.getUserByUserId(id);
+      }
 
       setUser(currentUser);
 

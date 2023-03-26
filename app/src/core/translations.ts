@@ -26,6 +26,7 @@ export const Hungarian = {
     InvalidCredentialsTitle: 'Az email vagy a jelszó nem megfelelő',
     SomethingWentWrong: 'Valami hiba történt, kérjük próbálja újra!',
   },
+  SignOut: 'Kijelentkezés',
 };
 
 export const English = {
@@ -56,4 +57,5 @@ export const English = {
     InvalidCredentialsTitle: 'Invalid credentials',
     SomethingWentWrong: 'Something went wrong, please try again!',
   },
+  SignOut: 'Sign out',
 };

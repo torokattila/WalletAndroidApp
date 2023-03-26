@@ -1,6 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as firebase from 'firebase/auth';
 import { deleteDoc, getDocs, query, where } from 'firebase/firestore';
 import { getApp, getCollection } from '../../firebase-config';
+
+const STORAGE_KEY = 'clientId';
 
 export class AuthService {
   private readonly auth: firebase.Auth = firebase.getAuth(getApp());
@@ -45,7 +48,12 @@ export class AuthService {
   }
 
   async signOut(): Promise<void> {
-    await firebase.signOut(this.auth);
+    try {
+      await AsyncStorage.removeItem(STORAGE_KEY);
+      await firebase.signOut(this.auth);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async changePassword(oldPassword: string, newPassword: string): Promise<void> {
