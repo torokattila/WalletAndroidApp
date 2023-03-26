@@ -13,7 +13,7 @@ import { CreditCard } from '@components/CreditCard';
 
 export const Home: FC = () => {
   const { user } = useUser();
-  const localizedName = getLocalizedName(user.lastname, user.firstname);
+  const localizedName = getLocalizedName(user?.lastname, user?.firstname);
 
   return (
     <Container contentContainerStyle={scrollViewStyle}>
@@ -24,10 +24,10 @@ export const Home: FC = () => {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       >
-        <WelcomeText>Hello {user.firstname}!</WelcomeText>
+        <WelcomeText>Hello {user?.firstname}!</WelcomeText>
 
         <ContentContainer>
-          <CreditCard name={localizedName} />
+          <CreditCard name={localizedName} balance={user?.balance} />
         </ContentContainer>
       </StyledLinearGradient>
     </Container>

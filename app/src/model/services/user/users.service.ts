@@ -26,6 +26,7 @@ export type UserModel = {
   email: string;
   lastname: string;
   firstname: string;
+  balance: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 };
@@ -102,6 +103,7 @@ export class UserService extends BaseService<UserModel> {
       email,
       firstname,
       lastname,
+      balance: 0,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
       userIds: [registeredUser.uid],

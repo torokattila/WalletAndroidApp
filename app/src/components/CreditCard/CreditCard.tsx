@@ -12,6 +12,7 @@ import {
 
 type CreditCardProps = {
   name: string;
+  balance: number;
 };
 
 const cardShadow = {
@@ -22,12 +23,12 @@ const cardShadow = {
   shadowRadius: 15,
 };
 
-export const CreditCard: FC<CreditCardProps> = ({ name }) => (
+export const CreditCard: FC<CreditCardProps> = ({ name, balance }) => (
   <Container colors={['#4547B8', '#8E65F7']} useAngle angle={140} style={cardShadow}>
     <VisaLogoContainer>
       <Icon type="visa" iconColor={theme.colors.white} />
     </VisaLogoContainer>
-    <Balance>0 Ft</Balance>
+    <Balance>{balance} Ft</Balance>
     <CardNumber>0000 1111 2222 3333</CardNumber>
     <CardName>{name}</CardName>
     <CardDate>00/00</CardDate>
