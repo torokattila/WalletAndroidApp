@@ -59,7 +59,9 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
         currentUser = await userService.getUserByUserId(id);
       }
 
-      setUser(currentUser);
+      if (currentUser) {
+        setUser(currentUser);
+      }
 
       if (!!user?.id && user.id !== userId) {
         setUserId(currentUser.id);
@@ -86,12 +88,6 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     fetchUser();
-    if (!isAuthLoading && isLoggedIn) {
-      fetchUser();
-    } else if (!isAuthLoading) {
-      setUser(null);
-      setIsLoading(false);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn, isAuthLoading]);
 
