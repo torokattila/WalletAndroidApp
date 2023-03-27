@@ -21,6 +21,7 @@ export type IncomeModel = {
   amount: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  title?: string;
 };
 
 export class IncomeService extends BaseService<IncomeModel> {
@@ -31,11 +32,12 @@ export class IncomeService extends BaseService<IncomeModel> {
     this.userService = new UserService();
   }
 
-  async createIncome(userId: string, amount: number): Promise<Income> {
+  async createIncome(userId: string, amount: number, title: string): Promise<Income> {
     const incomesCollectionRef = collection(getDB(), 'incomes');
     const insertedIncome = await addDoc(incomesCollectionRef, {
       userId,
       amount,
+      title,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     });

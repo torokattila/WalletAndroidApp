@@ -6,6 +6,7 @@ import { Eye } from './eye';
 import { EyeOutlined } from './eye-outlined';
 import { Home } from './home';
 import { Income } from './income';
+import { Plus } from './plus';
 import { Profile } from './profile';
 import { Purchase } from './purchase';
 import { SuccessTick } from './success-tick';
@@ -18,6 +19,7 @@ export type IconType =
   | 'eye-outlined'
   | 'income'
   | 'home'
+  | 'plus'
   | 'profile'
   | 'purchase'
   | 'success-tick'
@@ -42,6 +44,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Income iconColor={iconColor} {...props} />;
     case 'home':
       return <Home iconColor={iconColor} {...props} />;
+    case 'plus':
+      return <Plus iconColor={iconColor} {...props} />;
     case 'profile':
       return <Profile iconColor={iconColor} {...props} />;
     case 'purchase':

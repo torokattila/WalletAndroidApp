@@ -1,3 +1,3 @@
+export * from './AddButton';
 export * from './Icon';
-export * from './LayeredWaves';
 export * from './ToastNotification';

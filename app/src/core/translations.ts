@@ -27,10 +27,11 @@ export const Hungarian = {
     SomethingWentWrong: 'Valami hiba történt, kérjük próbálja újra!',
   },
   SignOut: 'Kijelentkezés',
-  HomeScreen: {
-    BalanceTitle: 'Rendelkezésre álló egyenleged',
-  },
+  BalanceTitle: 'Aktuális egyenleged',
   NameTemplate: '<lastname> <firstname>',
+  Incomes: {
+    ScreenTitle: 'Jövedelmek',
+  },
 };
 
 export const English = {
@@ -62,8 +63,9 @@ export const English = {
     SomethingWentWrong: 'Something went wrong, please try again!',
   },
   SignOut: 'Sign out',
-  HomeScreen: {
-    BalanceTitle: 'Your Available Balance',
-  },
+  BalanceTitle: 'Your Available Balance',
   NameTemplate: '<firstname> <lastname>',
+  Incomes: {
+    ScreenTitle: 'Incomes',
+  },
 };
