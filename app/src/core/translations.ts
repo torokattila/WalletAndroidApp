@@ -32,6 +32,13 @@ export const Hungarian = {
   Incomes: {
     ScreenTitle: 'Jövedelmek',
   },
+  NewModal: {
+    Incomes: {
+      Title: 'Új jövedelem hozzáadása',
+      TitleInputPlaceholder: 'Jövedelem címe (Opcionális)',
+    },
+  },
+  SaveButtonTitle: 'Mentés',
 };
 
 export const English = {
@@ -68,4 +75,11 @@ export const English = {
   Incomes: {
     ScreenTitle: 'Incomes',
   },
+  NewModal: {
+    Incomes: {
+      Title: 'Add new income',
+      TitleInputPlaceholder: 'Title of the income (Optional)',
+    },
+  },
+  SaveButtonTitle: 'Save',
 };

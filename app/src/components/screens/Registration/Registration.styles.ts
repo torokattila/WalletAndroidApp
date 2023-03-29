@@ -67,7 +67,7 @@ export const StyledTitle = styled(Text)`
   color: ${({ theme }) => theme.colors.purple[100]};
   font-size: 30px;
   text-align: center;
-  font-family: 'NunitoSans-ExtraBold';
+  font-family: 'NunitoSans-Bold';
 `;
 
 export const StyledSubtitle = styled(Text)`
@@ -80,7 +80,6 @@ export const StyledSubtitle = styled(Text)`
 export const FormContainer = styled(View)`
   margin-top: 12%;
   flex-direction: column;
-  /* gap: 30px; */
 `;
 
 export const keyboardAvoidingContainerStyle: StyleProp<ViewStyle> = {
