@@ -51,26 +51,6 @@ export const StyledTextInput = styled(TextInput)`
   margin-left: 15px;
 `;
 
-export const NumbersContainer = styled(View)`
-  margin-top: 25px;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: flex-start;
-`;
-
-export const NumberColumn = styled(View)`
-  flex-direction: column;
-  align-items: center;
-`;
-
-export const NumberButton = styled(TouchableOpacity)`
-  padding: 15px;
-`;
-
-export const Number = styled(Text)`
-  font-size: 25px;
-`;
-
 export const StyledButton = styled(TouchableOpacity)`
   position: absolute;
   bottom: 18%;

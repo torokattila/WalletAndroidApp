@@ -8,15 +8,11 @@ import {
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-detect';
 import { theme } from '@styles/theme';
-import { Icon, ModalBackground } from '@components/shared';
+import { ModalBackground, ModalNumberKeyboard } from '@components/shared';
 import {
   Content,
   ContentContainer,
   InputNumberText,
-  Number,
-  NumberButton,
-  NumberColumn,
-  NumbersContainer,
   StyledButton,
   StyledButtonText,
   StyledTextInput,
@@ -96,50 +92,10 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose }) => {
                 placeholder={i18n.t('NewModal.Incomes.TitleInputPlaceholder')}
               />
 
-              <NumbersContainer>
-                <NumberColumn>
-                  <NumberButton onPress={() => handleNumberChange('1')}>
-                    <Number>1</Number>
-                  </NumberButton>
-                  <NumberButton onPress={() => handleNumberChange('4')}>
-                    <Number>4</Number>
-                  </NumberButton>
-                  <NumberButton onPress={() => handleNumberChange('7')}>
-                    <Number>7</Number>
-                  </NumberButton>
-                  <NumberButton />
-                </NumberColumn>
-
-                <NumberColumn>
-                  <NumberButton onPress={() => handleNumberChange('2')}>
-                    <Number>2</Number>
-                  </NumberButton>
-                  <NumberButton onPress={() => handleNumberChange('5')}>
-                    <Number>5</Number>
-                  </NumberButton>
-                  <NumberButton onPress={() => handleNumberChange('8')}>
-                    <Number>8</Number>
-                  </NumberButton>
-                  <NumberButton onPress={() => handleNumberChange('0')}>
-                    <Number>0</Number>
-                  </NumberButton>
-                </NumberColumn>
-
-                <NumberColumn>
-                  <NumberButton onPress={() => handleNumberChange('3')}>
-                    <Number>3</Number>
-                  </NumberButton>
-                  <NumberButton onPress={() => handleNumberChange('6')}>
-                    <Number>6</Number>
-                  </NumberButton>
-                  <NumberButton onPress={() => handleNumberChange('9')}>
-                    <Number>9</Number>
-                  </NumberButton>
-                  <NumberButton onPress={handleBackspacePress}>
-                    <Icon type="backspace" iconColor={theme.colors.grey[100]} />
-                  </NumberButton>
-                </NumberColumn>
-              </NumbersContainer>
+              <ModalNumberKeyboard
+                onNumberChange={handleNumberChange}
+                onBackspacePress={handleBackspacePress}
+              />
 
               <StyledButton style={buttonShadow}>
                 <StyledButtonText>{i18n.t('SaveButtonTitle')}</StyledButtonText>
