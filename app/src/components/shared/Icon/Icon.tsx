@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { SvgProps } from 'react-native-svg';
+import { Backspace } from './backspace';
 import { Close } from './close';
 import { ErrorTriangle } from './error-triangle';
 import { Eye } from './eye';
@@ -13,6 +14,7 @@ import { SuccessTick } from './success-tick';
 import { Visa } from './visa';
 
 export type IconType =
+  | 'backspace'
   | 'close'
   | 'error-triangle'
   | 'eye'
@@ -32,6 +34,8 @@ type IconProps = SvgProps & {
 
 export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
   switch (type) {
+    case 'backspace':
+      return <Backspace iconColor={iconColor} {...props} />;
     case 'close':
       return <Close iconColor={iconColor} {...props} />;
     case 'error-triangle':

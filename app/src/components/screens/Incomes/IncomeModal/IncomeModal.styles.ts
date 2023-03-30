@@ -53,17 +53,18 @@ export const StyledTextInput = styled(TextInput)`
 
 export const NumbersContainer = styled(View)`
   margin-top: 25px;
-  flex-direction: column;
-`;
-
-export const NumberRow = styled(View)`
   flex-direction: row;
   justify-content: space-evenly;
-  margin-top: 5px;
+  align-items: flex-start;
+`;
+
+export const NumberColumn = styled(View)`
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const NumberButton = styled(TouchableOpacity)`
-  padding: 10px;
+  padding: 15px;
 `;
 
 export const Number = styled(Text)`
