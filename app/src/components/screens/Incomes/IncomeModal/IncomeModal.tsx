@@ -83,7 +83,10 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose }) => {
             <UpperLine />
             <Content>
               <Title>{i18n.t('NewModal.Incomes.Title')}</Title>
-              <InputNumberText>{`${inputNumber} Ft`}</InputNumberText>
+              <InputNumberText
+                numberOfLines={1}
+                ellipsizeMode="head"
+              >{`${inputNumber} Ft`}</InputNumberText>
               <StyledTextInput
                 value={incomeTitle}
                 onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
