@@ -25,6 +25,7 @@ export const Hungarian = {
     PasswordTooShortTitle: 'A jelszónak legalább 6 karakter hosszúnak kell lennie!',
     InvalidCredentialsTitle: 'Az email vagy a jelszó nem megfelelő',
     SomethingWentWrong: 'Valami hiba történt, kérjük próbálja újra!',
+    NewIncomeSuccess: 'Jövedelem sikeresen hozzáadva!',
   },
   SignOut: 'Kijelentkezés',
   BalanceTitle: 'Aktuális egyenleged',
@@ -36,6 +37,7 @@ export const Hungarian = {
     Incomes: {
       Title: 'Új jövedelem hozzáadása',
       TitleInputPlaceholder: 'Jövedelem címe (Opcionális)',
+      AmountError: 'Az összeg megadása kötelező!',
     },
   },
   SaveButtonTitle: 'Mentés',
@@ -68,6 +70,7 @@ export const English = {
     PasswordTooShortTitle: 'The password must be at least 6 characters long!',
     InvalidCredentialsTitle: 'Invalid credentials',
     SomethingWentWrong: 'Something went wrong, please try again!',
+    NewIncomeSuccess: 'Income successfully added!',
   },
   SignOut: 'Sign out',
   BalanceTitle: 'Your Available Balance',
@@ -79,6 +82,7 @@ export const English = {
     Incomes: {
       Title: 'Add new income',
       TitleInputPlaceholder: 'Title of the income (Optional)',
+      AmountError: 'Amount is required!',
     },
   },
   SaveButtonTitle: 'Save',

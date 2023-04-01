@@ -36,9 +36,14 @@ export const Title = styled(Text)`
 
 export const InputNumberText = styled(Text)`
   font-size: 50px;
-  margin: 20px;
+  margin: 20px 20px 0px 20px;
   color: ${({ theme }) => theme.colors.black};
   font-family: 'NunitoSans-Light';
+`;
+
+export const InputNumberErrorText = styled(Text)`
+  color: ${({ theme }) => theme.colors.red};
+  margin-left: 20px;
 `;
 
 export const StyledTextInput = styled(TextInput)`
@@ -47,8 +52,7 @@ export const StyledTextInput = styled(TextInput)`
   padding-left: 20px;
   padding-right: 20px;
   font-weight: bold;
-  margin-right: 15px;
-  margin-left: 15px;
+  margin: 15px 15px 0px 15px;
 `;
 
 export const StyledButton = styled(TouchableOpacity)`

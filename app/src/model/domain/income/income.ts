@@ -3,7 +3,7 @@ import { Timestamp } from 'firebase/firestore';
 type IncomeProps = {
   id: string;
   userId: string;
-  amount: number;
+  amount: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
   title?: string;
@@ -12,7 +12,7 @@ type IncomeProps = {
 export class Income {
   readonly id: string;
   readonly userId: string;
-  readonly amount: number;
+  readonly amount: string;
   readonly createdAt: Timestamp;
   readonly updatedAt: Timestamp;
   readonly title?: string;

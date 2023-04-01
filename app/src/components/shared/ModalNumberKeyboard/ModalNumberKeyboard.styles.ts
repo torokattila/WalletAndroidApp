@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 export const NumbersContainer = styled(View)`
-  margin-top: 25px;
+  margin-top: 15px;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: flex-start;

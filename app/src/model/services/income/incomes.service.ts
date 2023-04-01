@@ -18,7 +18,7 @@ import { UserService } from '../user';
 export type IncomeModel = {
   id: string;
   userId: string;
-  amount: number;
+  amount: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
   title?: string;
@@ -32,7 +32,7 @@ export class IncomeService extends BaseService<IncomeModel> {
     this.userService = new UserService();
   }
 
-  async createIncome(userId: string, amount: number, title: string): Promise<Income> {
+  async createIncome(userId: string, amount: string, title: string): Promise<Income> {
     const incomesCollectionRef = collection(getDB(), 'incomes');
     const insertedIncome = await addDoc(incomesCollectionRef, {
       userId,
@@ -46,7 +46,7 @@ export class IncomeService extends BaseService<IncomeModel> {
     const currentBalance = currentUser?.balance;
     await this.userService.updateBasicDetails(userId, {
       ...currentUser,
-      balance: currentBalance + amount,
+      balance: currentBalance + Number(amount),
     });
 
     const incomeRef = doc(getDB(), 'incomes', insertedIncome?.id) as DocumentReference<IncomeModel>;

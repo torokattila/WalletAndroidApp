@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { FC, useEffect } from 'react';
 import i18n from 'i18n-js';
 import {
   KeyboardAvoidingView,
@@ -9,9 +10,11 @@ import {
 import GestureRecognizer from 'react-native-swipe-detect';
 import { theme } from '@styles/theme';
 import { ModalBackground, ModalNumberKeyboard } from '@components/shared';
+import { useIncome } from '@hooks/useIncome';
 import {
   Content,
   ContentContainer,
+  InputNumberErrorText,
   InputNumberText,
   StyledButton,
   StyledButtonText,
@@ -43,30 +46,41 @@ const buttonShadow = {
 };
 
 export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose }) => {
-  const [inputNumber, setInputNumber] = useState<string>('0');
-  const [incomeTitle, setIncomeTitle] = useState<string>('');
-  // eslint-disable-next-line curly
-  if (!isVisible) return null;
+  const { amount, setAmount, title, setTitle, handleCreateIncome, errors, setErrors, isLoading } =
+    useIncome();
+
+  useEffect(() => {
+    if (!isLoading) {
+      onClose();
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    setErrors({});
+  }, [onClose]);
 
   const handleNumberChange = (value: string) => {
     let newInputNumber = '';
 
-    if (inputNumber === '0') {
+    if (amount === '0') {
       newInputNumber = '' + value;
     } else {
-      newInputNumber = inputNumber + value;
+      newInputNumber = amount + value;
     }
 
-    setInputNumber(newInputNumber);
+    setAmount(newInputNumber);
   };
 
   const handleBackspacePress = () => {
-    if (inputNumber.length <= 1) {
-      setInputNumber('0');
+    if (amount.length <= 1) {
+      setAmount('0');
     } else {
-      setInputNumber(inputNumber.slice(0, -1));
+      setAmount(amount.slice(0, -1));
     }
   };
+
+  // eslint-disable-next-line curly
+  if (!isVisible) return null;
 
   return (
     <GestureRecognizer onSwipeDown={onClose}>
@@ -86,11 +100,12 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose }) => {
               <InputNumberText
                 numberOfLines={1}
                 ellipsizeMode="head"
-              >{`${inputNumber} Ft`}</InputNumberText>
+              >{`${amount} Ft`}</InputNumberText>
+              {errors.amount && <InputNumberErrorText>{errors.amount}</InputNumberErrorText>}
               <StyledTextInput
-                value={incomeTitle}
+                value={title}
                 onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                  setIncomeTitle(e.nativeEvent.text)
+                  setTitle(e.nativeEvent.text)
                 }
                 placeholder={i18n.t('NewModal.Incomes.TitleInputPlaceholder')}
               />
@@ -100,7 +115,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose }) => {
                 onBackspacePress={handleBackspacePress}
               />
 
-              <StyledButton style={buttonShadow}>
+              <StyledButton style={buttonShadow} onPress={handleCreateIncome}>
                 <StyledButtonText>{i18n.t('SaveButtonTitle')}</StyledButtonText>
               </StyledButton>
             </Content>
