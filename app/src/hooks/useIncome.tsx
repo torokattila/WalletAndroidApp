@@ -1,7 +1,10 @@
-import { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from 'react';
 import i18n from 'i18n-js';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { IncomeService } from '@model/services';
+import { Income } from '@model/domain';
+import { Unsubscribe } from 'firebase/firestore';
 import { useUser } from './useUser';
 import { useUserId } from './useUserId';
 
@@ -12,9 +15,25 @@ export const useIncome = () => {
   const [title, setTitle] = useState<string>('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [incomes, setIncomes] = useState<Income[]>([]);
 
   const toast = useToastNotificationStore();
   const incomeService = new IncomeService();
+  let unsubscribe: Unsubscribe;
+
+  const fetchIncomes = async () => {
+    setIsLoading(true);
+
+    unsubscribe = await incomeService.getAllIncomes(
+      userId,
+      (updatedIncomes) => {
+        setIncomes(updatedIncomes);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  };
 
   const verifyForm = (): boolean => {
     if (amount === '0') {
@@ -56,6 +75,19 @@ export const useIncome = () => {
     }
   };
 
+  useEffect(() => {
+    if (userId) {
+      fetchIncomes();
+    } else {
+      setIncomes([]);
+      setIsLoading(false);
+    }
+
+    return () => {
+      unsubscribe && unsubscribe();
+    };
+  }, [userId]);
+
   return {
     amount,
     setAmount,
@@ -65,5 +97,7 @@ export const useIncome = () => {
     errors,
     setErrors,
     isLoading,
+    incomes,
+    retry: fetchIncomes,
   };
 };

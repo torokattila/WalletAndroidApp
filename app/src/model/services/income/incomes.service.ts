@@ -4,10 +4,16 @@ import {
   doc,
   documentId,
   DocumentReference,
+  FirestoreError,
   getDoc,
   getDocs,
+  limit,
+  onSnapshot,
+  orderBy,
   query,
+  QueryDocumentSnapshot,
   Timestamp,
+  Unsubscribe,
   where,
 } from 'firebase/firestore';
 import { getDB } from '@model/firebase-config';
@@ -55,6 +61,29 @@ export class IncomeService extends BaseService<IncomeModel> {
     return incomeSnapshot.data();
   }
 
+  async getAllIncomes(
+    userId: string,
+    onSuccess: (incomes: Income[]) => void,
+    onError: (error: FirestoreError) => void
+  ): Promise<Unsubscribe> {
+    const queryData = query(
+      this.collection,
+      where('userId', '==', userId),
+      orderBy('updatedAt', 'desc'),
+      limit(9998)
+    );
+
+    return onSnapshot(
+      queryData,
+      (snapshots) => {
+        const incomes = snapshots?.docs?.map((document) => IncomeService.toDomainObject(document));
+
+        onSuccess(incomes);
+      },
+      onError
+    );
+  }
+
   async getIncomeById(incomeId: string): Promise<Income> {
     const queryData = query(this.collection, where(documentId(), '==', incomeId));
     const incomeSnapshots = await getDocs(queryData);
@@ -64,5 +93,14 @@ export class IncomeService extends BaseService<IncomeModel> {
     }
 
     return incomeSnapshots.docs[0].data();
+  }
+
+  static toDomainObject(income: QueryDocumentSnapshot<Income>): Income {
+    const incomeData = income.data();
+
+    return new Income({
+      ...incomeData,
+      id: income.id,
+    });
   }
 }
