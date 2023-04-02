@@ -49,8 +49,17 @@ const buttonShadow = {
 };
 
 export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMode, income }) => {
-  const { amount, setAmount, title, setTitle, handleCreateIncome, errors, setErrors, isLoading } =
-    useIncome(income);
+  const {
+    amount,
+    setAmount,
+    title,
+    setTitle,
+    handleCreateIncome,
+    handleUpdateIncome,
+    errors,
+    setErrors,
+    isLoading,
+  } = useIncome(income);
 
   const modalTitle = isEditMode
     ? i18n.t('NewModal.Incomes.EditIncomeTitle')
@@ -127,7 +136,10 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
                 onBackspacePress={handleBackspacePress}
               />
 
-              <StyledButton style={buttonShadow} onPress={handleCreateIncome}>
+              <StyledButton
+                style={buttonShadow}
+                onPress={isEditMode ? handleUpdateIncome : handleCreateIncome}
+              >
                 <StyledButtonText>{i18n.t('SaveButtonTitle')}</StyledButtonText>
               </StyledButton>
             </Content>

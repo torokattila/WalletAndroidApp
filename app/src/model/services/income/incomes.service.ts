@@ -12,6 +12,7 @@ import {
   QueryDocumentSnapshot,
   Timestamp,
   Unsubscribe,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { getDB } from '@model/firebase-config';
@@ -57,6 +58,32 @@ export class IncomeService extends BaseService<IncomeModel> {
     const incomeSnapshot = await getDoc(incomeRef);
 
     return IncomeService.toDomainObject(incomeSnapshot);
+  }
+
+  async updateIncome(incomeId: string, userId: string, data: Partial<Income>): Promise<Income> {
+    const currentIncome = await this.getIncomeById(incomeId);
+    const currentUser = await this.userService.getUserByUserId(userId);
+    const updatedUser = await this.userService.updateBasicDetails(userId, {
+      ...currentUser,
+      balance: currentUser.balance - Number(currentIncome.amount),
+    });
+
+    const docRef = doc(this.collection, incomeId);
+    const incomeData: Partial<Income> = {
+      amount: data.amount,
+      title: data.title.trim(),
+    };
+
+    await this.userService.updateBasicDetails(userId, {
+      ...currentUser,
+      balance: updatedUser.balance + Number(data.amount),
+    });
+
+    await updateDoc(docRef, { ...incomeData, updatedAt: Timestamp.now() });
+
+    const incomeSnap = await getDoc(docRef);
+
+    return IncomeService.toDomainObject(incomeSnap);
   }
 
   async getAllIncomes(
