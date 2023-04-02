@@ -2,11 +2,9 @@ import {
   addDoc,
   collection,
   doc,
-  documentId,
   DocumentReference,
   FirestoreError,
   getDoc,
-  getDocs,
   limit,
   onSnapshot,
   orderBy,
@@ -58,7 +56,7 @@ export class IncomeService extends BaseService<IncomeModel> {
     const incomeRef = doc(getDB(), 'incomes', insertedIncome?.id) as DocumentReference<IncomeModel>;
     const incomeSnapshot = await getDoc(incomeRef);
 
-    return incomeSnapshot.data();
+    return IncomeService.toDomainObject(incomeSnapshot);
   }
 
   async getAllIncomes(
@@ -85,18 +83,14 @@ export class IncomeService extends BaseService<IncomeModel> {
   }
 
   async getIncomeById(incomeId: string): Promise<Income> {
-    const queryData = query(this.collection, where(documentId(), '==', incomeId));
-    const incomeSnapshots = await getDocs(queryData);
+    const queryData = doc(this.collection, incomeId);
+    const incomeSnapshot = await getDoc(queryData);
 
-    if (incomeSnapshots.empty) {
-      return null;
-    }
-
-    return incomeSnapshots.docs[0].data();
+    return IncomeService.toDomainObject(incomeSnapshot);
   }
 
   static toDomainObject(income: QueryDocumentSnapshot<Income>): Income {
-    const incomeData = income.data();
+    const { ...incomeData } = income.data();
 
     return new Income({
       ...incomeData,

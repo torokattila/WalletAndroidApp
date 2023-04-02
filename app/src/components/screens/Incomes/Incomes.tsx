@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { FC, useState } from 'react';
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native';
@@ -52,6 +53,9 @@ export const Incomes: FC = () => {
 
             <ListContainer>
               <FlatList
+                contentContainerStyle={{ paddingBottom: 40 }}
+                style={{ paddingHorizontal: 10, marginTop: -15 }}
+                showsVerticalScrollIndicator={false}
                 data={incomes}
                 keyExtractor={(item) => item.id}
                 scrollEnabled

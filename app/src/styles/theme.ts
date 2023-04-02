@@ -5,6 +5,7 @@ type ColorRange = {
   100: string;
   200?: string;
   300?: string;
+  400?: string;
 };
 
 declare module 'styled-components' {
@@ -34,6 +35,7 @@ export const theme: DefaultTheme = {
       100: '#A3DA57',
       200: '#92C34E',
       300: '#2FAC56',
+      400: '#4fce6e',
     },
     red: '#E23D3D',
     white: '#fff',

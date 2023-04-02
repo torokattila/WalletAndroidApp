@@ -60,7 +60,7 @@ export const ContentContainer = styled(View)`
   flex: 1;
   margin-top: 5%;
   height: 10%;
-  padding: 20px;
+  padding: 10px;
   border-top-left-radius: 35px;
   border-top-right-radius: 35px;
   position: relative;
@@ -70,9 +70,11 @@ export const AllIncomeTitle = styled(Text)`
   font-family: 'NunitoSans-Bold';
   font-size: 20px;
   margin-top: 20px;
-  margin-left: 10px;
+  margin-left: 20px;
 `;
 
 export const ListContainer = styled(View)`
   margin-top: 30px;
+  width: 100%;
+  flex: 1;
 `;
