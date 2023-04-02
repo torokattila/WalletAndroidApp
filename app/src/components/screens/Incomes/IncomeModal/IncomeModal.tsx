@@ -9,12 +9,13 @@ import {
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-detect';
 import { theme } from '@styles/theme';
-import { ModalBackground, ModalNumberKeyboard } from '@components/shared';
+import { Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
 import { useIncome } from '@hooks/useIncome';
 import { Income } from '@model/domain';
 import {
   Content,
   ContentContainer,
+  DeleteIconContainer,
   InputNumberErrorText,
   InputNumberText,
   StyledButton,
@@ -101,6 +102,11 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
         <ContentContainer style={shadow}>
           <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
             <UpperLine />
+            {isEditMode && (
+              <DeleteIconContainer>
+                <Icon type="trash" iconColor={theme.colors.white} />
+              </DeleteIconContainer>
+            )}
             <Content>
               <Title>{modalTitle}</Title>
               <InputNumberText

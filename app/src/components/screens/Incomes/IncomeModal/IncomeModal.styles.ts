@@ -28,6 +28,17 @@ export const Content = styled(View)`
   position: relative;
 `;
 
+export const DeleteIconContainer = styled(TouchableOpacity)`
+  background-color: ${({ theme }) => theme.colors.red};
+  border-radius: 30px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+`;
+
 export const Title = styled(Text)`
   text-align: center;
   font-size: 17px;

@@ -34,6 +34,7 @@ export const Incomes: FC = () => {
     setIsModalOpen(false);
     setSelectedIncome(null);
     setIsModalOpen(false);
+    setIsEditModeModal(false);
   };
 
   const handleEditModalOpen = (income: Income) => {
