@@ -26,18 +26,18 @@ export const TitleAndAmountContainer = styled(View)`
 
 export const Title = styled(Text)`
   color: ${({ theme }) => theme.colors.purple[100]};
-  font-weight: bold;
+  font-family: 'NunitoSans-Bold';
 `;
 
 export const Amount = styled(Text)`
-  font-weight: bold;
   color: ${({ theme }) => theme.colors.green[400]};
+  font-family: 'NunitoSans-Bold';
 `;
 
 export const IncomeDate = styled(Text)`
-  font-weight: bold;
   align-self: flex-end;
   position: absolute;
   right: 20px;
   bottom: 10px;
+  font-family: 'NunitoSans-Bold';
 `;
