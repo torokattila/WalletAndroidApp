@@ -32,6 +32,7 @@ export const Hungarian = {
   NameTemplate: '<lastname> <firstname>',
   Incomes: {
     ScreenTitle: 'Jövedelmek',
+    AllIncomeTitle: 'Összes jövedelem',
   },
   NewModal: {
     Incomes: {
@@ -77,6 +78,7 @@ export const English = {
   NameTemplate: '<firstname> <lastname>',
   Incomes: {
     ScreenTitle: 'Incomes',
+    AllIncomeTitle: 'All income',
   },
   NewModal: {
     Incomes: {

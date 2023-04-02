@@ -55,7 +55,7 @@ export const ContentContainer = styled(View)`
   background-color: ${({ theme }) => theme.colors.white};
   align-self: center;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   flex: 1;
   margin-top: 5%;
@@ -64,4 +64,15 @@ export const ContentContainer = styled(View)`
   border-top-left-radius: 35px;
   border-top-right-radius: 35px;
   position: relative;
+`;
+
+export const AllIncomeTitle = styled(Text)`
+  font-family: 'NunitoSans-Bold';
+  font-size: 20px;
+  margin-top: 20px;
+  margin-left: 10px;
+`;
+
+export const ListContainer = styled(View)`
+  margin-top: 30px;
 `;

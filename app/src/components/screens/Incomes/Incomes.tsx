@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import i18n from 'i18n-js';
+import { FlatList } from 'react-native';
 import { AddButton, Icon } from '@components/shared';
 import { useUser } from '@hooks/useUser';
 import {
@@ -12,12 +13,17 @@ import {
   ScreenTitleText,
   scrollViewStyle,
   StyledLinearGradient,
+  AllIncomeTitle,
+  ListContainer,
 } from './Incomes.styles';
 import { IncomeModal } from './IncomeModal';
+import { useIncome } from '@hooks/useIncome';
+import { IncomeCard } from './IncomeCard';
 
 export const Incomes: FC = () => {
   const { user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { incomes } = useIncome();
 
   const handleModalOpen = (): void => setIsModalOpen(true);
   const handleModalClose = (): void => setIsModalOpen(false);
@@ -42,6 +48,16 @@ export const Incomes: FC = () => {
             <Balance>{user.balance} Ft</Balance>
           </BalanceContainer>
           <ContentContainer>
+            <AllIncomeTitle>{i18n.t('Incomes.AllIncomeTitle')}</AllIncomeTitle>
+
+            <ListContainer>
+              <FlatList
+                data={incomes}
+                keyExtractor={(item) => item.id}
+                scrollEnabled
+                renderItem={({ item }) => <IncomeCard key={item.id} income={item} />}
+              />
+            </ListContainer>
             <AddButton onPress={handleModalOpen} />
           </ContentContainer>
         </StyledLinearGradient>
