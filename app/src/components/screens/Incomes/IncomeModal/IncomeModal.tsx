@@ -50,10 +50,10 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose }) => {
     useIncome();
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && !errors) {
       onClose();
     }
-  }, [isLoading]);
+  }, [isLoading, errors]);
 
   useEffect(() => {
     setErrors({});

@@ -2,9 +2,11 @@ import { useState } from 'react';
 import i18n from 'i18n-js';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { IncomeService } from '@model/services';
+import { useUser } from './useUser';
 import { useUserId } from './useUserId';
 
 export const useIncome = () => {
+  const { retry: fetchUser } = useUser();
   const { userId } = useUserId();
   const [amount, setAmount] = useState<string>('0');
   const [title, setTitle] = useState<string>('');
@@ -33,6 +35,7 @@ export const useIncome = () => {
       try {
         setIsLoading(true);
         await incomeService.createIncome(userId, amount, title);
+        fetchUser();
         setAmount('0');
         setTitle('');
         toast.show({
@@ -40,8 +43,11 @@ export const useIncome = () => {
           title: i18n.t('ToastNotification.NewIncomeSuccess'),
         });
       } catch (error: any) {
+        setErrors({
+          generalError: error,
+        });
         toast.show({
-          type: 'success',
+          type: 'error',
           title: i18n.t('ToastNotification.SomethingWentWrong'),
         });
       } finally {
