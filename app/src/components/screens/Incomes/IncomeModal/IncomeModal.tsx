@@ -11,6 +11,7 @@ import GestureRecognizer from 'react-native-swipe-detect';
 import { theme } from '@styles/theme';
 import { ModalBackground, ModalNumberKeyboard } from '@components/shared';
 import { useIncome } from '@hooks/useIncome';
+import { Income } from '@model/domain';
 import {
   Content,
   ContentContainer,
@@ -25,8 +26,9 @@ import {
 
 type IncomeModalProps = {
   isVisible: boolean;
-  onSave: () => void;
   onClose: () => void;
+  income?: Income;
+  isEditMode?: boolean;
 };
 
 const shadow = {
@@ -45,9 +47,13 @@ const buttonShadow = {
   shadowRadius: 20,
 };
 
-export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose }) => {
+export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMode, income }) => {
   const { amount, setAmount, title, setTitle, handleCreateIncome, errors, setErrors, isLoading } =
-    useIncome();
+    useIncome(income);
+
+  const modalTitle = isEditMode
+    ? i18n.t('NewModal.Incomes.EditIncomeTitle')
+    : i18n.t('NewModal.Incomes.Title');
 
   useEffect(() => {
     if (!isLoading && !errors) {
@@ -96,7 +102,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose }) => {
           <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
             <UpperLine />
             <Content>
-              <Title>{i18n.t('NewModal.Incomes.Title')}</Title>
+              <Title>{modalTitle}</Title>
               <InputNumberText
                 numberOfLines={1}
                 ellipsizeMode="head"

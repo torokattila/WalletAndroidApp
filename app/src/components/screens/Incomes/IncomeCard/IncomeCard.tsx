@@ -14,6 +14,7 @@ import { format } from 'date-fns';
 
 type IncomeCardProps = {
   income: Income;
+  onPress: () => void;
 };
 
 const cardShadow = {
@@ -24,9 +25,9 @@ const cardShadow = {
   shadowRadius: 14,
 };
 
-export const IncomeCard: FC<IncomeCardProps> = ({ income }) => {
+export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => {
   return (
-    <Container style={cardShadow}>
+    <Container style={cardShadow} onPress={onPress}>
       <IconContainer>
         <Icon type="dollar" iconColor={theme.colors.white} />
       </IconContainer>

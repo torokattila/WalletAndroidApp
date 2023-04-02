@@ -8,7 +8,7 @@ import { Unsubscribe } from 'firebase/firestore';
 import { useUser } from './useUser';
 import { useUserId } from './useUserId';
 
-export const useIncome = () => {
+export const useIncome = (income?: Income) => {
   const { retry: fetchUser } = useUser();
   const { userId } = useUserId();
   const [amount, setAmount] = useState<string>('0');
@@ -16,6 +16,16 @@ export const useIncome = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [incomes, setIncomes] = useState<Income[]>([]);
+
+  useEffect(() => {
+    if (income) {
+      setAmount(income.amount);
+      setTitle(income.title);
+    } else {
+      setAmount('0');
+      setTitle('');
+    }
+  }, [income]);
 
   const toast = useToastNotificationStore();
   const incomeService = new IncomeService();
