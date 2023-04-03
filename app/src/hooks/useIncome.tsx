@@ -8,11 +8,6 @@ import { Unsubscribe } from 'firebase/firestore';
 import { useUser } from './useUser';
 import { useUserId } from './useUserId';
 
-type EditIncomeData = {
-  amount: string;
-  title: string;
-};
-
 export const useIncome = (income?: Income) => {
   const { retry: fetchUser } = useUser();
   const { userId } = useUserId();
@@ -90,14 +85,14 @@ export const useIncome = (income?: Income) => {
     }
   };
 
-  const handleUpdateIncome = async (data: EditIncomeData): Promise<void> => {
+  const handleUpdateIncome = async (): Promise<void> => {
     if (!income) {
       return;
     }
 
     try {
       setIsLoading(true);
-      await incomeService.updateIncome(income?.id, userId, data);
+      await incomeService.updateIncome(income?.id, userId, { amount, title });
       fetchUser();
       fetchIncomes();
       toast.show({
