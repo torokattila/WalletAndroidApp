@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   DocumentReference,
   FirestoreError,
@@ -85,6 +86,25 @@ export class IncomeService extends BaseService<IncomeModel> {
     const incomeSnap = await getDoc(docRef);
 
     return IncomeService.toDomainObject(incomeSnap);
+  }
+
+  async deleteIncome(incomeId: string, userId: string): Promise<void> {
+    const currentIncome = await this.getIncomeById(incomeId);
+    const currentUser = await this.userService.getUserByUserId(userId);
+
+    await this.userService.updateBasicDetails(userId, {
+      ...currentUser,
+      balance: currentUser.balance - Number(currentIncome.amount),
+    });
+
+    const docRef = doc(this.collection, incomeId);
+    const incomeSnapshot = await getDoc(docRef);
+
+    if (!incomeSnapshot.exists()) {
+      return;
+    }
+
+    await deleteDoc(docRef);
   }
 
   async getAllIncomes(

@@ -56,6 +56,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
     setTitle,
     handleCreateIncome,
     handleUpdateIncome,
+    handleDeleteIncome,
     errors,
     setErrors,
     isLoading,
@@ -112,7 +113,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
           <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
             <UpperLine />
             {isEditMode && (
-              <DeleteIconContainer>
+              <DeleteIconContainer onPress={handleDeleteIncome}>
                 <Icon type="trash" iconColor={theme.colors.white} />
               </DeleteIconContainer>
             )}

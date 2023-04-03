@@ -112,6 +112,33 @@ export const useIncome = (income?: Income) => {
     }
   };
 
+  const handleDeleteIncome = async (): Promise<void> => {
+    if (!income) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await incomeService.deleteIncome(income?.id, userId);
+      fetchUser();
+      fetchIncomes();
+      toast.show({
+        type: 'success',
+        title: i18n.t('ToastNotification.DeleteIncomeSuccess'),
+      });
+    } catch (error: any) {
+      setErrors({
+        generalError: error,
+      });
+      toast.show({
+        type: 'error',
+        title: i18n.t('ToastNotification.SomethingWentWrong'),
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (userId) {
       fetchIncomes();
@@ -132,6 +159,7 @@ export const useIncome = (income?: Income) => {
     setTitle,
     handleCreateIncome,
     handleUpdateIncome,
+    handleDeleteIncome,
     errors,
     setErrors,
     isLoading,
