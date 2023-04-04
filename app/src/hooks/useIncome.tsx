@@ -16,6 +16,7 @@ export const useIncome = (income?: Income) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [incomes, setIncomes] = useState<Income[]>([]);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
   useEffect(() => {
     if (income) {
@@ -48,7 +49,7 @@ export const useIncome = (income?: Income) => {
   const verifyForm = (): boolean => {
     if (amount === '0') {
       setErrors({
-        amount: i18n.t('NewModal.Incomes.AmountError'),
+        amount: i18n.t('Dialog.Incomes.AmountError'),
       });
       return false;
     } else {
@@ -157,6 +158,8 @@ export const useIncome = (income?: Income) => {
     setAmount,
     title,
     setTitle,
+    isConfirmDialogOpen,
+    setIsConfirmDialogOpen,
     handleCreateIncome,
     handleUpdateIncome,
     handleDeleteIncome,

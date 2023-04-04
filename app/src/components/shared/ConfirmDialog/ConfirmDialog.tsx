@@ -1,7 +1,17 @@
 import React, { FC } from 'react';
 import { Modal } from 'react-native';
 import { theme } from '@styles/theme';
-import { Content, ContentContainer, Description, Title } from './ConfirmDialog.styles';
+import {
+  Background,
+  Content,
+  ContentContainer,
+  Description,
+  PrimaryButton,
+  PrimaryButtonText,
+  SecondaryButton,
+  SecondaryButtonText,
+  Title,
+} from './ConfirmDialog.styles';
 
 type ConfirmDialogProps = {
   isVisible: boolean;
@@ -31,11 +41,21 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
   onPressSecondaryButton,
 }) => (
   <Modal animationType="fade" transparent={true} visible={isVisible}>
-    <ContentContainer>
-      <Content style={shadow}>
-        <Title>{title}</Title>
-        <Description>{description}</Description>
-      </Content>
-    </ContentContainer>
+    <Background>
+      <ContentContainer>
+        <Content style={shadow}>
+          <Title>{title}</Title>
+          <Description>{description}</Description>
+
+          <PrimaryButton onPress={onPressPrimaryButton}>
+            <PrimaryButtonText>{primaryButtonText}</PrimaryButtonText>
+          </PrimaryButton>
+
+          <SecondaryButton onPress={onPressSecondaryButton}>
+            <SecondaryButtonText>{secondaryButtonText}</SecondaryButtonText>
+          </SecondaryButton>
+        </Content>
+      </ContentContainer>
+    </Background>
   </Modal>
 );

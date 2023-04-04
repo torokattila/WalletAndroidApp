@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-detect';
 import { theme } from '@styles/theme';
-import { Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
+import { ConfirmDialog, Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
 import { useIncome } from '@hooks/useIncome';
 import { Income } from '@model/domain';
 import {
@@ -54,6 +54,8 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
     setAmount,
     title,
     setTitle,
+    isConfirmDialogOpen,
+    setIsConfirmDialogOpen,
     handleCreateIncome,
     handleUpdateIncome,
     handleDeleteIncome,
@@ -63,8 +65,8 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
   } = useIncome(income);
 
   const modalTitle = isEditMode
-    ? i18n.t('NewModal.Incomes.EditIncomeTitle')
-    : i18n.t('NewModal.Incomes.Title');
+    ? i18n.t('Dialog.Incomes.EditIncomeTitle')
+    : i18n.t('Dialog.Incomes.Title');
 
   useEffect(() => {
     if (!isLoading && !errors) {
@@ -96,57 +98,76 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
     }
   };
 
+  const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
+  const handleConfirmDialogClose = () => setIsConfirmDialogOpen(false);
+
+  const handleConfirmDialogDelete = async () => {
+    await handleDeleteIncome();
+    handleConfirmDialogClose();
+  };
+
   // eslint-disable-next-line curly
   if (!isVisible) return null;
 
   return (
-    <GestureRecognizer onSwipeDown={onClose}>
-      <Modal
-        animationType="slide"
-        transparent
-        visible={isVisible}
-        onRequestClose={onClose}
-        animated
-      >
-        <ModalBackground onHide={onClose} isVisible={isVisible} />
-        <ContentContainer style={shadow}>
-          <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
-            <UpperLine />
-            {isEditMode && (
-              <DeleteIconContainer onPress={handleDeleteIncome}>
-                <Icon type="trash" iconColor={theme.colors.white} />
-              </DeleteIconContainer>
-            )}
-            <Content>
-              <Title>{modalTitle}</Title>
-              <InputNumberText
-                numberOfLines={1}
-                ellipsizeMode="head"
-              >{`${amount} Ft`}</InputNumberText>
-              {errors.amount && <InputNumberErrorText>{errors.amount}</InputNumberErrorText>}
-              <StyledTextInput
-                value={title}
-                onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                  setTitle(e.nativeEvent.text)
-                }
-                placeholder={i18n.t('NewModal.Incomes.TitleInputPlaceholder')}
-              />
+    <>
+      <GestureRecognizer onSwipeDown={onClose}>
+        <Modal
+          animationType="slide"
+          transparent
+          visible={isVisible}
+          onRequestClose={onClose}
+          animated
+        >
+          <ModalBackground onHide={onClose} isVisible={isVisible} />
+          <ContentContainer style={shadow}>
+            <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
+              <UpperLine />
+              {isEditMode && (
+                <DeleteIconContainer onPress={handleConfirmDialogOpen}>
+                  <Icon type="trash" iconColor={theme.colors.white} />
+                </DeleteIconContainer>
+              )}
+              <Content>
+                <Title>{modalTitle}</Title>
+                <InputNumberText
+                  numberOfLines={1}
+                  ellipsizeMode="head"
+                >{`${amount} Ft`}</InputNumberText>
+                {errors.amount && <InputNumberErrorText>{errors.amount}</InputNumberErrorText>}
+                <StyledTextInput
+                  value={title}
+                  onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
+                    setTitle(e.nativeEvent.text)
+                  }
+                  placeholder={i18n.t('Dialog.Incomes.TitleInputPlaceholder')}
+                />
 
-              <ModalNumberKeyboard
-                onNumberChange={handleNumberChange}
-                onBackspacePress={handleBackspacePress}
-              />
+                <ModalNumberKeyboard
+                  onNumberChange={handleNumberChange}
+                  onBackspacePress={handleBackspacePress}
+                />
 
-              <StyledButton
-                style={buttonShadow}
-                onPress={isEditMode ? handleUpdateIncome : handleCreateIncome}
-              >
-                <StyledButtonText>{i18n.t('SaveButtonTitle')}</StyledButtonText>
-              </StyledButton>
-            </Content>
-          </KeyboardAvoidingView>
-        </ContentContainer>
-      </Modal>
-    </GestureRecognizer>
+                <StyledButton
+                  style={buttonShadow}
+                  onPress={isEditMode ? handleUpdateIncome : handleCreateIncome}
+                >
+                  <StyledButtonText>{i18n.t('SaveButtonTitle')}</StyledButtonText>
+                </StyledButton>
+              </Content>
+            </KeyboardAvoidingView>
+          </ContentContainer>
+        </Modal>
+      </GestureRecognizer>
+      <ConfirmDialog
+        isVisible={isConfirmDialogOpen}
+        onPressPrimaryButton={handleConfirmDialogDelete}
+        onPressSecondaryButton={handleConfirmDialogClose}
+        primaryButtonText={i18n.t('Dialog.Delete')}
+        secondaryButtonText={i18n.t('Dialog.Cancel')}
+        title={i18n.t('Dialog.AreYouSureTitle')}
+        description={i18n.t('Dialog.CannotBeUndoneTitle')}
+      />
+    </>
   );
 };

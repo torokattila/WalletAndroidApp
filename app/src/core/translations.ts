@@ -36,13 +36,17 @@ export const Hungarian = {
     ScreenTitle: 'Jövedelmek',
     AllIncomeTitle: 'Összes jövedelem',
   },
-  NewModal: {
+  Dialog: {
     Incomes: {
       Title: 'Új jövedelem hozzáadása',
       TitleInputPlaceholder: 'Jövedelem címe (Opcionális)',
       AmountError: 'Az összeg megadása kötelező!',
       EditIncomeTitle: 'Jövedelem szerkesztése',
     },
+    AreYouSureTitle: 'Biztos vagy benne?',
+    CannotBeUndoneTitle: 'A művelet nem visszavonható!',
+    Delete: 'Törlés',
+    Cancel: 'Mégse',
   },
   SaveButtonTitle: 'Mentés',
 };
@@ -85,13 +89,17 @@ export const English = {
     ScreenTitle: 'Incomes',
     AllIncomeTitle: 'All income',
   },
-  NewModal: {
+  Dialog: {
     Incomes: {
       Title: 'Add new income',
       TitleInputPlaceholder: 'Title of the income (Optional)',
       AmountError: 'Amount is required!',
       EditIncomeTitle: 'Edit income',
     },
+    AreYouSureTitle: 'Are you sure?',
+    CannotBeUndoneTitle: 'The operation cannot be undone!',
+    Delete: 'Delete',
+    Cancel: 'Cancel',
   },
   SaveButtonTitle: 'Save',
 };
