@@ -23,7 +23,6 @@ import {
   FormContainer,
   StyledTextInput,
   StyledButton,
-  ButtonText,
   StyledSubtitle,
   StyledRedirectQuestionText,
   StyledRedirectButton,
@@ -42,6 +41,7 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
     setIsPassword,
     handleSubmit,
     errors,
+    isLoading,
   } = useLogin();
 
   const passwordRef = useRef(null);
@@ -98,18 +98,24 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
                   />
                 </StyledIconButton>
               </View>
-              <StyledButton onPress={handleSubmit}>
-                <ButtonText>{i18n.t('Login')}</ButtonText>
-              </StyledButton>
+              <StyledButton
+                onPress={handleSubmit}
+                text={i18n.t('Login')}
+                size="large"
+                withActivityIndicator
+                isLoading={isLoading}
+                disabled={isLoading}
+              />
             </FormContainer>
           </KeyboardAvoidingView>
 
           <StyledRedirectQuestionText>
             {i18n.t('DontYouHaveAnAccountLabel')}
           </StyledRedirectQuestionText>
-          <StyledRedirectButton onPress={() => navigation.navigate('Registration')}>
-            <ButtonText>{i18n.t('RedirectSignupLabel')}</ButtonText>
-          </StyledRedirectButton>
+          <StyledRedirectButton
+            onPress={() => navigation.navigate('Registration')}
+            text={i18n.t('RedirectSignupLabel')}
+          />
         </BottomContainer>
       </StyledLinearGradient>
     </Container>

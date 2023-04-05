@@ -12,6 +12,7 @@ import {
   TextInputProps,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { Button } from '@components/shared';
 
 const screenWidth = Dimensions.get('screen').width;
 
@@ -102,10 +103,7 @@ export const StyledIconButton = styled(TouchableOpacity)`
   top: 2px;
 `;
 
-export const StyledButton = styled(TouchableOpacity)`
-  width: ${() => screenWidth - 50}px;
-  background-color: ${({ theme }) => theme.colors.purple[100]};
-  border-radius: 30px;
+export const StyledButton = styled(Button)`
   padding: 18px;
 `;
 
@@ -125,10 +123,7 @@ export const StyledRedirectQuestionText = styled(Text)`
   margin-top: 10%;
 `;
 
-export const StyledRedirectButton = styled(TouchableOpacity)`
+export const StyledRedirectButton = styled(Button)`
   margin-top: 10px;
-  background-color: ${({ theme }) => theme.colors.purple[100]};
-  font-family: 'NunitoSans-Bold';
   padding: 10px 20px;
-  border-radius: 30px;
 `;

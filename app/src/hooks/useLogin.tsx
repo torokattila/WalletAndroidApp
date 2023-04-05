@@ -9,6 +9,7 @@ const useLogin = () => {
   const [password, setPassword] = useState('');
   const [isPassword, setIsPassword] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToastNotificationStore();
   const authService = new AuthService();
@@ -45,11 +46,10 @@ const useLogin = () => {
     const isFormVerified = await verifyForm();
 
     if (isFormVerified) {
+      setIsLoading(true);
+
       try {
         await authService.loginWithEmailAndPassword(email, password);
-        // setEmail('');
-        // setPassword('');
-        // setIsPassword(true);
       } catch (error) {
         switch (error.code) {
           case 'auth/user-not-found':
@@ -66,6 +66,8 @@ const useLogin = () => {
             });
             return;
         }
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -79,6 +81,7 @@ const useLogin = () => {
     setIsPassword,
     handleSubmit,
     errors,
+    isLoading,
   };
 };
 

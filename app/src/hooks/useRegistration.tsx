@@ -13,6 +13,7 @@ const useRegistration = () => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isPasswordConfirm, setIsPasswordConfirm] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToastNotificationStore();
   const userService = new UserService();
@@ -57,6 +58,8 @@ const useRegistration = () => {
     const isFormVerified = await verifyForm();
 
     if (isFormVerified) {
+      setIsLoading(true);
+
       try {
         await userService.createUser(email, password, firstname, lastname);
         setFirstname('');
@@ -92,6 +95,8 @@ const useRegistration = () => {
             });
             return;
         }
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -113,6 +118,7 @@ const useRegistration = () => {
     setIsPasswordConfirm,
     errors,
     handleSubmit,
+    isLoading,
   };
 };
 
