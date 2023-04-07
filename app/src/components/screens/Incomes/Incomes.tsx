@@ -26,6 +26,7 @@ import {
   DatePickerText,
   DatePickerButtonContainer,
   DatePickerButtonLabel,
+  DeleteFiltersButton,
 } from './Incomes.styles';
 import { IncomeModal } from './IncomeModal';
 import { IncomeCard } from './IncomeCard';
@@ -111,6 +112,10 @@ export const Incomes: FC = () => {
                   <DatePickerText>{format(toDate, 'yyyy-MM.dd.')}</DatePickerText>
                 </DatePickerButton>
               </DatePickerButtonContainer>
+
+              <DeleteFiltersButton>
+                <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
+              </DeleteFiltersButton>
             </DatePickerContainer>
 
             <DatePicker

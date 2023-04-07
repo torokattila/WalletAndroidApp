@@ -83,8 +83,10 @@ export const DatePickerContainer = styled(View)`
   width: 100%;
   flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
   padding-left: 20px;
   margin-top: 15px;
+  position: relative;
 `;
 
 export const DatePickerButtonContainer = styled(View)`
@@ -105,4 +107,15 @@ export const DatePickerButton = styled(TouchableOpacity)`
 export const DatePickerText = styled(Text)`
   color: ${({ theme }) => theme.colors.white};
   font-family: 'NunitoSans-Bold';
+`;
+
+export const DeleteFiltersButton = styled(TouchableOpacity)`
+  width: 35px;
+  height: 35px;
+  border-color: ${({ theme }) => theme.colors.purple[100]};
+  border-width: 2px;
+  border-radius: 30px;
+  align-items: center;
+  justify-content: center;
+  bottom: -8px;
 `;
