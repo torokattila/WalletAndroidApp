@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { FC, PropsWithChildren, useEffect, useRef } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { StatusBar } from 'react-native';
 import { RootSiblingParent } from 'react-native-root-siblings';
@@ -6,7 +6,7 @@ import i18n from 'i18n-js';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { AuthProvider } from '@hooks/useAuth';
 import { UserIdProvider } from '@hooks/useUserId';
-import { UserProvider } from '@hooks/useUser';
+import { UserProvider, useUser } from '@hooks/useUser';
 import { Navigation } from '@navigation/Navigation';
 import { English, Hungarian } from '@core/translations';
 import { getLocale } from '@core/translation-utils';
@@ -14,6 +14,7 @@ import { ThemeProvider } from '@styles/provider';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { ToastNotification } from '@components/shared';
 import { NavigationInterceptorProvider } from '@hooks/useNavigationInterceptor';
+import { LoadingScreen } from '@components/screens';
 
 const App = (): JSX.Element => {
   const navigationRef = useNavigationContainerRef();
@@ -51,8 +52,10 @@ const App = (): JSX.Element => {
             <UserIdProvider>
               <UserProvider>
                 <NavigationInterceptorProvider>
-                  <StatusBar barStyle="default" animated={true} />
-                  <Navigation />
+                  <AppLoader>
+                    <StatusBar barStyle="default" animated={true} />
+                    <Navigation />
+                  </AppLoader>
                 </NavigationInterceptorProvider>
               </UserProvider>
             </UserIdProvider>
@@ -68,6 +71,14 @@ const App = (): JSX.Element => {
       </RootSiblingParent>
     </ThemeProvider>
   );
+};
+
+type AppLoaderProps = PropsWithChildren;
+
+const AppLoader: FC<AppLoaderProps> = ({ children }) => {
+  const { isLoading: isUserLoading } = useUser();
+
+  return <LoadingScreen isAppReady={!isUserLoading}>{children}</LoadingScreen>;
 };
 
 export default App;
