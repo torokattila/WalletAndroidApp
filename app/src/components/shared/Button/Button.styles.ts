@@ -30,5 +30,5 @@ export const ButtonText = styled(Text)`
   color: ${({ theme }) => theme.colors.white};
   text-align: center;
   font-family: 'NunitoSans-Bold';
-  font-size: 15px;
+  font-size: 17px;
 `;

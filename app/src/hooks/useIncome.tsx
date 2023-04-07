@@ -44,6 +44,8 @@ export const useIncome = (income?: Income) => {
         console.error(error);
       }
     );
+
+    setIsLoading(false);
   };
 
   const verifyForm = (): boolean => {

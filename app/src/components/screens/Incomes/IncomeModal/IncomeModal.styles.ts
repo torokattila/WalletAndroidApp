@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Button } from '@components/shared';
 
 export const ContentContainer = styled(View)`
   background-color: ${({ theme }) => theme.colors.white};
@@ -66,18 +67,10 @@ export const StyledTextInput = styled(TextInput)`
   margin: 15px 15px 0px 15px;
 `;
 
-export const StyledButton = styled(TouchableOpacity)`
+export const StyledButton = styled(Button)`
   position: absolute;
   bottom: 18%;
-  border-radius: 30px;
   padding: 18px;
   width: 90%;
   align-self: center;
-  background-color: ${({ theme }) => theme.colors.purple[100]};
-`;
-
-export const StyledButtonText = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
-  font-size: 17px;
-  text-align: center;
 `;

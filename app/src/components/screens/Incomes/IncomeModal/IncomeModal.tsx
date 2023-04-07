@@ -19,7 +19,6 @@ import {
   InputNumberErrorText,
   InputNumberText,
   StyledButton,
-  StyledButtonText,
   StyledTextInput,
   Title,
   UpperLine,
@@ -149,11 +148,14 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
                 />
 
                 <StyledButton
+                  size="large"
                   style={buttonShadow}
                   onPress={isEditMode ? handleUpdateIncome : handleCreateIncome}
-                >
-                  <StyledButtonText>{i18n.t('SaveButtonTitle')}</StyledButtonText>
-                </StyledButton>
+                  withActivityIndicator
+                  isLoading={isLoading}
+                  disabled={isLoading}
+                  text={i18n.t('SaveButtonTitle')}
+                />
               </Content>
             </KeyboardAvoidingView>
           </ContentContainer>
