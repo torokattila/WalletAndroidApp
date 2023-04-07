@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { StyleProp, Text, View, ViewStyle } from 'react-native';
+import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 export const Container = styled(View)`
@@ -77,4 +77,32 @@ export const ListContainer = styled(View)`
   margin-top: 30px;
   width: 100%;
   flex: 1;
+`;
+
+export const DatePickerContainer = styled(View)`
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding-left: 20px;
+  margin-top: 15px;
+`;
+
+export const DatePickerButtonContainer = styled(View)`
+  flex-direction: column;
+`;
+
+export const DatePickerButtonLabel = styled(Text)`
+  margin-left: 6px;
+`;
+
+export const DatePickerButton = styled(TouchableOpacity)`
+  background-color: ${({ theme }) => theme.colors.grey[300]};
+  border-radius: 10px;
+  padding: 5px 20px;
+  margin-right: 20px;
+`;
+
+export const DatePickerText = styled(Text)`
+  color: ${({ theme }) => theme.colors.white};
+  font-family: 'NunitoSans-Bold';
 `;

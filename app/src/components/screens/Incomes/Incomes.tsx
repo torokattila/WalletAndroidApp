@@ -2,10 +2,13 @@
 import React, { FC, useState } from 'react';
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import { format } from 'date-fns';
 import { AddButton, Icon } from '@components/shared';
 import { useUser } from '@hooks/useUser';
 import { useIncome } from '@hooks/useIncome';
 import { Income } from '@model/domain';
+import { theme } from '@styles/theme';
 import {
   BalanceContainer,
   BalanceTitle,
@@ -18,14 +21,39 @@ import {
   StyledLinearGradient,
   AllIncomeTitle,
   ListContainer,
+  DatePickerContainer,
+  DatePickerButton,
+  DatePickerText,
+  DatePickerButtonContainer,
+  DatePickerButtonLabel,
 } from './Incomes.styles';
 import { IncomeModal } from './IncomeModal';
 import { IncomeCard } from './IncomeCard';
 
+const shadow = {
+  elevation: 10,
+  shadowColor: theme.colors.black,
+  shadowOffset: { width: -2, height: 20 },
+  shadowOpacity: 0.7,
+  shadowRadius: 20,
+};
+
 export const Incomes: FC = () => {
   const { user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { incomes } = useIncome();
+  const {
+    incomes,
+    isFromDatePickerOpen,
+    handleFromDatePickerOpen,
+    handleFromDatePickerClose,
+    fromDate,
+    setFromDate,
+    isToDatePickerOpen,
+    handleToDatePickerOpen,
+    handleToDatePickerClose,
+    toDate,
+    setToDate,
+  } = useIncome();
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
   const [isEditModeModal, setIsEditModeModal] = useState(false);
 
@@ -64,6 +92,57 @@ export const Incomes: FC = () => {
           </BalanceContainer>
           <ContentContainer>
             <AllIncomeTitle>{i18n.t('Incomes.AllIncomeTitle')}</AllIncomeTitle>
+
+            <DatePickerContainer>
+              <DatePickerButtonContainer>
+                <DatePickerButtonLabel>
+                  {i18n.t('DatePicker.FilterFromDateText')}
+                </DatePickerButtonLabel>
+                <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
+                  <DatePickerText>{format(fromDate, 'yyyy-MM.dd.')}</DatePickerText>
+                </DatePickerButton>
+              </DatePickerButtonContainer>
+
+              <DatePickerButtonContainer>
+                <DatePickerButtonLabel>
+                  {i18n.t('DatePicker.FilterToDateText')}
+                </DatePickerButtonLabel>
+                <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
+                  <DatePickerText>{format(toDate, 'yyyy-MM.dd.')}</DatePickerText>
+                </DatePickerButton>
+              </DatePickerButtonContainer>
+            </DatePickerContainer>
+
+            <DatePicker
+              modal
+              mode="date"
+              title={null}
+              open={isFromDatePickerOpen}
+              date={fromDate}
+              androidVariant="iosClone"
+              onConfirm={(date) => {
+                handleFromDatePickerClose();
+                setFromDate(date);
+              }}
+              onCancel={handleFromDatePickerClose}
+              cancelText={i18n.t('DatePicker.CancelButtonText')}
+              confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+            />
+            <DatePicker
+              modal
+              mode="date"
+              title={null}
+              open={isToDatePickerOpen}
+              date={toDate}
+              androidVariant="iosClone"
+              onConfirm={(date) => {
+                handleToDatePickerClose();
+                setToDate(date);
+              }}
+              onCancel={handleToDatePickerClose}
+              cancelText={i18n.t('DatePicker.CancelButtonText')}
+              confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+            />
 
             <ListContainer>
               <FlatList

@@ -49,6 +49,12 @@ export const Hungarian = {
     Cancel: 'Mégse',
   },
   SaveButtonTitle: 'Mentés',
+  DatePicker: {
+    CancelButtonText: 'Mégse',
+    ConfirmButtonText: 'Kiválaszt',
+    FilterFromDateText: 'Szűrés dátumtól',
+    FilterToDateText: 'Szűrés dátumig',
+  },
 };
 
 export const English = {
@@ -102,4 +108,10 @@ export const English = {
     Cancel: 'Cancel',
   },
   SaveButtonTitle: 'Save',
+  DatePicker: {
+    CancelButtonText: 'Cancel',
+    ConfirmButtonText: 'Select',
+    FilterFromDateText: 'Filter from date',
+    FilterToDateText: 'Filter to date',
+  },
 };

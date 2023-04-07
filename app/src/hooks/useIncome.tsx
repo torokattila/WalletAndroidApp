@@ -17,6 +17,10 @@ export const useIncome = (income?: Income) => {
   const [isLoading, setIsLoading] = useState(false);
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
+  const [fromDate, setFromDate] = useState(new Date());
+  const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
+  const [toDate, setToDate] = useState(new Date());
 
   useEffect(() => {
     if (income) {
@@ -142,6 +146,11 @@ export const useIncome = (income?: Income) => {
     }
   };
 
+  const handleFromDatePickerOpen = (): void => setIsFromDatePickerOpen(true);
+  const handleFromDatePickerClose = (): void => setIsFromDatePickerOpen(false);
+  const handleToDatePickerOpen = (): void => setIsToDatePickerOpen(true);
+  const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
+
   useEffect(() => {
     if (userId) {
       fetchIncomes();
@@ -170,5 +179,15 @@ export const useIncome = (income?: Income) => {
     isLoading,
     incomes,
     retry: fetchIncomes,
+    isFromDatePickerOpen,
+    handleFromDatePickerOpen,
+    handleFromDatePickerClose,
+    fromDate,
+    setFromDate,
+    isToDatePickerOpen,
+    handleToDatePickerOpen,
+    handleToDatePickerClose,
+    toDate,
+    setToDate,
   };
 };
