@@ -6,6 +6,7 @@ import {
   DocumentReference,
   FirestoreError,
   getDoc,
+  getDocs,
   limit,
   onSnapshot,
   orderBy,
@@ -128,6 +129,31 @@ export class IncomeService extends BaseService<IncomeModel> {
       },
       onError
     );
+  }
+
+  async getIncomesByDate(userId: string, startDate: Date, endDate: Date): Promise<Income[]> {
+    const startDateMidnight = startDate;
+
+    try {
+      const queryData = query(
+        this.collection,
+        where('userId', '==', userId),
+        where('updatedAt', '>=', startDateMidnight),
+        where('updatedAt', '<=', endDate),
+        orderBy('updatedAt', 'desc'),
+        limit(9998)
+      );
+
+      const snapshot = await getDocs(queryData);
+
+      if (snapshot.empty) {
+        return [];
+      }
+
+      return snapshot?.docs?.map((income) => IncomeService.toDomainObject(income));
+    } catch (error) {
+      console.error('Error: ', error);
+    }
   }
 
   async getIncomeById(incomeId: string): Promise<Income> {

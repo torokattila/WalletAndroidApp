@@ -56,6 +56,20 @@ export const useIncome = (income?: Income) => {
     setIsLoading(false);
   };
 
+  const filterIncomes = async () => {
+    setIsLoading(true);
+
+    try {
+      const filteredIncomes = await incomeService.getIncomesByDate(userId, fromDate, toDate);
+
+      setIncomes(filteredIncomes);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const verifyForm = (): boolean => {
     if (amount === '0') {
       setErrors({
@@ -155,22 +169,25 @@ export const useIncome = (income?: Income) => {
   const handleToDatePickerOpen = (): void => setIsToDatePickerOpen(true);
   const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
 
-  const handleFromDateChange = (date: Date): void => {
+  const handleFromDateChange = async (date: Date): Promise<void> => {
     setIsFilterChanged(true);
     handleFromDatePickerClose();
     setFromDate(date);
+    await filterIncomes();
   };
 
-  const handleToDateChange = (date: Date): void => {
+  const handleToDateChange = async (date: Date): Promise<void> => {
     setIsFilterChanged(true);
     handleToDatePickerClose();
     setToDate(date);
+    await filterIncomes();
   };
 
-  const handleClearFilters = (): void => {
+  const handleClearFilters = async (): Promise<void> => {
     setFromDate(new Date());
     setToDate(new Date());
     setIsFilterChanged(false);
+    await fetchIncomes();
   };
 
   const handleModalOpen = (): void => setIsModalOpen(true);
