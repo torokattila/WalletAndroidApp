@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native';
 import DatePicker from 'react-native-date-picker';
@@ -7,7 +7,6 @@ import { format } from 'date-fns';
 import { AddButton, Icon } from '@components/shared';
 import { useUser } from '@hooks/useUser';
 import { useIncome } from '@hooks/useIncome';
-import { Income } from '@model/domain';
 import { theme } from '@styles/theme';
 import {
   BalanceContainer,
@@ -41,7 +40,6 @@ const shadow = {
 
 export const Incomes: FC = () => {
   const { user } = useUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     incomes,
     isFromDatePickerOpen,
@@ -56,23 +54,13 @@ export const Incomes: FC = () => {
     handleToDateChange,
     handleClearFilters,
     isFilterChanged,
+    handleModalOpen,
+    handleEditModalOpen,
+    isModalOpen,
+    handleModalClose,
+    selectedIncome,
+    isEditModeModal,
   } = useIncome();
-  const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
-  const [isEditModeModal, setIsEditModeModal] = useState(false);
-
-  const handleModalOpen = (): void => setIsModalOpen(true);
-  const handleModalClose = (): void => {
-    setIsModalOpen(false);
-    setSelectedIncome(null);
-    setIsModalOpen(false);
-    setIsEditModeModal(false);
-  };
-
-  const handleEditModalOpen = (income: Income) => {
-    handleModalOpen();
-    setSelectedIncome(income);
-    setIsEditModeModal(true);
-  };
 
   return (
     <>

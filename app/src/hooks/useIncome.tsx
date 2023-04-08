@@ -22,6 +22,9 @@ export const useIncome = (income?: Income) => {
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
   const [toDate, setToDate] = useState(new Date());
   const [isFilterChanged, setIsFilterChanged] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
+  const [isEditModeModal, setIsEditModeModal] = useState(false);
 
   useEffect(() => {
     if (income) {
@@ -170,6 +173,20 @@ export const useIncome = (income?: Income) => {
     setIsFilterChanged(false);
   };
 
+  const handleModalOpen = (): void => setIsModalOpen(true);
+  const handleModalClose = (): void => {
+    setIsModalOpen(false);
+    setSelectedIncome(null);
+    setIsModalOpen(false);
+    setIsEditModeModal(false);
+  };
+
+  const handleEditModalOpen = (editableIncome: Income) => {
+    handleModalOpen();
+    setSelectedIncome(editableIncome);
+    setIsEditModeModal(true);
+  };
+
   useEffect(() => {
     if (userId) {
       fetchIncomes();
@@ -210,5 +227,11 @@ export const useIncome = (income?: Income) => {
     toDate,
     handleClearFilters,
     isFilterChanged,
+    handleModalOpen,
+    handleModalClose,
+    handleEditModalOpen,
+    isModalOpen,
+    selectedIncome,
+    isEditModeModal,
   };
 };
