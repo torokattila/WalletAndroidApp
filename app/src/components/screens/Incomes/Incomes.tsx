@@ -48,12 +48,14 @@ export const Incomes: FC = () => {
     handleFromDatePickerOpen,
     handleFromDatePickerClose,
     fromDate,
-    setFromDate,
+    handleFromDateChange,
     isToDatePickerOpen,
     handleToDatePickerOpen,
     handleToDatePickerClose,
     toDate,
-    setToDate,
+    handleToDateChange,
+    handleClearFilters,
+    isFilterChanged,
   } = useIncome();
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
   const [isEditModeModal, setIsEditModeModal] = useState(false);
@@ -113,9 +115,11 @@ export const Incomes: FC = () => {
                 </DatePickerButton>
               </DatePickerButtonContainer>
 
-              <DeleteFiltersButton>
-                <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
-              </DeleteFiltersButton>
+              {isFilterChanged && (
+                <DeleteFiltersButton onPress={handleClearFilters}>
+                  <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
+                </DeleteFiltersButton>
+              )}
             </DatePickerContainer>
 
             <DatePicker
@@ -125,10 +129,7 @@ export const Incomes: FC = () => {
               open={isFromDatePickerOpen}
               date={fromDate}
               androidVariant="iosClone"
-              onConfirm={(date) => {
-                handleFromDatePickerClose();
-                setFromDate(date);
-              }}
+              onConfirm={handleFromDateChange}
               onCancel={handleFromDatePickerClose}
               cancelText={i18n.t('DatePicker.CancelButtonText')}
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
@@ -140,10 +141,7 @@ export const Incomes: FC = () => {
               open={isToDatePickerOpen}
               date={toDate}
               androidVariant="iosClone"
-              onConfirm={(date) => {
-                handleToDatePickerClose();
-                setToDate(date);
-              }}
+              onConfirm={handleToDateChange}
               onCancel={handleToDatePickerClose}
               cancelText={i18n.t('DatePicker.CancelButtonText')}
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}

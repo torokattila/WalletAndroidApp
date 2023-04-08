@@ -21,6 +21,7 @@ export const useIncome = (income?: Income) => {
   const [fromDate, setFromDate] = useState(new Date());
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
   const [toDate, setToDate] = useState(new Date());
+  const [isFilterChanged, setIsFilterChanged] = useState(false);
 
   useEffect(() => {
     if (income) {
@@ -151,6 +152,24 @@ export const useIncome = (income?: Income) => {
   const handleToDatePickerOpen = (): void => setIsToDatePickerOpen(true);
   const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
 
+  const handleFromDateChange = (date: Date): void => {
+    setIsFilterChanged(true);
+    handleFromDatePickerClose();
+    setFromDate(date);
+  };
+
+  const handleToDateChange = (date: Date): void => {
+    setIsFilterChanged(true);
+    handleToDatePickerClose();
+    setToDate(date);
+  };
+
+  const handleClearFilters = (): void => {
+    setFromDate(new Date());
+    setToDate(new Date());
+    setIsFilterChanged(false);
+  };
+
   useEffect(() => {
     if (userId) {
       fetchIncomes();
@@ -182,12 +201,14 @@ export const useIncome = (income?: Income) => {
     isFromDatePickerOpen,
     handleFromDatePickerOpen,
     handleFromDatePickerClose,
+    handleFromDateChange,
     fromDate,
-    setFromDate,
     isToDatePickerOpen,
     handleToDatePickerOpen,
     handleToDatePickerClose,
+    handleToDateChange,
     toDate,
-    setToDate,
+    handleClearFilters,
+    isFilterChanged,
   };
 };
