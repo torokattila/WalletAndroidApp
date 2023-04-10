@@ -1,10 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
+import { Unsubscribe } from 'firebase/firestore';
+import { PermissionsAndroid } from 'react-native';
+import { writeFile, DownloadDirectoryPath } from 'react-native-fs';
+import XLSX from 'xlsx';
 import i18n from 'i18n-js';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { IncomeService } from '@model/services';
 import { Income } from '@model/domain';
-import { Unsubscribe } from 'firebase/firestore';
+import { formatDate } from '@core/date-utils';
 import { useUser } from './useUser';
 import { useUserId } from './useUserId';
 
@@ -213,6 +217,60 @@ export const useIncome = (income?: Income) => {
     setIsEditModeModal(true);
   };
 
+  const exportIncomesToExcel = async (): Promise<void> => {
+    const workBook = XLSX.utils.book_new();
+    const workSheet = XLSX.utils.json_to_sheet(incomes);
+    XLSX.utils.book_append_sheet(workBook, workSheet, 'Sheet1');
+    const output = XLSX.write(workBook, { type: 'binary', bookType: 'xlsx' });
+
+    const formattedStartDate = formatDate(fromDate.current);
+    const formattedToDate = formatDate(toDate.current).slice(0, -1);
+
+    writeFile(
+      DownloadDirectoryPath + `/incomes_${formattedStartDate}-${formattedToDate}.xlsx`,
+      output,
+      'ascii'
+    );
+
+    toast.show({
+      type: 'success',
+      title: i18n.t('ToastNotification.SuccessfulDownload'),
+    });
+  };
+
+  const handleDownloadButtonClick = async (): Promise<void> => {
+    try {
+      let isPermittedExternalStorage = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+      );
+
+      if (!isPermittedExternalStorage) {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: i18n.t('Permissions.StoragePermissionNeededTitle'),
+            buttonNeutral: i18n.t('Permissions.AskMeLaterTitle'),
+            buttonNegative: i18n.t('Dialog.Cancel'),
+            buttonPositive: 'OK',
+            message: '',
+          }
+        );
+
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          exportIncomesToExcel();
+        }
+      } else {
+        exportIncomesToExcel();
+      }
+    } catch (error) {
+      toast.show({
+        type: 'error',
+        title: i18n.t('ToastNotification.SomethingWentWrong'),
+      });
+      return;
+    }
+  };
+
   useEffect(() => {
     if (userId) {
       fetchIncomes();
@@ -259,5 +317,6 @@ export const useIncome = (income?: Income) => {
     isModalOpen,
     selectedIncome,
     isEditModeModal,
+    handleDownloadButtonClick,
   };
 };

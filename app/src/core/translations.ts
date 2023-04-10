@@ -28,6 +28,7 @@ export const Hungarian = {
     NewIncomeSuccess: 'Jövedelem sikeresen hozzáadva!',
     EditIncomeSuccess: 'Jövedelem sikeresen frissítve!',
     DeleteIncomeSuccess: 'Jövedelem sikeresen törölve!',
+    SuccessfulDownload: 'Sikeres letöltés',
   },
   SignOut: 'Kijelentkezés',
   BalanceTitle: 'Aktuális egyenleged',
@@ -54,6 +55,10 @@ export const Hungarian = {
     ConfirmButtonText: 'Kiválaszt',
     FilterFromDateText: 'Szűrés dátumtól',
     FilterToDateText: 'Szűrés dátumig',
+  },
+  Permissions: {
+    StoragePermissionNeededTitle: 'Tárhely engedély szükséges',
+    AskMeLaterTitle: 'Kérdezz meg később',
   },
 };
 
@@ -86,7 +91,8 @@ export const English = {
     SomethingWentWrong: 'Something went wrong, please try again!',
     NewIncomeSuccess: 'Income successfully added!',
     EditIncomeSuccess: 'Income updated successfully!',
-    DeleteIncomeSuccess: 'Jövedelem deleted törölve!',
+    DeleteIncomeSuccess: 'Income deleted!',
+    SuccessfulDownload: 'Successful Download!',
   },
   SignOut: 'Sign out',
   BalanceTitle: 'Your Available Balance',
@@ -113,5 +119,9 @@ export const English = {
     ConfirmButtonText: 'Select',
     FilterFromDateText: 'Filter from date',
     FilterToDateText: 'Filter to date',
+  },
+  Permissions: {
+    StoragePermissionNeededTitle: 'Tárhely engedély szükséges',
+    AskMeLaterTitle: 'Kérdezz meg később',
   },
 };

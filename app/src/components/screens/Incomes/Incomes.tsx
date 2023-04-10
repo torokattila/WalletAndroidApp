@@ -3,11 +3,11 @@ import React, { FC } from 'react';
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import { format } from 'date-fns';
 import { AddButton, Icon } from '@components/shared';
 import { useUser } from '@hooks/useUser';
 import { useIncome } from '@hooks/useIncome';
 import { theme } from '@styles/theme';
+import { formatDate } from '@core/date-utils';
 import {
   BalanceContainer,
   BalanceTitle,
@@ -61,6 +61,7 @@ export const Incomes: FC = () => {
     handleModalClose,
     selectedIncome,
     isEditModeModal,
+    handleDownloadButtonClick,
   } = useIncome();
 
   return (
@@ -91,7 +92,7 @@ export const Incomes: FC = () => {
                   {i18n.t('DatePicker.FilterFromDateText')}
                 </DatePickerButtonLabel>
                 <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
-                  <DatePickerText>{format(fromDate.current, 'yyyy-MM.dd.')}</DatePickerText>
+                  <DatePickerText>{formatDate(fromDate.current)}</DatePickerText>
                 </DatePickerButton>
               </DatePickerButtonContainer>
 
@@ -100,7 +101,7 @@ export const Incomes: FC = () => {
                   {i18n.t('DatePicker.FilterToDateText')}
                 </DatePickerButtonLabel>
                 <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
-                  <DatePickerText>{format(toDate.current, 'yyyy-MM.dd.')}</DatePickerText>
+                  <DatePickerText>{formatDate(toDate.current)}</DatePickerText>
                 </DatePickerButton>
               </DatePickerButtonContainer>
 
@@ -109,11 +110,11 @@ export const Incomes: FC = () => {
                   <DeleteFiltersButton onPress={handleClearFilters}>
                     <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
                   </DeleteFiltersButton>
-                  <DownloadButton>
-                    <Icon type="download" iconColor={theme.colors.purple[100]} />
-                  </DownloadButton>
                 </>
               )}
+              <DownloadButton onPress={handleDownloadButtonClick}>
+                <Icon type="download" iconColor={theme.colors.purple[100]} />
+              </DownloadButton>
             </DatePickerContainer>
 
             <DatePicker
