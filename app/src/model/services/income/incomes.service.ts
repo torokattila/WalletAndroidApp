@@ -132,28 +132,22 @@ export class IncomeService extends BaseService<IncomeModel> {
   }
 
   async getIncomesByDate(userId: string, startDate: Date, endDate: Date): Promise<Income[]> {
-    const startDateMidnight = startDate;
+    const queryData = query(
+      this.collection,
+      where('userId', '==', userId),
+      where('updatedAt', '>=', startDate),
+      where('updatedAt', '<=', endDate),
+      orderBy('updatedAt', 'desc'),
+      limit(9998)
+    );
 
-    try {
-      const queryData = query(
-        this.collection,
-        where('userId', '==', userId),
-        where('updatedAt', '>=', startDateMidnight),
-        where('updatedAt', '<=', endDate),
-        orderBy('updatedAt', 'desc'),
-        limit(9998)
-      );
+    const snapshot = await getDocs(queryData);
 
-      const snapshot = await getDocs(queryData);
-
-      if (snapshot.empty) {
-        return [];
-      }
-
-      return snapshot?.docs?.map((income) => IncomeService.toDomainObject(income));
-    } catch (error) {
-      console.error('Error: ', error);
+    if (snapshot.empty) {
+      return [];
     }
+
+    return snapshot?.docs?.map((income) => IncomeService.toDomainObject(income));
   }
 
   async getIncomeById(incomeId: string): Promise<Income> {

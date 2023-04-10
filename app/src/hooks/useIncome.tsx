@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import i18n from 'i18n-js';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { IncomeService } from '@model/services';
@@ -18,9 +18,9 @@ export const useIncome = (income?: Income) => {
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
-  const [fromDate, setFromDate] = useState(new Date());
+  const fromDate = useRef(new Date());
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
-  const [toDate, setToDate] = useState(new Date());
+  const toDate = useRef(new Date());
   const [isFilterChanged, setIsFilterChanged] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
@@ -59,8 +59,17 @@ export const useIncome = (income?: Income) => {
   const filterIncomes = async () => {
     setIsLoading(true);
 
+    const fromDateMidnight = fromDate;
+    fromDateMidnight.current.setHours(0, 0, 0, 0);
+    const endDateMidnight = toDate;
+    endDateMidnight.current.setHours(23, 59, 0, 0);
+
     try {
-      const filteredIncomes = await incomeService.getIncomesByDate(userId, fromDate, toDate);
+      const filteredIncomes = await incomeService.getIncomesByDate(
+        userId,
+        fromDateMidnight.current,
+        endDateMidnight.current
+      );
 
       setIncomes(filteredIncomes);
     } catch (error) {
@@ -172,20 +181,20 @@ export const useIncome = (income?: Income) => {
   const handleFromDateChange = async (date: Date): Promise<void> => {
     setIsFilterChanged(true);
     handleFromDatePickerClose();
-    setFromDate(date);
+    fromDate.current = date;
     await filterIncomes();
   };
 
   const handleToDateChange = async (date: Date): Promise<void> => {
     setIsFilterChanged(true);
     handleToDatePickerClose();
-    setToDate(date);
+    toDate.current = date;
     await filterIncomes();
   };
 
   const handleClearFilters = async (): Promise<void> => {
-    setFromDate(new Date());
-    setToDate(new Date());
+    fromDate.current = new Date();
+    toDate.current = new Date();
     setIsFilterChanged(false);
     await fetchIncomes();
   };

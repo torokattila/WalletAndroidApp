@@ -90,7 +90,7 @@ export const Incomes: FC = () => {
                   {i18n.t('DatePicker.FilterFromDateText')}
                 </DatePickerButtonLabel>
                 <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
-                  <DatePickerText>{format(fromDate, 'yyyy-MM.dd.')}</DatePickerText>
+                  <DatePickerText>{format(fromDate.current, 'yyyy-MM.dd.')}</DatePickerText>
                 </DatePickerButton>
               </DatePickerButtonContainer>
 
@@ -99,7 +99,7 @@ export const Incomes: FC = () => {
                   {i18n.t('DatePicker.FilterToDateText')}
                 </DatePickerButtonLabel>
                 <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
-                  <DatePickerText>{format(toDate, 'yyyy-MM.dd.')}</DatePickerText>
+                  <DatePickerText>{format(toDate.current, 'yyyy-MM.dd.')}</DatePickerText>
                 </DatePickerButton>
               </DatePickerButtonContainer>
 
@@ -115,7 +115,7 @@ export const Incomes: FC = () => {
               mode="date"
               title={null}
               open={isFromDatePickerOpen}
-              date={fromDate}
+              date={fromDate.current}
               androidVariant="iosClone"
               onConfirm={handleFromDateChange}
               onCancel={handleFromDatePickerClose}
@@ -127,7 +127,7 @@ export const Incomes: FC = () => {
               mode="date"
               title={null}
               open={isToDatePickerOpen}
-              date={toDate}
+              date={toDate.current}
               androidVariant="iosClone"
               onConfirm={handleToDateChange}
               onCancel={handleToDatePickerClose}
