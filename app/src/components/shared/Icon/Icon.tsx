@@ -4,6 +4,7 @@ import { Backspace } from './backspace';
 import { Close } from './close';
 import { DeleteFilters } from './delete-filters';
 import { Dollar } from './dollar';
+import { Download } from './download';
 import { ErrorTriangle } from './error-triangle';
 import { Eye } from './eye';
 import { EyeOutlined } from './eye-outlined';
@@ -21,6 +22,7 @@ export type IconType =
   | 'close'
   | 'delete-filters'
   | 'dollar'
+  | 'download'
   | 'error-triangle'
   | 'eye'
   | 'eye-outlined'
@@ -48,6 +50,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <DeleteFilters iconColor={iconColor} {...props} />;
     case 'dollar':
       return <Dollar iconColor={iconColor} {...props} />;
+    case 'download':
+      return <Download iconColor={iconColor} {...props} />;
     case 'error-triangle':
       return <ErrorTriangle iconColor={iconColor} {...props} />;
     case 'eye':

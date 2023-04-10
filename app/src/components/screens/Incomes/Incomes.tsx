@@ -26,6 +26,7 @@ import {
   DatePickerButtonContainer,
   DatePickerButtonLabel,
   DeleteFiltersButton,
+  DownloadButton,
 } from './Incomes.styles';
 import { IncomeModal } from './IncomeModal';
 import { IncomeCard } from './IncomeCard';
@@ -104,9 +105,14 @@ export const Incomes: FC = () => {
               </DatePickerButtonContainer>
 
               {isFilterChanged && (
-                <DeleteFiltersButton onPress={handleClearFilters}>
-                  <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
-                </DeleteFiltersButton>
+                <>
+                  <DeleteFiltersButton onPress={handleClearFilters}>
+                    <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
+                  </DeleteFiltersButton>
+                  <DownloadButton>
+                    <Icon type="download" iconColor={theme.colors.purple[100]} />
+                  </DownloadButton>
+                </>
               )}
             </DatePickerContainer>
 

@@ -118,4 +118,16 @@ export const DeleteFiltersButton = styled(TouchableOpacity)`
   align-items: center;
   justify-content: center;
   bottom: -8px;
+  margin-right: 10px;
+`;
+
+export const DownloadButton = styled(TouchableOpacity)`
+  width: 35px;
+  height: 35px;
+  border-color: ${({ theme }) => theme.colors.purple[100]};
+  border-width: 2px;
+  border-radius: 30px;
+  align-items: center;
+  justify-content: center;
+  bottom: -8px;
 `;
