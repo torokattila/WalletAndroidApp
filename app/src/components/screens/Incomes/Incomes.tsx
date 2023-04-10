@@ -122,6 +122,7 @@ export const Incomes: FC = () => {
               title={null}
               open={isFromDatePickerOpen}
               date={fromDate.current}
+              maximumDate={new Date()}
               androidVariant="iosClone"
               onConfirm={handleFromDateChange}
               onCancel={handleFromDatePickerClose}
@@ -134,6 +135,7 @@ export const Incomes: FC = () => {
               title={null}
               open={isToDatePickerOpen}
               date={toDate.current}
+              minimumDate={fromDate.current}
               androidVariant="iosClone"
               onConfirm={handleToDateChange}
               onCancel={handleToDatePickerClose}
