@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Unsubscribe } from 'firebase/firestore';
 import { PermissionsAndroid } from 'react-native';
 import { writeFile, DownloadDirectoryPath } from 'react-native-fs';
+import PushNotification, { Importance } from 'react-native-push-notification';
+import uuid from 'react-native-uuid';
 import XLSX from 'xlsx';
 import i18n from 'i18n-js';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
@@ -232,9 +234,19 @@ export const useIncome = (income?: Income) => {
       'ascii'
     );
 
-    toast.show({
-      type: 'success',
-      title: i18n.t('ToastNotification.SuccessfulDownload'),
+    const channelId = uuid.v4();
+
+    PushNotification.createChannel({
+      channelId,
+      channelName: `Notification channel - ${channelId}`,
+      importance: Importance.HIGH,
+      vibrate: true,
+    });
+
+    PushNotification.localNotification({
+      channelId,
+      vibrate: true,
+      message: i18n.t('ToastNotification.SuccessfulDownload'),
     });
   };
 
@@ -263,6 +275,7 @@ export const useIncome = (income?: Income) => {
         exportIncomesToExcel();
       }
     } catch (error) {
+      console.error('error: ', error);
       toast.show({
         type: 'error',
         title: i18n.t('ToastNotification.SomethingWentWrong'),

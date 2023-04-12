@@ -10,6 +10,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.*;
 import com.swmansion.reanimated.ReanimatedPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -51,7 +52,7 @@ public class MainApplication extends Application implements ReactApplication {
   }
 
   protected List<ReactPackage> getPackages() {
-    return Arrays.<ReactPackage>asList(new ReanimatedPackage());
+    return Arrays.<ReactPackage>asList(new ReanimatedPackage(), new ReactNativePushNotificationPackage());
   }
 
   @Override
