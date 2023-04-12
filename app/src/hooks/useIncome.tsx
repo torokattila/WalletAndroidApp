@@ -246,7 +246,13 @@ export const useIncome = (income?: Income) => {
     PushNotification.localNotification({
       channelId,
       vibrate: true,
-      message: i18n.t('ToastNotification.SuccessfulDownload'),
+      title: i18n.t('ToastNotification.SuccessfulDownload'),
+      message: `${formattedStartDate}-${formattedToDate}.xlsx`,
+    });
+
+    toast.show({
+      type: 'success',
+      title: i18n.t('ToastNotification.SuccessfulDownload'),
     });
   };
 
