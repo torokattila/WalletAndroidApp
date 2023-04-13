@@ -12,6 +12,7 @@ import { Home } from './home';
 import { Income } from './income';
 import { Plus } from './plus';
 import { Profile } from './profile';
+import { ProfileImage } from './profile-image';
 import { Purchase } from './purchase';
 import { SuccessTick } from './success-tick';
 import { Trash } from './trash';
@@ -30,6 +31,7 @@ export type IconType =
   | 'home'
   | 'plus'
   | 'profile'
+  | 'profile-image'
   | 'purchase'
   | 'success-tick'
   | 'trash'
@@ -66,6 +68,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Plus iconColor={iconColor} {...props} />;
     case 'profile':
       return <Profile iconColor={iconColor} {...props} />;
+    case 'profile-image':
+      return <ProfileImage iconColor={iconColor} {...props} />;
     case 'purchase':
       return <Purchase iconColor={iconColor} {...props} />;
     case 'success-tick':

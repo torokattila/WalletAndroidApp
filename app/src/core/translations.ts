@@ -60,6 +60,9 @@ export const Hungarian = {
     StoragePermissionNeededTitle: 'Tárhely engedély szükséges',
     AskMeLaterTitle: 'Kérdezz meg később',
   },
+  Profile: {
+    ScreenTitle: 'Profilom',
+  },
 };
 
 export const English = {
@@ -121,7 +124,10 @@ export const English = {
     FilterToDateText: 'Filter to date',
   },
   Permissions: {
-    StoragePermissionNeededTitle: 'Tárhely engedély szükséges',
-    AskMeLaterTitle: 'Kérdezz meg később',
+    StoragePermissionNeededTitle: 'Storage permission is required',
+    AskMeLaterTitle: 'Ask me later',
+  },
+  Profile: {
+    ScreenTitle: 'My profile',
   },
 };
