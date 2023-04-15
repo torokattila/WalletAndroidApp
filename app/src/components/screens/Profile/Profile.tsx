@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import i18n from 'i18n-js';
 import { Icon } from '@components/shared';
 import { theme } from '@styles/theme';
+import { useProfile } from '@hooks/useProfile';
 import {
   Container,
   ContentContainer,
@@ -18,7 +19,6 @@ import {
   OptionCardTitle,
   StyledIcon,
 } from './Profile.styles';
-import { useProfile } from '@hooks/useProfile';
 import { Dialog } from './Dialog';
 
 const cardShadow = {

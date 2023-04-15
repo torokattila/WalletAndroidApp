@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { getLocalizedName } from '@core/name';
 import { AuthService } from '@model/services';
-import { useUser } from './useUser';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '@navigation/Navigation';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+import { useUser } from './useUser';
 
 const authService = new AuthService();
 
