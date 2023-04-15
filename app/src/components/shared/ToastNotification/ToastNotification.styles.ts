@@ -20,7 +20,7 @@ export const TextContainer = styled(View)`
 `;
 
 export const StyledText = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
 `;
 
 export const SubtitleContainer = styled(View)`

@@ -124,7 +124,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
               <UpperLine />
               {isEditMode && (
                 <DeleteIconContainer onPress={handleConfirmDialogOpen}>
-                  <Icon type="trash" iconColor={theme.colors.white} />
+                  <Icon type="trash" iconColor={theme.colors.white[100]} />
                 </DeleteIconContainer>
               )}
               <Content>

@@ -16,6 +16,6 @@ const shadow = {
 
 export const AddButton: FC<AddButtonProps> = ({ onPress }) => (
   <StyledButton style={[shadow]} onPress={onPress}>
-    <StyledIcon type="plus" iconColor={theme.colors.white} />
+    <StyledIcon type="plus" iconColor={theme.colors.white[100]} />
   </StyledButton>
 );

@@ -1,16 +1,11 @@
 import styled from 'styled-components/native';
-import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 export const Container = styled(View)`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white[100]};
 `;
-
-export const scrollViewStyle: StyleProp<ViewStyle> = {
-  flexGrow: 1,
-  justifyContent: 'center',
-};
 
 export const StyledLinearGradient = styled(LinearGradient)`
   height: 100%;
@@ -28,7 +23,7 @@ export const ScreenTitleContainer = styled(View)`
 `;
 
 export const ScreenTitleText = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   font-size: 25px;
   margin-right: 15px;
   font-family: 'NunitoSans-Light';
@@ -41,18 +36,18 @@ export const BalanceContainer = styled(View)`
 `;
 
 export const BalanceTitle = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   opacity: 0.6;
   font-size: 15px;
 `;
 
 export const Balance = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   font-size: 30px;
 `;
 
 export const ContentContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   align-items: flex-start;
@@ -105,7 +100,7 @@ export const DatePickerButton = styled(TouchableOpacity)`
 `;
 
 export const DatePickerText = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   font-family: 'NunitoSans-Bold';
 `;
 

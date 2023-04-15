@@ -3,7 +3,7 @@ import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Button } from '@components/shared';
 
 export const ContentContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white[100]};
   flex: 1;
   height: 75%;
   width: 100%;

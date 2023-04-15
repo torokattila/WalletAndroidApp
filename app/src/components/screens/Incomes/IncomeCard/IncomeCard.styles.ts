@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 export const Container = styled(TouchableOpacity)`
   width: 95%;
   padding: 15px;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white[100]};
   border-radius: 14px;
   margin-top: 15px;
   margin-left: 5px;
@@ -25,7 +25,6 @@ export const TitleAndAmountContainer = styled(View)`
 `;
 
 export const Title = styled(Text)`
-  color: ${({ theme }) => theme.colors.purple[100]};
   font-family: 'NunitoSans-Bold';
 `;
 

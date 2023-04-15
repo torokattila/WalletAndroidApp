@@ -62,6 +62,9 @@ export const Hungarian = {
   },
   Profile: {
     ScreenTitle: 'Profilom',
+    BasicDetailsTitle: 'Alapadatok szerkesztése',
+    ChangePasswordTitle: 'Jelszó megváltoztatása',
+    DeleteProfileTitle: 'Profil törlése',
   },
 };
 
@@ -129,5 +132,8 @@ export const English = {
   },
   Profile: {
     ScreenTitle: 'My profile',
+    BasicDetailsTitle: 'Edit basic details',
+    ChangePasswordTitle: 'Change password',
+    DeleteProfileTitle: 'Delete profile',
   },
 };

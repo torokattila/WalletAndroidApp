@@ -15,7 +15,7 @@ declare module 'styled-components' {
       purple: ColorRange;
       green: ColorRange;
       red: string;
-      white: string;
+      white: ColorRange;
       black: string;
     };
   }
@@ -39,7 +39,10 @@ export const theme: DefaultTheme = {
       400: '#4fce6e',
     },
     red: '#E23D3D',
-    white: '#fff',
+    white: {
+      100: '#fff',
+      200: '#F9F9F9',
+    },
     black: '#000',
   },
 };

@@ -11,7 +11,7 @@ export const SplashContainer = styled(Animated.View)`
   position: relative;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white[100]};
 `;
 
 export const StyledImage = styled(Image)`

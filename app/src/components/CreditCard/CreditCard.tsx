@@ -26,7 +26,7 @@ const cardShadow = {
 export const CreditCard: FC<CreditCardProps> = ({ name, balance }) => (
   <Container colors={['#4547B8', '#8E65F7']} useAngle angle={140} style={cardShadow}>
     <VisaLogoContainer>
-      <Icon type="visa" iconColor={theme.colors.white} />
+      <Icon type="visa" iconColor={theme.colors.white[100]} />
     </VisaLogoContainer>
     <Balance>{balance} Ft</Balance>
     <CardNumber>0000 1111 2222 3333</CardNumber>

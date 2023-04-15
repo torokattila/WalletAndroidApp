@@ -27,7 +27,7 @@ export const Loader = styled(ActivityIndicator)`
 `;
 
 export const ButtonText = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   text-align: center;
   font-family: 'NunitoSans-Bold';
   font-size: 17px;

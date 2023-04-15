@@ -22,7 +22,7 @@ export const VisaLogoContainer = styled(View)`
 `;
 
 export const Balance = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   top: 12%;
   margin-left: 6.5%;
   font-size: 30px;
@@ -30,7 +30,7 @@ export const Balance = styled(Text)`
 `;
 
 export const CardNumber = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   font-size: 20px;
   position: absolute;
   bottom: 45%;
@@ -40,7 +40,7 @@ export const CardNumber = styled(Text)`
 `;
 
 export const CardDate = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   margin-left: 7%;
   position: absolute;
   font-weight: bold;
@@ -49,7 +49,7 @@ export const CardDate = styled(Text)`
 `;
 
 export const CardName = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   position: absolute;
   margin-left: 7%;
   font-size: 15px;

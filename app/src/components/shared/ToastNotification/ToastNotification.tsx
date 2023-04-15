@@ -25,8 +25,8 @@ const backgroundColor = {
 };
 
 const icon = {
-  success: <Icon type="success-tick" iconColor={theme.colors.white} />,
-  error: <Icon type="error-triangle" iconColor={theme.colors.white} />,
+  success: <Icon type="success-tick" iconColor={theme.colors.white[100]} />,
+  error: <Icon type="error-triangle" iconColor={theme.colors.white[100]} />,
 };
 
 export const ToastNotification: FC<ToastNotificationProps> = ({
@@ -75,7 +75,7 @@ export const ToastNotification: FC<ToastNotificationProps> = ({
         </TextContainer>
         <TouchableWithoutFeedback onPress={onHideToast}>
           <View>
-            <Icon type="close" iconColor={theme.colors.white} />
+            <Icon type="close" iconColor={theme.colors.white[100]} />
           </View>
         </TouchableWithoutFeedback>
       </Container>

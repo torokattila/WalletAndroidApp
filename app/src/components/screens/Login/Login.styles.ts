@@ -22,7 +22,7 @@ export type StyledTextInputProps = TextInputProps & {
 
 export const Container = styled(ScrollView)`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white[100]};
 `;
 
 export const scrollViewStyle: StyleProp<ViewStyle> = {
@@ -38,14 +38,14 @@ export const StyledLinearGradient = styled(LinearGradient)`
 `;
 
 export const StyledGradientText = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   font-size: 40px;
   padding-top: 7%;
   font-family: 'NunitoSans-Light';
 `;
 
 export const BottomContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white[100]};
   align-self: center;
   flex-direction: column;
   align-items: center;
@@ -108,7 +108,7 @@ export const StyledButton = styled(Button)`
 `;
 
 export const ButtonText = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   text-align: center;
   font-family: 'NunitoSans-Bold';
   text-transform: uppercase;

@@ -29,7 +29,7 @@ export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => {
   return (
     <Container style={cardShadow} onPress={onPress}>
       <IconContainer>
-        <Icon type="dollar" iconColor={theme.colors.white} />
+        <Icon type="dollar" iconColor={theme.colors.white[100]} />
       </IconContainer>
 
       <TitleAndAmountContainer>

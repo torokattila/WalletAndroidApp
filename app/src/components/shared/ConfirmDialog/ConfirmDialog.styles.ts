@@ -18,7 +18,7 @@ export const Content = styled(View)`
   display: flex;
   flex-direction: column;
   border-radius: 20px;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white[100]};
   align-items: center;
   justify-content: space-around;
   width: 90%;
@@ -51,7 +51,7 @@ export const PrimaryButton = styled(TouchableOpacity)`
 `;
 
 export const PrimaryButtonText = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   text-align: center;
   font-size: 17px;
 `;

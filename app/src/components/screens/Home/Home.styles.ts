@@ -4,7 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 export const Container = styled(ScrollView)<ScrollViewProps>`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white[100]};
 `;
 
 export const scrollViewStyle: StyleProp<ViewStyle> = {
@@ -20,7 +20,7 @@ export const StyledLinearGradient = styled(LinearGradient)`
 `;
 
 export const WelcomeText = styled(Text)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.white[100]};
   font-size: 25px;
   align-self: flex-start;
   padding-top: 7%;
@@ -30,7 +30,7 @@ export const WelcomeText = styled(Text)`
 `;
 
 export const ContentContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   align-items: center;

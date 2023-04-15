@@ -16,7 +16,6 @@ import {
   ContentContainer,
   ScreenTitleContainer,
   ScreenTitleText,
-  scrollViewStyle,
   StyledLinearGradient,
   AllIncomeTitle,
   ListContainer,
@@ -66,7 +65,7 @@ export const Incomes: FC = () => {
 
   return (
     <>
-      <Container contentContainerStyle={scrollViewStyle}>
+      <Container>
         <StyledLinearGradient
           colors={['#4547B8', '#8E65F7']}
           useAngle
