@@ -1,11 +1,6 @@
 import React, { FC, useRef } from 'react';
 import i18n from 'i18n-js';
-import {
-  KeyboardAvoidingView,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParams } from '@navigation/AuthStack';
 import { RootStackParams } from '@navigation/Navigation';
@@ -34,14 +29,13 @@ type LoginProps = NativeStackScreenProps<AuthStackParams & RootStackParams, 'Log
 export const Login: FC<LoginProps> = ({ navigation }) => {
   const {
     email,
-    setEmail,
     password,
-    setPassword,
     isPassword,
     setIsPassword,
     handleSubmit,
     errors,
     isLoading,
+    handleInputChange,
   } = useLogin();
 
   const passwordRef = useRef(null);
@@ -66,9 +60,7 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
             <FormContainer>
               <StyledTextInput
                 value={email}
-                onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                  setEmail(e.nativeEvent.text)
-                }
+                onChange={(e) => handleInputChange(e, 'email')}
                 hasError={!!errors.email}
                 inputMode="email"
                 placeholder={errors.email ? errors.email : i18n.t('EmailAddressLabel')}
@@ -81,9 +73,7 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
                 <StyledTextInput
                   ref={passwordRef}
                   value={password}
-                  onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                    setPassword(e.nativeEvent.text)
-                  }
+                  onChange={(e) => handleInputChange(e, 'password')}
                   hasError={!!errors.password}
                   secureTextEntry={isPassword}
                   placeholder={errors.password ? errors.password : i18n.t('PasswordLabel')}

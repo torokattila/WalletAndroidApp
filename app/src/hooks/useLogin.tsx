@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import * as Yup from 'yup';
 import i18n from 'i18n-js';
 import { AuthService } from '@model/services';
@@ -23,6 +24,22 @@ const useLogin = () => {
     email: Yup.string().required(i18n.t('AuthForm.EmailRequired')),
     password: Yup.string().required(i18n.t('AuthForm.PasswordRequired')),
   });
+
+  const handleInputChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>,
+    type: 'email' | 'password'
+  ): void => {
+    switch (type) {
+      case 'email':
+        setEmail(e.nativeEvent.text);
+        return;
+      case 'password':
+        setPassword(e.nativeEvent.text);
+        return;
+      default:
+        return null;
+    }
+  };
 
   const verifyForm = async (): Promise<boolean> => {
     try {
@@ -74,14 +91,13 @@ const useLogin = () => {
 
   return {
     email,
-    setEmail,
     password,
-    setPassword,
     isPassword,
     setIsPassword,
     handleSubmit,
     errors,
     isLoading,
+    handleInputChange,
   };
 };
 
