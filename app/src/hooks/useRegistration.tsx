@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import * as Yup from 'yup';
 import i18n from 'i18n-js';
 import { UserService } from '@model/services';
@@ -24,6 +25,31 @@ const useRegistration = () => {
     email,
     password,
     passwordConfirm,
+  };
+
+  const handleInputChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>,
+    type: 'firstname' | 'lastname' | 'email' | 'password' | 'passwordConfirm'
+  ): void => {
+    switch (type) {
+      case 'firstname':
+        setFirstname(e.nativeEvent.text);
+        return;
+      case 'lastname':
+        setLastname(e.nativeEvent.text);
+        return;
+      case 'email':
+        setEmail(e.nativeEvent.text);
+        return;
+      case 'password':
+        setPassword(e.nativeEvent.text);
+        return;
+      case 'passwordConfirm':
+        setPasswordConfirm(e.nativeEvent.text);
+        return;
+      default:
+        return null;
+    }
   };
 
   const RegistrationSchema = Yup.object().shape({
@@ -103,13 +129,9 @@ const useRegistration = () => {
 
   return {
     firstname,
-    setFirstname,
     lastname,
-    setLastname,
     email,
-    setEmail,
     password,
-    setPassword,
     isPassword,
     setIsPassword,
     passwordConfirm,
@@ -119,6 +141,7 @@ const useRegistration = () => {
     errors,
     handleSubmit,
     isLoading,
+    handleInputChange,
   };
 };
 

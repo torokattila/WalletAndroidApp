@@ -1,11 +1,6 @@
 import React, { FC, useRef } from 'react';
 import i18n from 'i18n-js';
-import {
-  KeyboardAvoidingView,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import useRegistration from '@hooks/useRegistration';
 import { AuthStackParams } from '@navigation/AuthStack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -34,22 +29,18 @@ type RegistrationProps = NativeStackScreenProps<AuthStackParams, 'Registration'>
 export const Registration: FC<RegistrationProps> = ({ navigation }) => {
   const {
     firstname,
-    setFirstname,
     lastname,
-    setLastname,
     email,
-    setEmail,
     password,
-    setPassword,
     isPassword,
     setIsPassword,
     passwordConfirm,
-    setPasswordConfirm,
     isPasswordConfirm,
     setIsPasswordConfirm,
     handleSubmit,
     errors,
     isLoading,
+    handleInputChange,
   } = useRegistration();
 
   const lastnameRef = useRef(null);
@@ -82,9 +73,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
             >
               <StyledTextInput
                 value={firstname}
-                onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                  setFirstname(e.nativeEvent.text)
-                }
+                onChange={(e) => handleInputChange(e, 'firstname')}
                 hasError={!!errors.firstname}
                 inputMode="text"
                 placeholder={errors.firstname ? errors.firstname : i18n.t('FirstNameLabel')}
@@ -99,9 +88,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 ref={lastnameRef}
                 inputMode="text"
                 value={lastname}
-                onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                  setLastname(e.nativeEvent.text)
-                }
+                onChange={(e) => handleInputChange(e, 'lastname')}
                 hasError={!!errors.lastname}
                 placeholder={errors.lastname ? errors.lastname : i18n.t('LastNameLabel')}
                 placeholderTextColor={errors.lastname ? theme.colors.red : theme.colors.purple[200]}
@@ -113,9 +100,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 ref={emailRef}
                 inputMode="email"
                 value={email}
-                onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                  setEmail(e.nativeEvent.text)
-                }
+                onChange={(e) => handleInputChange(e, 'email')}
                 hasError={!!errors.email}
                 autoCapitalize="none"
                 placeholder={errors.email ? errors.email : i18n.t('EmailAddressLabel')}
@@ -129,9 +114,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                   ref={passwordRef}
                   secureTextEntry={isPassword}
                   value={password}
-                  onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                    setPassword(e.nativeEvent.text)
-                  }
+                  onChange={(e) => handleInputChange(e, 'password')}
                   hasError={!!errors.password}
                   placeholder={errors.password ? errors.password : i18n.t('PasswordLabel')}
                   placeholderTextColor={
@@ -153,9 +136,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                   ref={passwordConfirmRef}
                   secureTextEntry={isPasswordConfirm}
                   value={passwordConfirm}
-                  onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                    setPasswordConfirm(e.nativeEvent.text)
-                  }
+                  onChange={(e) => handleInputChange(e, 'passwordConfirm')}
                   hasError={!!errors.passwordConfirm}
                   placeholder={
                     errors.passwordConfirm ? errors.passwordConfirm : i18n.t('PasswordConfirmLabel')

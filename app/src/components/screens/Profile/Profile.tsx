@@ -19,6 +19,7 @@ import {
   StyledIcon,
 } from './Profile.styles';
 import { useProfile } from '@hooks/useProfile';
+import { Dialog } from './Dialog';
 
 const cardShadow = {
   elevation: 4,
@@ -29,7 +30,17 @@ const cardShadow = {
 };
 
 export const Profile: FC = () => {
-  const { localizedName, handleSignOutButtonPress, email } = useProfile();
+  const {
+    localizedName,
+    handleSignOutButtonPress,
+    email,
+    isBasicDetailsVisible,
+    handleBasicDetailsPress,
+    handleBasicDetailsClose,
+    isChangePasswordVisible,
+    handleChangePasswordPress,
+    handleChangePasswordClose,
+  } = useProfile();
 
   return (
     <>
@@ -57,11 +68,11 @@ export const Profile: FC = () => {
             </NameEmailContainer>
 
             <OptionsContainer contentContainerStyle={scrollViewStyle}>
-              <OptionCard style={cardShadow}>
+              <OptionCard style={cardShadow} onPress={handleBasicDetailsPress}>
                 <StyledIcon type="identity-card" iconColor={theme.colors.purple[100]} />
                 <OptionCardTitle>{i18n.t('Profile.BasicDetailsTitle')}</OptionCardTitle>
               </OptionCard>
-              <OptionCard style={cardShadow}>
+              <OptionCard style={cardShadow} onPress={handleChangePasswordPress}>
                 <StyledIcon type="change-password" iconColor={theme.colors.purple[100]} />
                 <OptionCardTitle>{i18n.t('Profile.ChangePasswordTitle')}</OptionCardTitle>
               </OptionCard>
@@ -77,6 +88,12 @@ export const Profile: FC = () => {
           </ContentContainer>
         </StyledLinearGradient>
       </Container>
+      <Dialog
+        isOpen={isBasicDetailsVisible || isChangePasswordVisible}
+        isBasicDetailsDialog={isBasicDetailsVisible}
+        onSave={() => {}}
+        onClose={isBasicDetailsVisible ? handleBasicDetailsClose : handleChangePasswordClose}
+      />
     </>
   );
 };

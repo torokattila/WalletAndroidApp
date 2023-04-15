@@ -65,6 +65,9 @@ export const Hungarian = {
     BasicDetailsTitle: 'Alapadatok szerkesztése',
     ChangePasswordTitle: 'Jelszó megváltoztatása',
     DeleteProfileTitle: 'Profil törlése',
+    CurrentPasswordTitle: 'Jelenlegi jelszó',
+    CurrentPasswordConfirmTitle: 'Jelenlegi jelszó megerősítése',
+    NewPasswordTitle: 'Új jelszó',
   },
 };
 
@@ -135,5 +138,8 @@ export const English = {
     BasicDetailsTitle: 'Edit basic details',
     ChangePasswordTitle: 'Change password',
     DeleteProfileTitle: 'Delete profile',
+    CurrentPasswordTitle: 'Current password',
+    CurrentPasswordConfirmTitle: 'Confirm current password',
+    NewPasswordTitle: 'New password',
   },
 };
