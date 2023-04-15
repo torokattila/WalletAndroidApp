@@ -1,12 +1,7 @@
 import React, { FC } from 'react';
 import i18n from 'i18n-js';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { AuthService } from '@model/services';
-import { RootStackParams } from '@navigation/Navigation';
 import { Icon } from '@components/shared';
 import { theme } from '@styles/theme';
-import { useUser } from '@hooks/useUser';
-import { getLocalizedName } from '@core/name';
 import {
   Container,
   ContentContainer,
@@ -23,8 +18,7 @@ import {
   OptionCardTitle,
   StyledIcon,
 } from './Profile.styles';
-
-const authService = new AuthService();
+import { useProfile } from '@hooks/useProfile';
 
 const cardShadow = {
   elevation: 4,
@@ -35,16 +29,7 @@ const cardShadow = {
 };
 
 export const Profile: FC = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParams>>();
-  // const {} = useProfile();
-
-  const { user } = useUser();
-  const localizedName = getLocalizedName(user?.lastname, user?.firstname);
-
-  const handleSignOutButtonPress = async () => {
-    await authService.signOut();
-    navigation.navigate('Auth');
-  };
+  const { localizedName, handleSignOutButtonPress, email } = useProfile();
 
   return (
     <>
@@ -68,7 +53,7 @@ export const Profile: FC = () => {
 
             <NameEmailContainer>
               <Name>{localizedName}</Name>
-              <Email>{user?.email}</Email>
+              <Email>{email}</Email>
             </NameEmailContainer>
 
             <OptionsContainer contentContainerStyle={scrollViewStyle}>
