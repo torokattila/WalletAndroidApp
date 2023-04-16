@@ -14,7 +14,7 @@ const authService = new AuthService();
 export const useProfile = () => {
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
   const toast = useToastNotificationStore();
-  const { user } = useUser();
+  const { user, retry: fetchUser, updateDetails } = useUser();
 
   const localizedName = getLocalizedName(user?.lastname, user?.firstname);
 
@@ -78,7 +78,49 @@ export const useProfile = () => {
   const handleBasicDetailsPress = (): void => setIsBasicDetailsVisible(true);
   const handleBasicDetailsClose = (): void => setIsBasicDetailsVisible(false);
 
-  const handleUpdateBasicDetailsSubmit = (): void => {};
+  const verifyBasicDetails = (): boolean => {
+    if (!firstname.length) {
+      setErrors({
+        firstname: i18n.t('AuthForm.FirstnameRequired'),
+      });
+      return false;
+    } else if (!lastname.length) {
+      setErrors({
+        lastname: i18n.t('AuthForm.LastnameRequired'),
+      });
+      return false;
+    }
+
+    setErrors({});
+    return true;
+  };
+
+  const handleUpdateBasicDetailsSubmit = async (): Promise<void> => {
+    const isFormVerified = verifyBasicDetails();
+
+    if (isFormVerified) {
+      setIsLoading(true);
+      try {
+        await updateDetails({ ...user, firstname, lastname });
+        toast.show({
+          type: 'success',
+          title: i18n.t('ToastNotification.SuccessfulDataChange'),
+        });
+        handleBasicDetailsClose();
+        fetchUser();
+      } catch (error) {
+        setErrors({
+          generalError: error,
+        });
+        toast.show({
+          type: 'error',
+          title: i18n.t('ToastNotification.SomethingWentWrong'),
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
 
   const handleChangePasswordPress = (): void => setIsChangePasswordVisible(true);
   const handleChangePasswordClose = (): void => {
@@ -179,7 +221,6 @@ export const useProfile = () => {
       await authService.deleteAccount();
       navigation.navigate('Auth');
     } catch (error) {
-      console.error(error);
       setErrors({
         generalError: error,
       });

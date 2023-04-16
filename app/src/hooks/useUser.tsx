@@ -77,7 +77,7 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     try {
       setIsLoading(true);
 
-      const updatedUser = await userService.updateBasicDetails(user.id, data);
+      const updatedUser = await userService.updateBasicDetails(userId, data);
       setUser(updatedUser);
     } catch (err: any) {
       setError(err);

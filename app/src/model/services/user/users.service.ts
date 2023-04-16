@@ -121,7 +121,7 @@ export class UserService extends BaseService<UserModel> {
 
     let userData: Partial<User> = {
       lastname: data.lastname.trim(),
-      firstname: data.lastname.trim(),
+      firstname: data.firstname.trim(),
       balance: data.balance,
     };
 
