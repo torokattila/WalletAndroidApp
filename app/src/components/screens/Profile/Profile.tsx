@@ -44,6 +44,20 @@ export const Profile: FC = () => {
     handleDeleteProfilePress,
     handleDeleteProfileDialogClose,
     handleDeleteProfileSubmit,
+    handleUpdateBasicDetailsSubmit,
+    handleChangePasswordSubmit,
+    errors,
+    handleInputChange,
+    firstname,
+    lastname,
+    oldPassword,
+    newPassword,
+    newPasswordConfirm,
+    isLoading,
+    handleTogglePasswordVisible,
+    isOldPassword,
+    isNewPassword,
+    isNewPasswordConfirm,
   } = useProfile();
 
   return (
@@ -93,10 +107,26 @@ export const Profile: FC = () => {
         </StyledLinearGradient>
       </Container>
       <Dialog
+        handleInputChange={handleInputChange}
         isOpen={isBasicDetailsVisible || isChangePasswordVisible}
         isBasicDetailsDialog={isBasicDetailsVisible}
-        onSave={() => {}}
+        onSave={isBasicDetailsVisible ? handleUpdateBasicDetailsSubmit : handleChangePasswordSubmit}
         onClose={isBasicDetailsVisible ? handleBasicDetailsClose : handleChangePasswordClose}
+        errors={errors}
+        inputValues={{
+          firstname,
+          lastname,
+          oldPassword,
+          newPassword,
+          newPasswordConfirm,
+        }}
+        isLoading={isLoading}
+        handleTogglePasswordVisible={handleTogglePasswordVisible}
+        passwordsVisibility={{
+          isOldPassword,
+          isNewPassword,
+          isNewPasswordConfirm,
+        }}
       />
       <ConfirmDialog
         isVisible={isDeleteProfileDialogVisible}

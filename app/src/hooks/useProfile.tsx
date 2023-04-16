@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import i18n from 'i18n-js';
+import { FirebaseError } from 'firebase/app';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { getLocalizedName } from '@core/name';
 import { AuthService } from '@model/services';
@@ -21,19 +22,19 @@ export const useProfile = () => {
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
   const [firstname, setFirstname] = useState(user?.firstname ?? '');
   const [lastname, setLastname] = useState(user?.lastname ?? '');
-  const [password, setPassword] = useState('');
-  const [isPassword, setIsPassword] = useState(true);
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [isPasswordConfirm, setIsPasswordConfirm] = useState(true);
+  const [oldPassword, setOldPassword] = useState('');
+  const [isOldPassword, setIsOldPassword] = useState(true);
   const [newPassword, setNewPassword] = useState('');
   const [isNewPassword, setIsNewPassword] = useState(true);
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
+  const [isNewPasswordConfirm, setIsNewPasswordConfirm] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteProfileDialogVisible, setIsDeleteProfileDialogVisible] = useState(false);
 
   const handleInputChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>,
-    type: 'firstname' | 'lastname' | 'password' | 'passwordConfirm' | 'newPassword'
+    type: 'firstname' | 'lastname' | 'oldPassword' | 'newPassword' | 'newPasswordConfirm'
   ): void => {
     switch (type) {
       case 'firstname':
@@ -42,25 +43,133 @@ export const useProfile = () => {
       case 'lastname':
         setLastname(e.nativeEvent.text);
         return;
-      case 'password':
-        setPassword(e.nativeEvent.text);
-        return;
-      case 'passwordConfirm':
-        setPasswordConfirm(e.nativeEvent.text);
+      case 'oldPassword':
+        setOldPassword(e.nativeEvent.text);
         return;
       case 'newPassword':
         setNewPassword(e.nativeEvent.text);
+        return;
+      case 'newPasswordConfirm':
+        setNewPasswordConfirm(e.nativeEvent.text);
         return;
       default:
         return null;
     }
   };
 
+  const handleTogglePasswordVisible = (
+    type: 'oldPassword' | 'newPassword' | 'newPasswordConfirm'
+  ): void => {
+    switch (type) {
+      case 'oldPassword':
+        setIsOldPassword(!isOldPassword);
+        return;
+      case 'newPassword':
+        setIsNewPassword(!isNewPassword);
+        return;
+      case 'newPasswordConfirm':
+        setIsNewPasswordConfirm(!isNewPasswordConfirm);
+        return;
+      default:
+        return;
+    }
+  };
+
   const handleBasicDetailsPress = (): void => setIsBasicDetailsVisible(true);
   const handleBasicDetailsClose = (): void => setIsBasicDetailsVisible(false);
 
+  const handleUpdateBasicDetailsSubmit = (): void => {};
+
   const handleChangePasswordPress = (): void => setIsChangePasswordVisible(true);
-  const handleChangePasswordClose = (): void => setIsChangePasswordVisible(false);
+  const handleChangePasswordClose = (): void => {
+    setIsChangePasswordVisible(false);
+    setOldPassword('');
+    setIsOldPassword(true);
+    setNewPassword('');
+    setIsNewPassword(true);
+    setNewPasswordConfirm('');
+    setIsNewPasswordConfirm(true);
+  };
+
+  const verifyPasswordChangeForm = (): boolean => {
+    if (!oldPassword.length) {
+      setErrors({
+        oldPassword: i18n.t('AuthForm.PasswordRequired'),
+      });
+      return false;
+    } else if (!newPassword.length) {
+      setErrors({
+        ...errors,
+        newPassword: i18n.t('RequiredField'),
+      });
+      return false;
+    } else if (!newPasswordConfirm.length) {
+      setErrors({
+        newPasswordConfirm: i18n.t('AuthForm.PasswordConfirmRequired'),
+      });
+      return false;
+    }
+
+    setErrors({});
+    return true;
+  };
+
+  const handleChangePasswordSubmit = async (): Promise<void> => {
+    const isFormVerified = verifyPasswordChangeForm();
+
+    if (isFormVerified) {
+      setIsLoading(true);
+      try {
+        if (newPassword !== newPasswordConfirm) {
+          throw new FirebaseError('password-mismatch', 'Passwords are different');
+        }
+
+        await authService.changePassword(oldPassword, newPassword);
+
+        toast.show({
+          type: 'success',
+          title: i18n.t('ToastNotification.SuccessfulPasswordChange'),
+        });
+
+        handleChangePasswordClose();
+      } catch (error) {
+        console.error(error);
+        switch (error.code) {
+          case 'auth/wrong-password':
+            toast.show({
+              type: 'error',
+              title: i18n.t('Profile.WrongPassword'),
+            });
+            setErrors({
+              oldPassword: i18n.t('Profile.WrongPassword'),
+            });
+            return;
+          case 'auth/user-not-found':
+            setErrors({
+              oldPassword: i18n.t('Profile.WrongPassword'),
+            });
+            return;
+          case 'password-mismatch':
+            toast.show({
+              type: 'error',
+              title: i18n.t('AuthForm.PasswordsDoNotMatch'),
+            });
+            setErrors({
+              newPassword: i18n.t('AuthForm.PasswordsDoNotMatch'),
+            });
+            return;
+          default:
+            toast.show({
+              type: 'error',
+              title: i18n.t('ToastNotification.SomethingWentWrong'),
+            });
+            return;
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
 
   const handleDeleteProfilePress = (): void => setIsDeleteProfileDialogVisible(true);
   const handleDeleteProfileDialogClose = (): void => setIsDeleteProfileDialogVisible(false);
@@ -101,20 +210,20 @@ export const useProfile = () => {
     firstname,
     lastname,
     handleInputChange,
-    password,
-    isPassword,
-    setIsPassword,
-    passwordConfirm,
-    isPasswordConfirm,
-    setIsPasswordConfirm,
+    oldPassword,
+    isOldPassword,
+    newPasswordConfirm,
+    isNewPasswordConfirm,
     newPassword,
     isNewPassword,
-    setIsNewPassword,
     errors,
     isLoading,
     isDeleteProfileDialogVisible,
     handleDeleteProfilePress,
     handleDeleteProfileDialogClose,
     handleDeleteProfileSubmit,
+    handleUpdateBasicDetailsSubmit,
+    handleChangePasswordSubmit,
+    handleTogglePasswordVisible,
   };
 };

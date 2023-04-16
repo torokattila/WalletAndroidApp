@@ -29,6 +29,7 @@ export const Hungarian = {
     EditIncomeSuccess: 'Jövedelem sikeresen frissítve!',
     DeleteIncomeSuccess: 'Jövedelem sikeresen törölve!',
     SuccessfulDownload: 'Sikeres letöltés',
+    SuccessfulPasswordChange: 'Sikeres jelszó módosítás',
   },
   SignOut: 'Kijelentkezés',
   BalanceTitle: 'Aktuális egyenleged',
@@ -66,9 +67,11 @@ export const Hungarian = {
     ChangePasswordTitle: 'Jelszó megváltoztatása',
     DeleteProfileTitle: 'Profil törlése',
     CurrentPasswordTitle: 'Jelenlegi jelszó',
-    CurrentPasswordConfirmTitle: 'Jelenlegi jelszó megerősítése',
     NewPasswordTitle: 'Új jelszó',
+    NewPasswordConfirmTitle: 'Új jelszó megerősítése',
+    WrongPassword: 'Helytelen jelszó',
   },
+  RequiredField: 'A mező kitöltése kötelező',
 };
 
 export const English = {
@@ -139,7 +142,10 @@ export const English = {
     ChangePasswordTitle: 'Change password',
     DeleteProfileTitle: 'Delete profile',
     CurrentPasswordTitle: 'Current password',
-    CurrentPasswordConfirmTitle: 'Confirm current password',
     NewPasswordTitle: 'New password',
+    NewPasswordConfirmTitle: 'Confirm new password',
+    SuccessfulPasswordChange: 'Successful password change',
+    WrongPassword: 'Wrong password',
+    RequiredField: 'Required field',
   },
 };

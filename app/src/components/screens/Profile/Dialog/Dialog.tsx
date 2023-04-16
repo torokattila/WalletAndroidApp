@@ -1,9 +1,14 @@
 import React, { FC, useRef } from 'react';
 import i18n from 'i18n-js';
-import { KeyboardAvoidingView, Modal, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Modal,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+  View,
+} from 'react-native';
 import GestureRecognizer from 'react-native-swipe-detect';
 import { Icon, ModalBackground } from '@components/shared';
-import { useProfile } from '@hooks/useProfile';
 import { theme } from '@styles/theme';
 import {
   buttonShadow,
@@ -25,30 +30,45 @@ type DialogProps = {
   isBasicDetailsDialog: boolean;
   onSave: () => void;
   onClose: () => void;
+  errors: { [key: string]: string };
+  inputValues: {
+    firstname: string;
+    lastname: string;
+    oldPassword: string;
+    newPassword: string;
+    newPasswordConfirm: string;
+  };
+  handleInputChange: (
+    e: NativeSyntheticEvent<TextInputChangeEventData>,
+    type: 'firstname' | 'lastname' | 'oldPassword' | 'newPassword' | 'newPasswordConfirm'
+  ) => void;
+  isLoading: boolean;
+  handleTogglePasswordVisible: (type: 'oldPassword' | 'newPassword' | 'newPasswordConfirm') => void;
+  passwordsVisibility: {
+    isOldPassword: boolean;
+    isNewPassword: boolean;
+    isNewPasswordConfirm: boolean;
+  };
 };
 
-export const Dialog: FC<DialogProps> = ({ isOpen, isBasicDetailsDialog, onSave, onClose }) => {
-  const {
-    firstname,
-    lastname,
-    handleInputChange,
-    password,
-    isPassword,
-    setIsPassword,
-    setIsPasswordConfirm,
-    isNewPassword,
-    newPassword,
-    setIsNewPassword,
-    passwordConfirm,
-    isPasswordConfirm,
-    errors,
-  } = useProfile();
+export const Dialog: FC<DialogProps> = ({
+  isOpen,
+  isBasicDetailsDialog,
+  onSave,
+  onClose,
+  errors,
+  inputValues,
+  handleInputChange,
+  isLoading,
+  handleTogglePasswordVisible,
+  passwordsVisibility,
+}) => {
   const dialogTitle = isBasicDetailsDialog
     ? i18n.t('Profile.BasicDetailsTitle')
     : i18n.t('Profile.ChangePasswordTitle');
   const lastnameRef = useRef(null);
-  const passwordConfirmRef = useRef(null);
   const newPasswordRef = useRef(null);
+  const newPasswordConfirmRef = useRef(null);
 
   return (
     <GestureRecognizer onSwipeDown={onClose}>
@@ -65,7 +85,7 @@ export const Dialog: FC<DialogProps> = ({ isOpen, isBasicDetailsDialog, onSave, 
                     <InputContainer>
                       <Label>{i18n.t('FirstNameLabel')}</Label>
                       <StyledTextInput
-                        value={firstname}
+                        value={inputValues.firstname}
                         onChange={(e) => handleInputChange(e, 'firstname')}
                         hasError={!!errors.firstname}
                         inputMode="text"
@@ -82,7 +102,7 @@ export const Dialog: FC<DialogProps> = ({ isOpen, isBasicDetailsDialog, onSave, 
                       <StyledTextInput
                         ref={lastnameRef}
                         inputMode="text"
-                        value={lastname}
+                        value={inputValues.lastname}
                         onChange={(e) => handleInputChange(e, 'lastname')}
                         hasError={!!errors.lastname}
                         placeholder={errors.lastname ? errors.lastname : i18n.t('LastNameLabel')}
@@ -98,52 +118,27 @@ export const Dialog: FC<DialogProps> = ({ isOpen, isBasicDetailsDialog, onSave, 
                       <View>
                         <Label>{i18n.t('Profile.CurrentPasswordTitle')}</Label>
                         <StyledTextInput
-                          secureTextEntry={isPassword}
-                          value={password}
-                          onChange={(e) => handleInputChange(e, 'password')}
-                          hasError={!!errors.password}
+                          secureTextEntry={passwordsVisibility.isOldPassword}
+                          value={inputValues.oldPassword}
+                          onChange={(e) => handleInputChange(e, 'oldPassword')}
+                          hasError={!!errors.oldPassword}
                           placeholder={
-                            errors.password
-                              ? errors.password
+                            errors.oldPassword
+                              ? errors.oldPassword
                               : i18n.t('Profile.CurrentPasswordTitle')
                           }
                           placeholderTextColor={
-                            errors.password ? theme.colors.red : theme.colors.purple[200]
-                          }
-                          returnKeyType="next"
-                          blurOnSubmit={false}
-                          onSubmitEditing={() => passwordConfirmRef.current.focus()}
-                        />
-                        <StyledIconButton onPress={() => setIsPassword(!isPassword)}>
-                          <Icon
-                            type={isPassword ? 'eye' : 'eye-outlined'}
-                            iconColor={theme.colors.purple[100]}
-                          />
-                        </StyledIconButton>
-                      </View>
-                      <View>
-                        <Label>{i18n.t('Profile.CurrentPasswordConfirmTitle')}</Label>
-                        <StyledTextInput
-                          ref={passwordConfirmRef}
-                          secureTextEntry={isPasswordConfirm}
-                          value={passwordConfirm}
-                          onChange={(e) => handleInputChange(e, 'passwordConfirm')}
-                          hasError={!!errors.passwordConfirm}
-                          placeholder={
-                            errors.passwordConfirm
-                              ? errors.passwordConfirm
-                              : i18n.t('Profile.CurrentPasswordConfirmTitle')
-                          }
-                          placeholderTextColor={
-                            errors.passwordConfirm ? theme.colors.red : theme.colors.purple[200]
+                            errors.oldPassword ? theme.colors.red : theme.colors.purple[200]
                           }
                           returnKeyType="next"
                           blurOnSubmit={false}
                           onSubmitEditing={() => newPasswordRef.current.focus()}
                         />
-                        <StyledIconButton onPress={() => setIsPasswordConfirm(!isPasswordConfirm)}>
+                        <StyledIconButton
+                          onPress={() => handleTogglePasswordVisible('oldPassword')}
+                        >
                           <Icon
-                            type={isPasswordConfirm ? 'eye' : 'eye-outlined'}
+                            type={passwordsVisibility.isOldPassword ? 'eye' : 'eye-outlined'}
                             iconColor={theme.colors.purple[100]}
                           />
                         </StyledIconButton>
@@ -152,8 +147,8 @@ export const Dialog: FC<DialogProps> = ({ isOpen, isBasicDetailsDialog, onSave, 
                         <Label>{i18n.t('Profile.NewPasswordTitle')}</Label>
                         <StyledTextInput
                           ref={newPasswordRef}
-                          secureTextEntry={isNewPassword}
-                          value={newPassword}
+                          secureTextEntry={passwordsVisibility.isNewPassword}
+                          value={inputValues.newPassword}
                           onChange={(e) => handleInputChange(e, 'newPassword')}
                           hasError={!!errors.newPassword}
                           placeholder={
@@ -164,10 +159,41 @@ export const Dialog: FC<DialogProps> = ({ isOpen, isBasicDetailsDialog, onSave, 
                           placeholderTextColor={
                             errors.newPassword ? theme.colors.red : theme.colors.purple[200]
                           }
+                          returnKeyType="next"
+                          blurOnSubmit={false}
+                          onSubmitEditing={() => newPasswordConfirmRef.current.focus()}
                         />
-                        <StyledIconButton onPress={() => setIsNewPassword(!isNewPassword)}>
+                        <StyledIconButton
+                          onPress={() => handleTogglePasswordVisible('newPassword')}
+                        >
                           <Icon
-                            type={isNewPassword ? 'eye' : 'eye-outlined'}
+                            type={passwordsVisibility.isNewPassword ? 'eye' : 'eye-outlined'}
+                            iconColor={theme.colors.purple[100]}
+                          />
+                        </StyledIconButton>
+                      </View>
+                      <View>
+                        <Label>{i18n.t('Profile.NewPasswordConfirmTitle')}</Label>
+                        <StyledTextInput
+                          ref={newPasswordConfirmRef}
+                          secureTextEntry={passwordsVisibility.isNewPasswordConfirm}
+                          value={inputValues.newPasswordConfirm}
+                          onChange={(e) => handleInputChange(e, 'newPasswordConfirm')}
+                          hasError={!!errors.newPasswordConfirm}
+                          placeholder={
+                            errors.newPasswordConfirm
+                              ? errors.newPasswordConfirm
+                              : i18n.t('Profile.NewPasswordConfirmTitle')
+                          }
+                          placeholderTextColor={
+                            errors.newPasswordConfirm ? theme.colors.red : theme.colors.purple[200]
+                          }
+                        />
+                        <StyledIconButton
+                          onPress={() => handleTogglePasswordVisible('newPasswordConfirm')}
+                        >
+                          <Icon
+                            type={passwordsVisibility.isNewPasswordConfirm ? 'eye' : 'eye-outlined'}
                             iconColor={theme.colors.purple[100]}
                           />
                         </StyledIconButton>
@@ -182,6 +208,9 @@ export const Dialog: FC<DialogProps> = ({ isOpen, isBasicDetailsDialog, onSave, 
                 style={buttonShadow}
                 onPress={onSave}
                 text={i18n.t('SaveButtonTitle')}
+                withActivityIndicator
+                isLoading={isLoading}
+                disabled={isLoading}
               />
             </Content>
           </KeyboardAvoidingView>
