@@ -63,26 +63,11 @@ export class AuthService {
   }
 
   async changePassword(oldPassword: string, newPassword: string): Promise<void> {
-    // try {
-    let user = this.auth.currentUser;
-    if (!user) {
-      user = JSON.parse(await AsyncStorage.getItem(AUTH_USER_STORAGE_KEY));
-      user = { ...user, tenantId: undefined };
-    }
+    const user = this.auth.currentUser;
     const credential = firebase.EmailAuthProvider.credential(user.email, oldPassword);
-    console.log('credential: ', credential);
 
     const userCredential = await firebase.reauthenticateWithCredential(user, credential);
-    console.log('userCredential: ', userCredential);
-    if (!userCredential) {
-      await firebase.updatePassword(user, newPassword);
-    } else {
-      await firebase.updatePassword(userCredential.user, newPassword);
-    }
-
-    // } catch (error) {
-    //   console.error('backend Error: ', error);
-    // }
+    await firebase.updatePassword(userCredential.user, newPassword);
   }
 
   async deleteAccount(): Promise<void | string> {
