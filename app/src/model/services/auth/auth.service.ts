@@ -4,6 +4,7 @@ import { deleteDoc, getDocs, query, where } from 'firebase/firestore';
 import { getApp, getCollection } from '../../firebase-config';
 
 const STORAGE_KEY = 'clientId';
+const AUTH_USER_STORAGE_KEY = 'authUser';
 
 export class AuthService {
   private readonly auth: firebase.Auth = firebase.getAuth(getApp());
@@ -12,6 +13,8 @@ export class AuthService {
     const userCredential = await firebase.signInWithEmailAndPassword(this.auth, email, password);
 
     const { user } = userCredential;
+
+    await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
 
     return user;
   }
@@ -25,12 +28,14 @@ export class AuthService {
 
     const { user } = userCredential;
 
+    await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
+
     return user;
   }
 
   getCurrentUser(): Promise<firebase.User> {
     const promise: Promise<firebase.User> = new Promise((resolve, reject) => {
-      if (!this.auth.currentUser) {
+      if (this.auth.currentUser) {
         return resolve(this.auth.currentUser);
       }
 
@@ -50,6 +55,7 @@ export class AuthService {
   async signOut(): Promise<void> {
     try {
       await AsyncStorage.removeItem(STORAGE_KEY);
+      await AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY);
       await firebase.signOut(this.auth);
     } catch (error) {
       console.error(error);
@@ -66,10 +72,18 @@ export class AuthService {
 
   async deleteAccount(): Promise<void | string> {
     try {
-      const user = await this.getCurrentUser();
-      await user.delete();
+      let user: firebase.User = await this.getCurrentUser();
 
-      this.deleteUser(user.uid);
+      if (!user) {
+        user = JSON.parse(await AsyncStorage.getItem(AUTH_USER_STORAGE_KEY));
+      }
+
+      if (user) {
+        await user.delete();
+
+        await this.deleteUser(user.uid);
+        await this.signOut();
+      }
     } catch (error) {
       if (error.code === 'auth/requires-recent-login') {
         return 'auth/requires-recent-login';

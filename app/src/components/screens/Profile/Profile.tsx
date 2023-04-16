@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import i18n from 'i18n-js';
-import { Icon } from '@components/shared';
+import { ConfirmDialog, Icon } from '@components/shared';
 import { theme } from '@styles/theme';
 import { useProfile } from '@hooks/useProfile';
 import {
@@ -40,6 +40,10 @@ export const Profile: FC = () => {
     isChangePasswordVisible,
     handleChangePasswordPress,
     handleChangePasswordClose,
+    isDeleteProfileDialogVisible,
+    handleDeleteProfilePress,
+    handleDeleteProfileDialogClose,
+    handleDeleteProfileSubmit,
   } = useProfile();
 
   return (
@@ -76,7 +80,7 @@ export const Profile: FC = () => {
                 <StyledIcon type="change-password" iconColor={theme.colors.purple[100]} />
                 <OptionCardTitle>{i18n.t('Profile.ChangePasswordTitle')}</OptionCardTitle>
               </OptionCard>
-              <OptionCard style={cardShadow}>
+              <OptionCard style={cardShadow} onPress={handleDeleteProfilePress}>
                 <StyledIcon type="delete-profile" iconColor={theme.colors.purple[100]} />
                 <OptionCardTitle>{i18n.t('Profile.DeleteProfileTitle')}</OptionCardTitle>
               </OptionCard>
@@ -93,6 +97,15 @@ export const Profile: FC = () => {
         isBasicDetailsDialog={isBasicDetailsVisible}
         onSave={() => {}}
         onClose={isBasicDetailsVisible ? handleBasicDetailsClose : handleChangePasswordClose}
+      />
+      <ConfirmDialog
+        isVisible={isDeleteProfileDialogVisible}
+        onPressPrimaryButton={handleDeleteProfileSubmit}
+        onPressSecondaryButton={handleDeleteProfileDialogClose}
+        primaryButtonText={i18n.t('Dialog.Delete')}
+        secondaryButtonText={i18n.t('Dialog.Cancel')}
+        title={i18n.t('Dialog.AreYouSureTitle')}
+        description={i18n.t('Dialog.CannotBeUndoneTitle')}
       />
     </>
   );
