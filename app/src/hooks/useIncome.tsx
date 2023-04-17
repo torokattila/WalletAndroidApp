@@ -17,6 +17,7 @@ import { useUserId } from './useUserId';
 export const useIncome = (income?: Income) => {
   const { retry: fetchUser } = useUser();
   const { userId } = useUserId();
+
   const [amount, setAmount] = useState<string>('0');
   const [title, setTitle] = useState<string>('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});

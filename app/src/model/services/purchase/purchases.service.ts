@@ -3,9 +3,16 @@ import {
   collection,
   doc,
   DocumentReference,
+  FirestoreError,
   getDoc,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
   QueryDocumentSnapshot,
   Timestamp,
+  Unsubscribe,
+  where,
 } from 'firebase/firestore';
 import { Purchase, PurchaseCategory } from '@model/domain';
 import { getDB } from '@model/firebase-config';
@@ -58,6 +65,31 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     const purchaseSnapshot = await getDoc(purchaseRef);
 
     return PurchaseService.toDomainObject(purchaseSnapshot);
+  }
+
+  async getAllPurchases(
+    userId: string,
+    onSuccess: (purchases: Purchase[]) => void,
+    onError: (error: FirestoreError) => void
+  ): Promise<Unsubscribe> {
+    const queryData = query(
+      this.collection,
+      where('userId', '==', userId),
+      orderBy('updatedAt', 'desc'),
+      limit(9998)
+    );
+
+    return onSnapshot(
+      queryData,
+      (snapshots) => {
+        const purchases = snapshots?.docs?.map((document) =>
+          PurchaseService.toDomainObject(document)
+        );
+
+        onSuccess(purchases);
+      },
+      onError
+    );
   }
 
   static toDomainObject(purchase: QueryDocumentSnapshot<Purchase>): Purchase {
