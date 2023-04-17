@@ -73,6 +73,19 @@ export const Hungarian = {
     WrongPassword: 'Helytelen jelszó',
   },
   RequiredField: 'A mező kitöltése kötelező',
+  Purchases: {
+    ScreenTitle: 'Vásárlások',
+    PurchasesThisMonthTitle: 'Összes vásárlás ebben a hónapban',
+    AllPurchasesTitle: 'Összes vásárlás',
+    FilterForCategory: 'Szűrés kategóriára',
+    Categories: {
+      All: 'Összes',
+      Food: 'Élelmiszer',
+      Clothing: 'Ruházat',
+      Entertainment: 'Szórakozás',
+      Other: 'Egyéb',
+    },
+  },
 };
 
 export const English = {
@@ -148,6 +161,19 @@ export const English = {
     NewPasswordConfirmTitle: 'Confirm new password',
     SuccessfulPasswordChange: 'Successful password change',
     WrongPassword: 'Wrong password',
-    RequiredField: 'Required field',
+  },
+  RequiredField: 'Required field',
+  Purchases: {
+    ScreenTitle: 'Purchases',
+    PurchasesThisMonthTitle: 'Purchases this month',
+    AllPurchasesTitle: 'All purchases',
+    FilterForCategory: 'Filter for category',
+    Categories: {
+      All: 'All',
+      Food: 'Food',
+      Clothing: 'Clothing',
+      Entertainment: 'Entertainment',
+      Other: 'Other',
+    },
   },
 };

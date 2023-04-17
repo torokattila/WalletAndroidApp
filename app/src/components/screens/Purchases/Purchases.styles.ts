@@ -29,19 +29,19 @@ export const ScreenTitleText = styled(Text)`
   font-family: 'NunitoSans-Light';
 `;
 
-export const BalanceContainer = styled(View)`
+export const PurchasesThisMonthContainer = styled(View)`
   align-self: flex-start;
   padding-left: 5%;
   margin-top: 25px;
 `;
 
-export const BalanceTitle = styled(Text)`
+export const PurchasesThisMonthTitle = styled(Text)`
   color: ${({ theme }) => theme.colors.white[100]};
   opacity: 0.6;
   font-size: 15px;
 `;
 
-export const Balance = styled(Text)`
+export const PurchasesThisMonth = styled(Text)`
   color: ${({ theme }) => theme.colors.white[100]};
   font-size: 30px;
 `;
@@ -61,14 +61,14 @@ export const ContentContainer = styled(View)`
   position: relative;
 `;
 
-export const AllIncomeTitle = styled(Text)`
+export const AllPurchasesTitle = styled(Text)`
   font-family: 'NunitoSans-Bold';
   font-size: 20px;
   margin-top: 20px;
   margin-left: 20px;
 `;
 
-export const DatePickerContainer = styled(View)`
+export const FiltersContainer = styled(View)`
   width: 100%;
   flex-direction: row;
   justify-content: flex-start;
