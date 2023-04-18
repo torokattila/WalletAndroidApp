@@ -5,6 +5,7 @@ export enum PurchaseCategory {
   CLOTHING = 'clothing',
   ENTERTAINMENT = 'entertainment',
   OTHER = 'other',
+  ALL = 'all',
 }
 
 type PurchaseProps = {

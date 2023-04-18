@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import i18n from 'i18n-js';
 import { theme } from '@styles/theme';
 import { formatDate } from '@core/date-utils';
+import { AddButton, Icon } from '@components/shared';
+import { usePurchase } from '@hooks/usePurchase';
 import {
   AllPurchasesTitle,
   Container,
@@ -20,7 +22,7 @@ import {
   ScreenTitleText,
   StyledLinearGradient,
 } from './Purchases.styles';
-import { Icon } from '@components/shared';
+import { PurchaseModal } from './PurchaseModal';
 
 const shadow = {
   elevation: 10,
@@ -30,61 +32,75 @@ const shadow = {
   shadowRadius: 20,
 };
 
-export const Purchases: FC = () => (
-  <>
-    <Container>
-      <StyledLinearGradient
-        colors={['#8E65F7', '#4547B8']}
-        useAngle
-        angle={140}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <ScreenTitleContainer>
-          <ScreenTitleText>{i18n.t('Purchases.ScreenTitle')}</ScreenTitleText>
-          <Icon type="purchase" iconColor="#fff" />
-        </ScreenTitleContainer>
+export const Purchases: FC = () => {
+  const { handleModalOpen, handleModalClose, isModalOpen, isEditModeModal, selectedPurchase } =
+    usePurchase();
 
-        <PurchasesThisMonthContainer>
-          <PurchasesThisMonthTitle>
-            {i18n.t('Purchases.PurchasesThisMonthTitle')}
-          </PurchasesThisMonthTitle>
-          <PurchasesThisMonth>0 Ft</PurchasesThisMonth>
-        </PurchasesThisMonthContainer>
+  return (
+    <>
+      <Container>
+        <StyledLinearGradient
+          colors={['#8E65F7', '#4547B8']}
+          useAngle
+          angle={140}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <ScreenTitleContainer>
+            <ScreenTitleText>{i18n.t('Purchases.ScreenTitle')}</ScreenTitleText>
+            <Icon type="purchase" iconColor="#fff" />
+          </ScreenTitleContainer>
 
-        <ContentContainer>
-          <AllPurchasesTitle>{i18n.t('Purchases.AllPurchasesTitle')}</AllPurchasesTitle>
+          <PurchasesThisMonthContainer>
+            <PurchasesThisMonthTitle>
+              {i18n.t('Purchases.PurchasesThisMonthTitle')}
+            </PurchasesThisMonthTitle>
+            <PurchasesThisMonth>0 Ft</PurchasesThisMonth>
+          </PurchasesThisMonthContainer>
 
-          <FiltersContainer>
-            <DatePickerButtonContainer>
-              <DatePickerButtonLabel>
-                {i18n.t('DatePicker.FilterFromDateText')}
-              </DatePickerButtonLabel>
-              <DatePickerButton style={shadow} onPress={() => {}}>
-                <DatePickerText>{formatDate(new Date())}</DatePickerText>
-              </DatePickerButton>
-            </DatePickerButtonContainer>
+          <ContentContainer>
+            <AllPurchasesTitle>{i18n.t('Purchases.AllPurchasesTitle')}</AllPurchasesTitle>
 
-            <DatePickerButtonContainer>
-              <DatePickerButtonLabel>{i18n.t('DatePicker.FilterToDateText')}</DatePickerButtonLabel>
-              <DatePickerButton style={shadow} onPress={() => {}}>
-                <DatePickerText>{formatDate(new Date())}</DatePickerText>
-              </DatePickerButton>
-            </DatePickerButtonContainer>
+            <FiltersContainer>
+              <DatePickerButtonContainer>
+                <DatePickerButtonLabel>
+                  {i18n.t('DatePicker.FilterFromDateText')}
+                </DatePickerButtonLabel>
+                <DatePickerButton style={shadow} onPress={() => {}}>
+                  <DatePickerText>{formatDate(new Date())}</DatePickerText>
+                </DatePickerButton>
+              </DatePickerButtonContainer>
 
-            {/* {isFilterChanged && ( */}
-            <>
-              <DeleteFiltersButton onPress={() => {}}>
-                <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
-              </DeleteFiltersButton>
-            </>
-            {/* )} */}
-            <DownloadButton onPress={() => {}}>
-              <Icon type="download" iconColor={theme.colors.purple[100]} />
-            </DownloadButton>
-          </FiltersContainer>
-        </ContentContainer>
-      </StyledLinearGradient>
-    </Container>
-  </>
-);
+              <DatePickerButtonContainer>
+                <DatePickerButtonLabel>
+                  {i18n.t('DatePicker.FilterToDateText')}
+                </DatePickerButtonLabel>
+                <DatePickerButton style={shadow} onPress={() => {}}>
+                  <DatePickerText>{formatDate(new Date())}</DatePickerText>
+                </DatePickerButton>
+              </DatePickerButtonContainer>
+
+              {/* {isFilterChanged && ( */}
+              <>
+                <DeleteFiltersButton onPress={() => {}}>
+                  <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
+                </DeleteFiltersButton>
+              </>
+              {/* )} */}
+              <DownloadButton onPress={() => {}}>
+                <Icon type="download" iconColor={theme.colors.purple[100]} />
+              </DownloadButton>
+            </FiltersContainer>
+            <AddButton onPress={handleModalOpen} />
+          </ContentContainer>
+        </StyledLinearGradient>
+      </Container>
+      <PurchaseModal
+        isVisible={isModalOpen}
+        onClose={handleModalClose}
+        isEditMode={isEditModeModal}
+        purchase={selectedPurchase}
+      />
+    </>
+  );
+};

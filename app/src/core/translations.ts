@@ -46,6 +46,12 @@ export const Hungarian = {
       AmountError: 'Az összeg megadása kötelező!',
       EditIncomeTitle: 'Jövedelem szerkesztése',
     },
+    Purchases: {
+      Title: 'Új vásárlás hozzáadása',
+      Category: 'Kategória',
+      AmountError: 'Az összeg megadása kötelező!',
+      EditPurchaseTitle: 'Vásárlás szerkesztése',
+    },
     AreYouSureTitle: 'Biztos vagy benne?',
     CannotBeUndoneTitle: 'A művelet nem visszavonható!',
     Delete: 'Törlés',
@@ -78,6 +84,7 @@ export const Hungarian = {
     PurchasesThisMonthTitle: 'Összes vásárlás ebben a hónapban',
     AllPurchasesTitle: 'Összes vásárlás',
     FilterForCategory: 'Szűrés kategóriára',
+    ChooseCategory: 'Kategória kiválasztása',
     Categories: {
       All: 'Összes',
       Food: 'Élelmiszer',
@@ -135,6 +142,12 @@ export const English = {
       AmountError: 'Amount is required!',
       EditIncomeTitle: 'Edit income',
     },
+    Purchases: {
+      Title: 'Add new purchase',
+      Category: 'Category',
+      AmountError: 'Amount is required!',
+      EditPurchaseTitle: 'Edit purchase',
+    },
     AreYouSureTitle: 'Are you sure?',
     CannotBeUndoneTitle: 'The operation cannot be undone!',
     Delete: 'Delete',
@@ -168,6 +181,7 @@ export const English = {
     PurchasesThisMonthTitle: 'Purchases this month',
     AllPurchasesTitle: 'All purchases',
     FilterForCategory: 'Filter for category',
+    ChooseCategory: 'Choose category',
     Categories: {
       All: 'All',
       Food: 'Food',
