@@ -1,6 +1,16 @@
 import styled from 'styled-components/native';
-import { Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleProp,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+  Dimensions,
+} from 'react-native';
 import { Button } from '@components/shared';
+
+const WIDTH = Dimensions.get('screen').width;
 
 export const ContentContainer = styled(View)`
   background-color: ${({ theme }) => theme.colors.white[100]};
@@ -59,8 +69,35 @@ export const InputNumberErrorText = styled(Text)`
 `;
 
 export const DropdownContainer = styled(View)`
-  margin-top: 30px;
+  margin-top: 2px;
 `;
+
+export const DropdownLabel = styled(Text)`
+  margin-bottom: 10px;
+  align-self: center;
+  font-family: 'NunitoSans-Bold';
+`;
+
+export const dropdownStyle: StyleProp<ViewStyle> = {
+  borderColor: '#8E65F7',
+  borderWidth: 1.5,
+  maxWidth: WIDTH * 0.6,
+  borderRadius: 15,
+  alignSelf: 'center',
+};
+
+export const dropdownContainerStyle: StyleProp<ViewStyle> = {
+  borderColor: '#8E65F7',
+  borderWidth: 1.5,
+  borderRadius: 15,
+  maxWidth: WIDTH * 0.6,
+  alignSelf: 'center',
+  zIndex: 99,
+};
+
+export const dropdownTextStyle: StyleProp<TextStyle> = {
+  color: '#8E65F7',
+};
 
 export const StyledButton = styled(Button)`
   position: absolute;

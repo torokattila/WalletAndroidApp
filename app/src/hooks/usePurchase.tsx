@@ -15,7 +15,7 @@ export const usePurchase = (purchase?: Purchase) => {
   const { userId } = useUserId();
 
   const [amount, setAmount] = useState('0');
-  const [category, setCategory] = useState<PurchaseCategory>(PurchaseCategory.OTHER);
+  const [category, setCategory] = useState<PurchaseCategory>(PurchaseCategory.ALL);
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,6 +25,9 @@ export const usePurchase = (purchase?: Purchase) => {
   const [categories, setCategories] = useState<CategoryDropdownValueType[]>([
     { label: i18n.t('Purchases.Categories.All'), value: PurchaseCategory.ALL },
     { label: i18n.t('Purchases.Categories.Food'), value: PurchaseCategory.FOOD },
+    { label: i18n.t('Purchases.Categories.Clothing'), value: PurchaseCategory.CLOTHING },
+    { label: i18n.t('Purchases.Categories.Entertainment'), value: PurchaseCategory.ENTERTAINMENT },
+    { label: i18n.t('Purchases.Categories.Other'), value: PurchaseCategory.OTHER },
   ]);
 
   useEffect(() => {
@@ -33,7 +36,7 @@ export const usePurchase = (purchase?: Purchase) => {
       setCategory(purchase.category);
     } else {
       setAmount('0');
-      setCategory(PurchaseCategory.OTHER);
+      setCategory(PurchaseCategory.ALL);
     }
   }, [purchase]);
 
@@ -62,6 +65,8 @@ export const usePurchase = (purchase?: Purchase) => {
     setSelectedPurchase(null);
     setIsModalOpen(false);
     setIsEditModeModal(false);
+    setIsCategoryDropdownOpen(false);
+    setCategory(PurchaseCategory.ALL);
   };
 
   const handleEditModalOpen = (editableIncome: Purchase) => {
@@ -85,6 +90,7 @@ export const usePurchase = (purchase?: Purchase) => {
 
   return {
     amount,
+    setAmount,
     category,
     setCategory,
     purchases,

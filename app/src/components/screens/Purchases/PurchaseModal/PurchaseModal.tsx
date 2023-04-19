@@ -5,7 +5,7 @@ import { KeyboardAvoidingView, Modal } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
-import { Icon, ModalBackground } from '@components/shared';
+import { Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
 import {
   Content,
   ContentContainer,
@@ -13,6 +13,12 @@ import {
   DropdownContainer,
   Title,
   UpperLine,
+  dropdownContainerStyle,
+  dropdownTextStyle,
+  dropdownStyle,
+  DropdownLabel,
+  InputNumberText,
+  StyledButton,
 } from './PurchaseModal.styles';
 import { usePurchase } from '@hooks/usePurchase';
 
@@ -46,17 +52,40 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
   isEditMode,
 }) => {
   const {
+    amount,
+    setAmount,
     isCategoryDropdownOpen,
     setIsCategoryDropdownOpen,
     categories,
     setCategories,
     category,
     setCategory,
+    isLoading,
   } = usePurchase();
 
   const modalTitle = isEditMode
     ? i18n.t('Dialog.Purchases.EditPurchaseTitle')
     : i18n.t('Dialog.Purchases.Title');
+
+  const handleNumberChange = (value: string): void => {
+    let newInputNumber = '';
+
+    if (amount === '0') {
+      newInputNumber = '' + value;
+    } else {
+      newInputNumber = amount + value;
+    }
+
+    setAmount(newInputNumber);
+  };
+
+  const handleBackspacePress = (): void => {
+    if (amount.length <= 1) {
+      setAmount('0');
+    } else {
+      setAmount(amount.slice(0, -1));
+    }
+  };
 
   return (
     <>
@@ -81,9 +110,14 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
               <Content>
                 <Title>{modalTitle}</Title>
 
+                <InputNumberText numberOfLines={1} ellipsizeMode="head">
+                  {amount} Ft
+                </InputNumberText>
+
                 <DropdownContainer>
+                  <DropdownLabel>{i18n.t('Dialog.Purchases.Category')}</DropdownLabel>
                   <DropDownPicker
-                    style={shadow}
+                    style={[shadow, dropdownStyle]}
                     open={isCategoryDropdownOpen}
                     setOpen={setIsCategoryDropdownOpen}
                     multiple={false}
@@ -92,8 +126,25 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                     value={category}
                     setValue={setCategory}
                     placeholder={i18n.t('Purchases.ChooseCategory')}
+                    dropDownContainerStyle={[shadow, dropdownContainerStyle]}
+                    textStyle={dropdownTextStyle}
                   />
                 </DropdownContainer>
+
+                <ModalNumberKeyboard
+                  onNumberChange={handleNumberChange}
+                  onBackspacePress={handleBackspacePress}
+                />
+
+                <StyledButton
+                  size="large"
+                  style={buttonShadow}
+                  onPress={() => {}}
+                  withActivityIndicator
+                  isLoading={isLoading}
+                  disabled={isLoading}
+                  text={i18n.t('SaveButtonTitle')}
+                />
               </Content>
             </KeyboardAvoidingView>
           </ContentContainer>

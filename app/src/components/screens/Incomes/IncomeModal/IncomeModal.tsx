@@ -77,7 +77,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
     setErrors({});
   }, [onClose]);
 
-  const handleNumberChange = (value: string) => {
+  const handleNumberChange = (value: string): void => {
     let newInputNumber = '';
 
     if (amount === '0') {
@@ -89,7 +89,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
     setAmount(newInputNumber);
   };
 
-  const handleBackspacePress = () => {
+  const handleBackspacePress = (): void => {
     if (amount.length <= 1) {
       setAmount('0');
     } else {
