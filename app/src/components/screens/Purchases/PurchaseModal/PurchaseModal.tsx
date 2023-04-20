@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import i18n from 'i18n-js';
 import GestureRecognizer from 'react-native-swipe-detect';
 import { KeyboardAvoidingView, Modal } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { Purchase } from '@model/domain';
+import { Dropdown } from 'react-native-element-dropdown';
 import { theme } from '@styles/theme';
 import { Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
 import {
@@ -19,6 +19,7 @@ import {
   DropdownLabel,
   InputNumberText,
   StyledButton,
+  dropdownItemContaineStyle,
 } from './PurchaseModal.styles';
 import { usePurchase } from '@hooks/usePurchase';
 
@@ -45,27 +46,16 @@ const buttonShadow = {
   shadowRadius: 20,
 };
 
-export const PurchaseModal: FC<PurchaseModalProps> = ({
-  isVisible,
-  onClose,
-  purchase,
-  isEditMode,
-}) => {
-  const {
-    amount,
-    setAmount,
-    isCategoryDropdownOpen,
-    setIsCategoryDropdownOpen,
-    categories,
-    setCategories,
-    category,
-    setCategory,
-    isLoading,
-  } = usePurchase();
+export const PurchaseModal: FC<PurchaseModalProps> = ({ isVisible, onClose, isEditMode }) => {
+  const { amount, setAmount, categories, category, isLoading, handleDropdownChange } =
+    usePurchase();
 
   const modalTitle = isEditMode
     ? i18n.t('Dialog.Purchases.EditPurchaseTitle')
     : i18n.t('Dialog.Purchases.Title');
+  const dropdownPlaceholder = category
+    ? i18n.t(`Purchases.Categories.${category}`)
+    : i18n.t('Purchases.ChooseCategory');
 
   const handleNumberChange = (value: string): void => {
     let newInputNumber = '';
@@ -116,18 +106,18 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
 
                 <DropdownContainer>
                   <DropdownLabel>{i18n.t('Dialog.Purchases.Category')}</DropdownLabel>
-                  <DropDownPicker
+                  <Dropdown
                     style={[shadow, dropdownStyle]}
-                    open={isCategoryDropdownOpen}
-                    setOpen={setIsCategoryDropdownOpen}
-                    multiple={false}
-                    items={categories}
-                    setItems={setCategories}
+                    data={categories}
                     value={category}
-                    setValue={setCategory}
-                    placeholder={i18n.t('Purchases.ChooseCategory')}
-                    dropDownContainerStyle={[shadow, dropdownContainerStyle]}
-                    textStyle={dropdownTextStyle}
+                    placeholder={dropdownPlaceholder}
+                    containerStyle={[shadow, dropdownContainerStyle]}
+                    itemTextStyle={dropdownTextStyle}
+                    itemContainerStyle={dropdownItemContaineStyle}
+                    labelField={'label'}
+                    valueField={'value'}
+                    onChange={handleDropdownChange}
+                    mode="modal"
                   />
                 </DropdownContainer>
 

@@ -9,6 +9,8 @@ import {
   Dimensions,
 } from 'react-native';
 import { Button } from '@components/shared';
+4;
+import { theme as globalTheme } from '@styles/theme';
 
 const WIDTH = Dimensions.get('screen').width;
 
@@ -81,18 +83,25 @@ export const DropdownLabel = styled(Text)`
 export const dropdownStyle: StyleProp<ViewStyle> = {
   borderColor: '#8E65F7',
   borderWidth: 1.5,
-  maxWidth: WIDTH * 0.6,
-  borderRadius: 15,
+  width: WIDTH * 0.6,
+  borderRadius: 12,
   alignSelf: 'center',
+  backgroundColor: globalTheme.colors.white[100],
+  paddingHorizontal: 15,
+  paddingVertical: 3,
 };
 
 export const dropdownContainerStyle: StyleProp<ViewStyle> = {
   borderColor: '#8E65F7',
   borderWidth: 1.5,
-  borderRadius: 15,
-  maxWidth: WIDTH * 0.6,
+  borderRadius: 12,
+  width: WIDTH * 0.6,
   alignSelf: 'center',
   zIndex: 99,
+};
+
+export const dropdownItemContaineStyle: StyleProp<ViewStyle> = {
+  borderRadius: 12,
 };
 
 export const dropdownTextStyle: StyleProp<TextStyle> = {

@@ -86,11 +86,11 @@ export const Hungarian = {
     FilterForCategory: 'Szűrés kategóriára',
     ChooseCategory: 'Kategória kiválasztása',
     Categories: {
-      All: 'Összes',
-      Food: 'Élelmiszer',
-      Clothing: 'Ruházat',
-      Entertainment: 'Szórakozás',
-      Other: 'Egyéb',
+      all: 'Összes',
+      food: 'Élelmiszer',
+      clothing: 'Ruházat',
+      entertainment: 'Szórakozás',
+      other: 'Egyéb',
     },
   },
 };
@@ -183,11 +183,11 @@ export const English = {
     FilterForCategory: 'Filter for category',
     ChooseCategory: 'Choose category',
     Categories: {
-      All: 'All',
-      Food: 'Food',
-      Clothing: 'Clothing',
-      Entertainment: 'Entertainment',
-      Other: 'Other',
+      all: 'All',
+      food: 'Food',
+      clothing: 'Clothing',
+      entertainment: 'Entertainment',
+      other: 'Other',
     },
   },
 };
