@@ -47,8 +47,16 @@ const buttonShadow = {
 };
 
 export const PurchaseModal: FC<PurchaseModalProps> = ({ isVisible, onClose, isEditMode }) => {
-  const { amount, setAmount, categories, category, isLoading, handleDropdownChange } =
-    usePurchase();
+  const {
+    amount,
+    setAmount,
+    categories,
+    category,
+    isLoading,
+    handleDropdownChange,
+    handleCreatePurchase,
+    errors,
+  } = usePurchase();
 
   const modalTitle = isEditMode
     ? i18n.t('Dialog.Purchases.EditPurchaseTitle')
@@ -129,7 +137,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({ isVisible, onClose, isEd
                 <StyledButton
                   size="large"
                   style={buttonShadow}
-                  onPress={() => {}}
+                  onPress={handleCreatePurchase}
                   withActivityIndicator
                   isLoading={isLoading}
                   disabled={isLoading}

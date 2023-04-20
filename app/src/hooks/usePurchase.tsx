@@ -4,7 +4,9 @@ import i18n from 'i18n-js';
 import { Unsubscribe } from 'firebase/firestore';
 import { Purchase, PurchaseCategory } from '@model/domain';
 import { PurchaseService } from '@model/services';
+import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { useUserId } from './useUserId';
+import { useUser } from './useUser';
 
 type CategoryDropdownValueType = {
   label: string;
@@ -20,6 +22,7 @@ const categories: CategoryDropdownValueType[] = [
 
 export const usePurchase = (purchase?: Purchase) => {
   const { userId } = useUserId();
+  const { retry: fetchUser } = useUser();
 
   const [amount, setAmount] = useState('0');
   const [category, setCategory] = useState<PurchaseCategory | null>(null);
@@ -28,6 +31,7 @@ export const usePurchase = (purchase?: Purchase) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
   const [isEditModeModal, setIsEditModeModal] = useState(false);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     if (purchase) {
@@ -40,6 +44,8 @@ export const usePurchase = (purchase?: Purchase) => {
   }, [purchase]);
 
   const purchaseService = new PurchaseService();
+  const toast = useToastNotificationStore();
+
   let unsubscribe: Unsubscribe;
 
   const fetchPurchases = async () => {
@@ -56,6 +62,50 @@ export const usePurchase = (purchase?: Purchase) => {
     );
 
     setIsLoading(false);
+  };
+
+  const verifyForm = (): boolean => {
+    if (amount === '0') {
+      setErrors({
+        amount: i18n.t('Dialog.Incomes.AmountError'),
+      });
+      return false;
+    } else if (!category) {
+      setErrors({
+        category: i18n.t('Purchases.CategoryError'),
+      });
+    } else {
+      setErrors({});
+      return true;
+    }
+  };
+
+  const handleCreatePurchase = async (): Promise<void> => {
+    const isFormVerified = verifyForm();
+
+    if (isFormVerified) {
+      try {
+        setIsLoading(true);
+        await purchaseService.createdPurchase(userId, amount, category);
+        fetchUser();
+        setAmount('0');
+        setCategory(null);
+        toast.show({
+          type: 'success',
+          title: i18n.t('ToastNotification.NewPurchaseSuccess'),
+        });
+      } catch (error) {
+        setErrors({
+          generalError: error,
+        });
+        toast.show({
+          type: 'error',
+          title: i18n.t('ToastNotification.SomethingWentWrong'),
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   const handleModalOpen = (): void => setIsModalOpen(true);
@@ -102,5 +152,7 @@ export const usePurchase = (purchase?: Purchase) => {
     selectedPurchase,
     categories,
     handleDropdownChange,
+    handleCreatePurchase,
+    errors,
   };
 };

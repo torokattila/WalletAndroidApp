@@ -31,6 +31,9 @@ export const Hungarian = {
     SuccessfulDownload: 'Sikeres letöltés!',
     SuccessfulPasswordChange: 'Sikeres jelszó módosítás!',
     SuccessfulDataChange: 'Adatok sikeresen módosítva!',
+    NewPurchaseSuccess: 'Vásárlás sikeresen hozzáadva!',
+    EditPurchaseSuccess: 'Vásárlás sikeresen frissítve!',
+    DeletePurchaseSuccess: 'Vásárlás sikeresen törölve!',
   },
   SignOut: 'Kijelentkezés',
   BalanceTitle: 'Aktuális egyenleged',
@@ -92,6 +95,7 @@ export const Hungarian = {
       entertainment: 'Szórakozás',
       other: 'Egyéb',
     },
+    CategoryError: 'A kategória megadása kötelező!',
   },
 };
 
@@ -127,6 +131,9 @@ export const English = {
     DeleteIncomeSuccess: 'Income deleted!',
     SuccessfulDownload: 'Successful Download!',
     SuccessfulDataChange: 'Successful modification!',
+    NewPurchaseSuccess: 'Purchase successfully added!',
+    EditPurchaseSuccess: 'Purchase updated successfully!',
+    DeletePurchaseSuccess: 'Purchase deleted!',
   },
   SignOut: 'Sign out',
   BalanceTitle: 'Your Available Balance',
@@ -189,5 +196,6 @@ export const English = {
       entertainment: 'Entertainment',
       other: 'Other',
     },
+    CategoryError: 'Category is required!',
   },
 };
