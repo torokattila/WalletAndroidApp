@@ -1,6 +1,17 @@
 import styled from 'styled-components/native';
-import { Text, TouchableOpacity, View } from 'react-native';
+import {
+  Dimensions,
+  StyleProp,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { theme as globalTheme } from '@styles/theme';
+
+const WIDTH = Dimensions.get('screen').width;
 
 export const Container = styled(View)`
   flex: 1;
@@ -74,9 +85,48 @@ export const FiltersContainer = styled(View)`
   justify-content: flex-start;
   align-items: center;
   padding-left: 20px;
-  margin-top: 15px;
+  margin-top: 10px;
   position: relative;
 `;
+
+export const CategoryFilterContainer = styled(View)`
+  margin-top: 15px;
+  flex-direction: column;
+  padding-left: 20px;
+`;
+
+export const CategoryFilterLabel = styled(Text)`
+  margin-left: 6px;
+`;
+
+export const dropdownStyle: StyleProp<ViewStyle> = {
+  borderColor: globalTheme.colors.purple[300],
+  borderWidth: 1.5,
+  borderRadius: 12,
+  alignSelf: 'center',
+  backgroundColor: globalTheme.colors.white[100],
+  paddingHorizontal: 15,
+  paddingVertical: 3,
+  height: 35,
+  width: WIDTH * 0.35,
+};
+
+export const dropdownContainerStyle: StyleProp<ViewStyle> = {
+  borderColor: globalTheme.colors.purple[300],
+  borderWidth: 1.5,
+  borderRadius: 12,
+  alignSelf: 'center',
+  zIndex: 99,
+  width: WIDTH * 0.6,
+};
+
+export const dropdownItemContaineStyle: StyleProp<ViewStyle> = {
+  borderRadius: 12,
+};
+
+export const dropdownTextStyle: StyleProp<TextStyle> = {
+  color: globalTheme.colors.purple[300],
+};
 
 export const DatePickerButtonContainer = styled(View)`
   flex-direction: column;

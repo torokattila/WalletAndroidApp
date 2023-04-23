@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
+import DatePicker from 'react-native-date-picker';
 import i18n from 'i18n-js';
 import { theme } from '@styles/theme';
 import { formatDate } from '@core/date-utils';
@@ -7,6 +8,8 @@ import { AddButton, Icon } from '@components/shared';
 import { usePurchase } from '@hooks/usePurchase';
 import {
   AllPurchasesTitle,
+  CategoryFilterContainer,
+  CategoryFilterLabel,
   Container,
   ContentContainer,
   DatePickerButton,
@@ -15,6 +18,10 @@ import {
   DatePickerText,
   DeleteFiltersButton,
   DownloadButton,
+  dropdownContainerStyle,
+  dropdownItemContaineStyle,
+  dropdownStyle,
+  dropdownTextStyle,
   FiltersContainer,
   ListContainer,
   PurchasesThisMonth,
@@ -27,6 +34,7 @@ import {
 import { PurchaseModal } from './PurchaseModal';
 import { FlatList } from 'react-native';
 import { PurchaseCard } from './PurchaseCard';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const shadow = {
   elevation: 10,
@@ -46,7 +54,26 @@ export const Purchases: FC = () => {
     purchases,
     handleEditModalOpen,
     allPurchasesAmountForThisMonth,
+    fromDate,
+    filterCategories,
+    handleFromDatePickerOpen,
+    handleToDatePickerOpen,
+    handleFromDatePickerClose,
+    handleToDatePickerClose,
+    toDate,
+    handleFromDateChange,
+    handleToDateChange,
+    isFromDatePickerOpen,
+    isToDatePickerOpen,
+    handleClearFilters,
+    isFilterChanged,
+    filterCategory,
+    handleFilterCategoryChange,
   } = usePurchase();
+
+  const dropdownPlaceholder = filterCategory
+    ? i18n.t(`Purchases.Categories.${filterCategory}`)
+    : i18n.t('Purchases.Categories.all');
 
   return (
     <>
@@ -73,12 +100,29 @@ export const Purchases: FC = () => {
           <ContentContainer>
             <AllPurchasesTitle>{i18n.t('Purchases.AllPurchasesTitle')}</AllPurchasesTitle>
 
+            <CategoryFilterContainer>
+              <CategoryFilterLabel>Szűrés kategóriára</CategoryFilterLabel>
+              <Dropdown
+                style={[shadow, dropdownStyle]}
+                data={filterCategories}
+                value={filterCategory}
+                placeholder={dropdownPlaceholder}
+                containerStyle={[shadow, dropdownContainerStyle]}
+                itemTextStyle={dropdownTextStyle}
+                itemContainerStyle={dropdownItemContaineStyle}
+                labelField={'label'}
+                valueField={'value'}
+                onChange={handleFilterCategoryChange}
+                mode="modal"
+              />
+            </CategoryFilterContainer>
+
             <FiltersContainer>
               <DatePickerButtonContainer>
                 <DatePickerButtonLabel>
                   {i18n.t('DatePicker.FilterFromDateText')}
                 </DatePickerButtonLabel>
-                <DatePickerButton style={shadow} onPress={() => {}}>
+                <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
                   <DatePickerText>{formatDate(new Date())}</DatePickerText>
                 </DatePickerButton>
               </DatePickerButtonContainer>
@@ -87,22 +131,49 @@ export const Purchases: FC = () => {
                 <DatePickerButtonLabel>
                   {i18n.t('DatePicker.FilterToDateText')}
                 </DatePickerButtonLabel>
-                <DatePickerButton style={shadow} onPress={() => {}}>
+                <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
                   <DatePickerText>{formatDate(new Date())}</DatePickerText>
                 </DatePickerButton>
               </DatePickerButtonContainer>
 
-              {/* {isFilterChanged && ( */}
-              <>
-                <DeleteFiltersButton onPress={() => {}}>
-                  <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
-                </DeleteFiltersButton>
-              </>
-              {/* )} */}
+              {isFilterChanged && (
+                <>
+                  <DeleteFiltersButton onPress={handleClearFilters}>
+                    <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
+                  </DeleteFiltersButton>
+                </>
+              )}
               <DownloadButton onPress={() => {}}>
                 <Icon type="download" iconColor={theme.colors.purple[100]} />
               </DownloadButton>
             </FiltersContainer>
+
+            <DatePicker
+              modal
+              mode="date"
+              title={null}
+              open={isFromDatePickerOpen}
+              date={fromDate.current}
+              maximumDate={new Date()}
+              androidVariant="iosClone"
+              onConfirm={handleFromDateChange}
+              onCancel={handleFromDatePickerClose}
+              cancelText={i18n.t('DatePicker.CancelButtonText')}
+              confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+            />
+            <DatePicker
+              modal
+              mode="date"
+              title={null}
+              open={isToDatePickerOpen}
+              date={toDate.current}
+              minimumDate={fromDate.current}
+              androidVariant="iosClone"
+              onConfirm={handleToDateChange}
+              onCancel={handleToDatePickerClose}
+              cancelText={i18n.t('DatePicker.CancelButtonText')}
+              confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+            />
 
             <ListContainer>
               <FlatList

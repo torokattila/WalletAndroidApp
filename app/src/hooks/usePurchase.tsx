@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import i18n from 'i18n-js';
 import { Unsubscribe } from 'firebase/firestore';
 import { Purchase, PurchaseCategory } from '@model/domain';
@@ -20,6 +20,11 @@ const categories: CategoryDropdownValueType[] = [
   { label: i18n.t('Purchases.Categories.other'), value: PurchaseCategory.OTHER },
 ];
 
+const filterCategories: CategoryDropdownValueType[] = [
+  ...categories,
+  { label: i18n.t('Purchases.Categories.all'), value: PurchaseCategory.ALL },
+];
+
 export const usePurchase = (purchase?: Purchase) => {
   const { userId } = useUserId();
   const { retry: fetchUser } = useUser();
@@ -34,6 +39,12 @@ export const usePurchase = (purchase?: Purchase) => {
   const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
   const [isEditModeModal, setIsEditModeModal] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
+  const fromDate = useRef(new Date());
+  const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
+  const toDate = useRef(new Date());
+  const [filterCategory, setFilterCategory] = useState<PurchaseCategory | null>(null);
+  const [isFilterChanged, setIsFilterChanged] = useState(false);
 
   useEffect(() => {
     if (purchase) {
@@ -180,6 +191,8 @@ export const usePurchase = (purchase?: Purchase) => {
   };
 
   const handleDropdownChange = (item: CategoryDropdownValueType): void => setCategory(item.value);
+  const handleFilterCategoryChange = (item: CategoryDropdownValueType): void =>
+    setFilterCategory(item.value);
 
   const handleNumberChange = (value: string): void => {
     let newInputNumber = '';
@@ -199,6 +212,31 @@ export const usePurchase = (purchase?: Purchase) => {
     } else {
       setAmount(amount.slice(0, -1));
     }
+  };
+
+  const handleFromDatePickerOpen = (): void => setIsFromDatePickerOpen(true);
+  const handleFromDatePickerClose = (): void => setIsFromDatePickerOpen(false);
+  const handleToDatePickerOpen = (): void => setIsToDatePickerOpen(true);
+  const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
+
+  const handleFromDateChange = async (date: Date): Promise<void> => {
+    setIsFilterChanged(true);
+    handleFromDatePickerClose();
+    fromDate.current = date;
+  };
+
+  const handleToDateChange = async (date: Date): Promise<void> => {
+    setIsFilterChanged(true);
+    handleToDatePickerClose();
+    toDate.current = date;
+  };
+
+  const handleClearFilters = async (): Promise<void> => {
+    fromDate.current = new Date();
+    toDate.current = new Date();
+    setFilterCategory(PurchaseCategory.ALL);
+    setIsFilterChanged(false);
+    await fetchPurchases();
   };
 
   useEffect(() => {
@@ -228,6 +266,7 @@ export const usePurchase = (purchase?: Purchase) => {
     isEditModeModal,
     selectedPurchase,
     categories,
+    filterCategories,
     handleDropdownChange,
     handleCreatePurchase,
     errors,
@@ -239,5 +278,19 @@ export const usePurchase = (purchase?: Purchase) => {
     handleConfirmDialogClose,
     handleNumberChange,
     handleBackspacePress,
+    handleFromDatePickerOpen,
+    fromDate,
+    handleFromDatePickerClose,
+    handleToDatePickerOpen,
+    toDate,
+    handleToDatePickerClose,
+    handleFromDateChange,
+    handleToDateChange,
+    isFromDatePickerOpen,
+    isToDatePickerOpen,
+    isFilterChanged,
+    filterCategory,
+    handleClearFilters,
+    handleFilterCategoryChange,
   };
 };
