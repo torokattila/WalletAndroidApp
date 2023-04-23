@@ -31,6 +31,7 @@ export const theme: DefaultTheme = {
     purple: {
       100: '#3F087A',
       200: '#3f087a57',
+      300: '#8E65F7',
     },
     green: {
       100: '#A3DA57',

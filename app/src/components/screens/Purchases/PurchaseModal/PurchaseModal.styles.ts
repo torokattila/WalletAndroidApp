@@ -65,9 +65,12 @@ export const InputNumberText = styled(Text)`
   font-family: 'NunitoSans-Light';
 `;
 
-export const InputNumberErrorText = styled(Text)`
+export const ErrorText = styled(Text)`
   color: ${({ theme }) => theme.colors.red};
   margin-left: 20px;
+  margin-bottom: -20px;
+  margin-top: 5px;
+  text-align: center;
 `;
 
 export const DropdownContainer = styled(View)`
@@ -81,7 +84,7 @@ export const DropdownLabel = styled(Text)`
 `;
 
 export const dropdownStyle: StyleProp<ViewStyle> = {
-  borderColor: '#8E65F7',
+  borderColor: globalTheme.colors.purple[300],
   borderWidth: 1.5,
   width: WIDTH * 0.6,
   borderRadius: 12,
@@ -92,7 +95,7 @@ export const dropdownStyle: StyleProp<ViewStyle> = {
 };
 
 export const dropdownContainerStyle: StyleProp<ViewStyle> = {
-  borderColor: '#8E65F7',
+  borderColor: globalTheme.colors.purple[300],
   borderWidth: 1.5,
   borderRadius: 12,
   width: WIDTH * 0.6,
@@ -105,7 +108,7 @@ export const dropdownItemContaineStyle: StyleProp<ViewStyle> = {
 };
 
 export const dropdownTextStyle: StyleProp<TextStyle> = {
-  color: '#8E65F7',
+  color: globalTheme.colors.purple[300],
 };
 
 export const StyledButton = styled(Button)`

@@ -108,7 +108,10 @@ export const usePurchase = (purchase?: Purchase) => {
     }
   };
 
-  const handleModalOpen = (): void => setIsModalOpen(true);
+  const handleModalOpen = (): void => {
+    setIsModalOpen(true);
+  };
+
   const handleModalClose = (): void => {
     setIsModalOpen(false);
     setSelectedPurchase(null);
@@ -154,5 +157,6 @@ export const usePurchase = (purchase?: Purchase) => {
     handleDropdownChange,
     handleCreatePurchase,
     errors,
+    setErrors,
   };
 };

@@ -20,6 +20,7 @@ import {
   InputNumberText,
   StyledButton,
   dropdownItemContaineStyle,
+  ErrorText,
 } from './PurchaseModal.styles';
 import { usePurchase } from '@hooks/usePurchase';
 
@@ -46,7 +47,12 @@ const buttonShadow = {
   shadowRadius: 20,
 };
 
-export const PurchaseModal: FC<PurchaseModalProps> = ({ isVisible, onClose, isEditMode }) => {
+export const PurchaseModal: FC<PurchaseModalProps> = ({
+  isVisible,
+  onClose,
+  isEditMode,
+  purchase,
+}) => {
   const {
     amount,
     setAmount,
@@ -56,7 +62,8 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({ isVisible, onClose, isEd
     handleDropdownChange,
     handleCreatePurchase,
     errors,
-  } = usePurchase();
+    setErrors,
+  } = usePurchase(purchase);
 
   const modalTitle = isEditMode
     ? i18n.t('Dialog.Purchases.EditPurchaseTitle')
@@ -87,7 +94,12 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({ isVisible, onClose, isEd
 
   return (
     <>
-      <GestureRecognizer onSwipeDown={onClose}>
+      <GestureRecognizer
+        onSwipeDown={() => {
+          onClose();
+          setErrors({});
+        }}
+      >
         <Modal
           animationType="slide"
           transparent
@@ -108,6 +120,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({ isVisible, onClose, isEd
               <Content>
                 <Title>{modalTitle}</Title>
 
+                {errors.amount && <ErrorText>{errors.amount}</ErrorText>}
                 <InputNumberText numberOfLines={1} ellipsizeMode="head">
                   {amount} Ft
                 </InputNumberText>
@@ -127,6 +140,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({ isVisible, onClose, isEd
                     onChange={handleDropdownChange}
                     mode="modal"
                   />
+                  {errors.category && <ErrorText>{errors.category}</ErrorText>}
                 </DropdownContainer>
 
                 <ModalNumberKeyboard
