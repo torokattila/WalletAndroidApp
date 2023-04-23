@@ -50,17 +50,19 @@ const buttonShadow = {
 export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMode, income }) => {
   const {
     amount,
-    setAmount,
     title,
     setTitle,
     isConfirmDialogOpen,
-    setIsConfirmDialogOpen,
     handleCreateIncome,
     handleUpdateIncome,
-    handleDeleteIncome,
     errors,
     setErrors,
     isLoading,
+    handleNumberChange,
+    handleBackspacePress,
+    handleConfirmDialogOpen,
+    handleConfirmDialogDelete,
+    handleConfirmDialogClose,
   } = useIncome(income);
 
   const modalTitle = isEditMode
@@ -76,34 +78,6 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
   useEffect(() => {
     setErrors({});
   }, [onClose]);
-
-  const handleNumberChange = (value: string): void => {
-    let newInputNumber = '';
-
-    if (amount === '0') {
-      newInputNumber = '' + value;
-    } else {
-      newInputNumber = amount + value;
-    }
-
-    setAmount(newInputNumber);
-  };
-
-  const handleBackspacePress = (): void => {
-    if (amount.length <= 1) {
-      setAmount('0');
-    } else {
-      setAmount(amount.slice(0, -1));
-    }
-  };
-
-  const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
-  const handleConfirmDialogClose = () => setIsConfirmDialogOpen(false);
-
-  const handleConfirmDialogDelete = async () => {
-    await handleDeleteIncome();
-    handleConfirmDialogClose();
-  };
 
   // eslint-disable-next-line curly
   if (!isVisible) return null;

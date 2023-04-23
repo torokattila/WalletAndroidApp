@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   DocumentReference,
   FirestoreError,
@@ -90,6 +91,32 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       },
       onError
     );
+  }
+
+  async getPurchaseById(purchaseId: string): Promise<Purchase> {
+    const queryData = doc(this.collection, purchaseId);
+    const purchaseSnapshot = await getDoc(queryData);
+
+    return PurchaseService.toDomainObject(purchaseSnapshot);
+  }
+
+  async deletePurchase(purchaseId: string, userId: string): Promise<void> {
+    const currentPurchase = await this.getPurchaseById(purchaseId);
+    const currentUser = await this.userService.getUserByUserId(userId);
+
+    await this.userService.updateBasicDetails(userId, {
+      ...currentUser,
+      balance: currentUser.balance + Number(currentPurchase.amount),
+    });
+
+    const docRef = doc(this.collection, purchaseId);
+    const purchaseSnapshot = await getDoc(docRef);
+
+    if (!purchaseSnapshot.exists()) {
+      return;
+    }
+
+    await deleteDoc(docRef);
   }
 
   static toDomainObject(purchase: QueryDocumentSnapshot<Purchase>): Purchase {

@@ -27,6 +27,7 @@ export const usePurchase = (purchase?: Purchase) => {
   const [amount, setAmount] = useState('0');
   const [category, setCategory] = useState<PurchaseCategory | null>(null);
   const [purchases, setPurchases] = useState<Purchase[]>([]);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
@@ -108,6 +109,33 @@ export const usePurchase = (purchase?: Purchase) => {
     }
   };
 
+  const handleDeletePurchase = async (): Promise<void> => {
+    if (!purchase) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await purchaseService.deletePurchase(purchase?.id, userId);
+      fetchUser();
+      fetchPurchases();
+      toast.show({
+        type: 'success',
+        title: i18n.t('ToastNotification.DeletePurchaseSuccess'),
+      });
+    } catch (error) {
+      setErrors({
+        generalError: error,
+      });
+      toast.show({
+        type: 'error',
+        title: i18n.t('ToastNotification.SomethingWentWrong'),
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleModalOpen = (): void => {
     setIsModalOpen(true);
   };
@@ -126,7 +154,35 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsEditModeModal(true);
   };
 
+  const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
+  const handleConfirmDialogClose = () => setIsConfirmDialogOpen(false);
+
+  const handleConfirmDialogDelete = async () => {
+    await handleDeletePurchase();
+    handleConfirmDialogClose();
+  };
+
   const handleDropdownChange = (item: CategoryDropdownValueType): void => setCategory(item.value);
+
+  const handleNumberChange = (value: string): void => {
+    let newInputNumber = '';
+
+    if (amount === '0') {
+      newInputNumber = '' + value;
+    } else {
+      newInputNumber = amount + value;
+    }
+
+    setAmount(newInputNumber);
+  };
+
+  const handleBackspacePress = (): void => {
+    if (amount.length <= 1) {
+      setAmount('0');
+    } else {
+      setAmount(amount.slice(0, -1));
+    }
+  };
 
   useEffect(() => {
     if (userId) {
@@ -143,7 +199,6 @@ export const usePurchase = (purchase?: Purchase) => {
 
   return {
     amount,
-    setAmount,
     category,
     purchases,
     isLoading,
@@ -158,5 +213,12 @@ export const usePurchase = (purchase?: Purchase) => {
     handleCreatePurchase,
     errors,
     setErrors,
+    handleDeletePurchase,
+    isConfirmDialogOpen,
+    handleConfirmDialogOpen,
+    handleConfirmDialogDelete,
+    handleConfirmDialogClose,
+    handleNumberChange,
+    handleBackspacePress,
   };
 };

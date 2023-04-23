@@ -1,11 +1,13 @@
-import React, { FC } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { FC, useEffect } from 'react';
 import i18n from 'i18n-js';
 import GestureRecognizer from 'react-native-swipe-detect';
+import { Dropdown } from 'react-native-element-dropdown';
 import { KeyboardAvoidingView, Modal } from 'react-native';
 import { Purchase } from '@model/domain';
-import { Dropdown } from 'react-native-element-dropdown';
 import { theme } from '@styles/theme';
-import { Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
+import { ConfirmDialog, Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
+import { usePurchase } from '@hooks/usePurchase';
 import {
   Content,
   ContentContainer,
@@ -22,7 +24,6 @@ import {
   dropdownItemContaineStyle,
   ErrorText,
 } from './PurchaseModal.styles';
-import { usePurchase } from '@hooks/usePurchase';
 
 type PurchaseModalProps = {
   isVisible: boolean;
@@ -55,7 +56,6 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
 }) => {
   const {
     amount,
-    setAmount,
     categories,
     category,
     isLoading,
@@ -63,6 +63,12 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
     handleCreatePurchase,
     errors,
     setErrors,
+    isConfirmDialogOpen,
+    handleConfirmDialogOpen,
+    handleConfirmDialogDelete,
+    handleConfirmDialogClose,
+    handleNumberChange,
+    handleBackspacePress,
   } = usePurchase(purchase);
 
   const modalTitle = isEditMode
@@ -72,34 +78,22 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
     ? i18n.t(`Purchases.Categories.${category}`)
     : i18n.t('Purchases.ChooseCategory');
 
-  const handleNumberChange = (value: string): void => {
-    let newInputNumber = '';
-
-    if (amount === '0') {
-      newInputNumber = '' + value;
-    } else {
-      newInputNumber = amount + value;
+  useEffect(() => {
+    if (!isLoading && !errors) {
+      onClose();
     }
+  }, [isLoading, errors]);
 
-    setAmount(newInputNumber);
-  };
+  useEffect(() => {
+    setErrors({});
+  }, [onClose]);
 
-  const handleBackspacePress = (): void => {
-    if (amount.length <= 1) {
-      setAmount('0');
-    } else {
-      setAmount(amount.slice(0, -1));
-    }
-  };
+  // eslint-disable-next-line curly
+  if (!isVisible) return null;
 
   return (
     <>
-      <GestureRecognizer
-        onSwipeDown={() => {
-          onClose();
-          setErrors({});
-        }}
-      >
+      <GestureRecognizer onSwipeDown={onClose}>
         <Modal
           animationType="slide"
           transparent
@@ -112,7 +106,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
             <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
               <UpperLine />
               {isEditMode && (
-                <DeleteIconContainer onPress={() => {}}>
+                <DeleteIconContainer onPress={handleConfirmDialogOpen}>
                   <Icon type="trash" iconColor={theme.colors.white[100]} />
                 </DeleteIconContainer>
               )}
@@ -162,6 +156,15 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
           </ContentContainer>
         </Modal>
       </GestureRecognizer>
+      <ConfirmDialog
+        isVisible={isConfirmDialogOpen}
+        onPressPrimaryButton={handleConfirmDialogDelete}
+        onPressSecondaryButton={handleConfirmDialogClose}
+        primaryButtonText={i18n.t('Dialog.Delete')}
+        secondaryButtonText={i18n.t('Dialog.Cancel')}
+        title={i18n.t('Dialog.AreYouSureTitle')}
+        description={i18n.t('Dialog.CannotBeUndoneTitle')}
+      />
     </>
   );
 };
