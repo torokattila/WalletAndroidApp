@@ -15,6 +15,7 @@ import {
   QueryDocumentSnapshot,
   Timestamp,
   Unsubscribe,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { Purchase, PurchaseCategory } from '@model/domain';
@@ -85,9 +86,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     return onSnapshot(
       queryData,
       (snapshots) => {
-        const purchases = snapshots?.docs?.map((document) =>
-          PurchaseService.toDomainObject(document)
-        );
+        const purchases = snapshots?.docs?.map(PurchaseService.toDomainObject);
 
         onSuccess(purchases);
       },
@@ -100,6 +99,37 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     const purchaseSnapshot = await getDoc(queryData);
 
     return PurchaseService.toDomainObject(purchaseSnapshot);
+  }
+
+  async updatePurchase(
+    purchaseId: string,
+    userId: string,
+    data: Partial<Purchase>
+  ): Promise<Purchase> {
+    const currentPurchase = await this.getPurchaseById(purchaseId);
+    const currentUser = await this.userService.getUserByUserId(userId);
+
+    const updatedUser = await this.userService.updateBasicDetails(userId, {
+      ...currentUser,
+      balance: currentUser.balance + Number(currentPurchase.amount),
+    });
+
+    const docRef = doc(this.collection, purchaseId);
+    const purchaseData: Partial<Purchase> = {
+      amount: data.amount,
+      category: data.category,
+    };
+
+    await this.userService.updateBasicDetails(userId, {
+      ...updatedUser,
+      balance: updatedUser.balance - Number(data.amount),
+    });
+
+    await updateDoc(docRef, { ...purchaseData, updatedAt: Timestamp.now() });
+
+    const purchaseSnap = await getDoc(docRef);
+
+    return PurchaseService.toDomainObject(purchaseSnap);
   }
 
   async deletePurchase(purchaseId: string, userId: string): Promise<void> {
@@ -140,9 +170,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       return 0;
     }
 
-    const resultPurchases = snapshot?.docs?.map((purchase) =>
-      PurchaseService.toDomainObject(purchase)
-    );
+    const resultPurchases = snapshot?.docs?.map(PurchaseService.toDomainObject);
 
     resultPurchases.forEach((purchase) => {
       sum += Number(purchase.amount);

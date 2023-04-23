@@ -123,7 +123,7 @@ export class IncomeService extends BaseService<IncomeModel> {
     return onSnapshot(
       queryData,
       (snapshots) => {
-        const incomes = snapshots?.docs?.map((document) => IncomeService.toDomainObject(document));
+        const incomes = snapshots?.docs?.map(IncomeService.toDomainObject);
 
         onSuccess(incomes);
       },
@@ -147,7 +147,7 @@ export class IncomeService extends BaseService<IncomeModel> {
       return [];
     }
 
-    return snapshot?.docs?.map((income) => IncomeService.toDomainObject(income));
+    return snapshot?.docs?.map(IncomeService.toDomainObject);
   }
 
   async getIncomeById(incomeId: string): Promise<Income> {
