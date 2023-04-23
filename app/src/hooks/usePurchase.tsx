@@ -21,8 +21,8 @@ const categories: CategoryDropdownValueType[] = [
 ];
 
 const filterCategories: CategoryDropdownValueType[] = [
-  ...categories,
   { label: i18n.t('Purchases.Categories.all'), value: PurchaseCategory.ALL },
+  ...categories,
 ];
 
 export const usePurchase = (purchase?: Purchase) => {
@@ -43,7 +43,7 @@ export const usePurchase = (purchase?: Purchase) => {
   const fromDate = useRef(new Date());
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
   const toDate = useRef(new Date());
-  const [filterCategory, setFilterCategory] = useState<PurchaseCategory | null>(null);
+  const filterCategory = useRef(null);
   const [isFilterChanged, setIsFilterChanged] = useState(false);
 
   useEffect(() => {
@@ -86,6 +86,30 @@ export const usePurchase = (purchase?: Purchase) => {
       );
 
       setAllPurchasesAmountForThisMonth(purchasesAmountCurrentMonth);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const filterPurchases = async (): Promise<void> => {
+    setIsLoading(true);
+
+    const fromDateMidnight = fromDate;
+    fromDateMidnight.current.setHours(0, 0, 0, 0);
+    const toDateMidnight = toDate;
+    toDateMidnight.current.setHours(23, 59, 0, 0);
+
+    try {
+      const filteredPurchases = await purchaseService.filterPurchases(
+        userId,
+        fromDateMidnight.current,
+        toDateMidnight.current,
+        filterCategory.current
+      );
+
+      setPurchases(filteredPurchases);
     } catch (error) {
       console.error(error);
     } finally {
@@ -191,8 +215,12 @@ export const usePurchase = (purchase?: Purchase) => {
   };
 
   const handleDropdownChange = (item: CategoryDropdownValueType): void => setCategory(item.value);
-  const handleFilterCategoryChange = (item: CategoryDropdownValueType): void =>
-    setFilterCategory(item.value);
+
+  const handleFilterCategoryChange = async (item: CategoryDropdownValueType): Promise<void> => {
+    setIsFilterChanged(true);
+    filterCategory.current = item.value;
+    await filterPurchases();
+  };
 
   const handleNumberChange = (value: string): void => {
     let newInputNumber = '';
@@ -223,18 +251,20 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsFilterChanged(true);
     handleFromDatePickerClose();
     fromDate.current = date;
+    await filterPurchases();
   };
 
   const handleToDateChange = async (date: Date): Promise<void> => {
     setIsFilterChanged(true);
     handleToDatePickerClose();
     toDate.current = date;
+    await filterPurchases();
   };
 
   const handleClearFilters = async (): Promise<void> => {
     fromDate.current = new Date();
     toDate.current = new Date();
-    setFilterCategory(PurchaseCategory.ALL);
+    filterCategory.current = PurchaseCategory.ALL;
     setIsFilterChanged(false);
     await fetchPurchases();
   };

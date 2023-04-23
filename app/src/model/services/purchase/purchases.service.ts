@@ -10,6 +10,7 @@ import {
   limit,
   onSnapshot,
   orderBy,
+  Query,
   query,
   QueryDocumentSnapshot,
   Timestamp,
@@ -148,6 +149,44 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     });
 
     return sum;
+  }
+
+  async filterPurchases(
+    userId: string,
+    startDate: Date,
+    endDate: Date,
+    category: string
+  ): Promise<Purchase[]> {
+    let queryData: Query<PurchaseModel>;
+
+    if (!category || category === PurchaseCategory.ALL) {
+      queryData = query(
+        this.collection,
+        where('userId', '==', userId),
+        where('updatedAt', '>=', startDate),
+        where('updatedAt', '<=', endDate),
+        orderBy('updatedAt', 'desc'),
+        limit(9998)
+      );
+    } else {
+      queryData = query(
+        this.collection,
+        where('userId', '==', userId),
+        where('updatedAt', '>=', startDate),
+        where('updatedAt', '<=', endDate),
+        where('category', '==', category),
+        orderBy('updatedAt', 'desc'),
+        limit(9998)
+      );
+    }
+
+    const snapshot = await getDocs(queryData);
+
+    if (snapshot.empty) {
+      return [];
+    }
+
+    return snapshot?.docs?.map(PurchaseService.toDomainObject);
   }
 
   static toDomainObject(purchase: QueryDocumentSnapshot<Purchase>): Purchase {

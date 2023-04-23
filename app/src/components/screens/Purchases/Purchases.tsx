@@ -71,8 +71,8 @@ export const Purchases: FC = () => {
     handleFilterCategoryChange,
   } = usePurchase();
 
-  const dropdownPlaceholder = filterCategory
-    ? i18n.t(`Purchases.Categories.${filterCategory}`)
+  const dropdownPlaceholder = filterCategory.current
+    ? i18n.t(`Purchases.Categories.${filterCategory.current}`)
     : i18n.t('Purchases.Categories.all');
 
   return (
@@ -105,7 +105,7 @@ export const Purchases: FC = () => {
               <Dropdown
                 style={[shadow, dropdownStyle]}
                 data={filterCategories}
-                value={filterCategory}
+                value={filterCategory.current}
                 placeholder={dropdownPlaceholder}
                 containerStyle={[shadow, dropdownContainerStyle]}
                 itemTextStyle={dropdownTextStyle}
@@ -123,7 +123,7 @@ export const Purchases: FC = () => {
                   {i18n.t('DatePicker.FilterFromDateText')}
                 </DatePickerButtonLabel>
                 <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
-                  <DatePickerText>{formatDate(new Date())}</DatePickerText>
+                  <DatePickerText>{formatDate(fromDate.current)}</DatePickerText>
                 </DatePickerButton>
               </DatePickerButtonContainer>
 
@@ -132,7 +132,7 @@ export const Purchases: FC = () => {
                   {i18n.t('DatePicker.FilterToDateText')}
                 </DatePickerButtonLabel>
                 <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
-                  <DatePickerText>{formatDate(new Date())}</DatePickerText>
+                  <DatePickerText>{formatDate(toDate.current)}</DatePickerText>
                 </DatePickerButton>
               </DatePickerButtonContainer>
 
