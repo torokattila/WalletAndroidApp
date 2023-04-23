@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
 import i18n from 'i18n-js';
 import { theme } from '@styles/theme';
@@ -15,6 +16,7 @@ import {
   DeleteFiltersButton,
   DownloadButton,
   FiltersContainer,
+  ListContainer,
   PurchasesThisMonth,
   PurchasesThisMonthContainer,
   PurchasesThisMonthTitle,
@@ -23,6 +25,7 @@ import {
   StyledLinearGradient,
 } from './Purchases.styles';
 import { PurchaseModal } from './PurchaseModal';
+import { FlatList } from 'react-native';
 
 const shadow = {
   elevation: 10,
@@ -33,8 +36,14 @@ const shadow = {
 };
 
 export const Purchases: FC = () => {
-  const { handleModalOpen, handleModalClose, isModalOpen, isEditModeModal, selectedPurchase } =
-    usePurchase();
+  const {
+    handleModalOpen,
+    handleModalClose,
+    isModalOpen,
+    isEditModeModal,
+    selectedPurchase,
+    purchases,
+  } = usePurchase();
 
   return (
     <>
@@ -91,6 +100,23 @@ export const Purchases: FC = () => {
                 <Icon type="download" iconColor={theme.colors.purple[100]} />
               </DownloadButton>
             </FiltersContainer>
+
+            <ListContainer>
+              {/* <FlatList
+                contentContainerStyle={{ paddingBottom: 40 }}
+                style={{
+                  paddingHorizontal: 10,
+                  marginTop: -15,
+                }}
+                showsVerticalScrollIndicator={false}
+                data={purchases}
+                keyExtractor={(item) => item.id}
+                scrollEnabled
+                renderItem={({item}) => (
+
+                )}
+              /> */}
+            </ListContainer>
             <AddButton onPress={handleModalOpen} />
           </ContentContainer>
         </StyledLinearGradient>

@@ -25,19 +25,17 @@ const cardShadow = {
   shadowRadius: 14,
 };
 
-export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => {
-  return (
-    <Container style={cardShadow} onPress={onPress}>
-      <IconContainer>
-        <Icon type="dollar" iconColor={theme.colors.white[100]} />
-      </IconContainer>
+export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => (
+  <Container style={cardShadow} onPress={onPress}>
+    <IconContainer>
+      <Icon type="dollar" iconColor={theme.colors.white[100]} />
+    </IconContainer>
 
-      <TitleAndAmountContainer>
-        {income.title && <Title>{income.title}</Title>}
-        <Amount>+ {income.amount} Ft</Amount>
-      </TitleAndAmountContainer>
+    <TitleAndAmountContainer>
+      {income.title && <Title>{income.title}</Title>}
+      <Amount>+ {income.amount} Ft</Amount>
+    </TitleAndAmountContainer>
 
-      <IncomeDate>{format(income.updatedAt.toDate(), 'yyyy-MM.dd.')}</IncomeDate>
-    </Container>
-  );
-};
+    <IncomeDate>{format(income.updatedAt.toDate(), 'yyyy-MM.dd.')}</IncomeDate>
+  </Container>
+);

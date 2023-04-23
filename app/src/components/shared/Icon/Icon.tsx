@@ -3,17 +3,21 @@ import { SvgProps } from 'react-native-svg';
 import { Backspace } from './backspace';
 import { ChangePassword } from './change-password';
 import { Close } from './close';
+import { Clothing } from './clothing';
 import { DeleteFilters } from './delete-filters';
 import { DeleteProfile } from './delete-profile';
 import { Dollar } from './dollar';
 import { Download } from './download';
+import { Entertainment } from './entertainment';
 import { ErrorTriangle } from './error-triangle';
 import { Eye } from './eye';
 import { EyeOutlined } from './eye-outlined';
+import { Hamburger } from './hamburger';
 import { Home } from './home';
 import { IdentityCard } from './identity-card';
 import { Income } from './income';
 import { Logout } from './logout';
+import { OtherPurchase } from './other-purchase';
 import { Plus } from './plus';
 import { Profile } from './profile';
 import { ProfileImage } from './profile-image';
@@ -26,17 +30,21 @@ export type IconType =
   | 'backspace'
   | 'change-password'
   | 'close'
+  | 'clothing'
   | 'delete-filters'
   | 'delete-profile'
   | 'dollar'
   | 'download'
+  | 'entertainment'
   | 'error-triangle'
   | 'eye'
   | 'eye-outlined'
+  | 'hamburger'
+  | 'home'
   | 'identity-card'
   | 'income'
-  | 'home'
   | 'logout'
+  | 'other-purchase'
   | 'plus'
   | 'profile'
   | 'profile-image'
@@ -58,6 +66,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <ChangePassword iconColor={iconColor} {...props} />;
     case 'close':
       return <Close iconColor={iconColor} {...props} />;
+    case 'clothing':
+      return <Clothing iconColor={iconColor} {...props} />;
     case 'delete-filters':
       return <DeleteFilters iconColor={iconColor} {...props} />;
     case 'delete-profile':
@@ -66,20 +76,26 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Dollar iconColor={iconColor} {...props} />;
     case 'download':
       return <Download iconColor={iconColor} {...props} />;
+    case 'entertainment':
+      return <Entertainment iconColor={iconColor} {...props} />;
     case 'error-triangle':
       return <ErrorTriangle iconColor={iconColor} {...props} />;
     case 'eye':
       return <Eye iconColor={iconColor} {...props} />;
     case 'eye-outlined':
       return <EyeOutlined iconColor={iconColor} {...props} />;
+    case 'hamburger':
+      return <Hamburger iconColor={iconColor} {...props} />;
+    case 'home':
+      return <Home iconColor={iconColor} {...props} />;
     case 'identity-card':
       return <IdentityCard iconColor={iconColor} {...props} />;
     case 'income':
       return <Income iconColor={iconColor} {...props} />;
-    case 'home':
-      return <Home iconColor={iconColor} {...props} />;
     case 'logout':
       return <Logout iconColor={iconColor} {...props} />;
+    case 'other-purchase':
+      return <OtherPurchase iconColor={iconColor} {...props} />;
     case 'plus':
       return <Plus iconColor={iconColor} {...props} />;
     case 'profile':
