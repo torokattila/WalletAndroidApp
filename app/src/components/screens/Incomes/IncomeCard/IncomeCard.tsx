@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { format } from 'date-fns';
 import { Income } from '@model/domain';
 import { theme } from '@styles/theme';
 import { Icon } from '@components/shared';
@@ -10,7 +11,6 @@ import {
   Title,
   TitleAndAmountContainer,
 } from './IncomeCard.styles';
-import { format } from 'date-fns';
 
 type IncomeCardProps = {
   income: Income;
@@ -27,7 +27,7 @@ const cardShadow = {
 
 export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => (
   <Container style={cardShadow} onPress={onPress}>
-    <IconContainer>
+    <IconContainer style={cardShadow}>
       <Icon type="dollar" iconColor={theme.colors.white[100]} />
     </IconContainer>
 

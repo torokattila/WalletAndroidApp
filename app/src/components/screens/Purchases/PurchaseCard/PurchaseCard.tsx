@@ -1,8 +1,17 @@
 import React, { FC } from 'react';
+import { format } from 'date-fns';
+import i18n from 'i18n-js';
 import { Icon } from '@components/shared';
 import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
-import { Container, IconContainer } from './PurchaseCard.styles';
+import {
+  Amount,
+  Category,
+  CategoryAndAmountContainer,
+  Container,
+  IconContainer,
+  PurchaseDate,
+} from './PurchaseCard.styles';
 
 type PurchaseCardProps = {
   purchase: Purchase;
@@ -10,7 +19,7 @@ type PurchaseCardProps = {
 };
 
 const cardIcon = {
-  hamburger: <Icon type="hamburger" iconColor={theme.colors.white[100]} />,
+  food: <Icon type="hamburger" iconColor={theme.colors.white[100]} />,
   clothing: <Icon type="clothing" iconColor={theme.colors.white[100]} />,
   entertainment: <Icon type="entertainment" iconColor={theme.colors.white[100]} />,
   other: <Icon type="other-purchase" iconColor={theme.colors.white[100]} />,
@@ -26,6 +35,13 @@ const cardShadow = {
 
 export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => (
   <Container style={cardShadow} onPress={onPress}>
-    <IconContainer>{cardIcon[purchase.category]}</IconContainer>
+    <IconContainer style={cardShadow}>{cardIcon[purchase.category]}</IconContainer>
+
+    <CategoryAndAmountContainer>
+      {<Category>{i18n.t(`Purchases.Categories.${purchase.category}`)}</Category>}
+      <Amount>- {purchase.amount} Ft</Amount>
+    </CategoryAndAmountContainer>
+
+    <PurchaseDate>{format(purchase.updatedAt.toDate(), 'yyyy-MM.dd.')}</PurchaseDate>
   </Container>
 );

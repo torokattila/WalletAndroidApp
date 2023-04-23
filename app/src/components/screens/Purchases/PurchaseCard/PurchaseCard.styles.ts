@@ -1,4 +1,4 @@
-import { TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Container = styled(TouchableOpacity)`
@@ -16,4 +16,27 @@ export const IconContainer = styled(View)`
   background-color: ${({ theme }) => theme.colors.purple[100]};
   padding: 10px;
   border-radius: 10px;
+`;
+
+export const CategoryAndAmountContainer = styled(View)`
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 10px;
+`;
+
+export const Category = styled(Text)`
+  font-family: 'NunitoSans-Bold';
+`;
+
+export const Amount = styled(Text)`
+  color: ${({ theme }) => theme.colors.red};
+  font-family: 'NunitoSans-Bold';
+`;
+
+export const PurchaseDate = styled(Text)`
+  align-self: flex-end;
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+  font-family: 'NunitoSans-Bold';
 `;

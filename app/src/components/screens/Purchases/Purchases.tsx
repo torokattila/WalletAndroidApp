@@ -26,6 +26,7 @@ import {
 } from './Purchases.styles';
 import { PurchaseModal } from './PurchaseModal';
 import { FlatList } from 'react-native';
+import { PurchaseCard } from './PurchaseCard';
 
 const shadow = {
   elevation: 10,
@@ -43,6 +44,7 @@ export const Purchases: FC = () => {
     isEditModeModal,
     selectedPurchase,
     purchases,
+    handleEditModalOpen,
   } = usePurchase();
 
   return (
@@ -102,7 +104,7 @@ export const Purchases: FC = () => {
             </FiltersContainer>
 
             <ListContainer>
-              {/* <FlatList
+              <FlatList
                 contentContainerStyle={{ paddingBottom: 40 }}
                 style={{
                   paddingHorizontal: 10,
@@ -112,10 +114,10 @@ export const Purchases: FC = () => {
                 data={purchases}
                 keyExtractor={(item) => item.id}
                 scrollEnabled
-                renderItem={({item}) => (
-
+                renderItem={({ item }) => (
+                  <PurchaseCard purchase={item} onPress={() => handleEditModalOpen(item)} />
                 )}
-              /> */}
+              />
             </ListContainer>
             <AddButton onPress={handleModalOpen} />
           </ContentContainer>
