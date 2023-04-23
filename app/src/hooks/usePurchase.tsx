@@ -25,6 +25,7 @@ export const usePurchase = (purchase?: Purchase) => {
   const { retry: fetchUser } = useUser();
 
   const [amount, setAmount] = useState('0');
+  const [allPurchasesAmountForThisMonth, setAllPurchasesAmountForThisMonth] = useState(0);
   const [category, setCategory] = useState<PurchaseCategory | null>(null);
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -63,6 +64,22 @@ export const usePurchase = (purchase?: Purchase) => {
     );
 
     setIsLoading(false);
+  };
+
+  const fetchThisMonthPurchasesAmount = async (): Promise<void> => {
+    setIsLoading(true);
+
+    try {
+      const purchasesAmountCurrentMonth = await purchaseService.getAllPurchaseAmountInCurrentMonth(
+        userId
+      );
+
+      setAllPurchasesAmountForThisMonth(purchasesAmountCurrentMonth);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const verifyForm = (): boolean => {
@@ -187,6 +204,7 @@ export const usePurchase = (purchase?: Purchase) => {
   useEffect(() => {
     if (userId) {
       fetchPurchases();
+      fetchThisMonthPurchasesAmount();
     } else {
       setPurchases([]);
       setIsLoading(false);
@@ -201,6 +219,7 @@ export const usePurchase = (purchase?: Purchase) => {
     amount,
     category,
     purchases,
+    allPurchasesAmountForThisMonth,
     isLoading,
     handleModalOpen,
     handleModalClose,

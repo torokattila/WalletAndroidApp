@@ -45,6 +45,7 @@ export const Purchases: FC = () => {
     selectedPurchase,
     purchases,
     handleEditModalOpen,
+    allPurchasesAmountForThisMonth,
   } = usePurchase();
 
   return (
@@ -66,7 +67,7 @@ export const Purchases: FC = () => {
             <PurchasesThisMonthTitle>
               {i18n.t('Purchases.PurchasesThisMonthTitle')}
             </PurchasesThisMonthTitle>
-            <PurchasesThisMonth>0 Ft</PurchasesThisMonth>
+            <PurchasesThisMonth>{allPurchasesAmountForThisMonth} Ft</PurchasesThisMonth>
           </PurchasesThisMonthContainer>
 
           <ContentContainer>

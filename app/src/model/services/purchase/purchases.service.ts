@@ -6,6 +6,7 @@ import {
   DocumentReference,
   FirestoreError,
   getDoc,
+  getDocs,
   limit,
   onSnapshot,
   orderBy,
@@ -117,6 +118,36 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     }
 
     await deleteDoc(docRef);
+  }
+
+  async getAllPurchaseAmountInCurrentMonth(userId: string): Promise<number> {
+    const currentDate = new Date();
+    const firstDayOfTheMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const lastDayOfTheMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 31);
+    let sum = 0;
+
+    const queryData = query(
+      this.collection,
+      where('userId', '==', userId),
+      where('updatedAt', '>=', firstDayOfTheMonth),
+      where('updatedAt', '<=', lastDayOfTheMonth)
+    );
+
+    const snapshot = await getDocs(queryData);
+
+    if (snapshot.empty) {
+      return 0;
+    }
+
+    const resultPurchases = snapshot?.docs?.map((purchase) =>
+      PurchaseService.toDomainObject(purchase)
+    );
+
+    resultPurchases.forEach((purchase) => {
+      sum += Number(purchase.amount);
+    });
+
+    return sum;
   }
 
   static toDomainObject(purchase: QueryDocumentSnapshot<Purchase>): Purchase {
