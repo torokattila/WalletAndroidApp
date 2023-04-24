@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
 import DatePicker from 'react-native-date-picker';
+import { Dropdown } from 'react-native-element-dropdown';
 import i18n from 'i18n-js';
 import { theme } from '@styles/theme';
 import { formatDate } from '@core/date-utils';
@@ -8,10 +9,12 @@ import { AddButton, Icon } from '@components/shared';
 import { usePurchase } from '@hooks/usePurchase';
 import {
   AllPurchasesTitle,
+  CategoryAndShowDateFiltersButtonContainer,
   CategoryFilterContainer,
   CategoryFilterLabel,
   Container,
   ContentContainer,
+  DateFiltersContainer,
   DatePickerButton,
   DatePickerButtonContainer,
   DatePickerButtonLabel,
@@ -29,12 +32,13 @@ import {
   PurchasesThisMonthTitle,
   ScreenTitleContainer,
   ScreenTitleText,
+  ShowDateFiltersButton,
+  ShowDateFiltersButtonText,
   StyledLinearGradient,
 } from './Purchases.styles';
 import { PurchaseModal } from './PurchaseModal';
 import { FlatList } from 'react-native';
 import { PurchaseCard } from './PurchaseCard';
-import { Dropdown } from 'react-native-element-dropdown';
 
 const shadow = {
   elevation: 10,
@@ -69,6 +73,8 @@ export const Purchases: FC = () => {
     isFilterChanged,
     filterCategory,
     handleFilterCategoryChange,
+    isDateFiltersShown,
+    toggleDateFiltersShown,
   } = usePurchase();
 
   const dropdownPlaceholder = filterCategory.current
@@ -100,41 +106,51 @@ export const Purchases: FC = () => {
           <ContentContainer>
             <AllPurchasesTitle>{i18n.t('Purchases.AllPurchasesTitle')}</AllPurchasesTitle>
 
-            <CategoryFilterContainer>
-              <CategoryFilterLabel>Szűrés kategóriára</CategoryFilterLabel>
-              <Dropdown
-                style={[shadow, dropdownStyle]}
-                data={filterCategories}
-                value={filterCategory.current}
-                placeholder={dropdownPlaceholder}
-                containerStyle={[shadow, dropdownContainerStyle]}
-                itemTextStyle={dropdownTextStyle}
-                itemContainerStyle={dropdownItemContaineStyle}
-                labelField={'label'}
-                valueField={'value'}
-                onChange={handleFilterCategoryChange}
-                mode="modal"
-              />
-            </CategoryFilterContainer>
+            <CategoryAndShowDateFiltersButtonContainer>
+              <CategoryFilterContainer>
+                <CategoryFilterLabel>Szűrés kategóriára</CategoryFilterLabel>
+                <Dropdown
+                  style={[shadow, dropdownStyle]}
+                  data={filterCategories}
+                  value={filterCategory.current}
+                  placeholder={dropdownPlaceholder}
+                  containerStyle={[shadow, dropdownContainerStyle]}
+                  itemTextStyle={dropdownTextStyle}
+                  itemContainerStyle={dropdownItemContaineStyle}
+                  labelField={'label'}
+                  valueField={'value'}
+                  onChange={handleFilterCategoryChange}
+                  mode="modal"
+                />
+              </CategoryFilterContainer>
+
+              <ShowDateFiltersButton style={shadow} onPress={toggleDateFiltersShown}>
+                <ShowDateFiltersButtonText>{i18n.t('FilterForDate')}</ShowDateFiltersButtonText>
+              </ShowDateFiltersButton>
+            </CategoryAndShowDateFiltersButtonContainer>
 
             <FiltersContainer>
-              <DatePickerButtonContainer>
-                <DatePickerButtonLabel>
-                  {i18n.t('DatePicker.FilterFromDateText')}
-                </DatePickerButtonLabel>
-                <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
-                  <DatePickerText>{formatDate(fromDate.current)}</DatePickerText>
-                </DatePickerButton>
-              </DatePickerButtonContainer>
+              {isDateFiltersShown && (
+                <DateFiltersContainer>
+                  <DatePickerButtonContainer>
+                    <DatePickerButtonLabel>
+                      {i18n.t('DatePicker.FilterFromDateText')}
+                    </DatePickerButtonLabel>
+                    <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
+                      <DatePickerText>{formatDate(fromDate.current)}</DatePickerText>
+                    </DatePickerButton>
+                  </DatePickerButtonContainer>
 
-              <DatePickerButtonContainer>
-                <DatePickerButtonLabel>
-                  {i18n.t('DatePicker.FilterToDateText')}
-                </DatePickerButtonLabel>
-                <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
-                  <DatePickerText>{formatDate(toDate.current)}</DatePickerText>
-                </DatePickerButton>
-              </DatePickerButtonContainer>
+                  <DatePickerButtonContainer>
+                    <DatePickerButtonLabel>
+                      {i18n.t('DatePicker.FilterToDateText')}
+                    </DatePickerButtonLabel>
+                    <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
+                      <DatePickerText>{formatDate(toDate.current)}</DatePickerText>
+                    </DatePickerButton>
+                  </DatePickerButtonContainer>
+                </DateFiltersContainer>
+              )}
 
               {isFilterChanged && (
                 <>

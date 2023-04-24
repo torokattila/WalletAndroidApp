@@ -89,6 +89,33 @@ export const FiltersContainer = styled(View)`
   position: relative;
 `;
 
+export const DateFiltersContainer = styled(View)`
+  flex-direction: row;
+  justify-content: flex-start;
+  position: relative;
+`;
+
+export const CategoryAndShowDateFiltersButtonContainer = styled(View)`
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+`;
+
+export const ShowDateFiltersButton = styled(TouchableOpacity)`
+  margin-left: 20px;
+  background-color: ${({ theme }) => theme.colors.white[100]};
+  border-color: ${({ theme }) => theme.colors.purple[300]};
+  border-width: 1.5px;
+  border-radius: 12px;
+  padding: 6px 15px;
+  align-self: flex-end;
+`;
+
+export const ShowDateFiltersButtonText = styled(Text)`
+  font-family: 'NunitoSans-SemiBold';
+  font-size: 15px;
+`;
+
 export const CategoryFilterContainer = styled(View)`
   margin-top: 15px;
   flex-direction: column;

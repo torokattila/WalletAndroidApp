@@ -45,6 +45,7 @@ export const usePurchase = (purchase?: Purchase) => {
   const toDate = useRef(new Date());
   const filterCategory = useRef(null);
   const [isFilterChanged, setIsFilterChanged] = useState(false);
+  const [isDateFiltersShown, setIsDateFiltersShown] = useState(false);
 
   useEffect(() => {
     if (purchase) {
@@ -274,6 +275,8 @@ export const usePurchase = (purchase?: Purchase) => {
     }
   };
 
+  const toggleDateFiltersShown = (): void => setIsDateFiltersShown(!isDateFiltersShown);
+
   const handleFromDatePickerOpen = (): void => setIsFromDatePickerOpen(true);
   const handleFromDatePickerClose = (): void => setIsFromDatePickerOpen(false);
   const handleToDatePickerOpen = (): void => setIsToDatePickerOpen(true);
@@ -355,5 +358,7 @@ export const usePurchase = (purchase?: Purchase) => {
     handleClearFilters,
     handleFilterCategoryChange,
     handleUpdatePurchase,
+    isDateFiltersShown,
+    toggleDateFiltersShown,
   };
 };

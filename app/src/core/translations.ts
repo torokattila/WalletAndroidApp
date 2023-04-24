@@ -67,6 +67,7 @@ export const Hungarian = {
     FilterFromDateText: 'Szűrés dátumtól',
     FilterToDateText: 'Szűrés dátumig',
   },
+  FilterForDate: 'Szűrés dátumra',
   Permissions: {
     StoragePermissionNeededTitle: 'Tárhely engedély szükséges',
     AskMeLaterTitle: 'Kérdezz meg később',
@@ -167,6 +168,7 @@ export const English = {
     FilterFromDateText: 'Filter from date',
     FilterToDateText: 'Filter to date',
   },
+  FilterForDate: 'Filter for date',
   Permissions: {
     StoragePermissionNeededTitle: 'Storage permission is required',
     AskMeLaterTitle: 'Ask me later',
