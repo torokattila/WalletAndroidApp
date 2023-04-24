@@ -166,26 +166,30 @@ export const usePurchase = (purchase?: Purchase) => {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      await purchaseService.updatePurchase(purchase?.id, userId, { amount, category });
+    const isFormVerified = verifyForm();
 
-      fetchUser();
-      fetchPurchases();
-      toast.show({
-        type: 'success',
-        title: i18n.t('ToastNotification.EditPurchaseSuccess'),
-      });
-    } catch (error) {
-      setErrors({
-        generalError: error,
-      });
-      toast.show({
-        type: 'error',
-        title: i18n.t('ToastNotification.SomethingWentWrong'),
-      });
-    } finally {
-      setIsLoading(false);
+    if (isFormVerified) {
+      try {
+        setIsLoading(true);
+        await purchaseService.updatePurchase(purchase?.id, userId, { amount, category });
+
+        fetchUser();
+        fetchPurchases();
+        toast.show({
+          type: 'success',
+          title: i18n.t('ToastNotification.EditPurchaseSuccess'),
+        });
+      } catch (error) {
+        setErrors({
+          generalError: error,
+        });
+        toast.show({
+          type: 'error',
+          title: i18n.t('ToastNotification.SomethingWentWrong'),
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 

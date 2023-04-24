@@ -131,25 +131,29 @@ export const useIncome = (income?: Income) => {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      await incomeService.updateIncome(income?.id, userId, { amount, title });
-      fetchUser();
-      fetchIncomes();
-      toast.show({
-        type: 'success',
-        title: i18n.t('ToastNotification.EditIncomeSuccess'),
-      });
-    } catch (error: any) {
-      setErrors({
-        generalError: error,
-      });
-      toast.show({
-        type: 'error',
-        title: i18n.t('ToastNotification.SomethingWentWrong'),
-      });
-    } finally {
-      setIsLoading(false);
+    const isFormVerified = verifyForm();
+
+    if (isFormVerified) {
+      try {
+        setIsLoading(true);
+        await incomeService.updateIncome(income?.id, userId, { amount, title });
+        fetchUser();
+        fetchIncomes();
+        toast.show({
+          type: 'success',
+          title: i18n.t('ToastNotification.EditIncomeSuccess'),
+        });
+      } catch (error: any) {
+        setErrors({
+          generalError: error,
+        });
+        toast.show({
+          type: 'error',
+          title: i18n.t('ToastNotification.SomethingWentWrong'),
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
