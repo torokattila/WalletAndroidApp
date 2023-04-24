@@ -161,6 +161,34 @@ export const usePurchase = (purchase?: Purchase) => {
     }
   };
 
+  const handleUpdatePurchase = async (): Promise<void> => {
+    if (!purchase) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await purchaseService.updatePurchase(purchase?.id, userId, { amount, category });
+
+      fetchUser();
+      fetchPurchases();
+      toast.show({
+        type: 'success',
+        title: i18n.t('ToastNotification.EditPurchaseSuccess'),
+      });
+    } catch (error) {
+      setErrors({
+        generalError: error,
+      });
+      toast.show({
+        type: 'error',
+        title: i18n.t('ToastNotification.SomethingWentWrong'),
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleDeletePurchase = async (): Promise<void> => {
     if (!purchase) {
       return;
@@ -322,5 +350,6 @@ export const usePurchase = (purchase?: Purchase) => {
     filterCategory,
     handleClearFilters,
     handleFilterCategoryChange,
+    handleUpdatePurchase,
   };
 };

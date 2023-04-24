@@ -61,6 +61,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
     isLoading,
     handleDropdownChange,
     handleCreatePurchase,
+    handleUpdatePurchase,
     errors,
     setErrors,
     isConfirmDialogOpen,
@@ -145,7 +146,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                 <StyledButton
                   size="large"
                   style={buttonShadow}
-                  onPress={handleCreatePurchase}
+                  onPress={isEditMode ? handleUpdatePurchase : handleCreatePurchase}
                   withActivityIndicator
                   isLoading={isLoading}
                   disabled={isLoading}
