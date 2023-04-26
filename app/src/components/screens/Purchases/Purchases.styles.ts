@@ -79,6 +79,14 @@ export const AllPurchasesTitle = styled(Text)`
   margin-left: 20px;
 `;
 
+export const ClearFilterAndDownloadContainer = styled(View)`
+  flex-direction: row;
+  align-self: flex-end;
+  position: absolute;
+  top: 5%;
+  right: 20%;
+`;
+
 export const FiltersContainer = styled(View)`
   width: 100%;
   flex-direction: row;
@@ -93,6 +101,27 @@ export const DateFiltersContainer = styled(View)`
   flex-direction: row;
   justify-content: flex-start;
   position: relative;
+  border-width: 1.5px;
+  border-color: ${({ theme }) => theme.colors.purple[300]};
+  border-radius: 12px;
+  padding: 8px 10px;
+  background-color: ${({ theme }) => theme.colors.white[100]};
+  margin-top: 10px;
+`;
+
+export const CloseDateFiltersButton = styled(TouchableOpacity)`
+  border-radius: 25px;
+  width: 34px;
+  height: 34px;
+  border-width: 1.5px;
+  border-color: ${({ theme }) => theme.colors.purple[300]};
+  background-color: ${({ theme }) => theme.colors.white[100]};
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: -10px;
+  top: -10px;
 `;
 
 export const CategoryAndShowDateFiltersButtonContainer = styled(View)`

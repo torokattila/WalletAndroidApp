@@ -275,7 +275,8 @@ export const usePurchase = (purchase?: Purchase) => {
     }
   };
 
-  const toggleDateFiltersShown = (): void => setIsDateFiltersShown(!isDateFiltersShown);
+  const showDateFilters = (): void => setIsDateFiltersShown(true);
+  const hideDateFilters = (): void => setIsDateFiltersShown(false);
 
   const handleFromDatePickerOpen = (): void => setIsFromDatePickerOpen(true);
   const handleFromDatePickerClose = (): void => setIsFromDatePickerOpen(false);
@@ -359,6 +360,7 @@ export const usePurchase = (purchase?: Purchase) => {
     handleFilterCategoryChange,
     handleUpdatePurchase,
     isDateFiltersShown,
-    toggleDateFiltersShown,
+    showDateFilters,
+    hideDateFilters,
   };
 };

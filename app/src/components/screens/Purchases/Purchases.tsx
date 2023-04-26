@@ -12,6 +12,8 @@ import {
   CategoryAndShowDateFiltersButtonContainer,
   CategoryFilterContainer,
   CategoryFilterLabel,
+  ClearFilterAndDownloadContainer,
+  CloseDateFiltersButton,
   Container,
   ContentContainer,
   DateFiltersContainer,
@@ -74,7 +76,8 @@ export const Purchases: FC = () => {
     filterCategory,
     handleFilterCategoryChange,
     isDateFiltersShown,
-    toggleDateFiltersShown,
+    showDateFilters,
+    hideDateFilters,
   } = usePurchase();
 
   const dropdownPlaceholder = filterCategory.current
@@ -106,9 +109,22 @@ export const Purchases: FC = () => {
           <ContentContainer>
             <AllPurchasesTitle>{i18n.t('Purchases.AllPurchasesTitle')}</AllPurchasesTitle>
 
+            <ClearFilterAndDownloadContainer>
+              {isFilterChanged && (
+                <>
+                  <DeleteFiltersButton onPress={handleClearFilters}>
+                    <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
+                  </DeleteFiltersButton>
+                </>
+              )}
+              <DownloadButton onPress={() => {}}>
+                <Icon type="download" iconColor={theme.colors.purple[100]} />
+              </DownloadButton>
+            </ClearFilterAndDownloadContainer>
+
             <CategoryAndShowDateFiltersButtonContainer>
               <CategoryFilterContainer>
-                <CategoryFilterLabel>Szűrés kategóriára</CategoryFilterLabel>
+                <CategoryFilterLabel>{i18n.t('Purchases.FilterForCategory')}</CategoryFilterLabel>
                 <Dropdown
                   style={[shadow, dropdownStyle]}
                   data={filterCategories}
@@ -124,14 +140,14 @@ export const Purchases: FC = () => {
                 />
               </CategoryFilterContainer>
 
-              <ShowDateFiltersButton style={shadow} onPress={toggleDateFiltersShown}>
+              <ShowDateFiltersButton style={shadow} onPress={showDateFilters}>
                 <ShowDateFiltersButtonText>{i18n.t('FilterForDate')}</ShowDateFiltersButtonText>
               </ShowDateFiltersButton>
             </CategoryAndShowDateFiltersButtonContainer>
 
             <FiltersContainer>
               {isDateFiltersShown && (
-                <DateFiltersContainer>
+                <DateFiltersContainer style={shadow}>
                   <DatePickerButtonContainer>
                     <DatePickerButtonLabel>
                       {i18n.t('DatePicker.FilterFromDateText')}
@@ -149,19 +165,12 @@ export const Purchases: FC = () => {
                       <DatePickerText>{formatDate(toDate.current)}</DatePickerText>
                     </DatePickerButton>
                   </DatePickerButtonContainer>
+
+                  <CloseDateFiltersButton style={shadow} onPress={hideDateFilters}>
+                    <Icon type="close" iconColor={theme.colors.purple[300]} />
+                  </CloseDateFiltersButton>
                 </DateFiltersContainer>
               )}
-
-              {isFilterChanged && (
-                <>
-                  <DeleteFiltersButton onPress={handleClearFilters}>
-                    <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
-                  </DeleteFiltersButton>
-                </>
-              )}
-              <DownloadButton onPress={() => {}}>
-                <Icon type="download" iconColor={theme.colors.purple[100]} />
-              </DownloadButton>
             </FiltersContainer>
 
             <DatePicker
