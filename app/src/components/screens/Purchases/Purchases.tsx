@@ -72,7 +72,8 @@ export const Purchases: FC = () => {
     isFromDatePickerOpen,
     isToDatePickerOpen,
     handleClearFilters,
-    isFilterChanged,
+    isDateFilterChanged,
+    isCategoryFilterChanged,
     filterCategory,
     handleFilterCategoryChange,
     isDateFiltersShown,
@@ -110,7 +111,7 @@ export const Purchases: FC = () => {
             <AllPurchasesTitle>{i18n.t('Purchases.AllPurchasesTitle')}</AllPurchasesTitle>
 
             <ClearFilterAndDownloadContainer>
-              {isFilterChanged && (
+              {(isCategoryFilterChanged || isDateFilterChanged) && (
                 <>
                   <DeleteFiltersButton onPress={handleClearFilters}>
                     <Icon type="delete-filters" iconColor={theme.colors.purple[300]} />

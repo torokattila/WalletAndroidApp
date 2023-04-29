@@ -183,7 +183,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     userId: string,
     startDate: Date,
     endDate: Date,
-    category: string
+    category: string | null
   ): Promise<Purchase[]> {
     let queryData: Query<PurchaseModel>;
 

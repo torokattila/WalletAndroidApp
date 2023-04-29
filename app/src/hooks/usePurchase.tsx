@@ -44,7 +44,8 @@ export const usePurchase = (purchase?: Purchase) => {
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
   const toDate = useRef(new Date());
   const filterCategory = useRef(null);
-  const [isFilterChanged, setIsFilterChanged] = useState(false);
+  const [isCategoryFilterChanged, setIsCategoryFilterChanged] = useState(false);
+  const [isDateFilterChanged, setIsDateFilterChanged] = useState(false);
   const [isDateFiltersShown, setIsDateFiltersShown] = useState(false);
 
   useEffect(() => {
@@ -107,7 +108,7 @@ export const usePurchase = (purchase?: Purchase) => {
         userId,
         fromDateMidnight.current,
         toDateMidnight.current,
-        filterCategory.current
+        filterCategory.current !== PurchaseCategory.ALL ? filterCategory.current : null
       );
 
       setPurchases(filteredPurchases);
@@ -250,7 +251,9 @@ export const usePurchase = (purchase?: Purchase) => {
   const handleDropdownChange = (item: CategoryDropdownValueType): void => setCategory(item.value);
 
   const handleFilterCategoryChange = async (item: CategoryDropdownValueType): Promise<void> => {
-    setIsFilterChanged(true);
+    if (item.value !== PurchaseCategory.ALL) {
+      setIsCategoryFilterChanged(true);
+    }
     filterCategory.current = item.value;
     await filterPurchases();
   };
@@ -284,14 +287,14 @@ export const usePurchase = (purchase?: Purchase) => {
   const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
 
   const handleFromDateChange = async (date: Date): Promise<void> => {
-    setIsFilterChanged(true);
+    setIsDateFilterChanged(true);
     handleFromDatePickerClose();
     fromDate.current = date;
     await filterPurchases();
   };
 
   const handleToDateChange = async (date: Date): Promise<void> => {
-    setIsFilterChanged(true);
+    setIsDateFilterChanged(true);
     handleToDatePickerClose();
     toDate.current = date;
     await filterPurchases();
@@ -301,7 +304,8 @@ export const usePurchase = (purchase?: Purchase) => {
     fromDate.current = new Date();
     toDate.current = new Date();
     filterCategory.current = PurchaseCategory.ALL;
-    setIsFilterChanged(false);
+    setIsCategoryFilterChanged(false);
+    setIsDateFilterChanged(false);
     await fetchPurchases();
   };
 
@@ -354,7 +358,8 @@ export const usePurchase = (purchase?: Purchase) => {
     handleToDateChange,
     isFromDatePickerOpen,
     isToDatePickerOpen,
-    isFilterChanged,
+    isDateFilterChanged,
+    isCategoryFilterChanged,
     filterCategory,
     handleClearFilters,
     handleFilterCategoryChange,
