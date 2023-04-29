@@ -107,12 +107,12 @@ export const Incomes: FC = () => {
               {isFilterChanged && (
                 <>
                   <DeleteFiltersButton onPress={handleClearFilters}>
-                    <Icon type="delete-filters" iconColor={theme.colors.purple[100]} />
+                    <Icon type="delete-filters" iconColor={theme.colors.purple[300]} />
                   </DeleteFiltersButton>
                 </>
               )}
               <DownloadButton onPress={handleDownloadButtonClick}>
-                <Icon type="download" iconColor={theme.colors.purple[100]} />
+                <Icon type="download" iconColor={theme.colors.purple[300]} />
               </DownloadButton>
             </DatePickerContainer>
 

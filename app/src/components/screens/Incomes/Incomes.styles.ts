@@ -87,7 +87,7 @@ export const DatePickerButtonLabel = styled(Text)`
 `;
 
 export const DatePickerButton = styled(TouchableOpacity)`
-  background-color: ${({ theme }) => theme.colors.grey[300]};
+  background-color: ${({ theme }) => theme.colors.purple[300]};
   border-radius: 10px;
   padding: 5px 20px;
   margin-right: 20px;
@@ -101,7 +101,7 @@ export const DatePickerText = styled(Text)`
 export const DeleteFiltersButton = styled(TouchableOpacity)`
   width: 35px;
   height: 35px;
-  border-color: ${({ theme }) => theme.colors.purple[100]};
+  border-color: ${({ theme }) => theme.colors.purple[300]};
   border-width: 2px;
   border-radius: 30px;
   align-items: center;
@@ -113,7 +113,7 @@ export const DeleteFiltersButton = styled(TouchableOpacity)`
 export const DownloadButton = styled(TouchableOpacity)`
   width: 35px;
   height: 35px;
-  border-color: ${({ theme }) => theme.colors.purple[100]};
+  border-color: ${({ theme }) => theme.colors.purple[300]};
   border-width: 2px;
   border-radius: 30px;
   align-items: center;
