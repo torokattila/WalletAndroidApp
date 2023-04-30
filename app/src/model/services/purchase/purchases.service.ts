@@ -181,18 +181,38 @@ export class PurchaseService extends BaseService<PurchaseModel> {
 
   async filterPurchases(
     userId: string,
-    startDate: Date,
-    endDate: Date,
+    dates: {
+      startDate: Date;
+      endDate: Date;
+    } | null,
     category: string | null
   ): Promise<Purchase[]> {
     let queryData: Query<PurchaseModel>;
 
-    if (!category || category === PurchaseCategory.ALL) {
+    if ((!category || category === PurchaseCategory.ALL) && dates) {
       queryData = query(
         this.collection,
         where('userId', '==', userId),
-        where('updatedAt', '>=', startDate),
-        where('updatedAt', '<=', endDate),
+        where('updatedAt', '>=', dates.startDate),
+        where('updatedAt', '<=', dates.endDate),
+        orderBy('updatedAt', 'desc'),
+        limit(9998)
+      );
+    } else if (category && dates) {
+      queryData = query(
+        this.collection,
+        where('userId', '==', userId),
+        where('updatedAt', '>=', dates.startDate),
+        where('updatedAt', '<=', dates.endDate),
+        where('category', '==', category),
+        orderBy('updatedAt', 'desc'),
+        limit(9998)
+      );
+    } else if (category && !dates) {
+      queryData = query(
+        this.collection,
+        where('userId', '==', userId),
+        where('category', '==', category),
         orderBy('updatedAt', 'desc'),
         limit(9998)
       );
@@ -200,9 +220,6 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       queryData = query(
         this.collection,
         where('userId', '==', userId),
-        where('updatedAt', '>=', startDate),
-        where('updatedAt', '<=', endDate),
-        where('category', '==', category),
         orderBy('updatedAt', 'desc'),
         limit(9998)
       );

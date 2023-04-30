@@ -106,8 +106,12 @@ export const usePurchase = (purchase?: Purchase) => {
     try {
       const filteredPurchases = await purchaseService.filterPurchases(
         userId,
-        fromDateMidnight.current,
-        toDateMidnight.current,
+        isDateFilterChanged
+          ? {
+              startDate: fromDateMidnight.current,
+              endDate: toDateMidnight.current,
+            }
+          : null,
         filterCategory.current !== PurchaseCategory.ALL ? filterCategory.current : null
       );
 
