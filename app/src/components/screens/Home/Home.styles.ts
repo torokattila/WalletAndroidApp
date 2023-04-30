@@ -43,3 +43,20 @@ export const ContentContainer = styled(View)`
   border-top-right-radius: 35px;
   position: relative;
 `;
+
+export const LastFivePurchasesContainer = styled(View)`
+  margin-top: 35%;
+  align-self: flex-start;
+`;
+
+export const LastFivePurchasesTitle = styled(Text)`
+  font-size: 22px;
+  margin-left: 15px;
+  font-family: 'NunitoSans-Light';
+`;
+
+export const ListContainer = styled(View)`
+  margin-top: 10px;
+  width: 100%;
+  flex: 1;
+`;

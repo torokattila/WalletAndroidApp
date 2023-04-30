@@ -98,6 +98,9 @@ export const Hungarian = {
     },
     CategoryError: 'A kategória megadása kötelező!',
   },
+  Home: {
+    LastFivePurchasesTitle: 'Utolsó 5 vásárlás',
+  },
 };
 
 export const English = {
@@ -199,5 +202,8 @@ export const English = {
       other: 'Other',
     },
     CategoryError: 'Category is required!',
+  },
+  Home: {
+    LastFivePurchasesTitle: 'Last 5 purchases',
   },
 };

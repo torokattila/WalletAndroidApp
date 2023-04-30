@@ -25,26 +25,34 @@ import { Purchase } from './purchase';
 import { SuccessTick } from './success-tick';
 import { Trash } from './trash';
 import { Visa } from './visa';
+import { HamburgerBig } from './hamburger-big';
+import { EntertainmentBig } from './entertainment-big';
+import { ClothingBig } from './clothing-big';
+import { OtherPurchaseBig } from './other-purchase-big';
 
 export type IconType =
   | 'backspace'
   | 'change-password'
   | 'close'
   | 'clothing'
+  | 'clothing-big'
   | 'delete-filters'
   | 'delete-profile'
   | 'dollar'
   | 'download'
   | 'entertainment'
+  | 'entertainment-big'
   | 'error-triangle'
   | 'eye'
   | 'eye-outlined'
   | 'hamburger'
+  | 'hamburger-big'
   | 'home'
   | 'identity-card'
   | 'income'
   | 'logout'
   | 'other-purchase'
+  | 'other-purchase-big'
   | 'plus'
   | 'profile'
   | 'profile-image'
@@ -68,6 +76,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Close iconColor={iconColor} {...props} />;
     case 'clothing':
       return <Clothing iconColor={iconColor} {...props} />;
+    case 'clothing-big':
+      return <ClothingBig iconColor={iconColor} {...props} />;
     case 'delete-filters':
       return <DeleteFilters iconColor={iconColor} {...props} />;
     case 'delete-profile':
@@ -78,6 +88,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Download iconColor={iconColor} {...props} />;
     case 'entertainment':
       return <Entertainment iconColor={iconColor} {...props} />;
+    case 'entertainment-big':
+      return <EntertainmentBig iconColor={iconColor} {...props} />;
     case 'error-triangle':
       return <ErrorTriangle iconColor={iconColor} {...props} />;
     case 'eye':
@@ -86,6 +98,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <EyeOutlined iconColor={iconColor} {...props} />;
     case 'hamburger':
       return <Hamburger iconColor={iconColor} {...props} />;
+    case 'hamburger-big':
+      return <HamburgerBig iconColor={iconColor} {...props} />;
     case 'home':
       return <Home iconColor={iconColor} {...props} />;
     case 'identity-card':
@@ -96,6 +110,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Logout iconColor={iconColor} {...props} />;
     case 'other-purchase':
       return <OtherPurchase iconColor={iconColor} {...props} />;
+    case 'other-purchase-big':
+      return <OtherPurchaseBig iconColor={iconColor} {...props} />;
     case 'plus':
       return <Plus iconColor={iconColor} {...props} />;
     case 'profile':
