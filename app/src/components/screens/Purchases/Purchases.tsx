@@ -79,6 +79,7 @@ export const Purchases: FC = () => {
     isDateFiltersShown,
     showDateFilters,
     hideDateFilters,
+    handleDownloadButtonClick,
   } = usePurchase();
 
   const dropdownPlaceholder = filterCategory.current
@@ -118,7 +119,7 @@ export const Purchases: FC = () => {
                   </DeleteFiltersButton>
                 </>
               )}
-              <DownloadButton onPress={() => {}}>
+              <DownloadButton onPress={handleDownloadButtonClick}>
                 <Icon type="download" iconColor={theme.colors.purple[300]} />
               </DownloadButton>
             </ClearFilterAndDownloadContainer>

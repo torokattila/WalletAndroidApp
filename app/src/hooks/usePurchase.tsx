@@ -7,6 +7,7 @@ import { PurchaseService } from '@model/services';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { useUserId } from './useUserId';
 import { useUser } from './useUser';
+import { useDownload } from './useDownload';
 
 type CategoryDropdownValueType = {
   label: string;
@@ -60,6 +61,12 @@ export const usePurchase = (purchase?: Purchase) => {
 
   const purchaseService = new PurchaseService();
   const toast = useToastNotificationStore();
+  const { handleDownloadButtonClick } = useDownload(
+    purchases,
+    fromDate.current,
+    toDate.current,
+    'purchases'
+  );
 
   let unsubscribe: Unsubscribe;
 
@@ -371,5 +378,6 @@ export const usePurchase = (purchase?: Purchase) => {
     isDateFiltersShown,
     showDateFilters,
     hideDateFilters,
+    handleDownloadButtonClick,
   };
 };
