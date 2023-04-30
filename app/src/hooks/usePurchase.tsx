@@ -45,7 +45,7 @@ export const usePurchase = (purchase?: Purchase) => {
   const toDate = useRef(new Date());
   const filterCategory = useRef(null);
   const [isCategoryFilterChanged, setIsCategoryFilterChanged] = useState(false);
-  const [isDateFilterChanged, setIsDateFilterChanged] = useState(false);
+  const isDateFilterChanged = useRef(false);
   const [isDateFiltersShown, setIsDateFiltersShown] = useState(false);
 
   useEffect(() => {
@@ -106,7 +106,7 @@ export const usePurchase = (purchase?: Purchase) => {
     try {
       const filteredPurchases = await purchaseService.filterPurchases(
         userId,
-        isDateFilterChanged
+        isDateFilterChanged.current
           ? {
               startDate: fromDateMidnight.current,
               endDate: toDateMidnight.current,
@@ -291,14 +291,14 @@ export const usePurchase = (purchase?: Purchase) => {
   const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
 
   const handleFromDateChange = async (date: Date): Promise<void> => {
-    setIsDateFilterChanged(true);
+    isDateFilterChanged.current = true;
     handleFromDatePickerClose();
     fromDate.current = date;
     await filterPurchases();
   };
 
   const handleToDateChange = async (date: Date): Promise<void> => {
-    setIsDateFilterChanged(true);
+    isDateFilterChanged.current = true;
     handleToDatePickerClose();
     toDate.current = date;
     await filterPurchases();
@@ -309,7 +309,7 @@ export const usePurchase = (purchase?: Purchase) => {
     toDate.current = new Date();
     filterCategory.current = PurchaseCategory.ALL;
     setIsCategoryFilterChanged(false);
-    setIsDateFilterChanged(false);
+    isDateFilterChanged.current = false;
     await fetchPurchases();
   };
 
