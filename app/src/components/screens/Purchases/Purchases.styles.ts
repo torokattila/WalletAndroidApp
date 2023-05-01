@@ -232,3 +232,14 @@ export const ListContainer = styled(View)`
   width: 100%;
   flex: 1;
 `;
+
+export const NoPurchasesContainer = styled(View)`
+  margin-top: 20%;
+  align-self: center;
+`;
+
+export const NoPurchasesText = styled(Text)`
+  text-align: center;
+  font-family: 'NunitoSans-Light';
+  font-size: 18px;
+`;

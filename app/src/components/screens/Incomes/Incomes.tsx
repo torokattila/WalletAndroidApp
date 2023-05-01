@@ -26,6 +26,8 @@ import {
   DatePickerButtonLabel,
   DeleteFiltersButton,
   DownloadButton,
+  NoIncomesContainer,
+  NoIncomesText,
 } from './Incomes.styles';
 import { IncomeModal } from './IncomeModal';
 import { IncomeCard } from './IncomeCard';
@@ -143,23 +145,31 @@ export const Incomes: FC = () => {
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
             />
 
-            <ListContainer>
-              <FlatList
-                contentContainerStyle={{ paddingBottom: 40 }}
-                style={{ paddingHorizontal: 10, marginTop: -15 }}
-                showsVerticalScrollIndicator={false}
-                data={incomes}
-                keyExtractor={(item) => item.id}
-                scrollEnabled
-                renderItem={({ item }) => (
-                  <IncomeCard
-                    key={item.id}
-                    income={item}
-                    onPress={() => handleEditModalOpen(item)}
-                  />
-                )}
-              />
-            </ListContainer>
+            {incomes.length > 0 && (
+              <ListContainer>
+                <FlatList
+                  contentContainerStyle={{ paddingBottom: 40 }}
+                  style={{ paddingHorizontal: 10, marginTop: -15 }}
+                  showsVerticalScrollIndicator={false}
+                  data={incomes}
+                  keyExtractor={(item) => item.id}
+                  scrollEnabled
+                  renderItem={({ item }) => (
+                    <IncomeCard
+                      key={item.id}
+                      income={item}
+                      onPress={() => handleEditModalOpen(item)}
+                    />
+                  )}
+                />
+              </ListContainer>
+            )}
+
+            {!incomes.length && (
+              <NoIncomesContainer>
+                <NoIncomesText>{i18n.t('Incomes.NoIncomesText')}</NoIncomesText>
+              </NoIncomesContainer>
+            )}
             <AddButton onPress={handleModalOpen} />
           </ContentContainer>
         </StyledLinearGradient>

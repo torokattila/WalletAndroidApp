@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { ScrollView, ScrollViewProps, StyleProp, Text, View, ViewStyle } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { Button } from '@components/shared';
 
 export const Container = styled(ScrollView)<ScrollViewProps>`
   flex: 1;
@@ -53,6 +54,22 @@ export const LastFivePurchasesTitle = styled(Text)`
   font-size: 22px;
   margin-left: 15px;
   font-family: 'NunitoSans-Light';
+`;
+
+export const NoLastFivePurchasesContainer = styled(View)`
+  margin-top: 15%;
+  align-self: center;
+`;
+
+export const NoLastFivePurchasesText = styled(Text)`
+  text-align: center;
+  font-family: 'NunitoSans-Light';
+  font-size: 18px;
+`;
+
+export const RedirectToPurchasesButton = styled(Button)`
+  margin-top: 8%;
+  padding: 15px 40px;
 `;
 
 export const ListContainer = styled(View)`

@@ -29,6 +29,8 @@ import {
   dropdownTextStyle,
   FiltersContainer,
   ListContainer,
+  NoPurchasesContainer,
+  NoPurchasesText,
   PurchasesThisMonth,
   PurchasesThisMonthContainer,
   PurchasesThisMonthTitle,
@@ -202,22 +204,29 @@ export const Purchases: FC = () => {
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
             />
 
-            <ListContainer>
-              <FlatList
-                contentContainerStyle={{ paddingBottom: 40 }}
-                style={{
-                  paddingHorizontal: 10,
-                  marginTop: -15,
-                }}
-                showsVerticalScrollIndicator={false}
-                data={purchases}
-                keyExtractor={(item) => item.id}
-                scrollEnabled
-                renderItem={({ item }) => (
-                  <PurchaseCard purchase={item} onPress={() => handleEditModalOpen(item)} />
-                )}
-              />
-            </ListContainer>
+            {purchases.length > 0 && (
+              <ListContainer>
+                <FlatList
+                  contentContainerStyle={{ paddingBottom: 40 }}
+                  style={{
+                    paddingHorizontal: 10,
+                    marginTop: -15,
+                  }}
+                  showsVerticalScrollIndicator={false}
+                  data={purchases}
+                  keyExtractor={(item) => item.id}
+                  scrollEnabled
+                  renderItem={({ item }) => (
+                    <PurchaseCard purchase={item} onPress={() => handleEditModalOpen(item)} />
+                  )}
+                />
+              </ListContainer>
+            )}
+            {!purchases.length && (
+              <NoPurchasesContainer>
+                <NoPurchasesText>{i18n.t('NoPurchasesText')}</NoPurchasesText>
+              </NoPurchasesContainer>
+            )}
             <AddButton onPress={handleModalOpen} />
           </ContentContainer>
         </StyledLinearGradient>

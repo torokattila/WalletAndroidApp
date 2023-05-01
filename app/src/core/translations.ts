@@ -41,6 +41,7 @@ export const Hungarian = {
   Incomes: {
     ScreenTitle: 'Jövedelmek',
     AllIncomeTitle: 'Összes jövedelem',
+    NoIncomesText: 'Még nem adtál hozzá jövedelmet.',
   },
   Dialog: {
     Incomes: {
@@ -101,6 +102,7 @@ export const Hungarian = {
   Home: {
     LastFivePurchasesTitle: 'Utolsó 5 vásárlás',
   },
+  NoPurchasesText: 'Még nem vásároltál semmit.',
 };
 
 export const English = {
@@ -145,6 +147,7 @@ export const English = {
   Incomes: {
     ScreenTitle: 'Incomes',
     AllIncomeTitle: 'All income',
+    NoIncomesText: 'There are no incomes yet.',
   },
   Dialog: {
     Incomes: {
@@ -206,4 +209,5 @@ export const English = {
   Home: {
     LastFivePurchasesTitle: 'Last 5 purchases',
   },
+  NoPurchasesText: 'There are no purchases yet.',
 };

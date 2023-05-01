@@ -6,25 +6,40 @@ import { useUser } from '@hooks/useUser';
 import { getLocalizedName } from '@core/name';
 import { CreditCard } from '@components/CreditCard';
 import { usePurchase } from '@hooks/usePurchase';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { TabStackParams } from '@navigation/Tabs';
+import { theme } from '@styles/theme';
+import { PurchaseModal } from '../Purchases/PurchaseModal';
 import {
   Container,
   ContentContainer,
   LastFivePurchasesContainer,
   LastFivePurchasesTitle,
   ListContainer,
+  NoLastFivePurchasesText,
+  NoLastFivePurchasesContainer,
   scrollViewStyle,
   StyledLinearGradient,
   WelcomeText,
+  RedirectToPurchasesButton,
 } from './Home.styles';
 import { HomeScreenPurchaseCard } from './HomeScreenPurchaseCard';
-import { PurchaseModal } from '../Purchases/PurchaseModal';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width - 150;
 const INTERVAL = CARD_WIDTH + 10;
 
+const buttonShadow = {
+  elevation: 10,
+  shadowColor: theme.colors.black,
+  shadowOffset: { width: -2, height: 20 },
+  shadowOpacity: 0.7,
+  shadowRadius: 20,
+};
+
 export const Home: FC = () => {
   const { user } = useUser();
+  const navigation = useNavigation<NavigationProp<TabStackParams>>();
   const localizedName = getLocalizedName(user?.lastname, user?.firstname);
   const {
     purchases,
@@ -58,26 +73,40 @@ export const Home: FC = () => {
                 {i18n.t('Home.LastFivePurchasesTitle')}
               </LastFivePurchasesTitle>
 
-              <ListContainer>
-                <FlatList
-                  contentContainerStyle={{ paddingRight: 20, paddingLeft: 15, paddingBottom: 40 }}
-                  showsHorizontalScrollIndicator={false}
-                  data={lastFivePurchases}
-                  keyExtractor={(item) => item.id}
-                  scrollEnabled
-                  snapToInterval={INTERVAL}
-                  horizontal
-                  pagingEnabled
-                  decelerationRate="fast"
-                  renderItem={({ item }) => (
-                    <HomeScreenPurchaseCard
-                      purchase={item}
-                      onPress={() => handleEditModalOpen(item)}
-                    />
-                  )}
-                />
-              </ListContainer>
+              {lastFivePurchases.length > 0 && (
+                <ListContainer>
+                  <FlatList
+                    contentContainerStyle={{ paddingRight: 20, paddingLeft: 15, paddingBottom: 40 }}
+                    showsHorizontalScrollIndicator={false}
+                    data={lastFivePurchases}
+                    keyExtractor={(item) => item.id}
+                    scrollEnabled
+                    snapToInterval={INTERVAL}
+                    horizontal
+                    pagingEnabled
+                    decelerationRate="fast"
+                    renderItem={({ item }) => (
+                      <HomeScreenPurchaseCard
+                        purchase={item}
+                        onPress={() => handleEditModalOpen(item)}
+                      />
+                    )}
+                  />
+                </ListContainer>
+              )}
             </LastFivePurchasesContainer>
+
+            {!lastFivePurchases.length && (
+              <NoLastFivePurchasesContainer>
+                <NoLastFivePurchasesText>{i18n.t('NoPurchasesText')}</NoLastFivePurchasesText>
+                <RedirectToPurchasesButton
+                  style={buttonShadow}
+                  onPress={() => navigation.navigate('Purchases')}
+                  text="Tovább a vásárlásokhoz"
+                  size="small"
+                />
+              </NoLastFivePurchasesContainer>
+            )}
           </ContentContainer>
         </StyledLinearGradient>
       </Container>
