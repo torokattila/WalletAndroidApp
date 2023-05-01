@@ -103,6 +103,13 @@ export const Hungarian = {
     LastFivePurchasesTitle: 'Utolsó 5 vásárlás',
   },
   NoPurchasesText: 'Még nem vásároltál semmit.',
+  ExcelColumns: {
+    Amount: 'Összeg',
+    Created: 'Létrehozás dátuma',
+    Modified: 'Utolsó módosítás dátuma',
+    Title: 'Cím',
+    Category: 'Kategória',
+  },
 };
 
 export const English = {
@@ -210,4 +217,11 @@ export const English = {
     LastFivePurchasesTitle: 'Last 5 purchases',
   },
   NoPurchasesText: 'There are no purchases yet.',
+  ExcelColumns: {
+    Amount: 'Amount',
+    Created: 'Date of creation',
+    Modified: 'Date of last modification',
+    Title: 'Title',
+    Category: 'Category',
+  },
 };

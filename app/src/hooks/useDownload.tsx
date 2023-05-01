@@ -18,7 +18,32 @@ export const useDownload = (
 
   const exportToExcel = async (): Promise<void> => {
     const workBook = XLSX.utils.book_new();
-    const workSheet = XLSX.utils.json_to_sheet(sheet);
+
+    let resultWorkSheet: any[] = [];
+
+    if (sheet.length > 0 && sheet[0] instanceof Income) {
+      resultWorkSheet = (sheet as Income[]).map((income) => {
+        return {
+          [`${i18n.t('ExcelColumns.Amount')}`]: income.amount,
+          [`${i18n.t('ExcelColumns.Created')}`]: formatDate(income.createdAt.toDate()),
+          [`${i18n.t('ExcelColumns.Modified')}`]: formatDate(income.updatedAt.toDate()),
+          [`${i18n.t('ExcelColumns.Title')}`]: income?.title ?? '',
+        };
+      });
+    } else if (sheet.length > 0 && sheet[0] instanceof Purchase) {
+      resultWorkSheet = (sheet as Purchase[]).map((purchase) => {
+        return {
+          [`${i18n.t('ExcelColumns.Amount')}`]: purchase.amount,
+          [`${i18n.t('ExcelColumns.Created')}`]: formatDate(purchase.createdAt.toDate()),
+          [`${i18n.t('ExcelColumns.Modified')}`]: formatDate(purchase.updatedAt.toDate()),
+          [`${i18n.t('ExcelColumns.Category')}`]:
+            i18n.t(`Purchases.Categories.${purchase.category}`) ?? '',
+        };
+      });
+    }
+
+    const workSheet = XLSX.utils.json_to_sheet(resultWorkSheet);
+
     XLSX.utils.book_append_sheet(workBook, workSheet, 'Sheet1');
     const output = XLSX.write(workBook, { type: 'binary', bookType: 'xlsx' });
 
