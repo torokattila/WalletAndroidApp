@@ -14,6 +14,10 @@ export class AuthService {
 
     const { user } = userCredential;
 
+    if (user && !user.emailVerified) {
+      await firebase.sendEmailVerification(user);
+    }
+
     await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
 
     return user;
@@ -27,6 +31,10 @@ export class AuthService {
     );
 
     const { user } = userCredential;
+
+    if (user && !user.emailVerified) {
+      await firebase.sendEmailVerification(user);
+    }
 
     await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
 
@@ -105,5 +113,11 @@ export class AuthService {
     const docRef = snapshots.docs[0].ref;
 
     await deleteDoc(docRef);
+  }
+
+  async sendVerificationEmail(): Promise<void> {
+    const user = await this.getCurrentUser();
+
+    await firebase.sendEmailVerification(user);
   }
 }

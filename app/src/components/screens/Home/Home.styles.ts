@@ -54,6 +54,7 @@ export const LastFivePurchasesTitle = styled(Text)`
   font-size: 22px;
   margin-left: 15px;
   font-family: 'NunitoSans-Light';
+  color: ${({ theme }) => theme.colors.purple[300]};
 `;
 
 export const NoLastFivePurchasesContainer = styled(View)`

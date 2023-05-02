@@ -1,6 +1,8 @@
 export const Hungarian = {
   Login: 'Bejelentkezés',
   Registration: 'Regisztráció',
+  VerifyEmailAddressText:
+    'A regisztráció után emailt küldünk neked amin keresztül aktiválhatod a fiókodat.',
   EmailAddressLabel: 'Email cím',
   PasswordLabel: 'Jelszó',
   PasswordConfirmLabel: 'Jelszó megerősítése',
@@ -115,6 +117,8 @@ export const Hungarian = {
 export const English = {
   Login: 'Login',
   Registration: 'Registration',
+  VerifyEmailAddressText:
+    'After registration, we will send you an email through which you can activate your account',
   EmailAddressLabel: 'Email address',
   PasswordLabel: 'Password',
   PasswordConfirmLabel: 'Confirm password',

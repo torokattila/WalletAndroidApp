@@ -38,6 +38,7 @@ export const Category = styled(Text)`
   font-family: 'NunitoSans-Bold';
   text-align: center;
   font-size: 20px;
+  color: ${({ theme }) => theme.colors.purple[300]};
 `;
 
 export const Amount = styled(Text)`
@@ -55,4 +56,5 @@ export const PurchaseDate = styled(Text)`
   bottom: 10px;
   margin-top: 25%;
   font-family: 'NunitoSans-Bold';
+  color: ${({ theme }) => theme.colors.purple[300]};
 `;

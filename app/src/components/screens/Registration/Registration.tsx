@@ -22,6 +22,7 @@ import {
   StyledRedirectButton,
   keyboardAvoidingContainerStyle,
   StyledIconButton,
+  VerifyEmailAddressText,
 } from './Registration.styles';
 
 type RegistrationProps = NativeStackScreenProps<AuthStackParams, 'Registration'>;
@@ -162,6 +163,8 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
               />
             </KeyboardAvoidingView>
           </FormContainer>
+
+          <VerifyEmailAddressText>{i18n.t('VerifyEmailAddressText')}</VerifyEmailAddressText>
 
           <StyledRedirectQuestionText>
             {i18n.t('AlreadyHaveAnAccountLabel')}

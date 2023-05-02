@@ -118,12 +118,19 @@ export const ButtonText = styled(Text)`
   font-size: 15px;
 `;
 
+export const VerifyEmailAddressText = styled(Text)`
+  text-align: center;
+  margin-top: 7%;
+  font-family: 'NunitoSans-Light';
+  color: ${({ theme }) => theme.colors.purple[100]};
+`;
+
 export const StyledRedirectQuestionText = styled(Text)`
   color: ${({ theme }) => theme.colors.purple[100]};
   font-size: 15px;
   text-align: center;
   font-family: 'NunitoSans-Regular';
-  margin-top: 10%;
+  margin-top: 5%;
 `;
 
 export const StyledRedirectButton = styled(Button)`
