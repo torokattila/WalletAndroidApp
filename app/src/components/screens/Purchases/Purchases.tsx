@@ -1,7 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
+import { FlatList } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Dropdown } from 'react-native-element-dropdown';
+import Animated, { FadeIn, FadeInLeft, FadeOut, FadeOutLeft } from 'react-native-reanimated';
 import i18n from 'i18n-js';
 import { theme } from '@styles/theme';
 import { formatDate } from '@core/date-utils';
@@ -41,7 +43,6 @@ import {
   StyledLinearGradient,
 } from './Purchases.styles';
 import { PurchaseModal } from './PurchaseModal';
-import { FlatList } from 'react-native';
 import { PurchaseCard } from './PurchaseCard';
 
 const shadow = {
@@ -114,12 +115,12 @@ export const Purchases: FC = () => {
             <AllPurchasesTitle>{i18n.t('Purchases.AllPurchasesTitle')}</AllPurchasesTitle>
 
             <ClearFilterAndDownloadContainer>
-              {(isCategoryFilterChanged || isDateFilterChanged) && (
-                <>
+              {(isCategoryFilterChanged || isDateFilterChanged.current) && (
+                <Animated.View entering={FadeIn} exiting={FadeOut}>
                   <DeleteFiltersButton onPress={handleClearFilters}>
                     <Icon type="delete-filters" iconColor={theme.colors.purple[300]} />
                   </DeleteFiltersButton>
-                </>
+                </Animated.View>
               )}
               <DownloadButton onPress={handleDownloadButtonClick}>
                 <Icon type="download" iconColor={theme.colors.purple[300]} />
@@ -151,7 +152,7 @@ export const Purchases: FC = () => {
 
             <FiltersContainer>
               {isDateFiltersShown && (
-                <DateFiltersContainer style={shadow}>
+                <DateFiltersContainer style={shadow} entering={FadeInLeft} exiting={FadeOutLeft}>
                   <DatePickerButtonContainer>
                     <DatePickerButtonLabel>
                       {i18n.t('DatePicker.FilterFromDateText')}

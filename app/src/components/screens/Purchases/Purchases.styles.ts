@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { theme as globalTheme } from '@styles/theme';
+import Animated from 'react-native-reanimated';
 
 const WIDTH = Dimensions.get('screen').width;
 
@@ -97,7 +98,7 @@ export const FiltersContainer = styled(View)`
   position: relative;
 `;
 
-export const DateFiltersContainer = styled(View)`
+export const DateFiltersContainer = styled(Animated.View)`
   flex-direction: row;
   justify-content: flex-start;
   position: relative;

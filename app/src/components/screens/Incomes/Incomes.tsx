@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import DatePicker from 'react-native-date-picker';
 import { AddButton, Icon } from '@components/shared';
 import { useUser } from '@hooks/useUser';
@@ -107,11 +108,11 @@ export const Incomes: FC = () => {
               </DatePickerButtonContainer>
 
               {isFilterChanged && (
-                <>
+                <Animated.View entering={FadeIn} exiting={FadeOut}>
                   <DeleteFiltersButton onPress={handleClearFilters}>
                     <Icon type="delete-filters" iconColor={theme.colors.purple[300]} />
                   </DeleteFiltersButton>
-                </>
+                </Animated.View>
               )}
               <DownloadButton onPress={handleDownloadButtonClick}>
                 <Icon type="download" iconColor={theme.colors.purple[300]} />
