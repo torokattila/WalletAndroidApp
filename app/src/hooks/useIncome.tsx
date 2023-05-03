@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { Unsubscribe } from 'firebase/firestore';
 import i18n from 'i18n-js';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
@@ -225,6 +226,10 @@ export const useIncome = (income?: Income) => {
     setIsEditModeModal(true);
   };
 
+  const handleTitleChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    setTitle(e.nativeEvent.text);
+  };
+
   const handleNumberChange = (value: string): void => {
     let newInputNumber = '';
 
@@ -270,7 +275,7 @@ export const useIncome = (income?: Income) => {
     amount,
     setAmount,
     title,
-    setTitle,
+    handleTitleChange,
     isConfirmDialogOpen,
     setIsConfirmDialogOpen,
     handleCreateIncome,

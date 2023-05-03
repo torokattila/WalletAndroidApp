@@ -1,12 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect } from 'react';
 import i18n from 'i18n-js';
-import {
-  KeyboardAvoidingView,
-  Modal,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-} from 'react-native';
+import { KeyboardAvoidingView, Modal } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-detect';
 import { theme } from '@styles/theme';
 import { ConfirmDialog, Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
@@ -51,7 +46,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
   const {
     amount,
     title,
-    setTitle,
+    handleTitleChange,
     isConfirmDialogOpen,
     handleCreateIncome,
     handleUpdateIncome,
@@ -110,9 +105,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
                 {errors.amount && <InputNumberErrorText>{errors.amount}</InputNumberErrorText>}
                 <StyledTextInput
                   value={title}
-                  onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                    setTitle(e.nativeEvent.text)
-                  }
+                  onChange={handleTitleChange}
                   placeholder={i18n.t('Dialog.Incomes.TitleInputPlaceholder')}
                 />
 
