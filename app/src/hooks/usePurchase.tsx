@@ -379,5 +379,6 @@ export const usePurchase = (purchase?: Purchase) => {
     showDateFilters,
     hideDateFilters,
     handleDownloadButtonClick,
+    retry: fetchPurchases,
   };
 };

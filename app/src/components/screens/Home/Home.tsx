@@ -2,12 +2,9 @@
 import React, { FC, useMemo } from 'react';
 import i18n from 'i18n-js';
 import { Dimensions, FlatList } from 'react-native';
-import { useUser } from '@hooks/useUser';
-import { getLocalizedName } from '@core/name';
 import { CreditCard } from '@components/CreditCard';
 import { usePurchase } from '@hooks/usePurchase';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { TabStackParams } from '@navigation/Tabs';
+import { useHome } from '@hooks/useHome';
 import { theme } from '@styles/theme';
 import { PurchaseModal } from '../Purchases/PurchaseModal';
 import {
@@ -38,9 +35,6 @@ const buttonShadow = {
 };
 
 export const Home: FC = () => {
-  const { user } = useUser();
-  const navigation = useNavigation<NavigationProp<TabStackParams>>();
-  const localizedName = getLocalizedName(user?.lastname, user?.firstname);
   const {
     purchases,
     handleEditModalOpen,
@@ -49,6 +43,7 @@ export const Home: FC = () => {
     isEditModeModal,
     selectedPurchase,
   } = usePurchase();
+  const { user, localizedName, navigation } = useHome();
   const lastFivePurchases = useMemo(() => {
     return purchases.slice(0, 5);
   }, [purchases]);
@@ -102,7 +97,7 @@ export const Home: FC = () => {
                 <RedirectToPurchasesButton
                   style={buttonShadow}
                   onPress={() => navigation.navigate('Purchases')}
-                  text="Tovább a vásárlásokhoz"
+                  text={i18n.t('Home.RedirectToPurchasesButtonText')}
                   size="small"
                 />
               </NoLastFivePurchasesContainer>

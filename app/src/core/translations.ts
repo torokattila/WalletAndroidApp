@@ -103,6 +103,7 @@ export const Hungarian = {
   },
   Home: {
     LastFivePurchasesTitle: 'Utolsó 5 vásárlás',
+    RedirectToPurchasesButtonText: 'Tovább a vásárlásokhoz',
   },
   NoPurchasesText: 'Még nem vásároltál semmit.',
   ExcelColumns: {
@@ -146,6 +147,7 @@ export const English = {
     NewIncomeSuccess: 'Income successfully added!',
     EditIncomeSuccess: 'Income updated successfully!',
     DeleteIncomeSuccess: 'Income deleted!',
+    SuccessfulPasswordChange: 'Successful password change!',
     SuccessfulDownload: 'Successful Download!',
     SuccessfulDataChange: 'Successful modification!',
     NewPurchaseSuccess: 'Purchase successfully added!',
@@ -198,7 +200,6 @@ export const English = {
     CurrentPasswordTitle: 'Current password',
     NewPasswordTitle: 'New password',
     NewPasswordConfirmTitle: 'Confirm new password',
-    SuccessfulPasswordChange: 'Successful password change',
     WrongPassword: 'Wrong password',
   },
   RequiredField: 'Required field',
@@ -219,6 +220,7 @@ export const English = {
   },
   Home: {
     LastFivePurchasesTitle: 'Last 5 purchases',
+    RedirectToPurchasesButtonText: 'Go to the purchases',
   },
   NoPurchasesText: 'There are no purchases yet.',
   ExcelColumns: {
