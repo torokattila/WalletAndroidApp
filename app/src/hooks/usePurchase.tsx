@@ -28,7 +28,7 @@ const filterCategories: CategoryDropdownValueType[] = [
 
 export const usePurchase = (purchase?: Purchase) => {
   const { userId } = useUserId();
-  const { retry: fetchUser } = useUser();
+  const { retry: fetchUser, user } = useUser();
 
   const [amount, setAmount] = useState('0');
   const [allPurchasesAmountForThisMonth, setAllPurchasesAmountForThisMonth] = useState(0);
@@ -74,7 +74,7 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsLoading(true);
 
     unsubscribe = await purchaseService.getAllPurchases(
-      userId,
+      user.id,
       (updatedPurchases) => {
         setPurchases(updatedPurchases);
       },

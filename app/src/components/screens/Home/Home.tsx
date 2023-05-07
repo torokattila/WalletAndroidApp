@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { FC, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import i18n from 'i18n-js';
-import { Dimensions, FlatList } from 'react-native';
+import { Dimensions, FlatList, RefreshControl } from 'react-native';
 import { CreditCard } from '@components/CreditCard';
 import { usePurchase } from '@hooks/usePurchase';
 import { useHome } from '@hooks/useHome';
@@ -35,6 +35,7 @@ const buttonShadow = {
 };
 
 export const Home: FC = () => {
+  const { screenRefreshing, setScreenRefreshing } = useHome();
   const {
     purchases,
     handleEditModalOpen,
@@ -42,15 +43,36 @@ export const Home: FC = () => {
     handleModalClose,
     isEditModeModal,
     selectedPurchase,
+    retry: reloadPurchases,
+    isLoading,
   } = usePurchase();
   const { user, localizedName, navigation } = useHome();
   const lastFivePurchases = useMemo(() => {
     return purchases.slice(0, 5);
   }, [purchases]);
 
+  const handlePullToRefresh = async () => {
+    setScreenRefreshing(true);
+
+    await reloadPurchases();
+  };
+
+  useEffect(() => {
+    if (!isLoading && screenRefreshing) {
+      setScreenRefreshing(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, purchases, screenRefreshing]);
+
   return (
     <>
-      <Container contentContainerStyle={scrollViewStyle}>
+      <Container
+        overScrollMode="never"
+        contentContainerStyle={scrollViewStyle}
+        refreshControl={
+          <RefreshControl refreshing={screenRefreshing} onRefresh={handlePullToRefresh} />
+        }
+      >
         <StyledLinearGradient
           colors={['#2C1F5F', '#4c397a', '#9068ee', '#b296f1', '#ffffff', '#3f087a57']}
           useAngle
