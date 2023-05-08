@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import i18n from 'i18n-js';
-import { Unsubscribe } from 'firebase/firestore';
 import { Purchase, PurchaseCategory } from '@model/domain';
 import { PurchaseService } from '@model/services';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
@@ -68,8 +67,6 @@ export const usePurchase = (purchase?: Purchase) => {
     toDate.current,
     'purchases'
   );
-
-  let unsubscribe: Unsubscribe;
 
   const fetchPurchases = async () => {
     setIsLoading(true);
@@ -333,10 +330,6 @@ export const usePurchase = (purchase?: Purchase) => {
       setPurchases([]);
       setIsLoading(false);
     }
-
-    return () => {
-      unsubscribe && unsubscribe();
-    };
   }, [userId]);
 
   return {
