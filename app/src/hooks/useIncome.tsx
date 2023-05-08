@@ -11,7 +11,7 @@ import { useUserId } from './useUserId';
 import { useDownload } from './useDownload';
 
 export const useIncome = (income?: Income) => {
-  const { retry: fetchUser } = useUser();
+  const { retry: fetchUser, user } = useUser();
   const { userId } = useUserId();
 
   const [amount, setAmount] = useState<string>('0');
@@ -52,17 +52,15 @@ export const useIncome = (income?: Income) => {
   const fetchIncomes = async () => {
     setIsLoading(true);
 
-    unsubscribe = await incomeService.getAllIncomes(
-      userId,
-      (updatedIncomes) => {
-        setIncomes(updatedIncomes);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+    try {
+      const allIncomes = await incomeService.getAllIncomes(user.id);
 
-    setIsLoading(false);
+      setIncomes(allIncomes);
+    } catch (error) {
+      console.error(`Error during fetching incomes: ${error}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const filterIncomes = async () => {

@@ -48,6 +48,7 @@ export const usePurchase = (purchase?: Purchase) => {
   const [isCategoryFilterChanged, setIsCategoryFilterChanged] = useState(false);
   const isDateFilterChanged = useRef(false);
   const [isDateFiltersShown, setIsDateFiltersShown] = useState(false);
+  const [screenRefreshing, setScreenRefreshing] = useState(false);
 
   useEffect(() => {
     if (purchase) {
@@ -73,17 +74,21 @@ export const usePurchase = (purchase?: Purchase) => {
   const fetchPurchases = async () => {
     setIsLoading(true);
 
-    unsubscribe = await purchaseService.getAllPurchases(
-      user.id,
-      (updatedPurchases) => {
-        setPurchases(updatedPurchases);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+    try {
+      const allPurchases = await purchaseService.getAllPurchases(user.id);
 
-    setIsLoading(false);
+      setPurchases(allPurchases);
+    } catch (error) {
+      console.error(`Error during fetching purchases: ${error}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePullToRefresh = async () => {
+    setScreenRefreshing(true);
+
+    await fetchPurchases();
   };
 
   const fetchThisMonthPurchasesAmount = async (): Promise<void> => {
@@ -91,7 +96,7 @@ export const usePurchase = (purchase?: Purchase) => {
 
     try {
       const purchasesAmountCurrentMonth = await purchaseService.getAllPurchaseAmountInCurrentMonth(
-        userId
+        user.id
       );
 
       setAllPurchasesAmountForThisMonth(purchasesAmountCurrentMonth);
@@ -380,5 +385,7 @@ export const usePurchase = (purchase?: Purchase) => {
     hideDateFilters,
     handleDownloadButtonClick,
     retry: fetchPurchases,
+    screenRefreshing,
+    handlePullToRefresh,
   };
 };

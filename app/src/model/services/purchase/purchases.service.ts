@@ -4,17 +4,14 @@ import {
   deleteDoc,
   doc,
   DocumentReference,
-  FirestoreError,
   getDoc,
   getDocs,
   limit,
-  onSnapshot,
   orderBy,
   Query,
   query,
   QueryDocumentSnapshot,
   Timestamp,
-  Unsubscribe,
   updateDoc,
   where,
 } from 'firebase/firestore';
@@ -71,11 +68,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     return PurchaseService.toDomainObject(purchaseSnapshot);
   }
 
-  async getAllPurchases(
-    userId: string,
-    onSuccess: (purchases: Purchase[]) => void,
-    onError: (error: FirestoreError) => void
-  ): Promise<Unsubscribe> {
+  async getAllPurchases(userId: string): Promise<Purchase[]> {
     const queryData = query(
       this.collection,
       where('userId', '==', userId),
@@ -83,15 +76,13 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       limit(9998)
     );
 
-    return onSnapshot(
-      queryData,
-      (snapshots) => {
-        const purchases = snapshots?.docs?.map(PurchaseService.toDomainObject);
+    const snapshot = await getDocs(queryData);
 
-        onSuccess(purchases);
-      },
-      onError
-    );
+    if (snapshot.empty) {
+      return [];
+    }
+
+    return snapshot?.docs?.map(PurchaseService.toDomainObject);
   }
 
   async getPurchaseById(purchaseId: string): Promise<Purchase> {

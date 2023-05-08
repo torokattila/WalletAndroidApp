@@ -4,16 +4,13 @@ import {
   deleteDoc,
   doc,
   DocumentReference,
-  FirestoreError,
   getDoc,
   getDocs,
   limit,
-  onSnapshot,
   orderBy,
   query,
   QueryDocumentSnapshot,
   Timestamp,
-  Unsubscribe,
   updateDoc,
   where,
 } from 'firebase/firestore';
@@ -108,11 +105,7 @@ export class IncomeService extends BaseService<IncomeModel> {
     await deleteDoc(docRef);
   }
 
-  async getAllIncomes(
-    userId: string,
-    onSuccess: (incomes: Income[]) => void,
-    onError: (error: FirestoreError) => void
-  ): Promise<Unsubscribe> {
+  async getAllIncomes(userId: string): Promise<Income[]> {
     const queryData = query(
       this.collection,
       where('userId', '==', userId),
@@ -120,15 +113,13 @@ export class IncomeService extends BaseService<IncomeModel> {
       limit(9998)
     );
 
-    return onSnapshot(
-      queryData,
-      (snapshots) => {
-        const incomes = snapshots?.docs?.map(IncomeService.toDomainObject);
+    const snapshot = await getDocs(queryData);
 
-        onSuccess(incomes);
-      },
-      onError
-    );
+    if (snapshot.empty) {
+      return [];
+    }
+
+    return snapshot?.docs?.map(IncomeService.toDomainObject);
   }
 
   async getIncomesByDate(userId: string, startDate: Date, endDate: Date): Promise<Income[]> {
