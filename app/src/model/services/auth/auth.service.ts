@@ -5,6 +5,7 @@ import { getApp, getCollection } from '../../firebase-config';
 
 const STORAGE_KEY = 'clientId';
 const AUTH_USER_STORAGE_KEY = 'authUser';
+const USER_UID = 'userUid';
 
 export class AuthService {
   private readonly auth: firebase.Auth = firebase.getAuth(getApp());
@@ -19,6 +20,7 @@ export class AuthService {
     }
 
     await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
+    await AsyncStorage.setItem(USER_UID, JSON.stringify(user.uid));
 
     return user;
   }
@@ -37,6 +39,7 @@ export class AuthService {
     }
 
     await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
+    await AsyncStorage.setItem(USER_UID, JSON.stringify(user.uid));
 
     return user;
   }
@@ -64,6 +67,7 @@ export class AuthService {
     try {
       await AsyncStorage.removeItem(STORAGE_KEY);
       await AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY);
+      await AsyncStorage.removeItem(USER_UID);
       await firebase.signOut(this.auth);
     } catch (error) {
       console.error(error);

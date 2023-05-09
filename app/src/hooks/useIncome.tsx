@@ -27,6 +27,7 @@ export const useIncome = (income?: Income) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
   const [isEditModeModal, setIsEditModeModal] = useState(false);
+  const [screenRefreshing, setScreenRefreshing] = useState(false);
 
   useEffect(() => {
     if (income) {
@@ -60,6 +61,14 @@ export const useIncome = (income?: Income) => {
       setIsLoading(false);
     }
   };
+
+  const handlePullToRefresh = async () => {
+    setScreenRefreshing(true);
+
+    await fetchIncomes();
+  };
+
+  const stopRefreshing = () => setScreenRefreshing(false);
 
   const filterIncomes = async () => {
     setIsLoading(true);
@@ -263,6 +272,12 @@ export const useIncome = (income?: Income) => {
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (!isLoading && screenRefreshing) {
+      stopRefreshing();
+    }
+  }, [isLoading, incomes, screenRefreshing]);
+
   return {
     amount,
     setAmount,
@@ -302,5 +317,8 @@ export const useIncome = (income?: Income) => {
     handleConfirmDialogOpen,
     handleConfirmDialogDelete,
     handleConfirmDialogClose,
+    handlePullToRefresh,
+    stopRefreshing,
+    screenRefreshing,
   };
 };

@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
 import i18n from 'i18n-js';
-import { FlatList } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import DatePicker from 'react-native-date-picker';
 import { AddButton, Icon } from '@components/shared';
@@ -64,11 +64,18 @@ export const Incomes: FC = () => {
     selectedIncome,
     isEditModeModal,
     handleDownloadButtonClick,
+    screenRefreshing,
+    handlePullToRefresh,
   } = useIncome();
 
   return (
     <>
-      <Container>
+      <Container
+        overScrollMode="never"
+        refreshControl={
+          <RefreshControl refreshing={screenRefreshing} onRefresh={handlePullToRefresh} />
+        }
+      >
         <StyledLinearGradient
           colors={['#4547B8', '#8E65F7']}
           useAngle

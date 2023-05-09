@@ -27,6 +27,8 @@ export const NavigationInterceptorProvider = ({ children }) => {
   });
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
+  // console.log('user in interceptor: ', user);
+
   const redirect = () => {
     let redirectData = { ...redirectPath, index: redirectPath.routes.length - 1 };
 
@@ -40,6 +42,7 @@ export const NavigationInterceptorProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    console.log('user in interceptor: ', user);
     user && redirect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, redirectPath]);

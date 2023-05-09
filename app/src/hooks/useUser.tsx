@@ -54,10 +54,7 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     try {
       let currentUser: User = await userService.getCurrentUser();
 
-      if (!currentUser) {
-        const id = await AsyncStorage.getItem(STORAGE_KEY);
-        currentUser = await userService.getUserByUserId(id);
-      }
+      console.log('currentUser in useUser: ', currentUser);
 
       if (currentUser) {
         setUser(currentUser);
@@ -85,6 +82,9 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
       setIsLoading(false);
     }
   };
+
+  console.log('userId in useUser: ', userId);
+  console.log('user in useUser: ', user);
 
   useEffect(() => {
     fetchUser();

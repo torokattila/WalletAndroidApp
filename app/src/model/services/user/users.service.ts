@@ -31,6 +31,8 @@ export type UserModel = {
   updatedAt: Timestamp;
 };
 
+const USER_UID = 'userUid';
+
 export class UserService extends BaseService<UserModel> {
   private authService: AuthService;
 
@@ -42,15 +44,18 @@ export class UserService extends BaseService<UserModel> {
   async getCurrentUser(): Promise<User> {
     const user = await this.authService.getCurrentUser();
 
-    if (!user) {
-      return null;
-    }
+    let storageUid = await AsyncStorage.getItem(USER_UID);
+    storageUid = storageUid.replace(/"/g, '');
 
-    let queryData = query(this.collection, where('userIds', 'array-contains', user.uid));
+    let queryData = query(
+      this.collection,
+      where('userIds', 'array-contains', !user ? storageUid : user.uid)
+    );
+
     let userSnapshots = await getDocs(queryData);
 
     if (userSnapshots.empty) {
-      queryData = query(this.collection, where('userId', '==', user.uid));
+      queryData = query(this.collection, where('userId', '==', !user ? storageUid : user.uid));
       userSnapshots = await getDocs(queryData);
 
       if (userSnapshots.empty) {
