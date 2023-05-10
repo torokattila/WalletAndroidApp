@@ -3,9 +3,14 @@ import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import * as Yup from 'yup';
 import i18n from 'i18n-js';
 import { AuthService } from '@model/services';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
+import { useUser } from './useUser';
+import { TabStackParams } from '@navigation/Tabs';
 
 const useLogin = () => {
+  const navigation = useNavigation<NavigationProp<TabStackParams>>();
+  const { retry: fetchUser } = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPassword, setIsPassword] = useState(true);
@@ -67,6 +72,8 @@ const useLogin = () => {
 
       try {
         await authService.loginWithEmailAndPassword(email, password);
+        navigation.navigate('Home');
+        fetchUser();
       } catch (error) {
         switch (error.code) {
           case 'auth/user-not-found':

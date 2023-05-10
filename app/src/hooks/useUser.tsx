@@ -10,7 +10,6 @@ import { User } from '@model/domain';
 import { UserService } from '@model/services';
 import { useUserId } from './useUserId';
 import { useAuth } from './useAuth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type UserContextProps = {
   user: User;
@@ -35,8 +34,6 @@ const UserContext = createContext<UserContextProps>({
   retry: () => Promise.resolve(),
 });
 
-const STORAGE_KEY = 'clientId';
-
 export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
   const userService = new UserService();
 
@@ -53,8 +50,6 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
 
     try {
       let currentUser: User = await userService.getCurrentUser();
-
-      console.log('currentUser in useUser: ', currentUser);
 
       if (currentUser) {
         setUser(currentUser);
@@ -82,9 +77,6 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
       setIsLoading(false);
     }
   };
-
-  console.log('userId in useUser: ', userId);
-  console.log('user in useUser: ', user);
 
   useEffect(() => {
     fetchUser();
