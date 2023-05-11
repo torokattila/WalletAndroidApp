@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 import Animated, { FadeIn, FadeInLeft, FadeOut, FadeOutLeft } from 'react-native-reanimated';
@@ -83,6 +83,8 @@ export const Purchases: FC = () => {
     showDateFilters,
     hideDateFilters,
     handleDownloadButtonClick,
+    screenRefreshing,
+    handlePullToRefresh,
   } = usePurchase();
 
   const dropdownPlaceholder = filterCategory.current
@@ -213,6 +215,13 @@ export const Purchases: FC = () => {
                     paddingHorizontal: 10,
                     marginTop: -15,
                   }}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={screenRefreshing}
+                      onRefresh={handlePullToRefresh}
+                      colors={['#4547B8', '#8E65F7']}
+                    />
+                  }
                   showsVerticalScrollIndicator={false}
                   data={purchases}
                   keyExtractor={(item) => item.id}

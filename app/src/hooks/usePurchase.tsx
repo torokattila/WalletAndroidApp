@@ -88,6 +88,8 @@ export const usePurchase = (purchase?: Purchase) => {
     await fetchPurchases();
   };
 
+  const stopRefreshing = () => setScreenRefreshing(false);
+
   const fetchThisMonthPurchasesAmount = async (): Promise<void> => {
     setIsLoading(true);
 
@@ -332,6 +334,12 @@ export const usePurchase = (purchase?: Purchase) => {
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (!isLoading && screenRefreshing) {
+      stopRefreshing();
+    }
+  }, [isLoading, purchases, screenRefreshing]);
+
   return {
     amount,
     category,
@@ -380,5 +388,6 @@ export const usePurchase = (purchase?: Purchase) => {
     retry: fetchPurchases,
     screenRefreshing,
     handlePullToRefresh,
+    stopRefreshing,
   };
 };
