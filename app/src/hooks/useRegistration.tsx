@@ -3,12 +3,11 @@ import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import * as Yup from 'yup';
 import i18n from 'i18n-js';
 import { UserService } from '@model/services';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
-import { TabStackParams } from '@navigation/Tabs';
+import { useUser } from './useUser';
 
 const useRegistration = () => {
-  const navigation = useNavigation<NavigationProp<TabStackParams>>();
+  const { retry: fetchUser } = useUser();
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
@@ -97,7 +96,7 @@ const useRegistration = () => {
         setPasswordConfirm('');
         setIsPassword(true);
         setIsPasswordConfirm(true);
-        navigation.navigate('Home');
+        fetchUser();
       } catch (error) {
         switch (error.code) {
           case 'auth/email-already-in-use':
