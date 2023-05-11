@@ -70,7 +70,11 @@ export const Home: FC = () => {
         overScrollMode="never"
         contentContainerStyle={scrollViewStyle}
         refreshControl={
-          <RefreshControl refreshing={screenRefreshing} onRefresh={handlePullToRefresh} />
+          <RefreshControl
+            refreshing={screenRefreshing}
+            onRefresh={handlePullToRefresh}
+            colors={['#4547B8', '#8E65F7']}
+          />
         }
       >
         <StyledLinearGradient

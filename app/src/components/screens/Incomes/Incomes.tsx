@@ -73,7 +73,11 @@ export const Incomes: FC = () => {
       <Container
         overScrollMode="never"
         refreshControl={
-          <RefreshControl refreshing={screenRefreshing} onRefresh={handlePullToRefresh} />
+          <RefreshControl
+            refreshing={screenRefreshing}
+            onRefresh={handlePullToRefresh}
+            colors={['#4547B8', '#8E65F7']}
+          />
         }
       >
         <StyledLinearGradient
@@ -160,8 +164,14 @@ export const Incomes: FC = () => {
                   style={{ paddingHorizontal: 10, marginTop: -15 }}
                   showsVerticalScrollIndicator={false}
                   data={incomes}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={screenRefreshing}
+                      onRefresh={handlePullToRefresh}
+                      colors={['#4547B8', '#8E65F7']}
+                    />
+                  }
                   keyExtractor={(item) => item.id}
-                  scrollEnabled
                   renderItem={({ item }) => (
                     <IncomeCard
                       key={item.id}
