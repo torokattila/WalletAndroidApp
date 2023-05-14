@@ -8,6 +8,7 @@ import { NavigationContainer, useNavigationContainerRef } from '@react-navigatio
 import { AuthProvider } from '@hooks/useAuth';
 import { UserIdProvider } from '@hooks/useUserId';
 import { UserProvider, useUser } from '@hooks/useUser';
+import { DarkModeProvider } from '@hooks/useDarkMode';
 import { Navigation } from '@navigation/Navigation';
 import { English, Hungarian } from '@core/translations';
 import { getLocale } from '@core/translation-utils';
@@ -41,42 +42,44 @@ const App = (): JSX.Element => {
 
   return (
     <ThemeProvider>
-      <RootSiblingParent>
-        <NavigationContainer
-          ref={navigationRef}
-          onReady={() => {
-            routeNameRef.current = navigationRef?.getCurrentRoute()?.name;
-          }}
-          onStateChange={handleNavigationChange}
-        >
-          <AuthProvider>
-            <UserIdProvider>
-              <UserProvider>
-                <NavigationInterceptorProvider>
-                  <AppLoader>
-                    <StatusBar
-                      barStyle="default"
-                      translucent
-                      backgroundColor="transparent"
-                      animated={true}
-                    />
-                    <SafeAreaView style={{ flex: 1 }}>
-                      <Navigation />
-                    </SafeAreaView>
-                  </AppLoader>
-                </NavigationInterceptorProvider>
-              </UserProvider>
-            </UserIdProvider>
-            <ToastNotification
-              isVisible={toastNotification.visible}
-              type={toastNotification.toastType}
-              title={toastNotification.toastTitle}
-              subtitle={toastNotification.toastSubtitle}
-              onHideToast={toastNotification.hide}
-            />
-          </AuthProvider>
-        </NavigationContainer>
-      </RootSiblingParent>
+      <DarkModeProvider>
+        <RootSiblingParent>
+          <NavigationContainer
+            ref={navigationRef}
+            onReady={() => {
+              routeNameRef.current = navigationRef?.getCurrentRoute()?.name;
+            }}
+            onStateChange={handleNavigationChange}
+          >
+            <AuthProvider>
+              <UserIdProvider>
+                <UserProvider>
+                  <NavigationInterceptorProvider>
+                    <AppLoader>
+                      <StatusBar
+                        barStyle="default"
+                        translucent
+                        backgroundColor="transparent"
+                        animated={true}
+                      />
+                      <SafeAreaView style={{ flex: 1 }}>
+                        <Navigation />
+                      </SafeAreaView>
+                    </AppLoader>
+                  </NavigationInterceptorProvider>
+                </UserProvider>
+              </UserIdProvider>
+              <ToastNotification
+                isVisible={toastNotification.visible}
+                type={toastNotification.toastType}
+                title={toastNotification.toastTitle}
+                subtitle={toastNotification.toastSubtitle}
+                onHideToast={toastNotification.hide}
+              />
+            </AuthProvider>
+          </NavigationContainer>
+        </RootSiblingParent>
+      </DarkModeProvider>
     </ThemeProvider>
   );
 };

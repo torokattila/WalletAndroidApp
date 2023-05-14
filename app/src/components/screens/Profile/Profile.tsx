@@ -3,6 +3,7 @@ import i18n from 'i18n-js';
 import { ConfirmDialog, Icon } from '@components/shared';
 import { theme } from '@styles/theme';
 import { useProfile } from '@hooks/useProfile';
+import { useDarkModeStore } from '@stores/darkMode.store';
 import {
   Container,
   ContentContainer,
@@ -18,8 +19,10 @@ import {
   OptionCard,
   OptionCardTitle,
   StyledIcon,
+  SwitchDarkModeText,
 } from './Profile.styles';
 import { Dialog } from './Dialog';
+import { Switch } from 'react-native';
 
 const cardShadow = {
   elevation: 4,
@@ -59,6 +62,7 @@ export const Profile: FC = () => {
     isNewPassword,
     isNewPasswordConfirm,
   } = useProfile();
+  const { isDarkMode, toggleDarkMode } = useDarkModeStore();
 
   return (
     <>
@@ -102,6 +106,9 @@ export const Profile: FC = () => {
                 <StyledIcon type="logout" iconColor={theme.colors.purple[100]} />
                 <OptionCardTitle>{i18n.t('SignOut')}</OptionCardTitle>
               </OptionCard>
+
+              <SwitchDarkModeText>{i18n.t('ChangeThemeText')}</SwitchDarkModeText>
+              <Switch value={isDarkMode} onValueChange={toggleDarkMode} />
             </OptionsContainer>
           </ContentContainer>
         </StyledLinearGradient>

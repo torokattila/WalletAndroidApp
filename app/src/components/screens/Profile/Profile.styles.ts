@@ -108,3 +108,10 @@ export const OptionCardTitle = styled(Text)`
 export const StyledIcon = styled(Icon)`
   margin-right: 15px;
 `;
+
+export const SwitchDarkModeText = styled(Text)`
+  align-self: flex-start;
+  margin-left: 25px;
+  margin-top: 25px;
+  color: ${({ theme }) => theme.colors.purple[300]};
+`;

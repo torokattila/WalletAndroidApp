@@ -113,6 +113,7 @@ export const Hungarian = {
     Title: 'Cím',
     Category: 'Kategória',
   },
+  ChangeThemeText: 'Téma megváltozatása',
 };
 
 export const English = {
@@ -230,4 +231,5 @@ export const English = {
     Title: 'Title',
     Category: 'Category',
   },
+  ChangeThemeText: 'Change theme',
 };
