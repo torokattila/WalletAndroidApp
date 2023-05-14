@@ -31,14 +31,16 @@ const cardShadow = {
 };
 
 export const HomeScreenPurchaseCard: FC<HomeScreenPurchaseCardProps> = ({ purchase, onPress }) => (
-  <Container style={cardShadow} onPress={onPress}>
-    <IconContainer style={cardShadow}>{cardIcon[purchase.category]}</IconContainer>
+  <Container style={cardShadow} onPress={onPress} underlayColor="#DDDDDD">
+    <>
+      <IconContainer style={cardShadow}>{cardIcon[purchase.category]}</IconContainer>
 
-    <CategoryAndAmountContainer>
-      {<Category>{i18n.t(`Purchases.Categories.${purchase.category}`)}</Category>}
-      <Amount>- {purchase.amount} Ft</Amount>
-    </CategoryAndAmountContainer>
+      <CategoryAndAmountContainer>
+        {<Category>{i18n.t(`Purchases.Categories.${purchase.category}`)}</Category>}
+        <Amount>- {purchase.amount} Ft</Amount>
+      </CategoryAndAmountContainer>
 
-    <PurchaseDate>{format(purchase.updatedAt.toDate(), 'yyyy-MM.dd.')}</PurchaseDate>
+      <PurchaseDate>{format(purchase.updatedAt.toDate(), 'yyyy-MM.dd.')}</PurchaseDate>
+    </>
   </Container>
 );

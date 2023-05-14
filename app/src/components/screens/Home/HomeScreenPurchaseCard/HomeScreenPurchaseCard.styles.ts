@@ -1,10 +1,10 @@
-import { Text, TouchableOpacity, View, Dimensions } from 'react-native';
+import { Text, TouchableHighlight, View, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width - 150;
 
-export const Container = styled(TouchableOpacity)`
+export const Container = styled(TouchableHighlight)`
   width: ${() => CARD_WIDTH}px;
   padding: 15px;
   background-color: ${({ theme }) => theme.colors.white[100]};
