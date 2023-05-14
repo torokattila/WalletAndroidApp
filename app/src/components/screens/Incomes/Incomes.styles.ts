@@ -98,6 +98,14 @@ export const DatePickerText = styled(Text)`
   font-family: 'NunitoSans-Bold';
 `;
 
+export const ClearFilterAndDownloadContainer = styled(View)`
+  flex-direction: row;
+  align-self: flex-end;
+  position: absolute;
+  top: 5%;
+  right: 20%;
+`;
+
 export const DeleteFiltersButton = styled(TouchableOpacity)`
   width: 35px;
   height: 35px;

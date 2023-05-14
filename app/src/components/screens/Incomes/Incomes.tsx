@@ -30,6 +30,7 @@ import {
   NoIncomesContainer,
   NoIncomesText,
   Loader,
+  ClearFilterAndDownloadContainer,
 } from './Incomes.styles';
 import { IncomeModal } from './IncomeModal';
 import { IncomeCard } from './IncomeCard';
@@ -119,7 +120,9 @@ export const Incomes: FC = () => {
                   <DatePickerText>{formatDate(toDate.current)}</DatePickerText>
                 </DatePickerButton>
               </DatePickerButtonContainer>
+            </DatePickerContainer>
 
+            <ClearFilterAndDownloadContainer>
               {isFilterChanged && (
                 <Animated.View entering={FadeIn} exiting={FadeOut}>
                   <DeleteFiltersButton onPress={handleClearFilters}>
@@ -130,7 +133,7 @@ export const Incomes: FC = () => {
               <DownloadButton onPress={handleDownloadButtonClick}>
                 <Icon type="download" iconColor={theme.colors.purple[300]} />
               </DownloadButton>
-            </DatePickerContainer>
+            </ClearFilterAndDownloadContainer>
 
             <DatePicker
               modal
