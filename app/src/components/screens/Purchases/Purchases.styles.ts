@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import {
+  ActivityIndicator,
   Dimensions,
   StyleProp,
   Text,
@@ -243,4 +244,9 @@ export const NoPurchasesText = styled(Text)`
   text-align: center;
   font-family: 'NunitoSans-Light';
   font-size: 18px;
+`;
+
+export const Loader = styled(ActivityIndicator)`
+  padding-top: 20%;
+  align-self: center;
 `;

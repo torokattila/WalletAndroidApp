@@ -29,6 +29,7 @@ import {
   DownloadButton,
   NoIncomesContainer,
   NoIncomesText,
+  Loader,
 } from './Incomes.styles';
 import { IncomeModal } from './IncomeModal';
 import { IncomeCard } from './IncomeCard';
@@ -44,6 +45,7 @@ const shadow = {
 export const Incomes: FC = () => {
   const { user } = useUser();
   const {
+    isLoading,
     incomes,
     isFromDatePickerOpen,
     handleFromDatePickerOpen,
@@ -157,7 +159,9 @@ export const Incomes: FC = () => {
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
             />
 
-            {incomes.length > 0 && (
+            {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
+
+            {incomes.length > 0 && !isLoading && (
               <ListContainer>
                 <FlatList
                   contentContainerStyle={{ paddingBottom: 40 }}
@@ -183,7 +187,7 @@ export const Incomes: FC = () => {
               </ListContainer>
             )}
 
-            {!incomes.length && (
+            {!incomes.length && !isLoading && (
               <NoIncomesContainer>
                 <NoIncomesText>{i18n.t('Incomes.NoIncomesText')}</NoIncomesText>
               </NoIncomesContainer>

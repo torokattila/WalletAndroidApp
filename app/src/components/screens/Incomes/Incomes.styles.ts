@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 export const Container = styled(View)`
@@ -136,4 +136,9 @@ export const NoIncomesText = styled(Text)`
   text-align: center;
   font-family: 'NunitoSans-Light';
   font-size: 18px;
+`;
+
+export const Loader = styled(ActivityIndicator)`
+  padding-top: 20%;
+  align-self: center;
 `;

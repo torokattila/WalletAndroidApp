@@ -31,6 +31,7 @@ import {
   dropdownTextStyle,
   FiltersContainer,
   ListContainer,
+  Loader,
   NoPurchasesContainer,
   NoPurchasesText,
   PurchasesThisMonth,
@@ -55,6 +56,7 @@ const shadow = {
 
 export const Purchases: FC = () => {
   const {
+    isLoading,
     handleModalOpen,
     handleModalClose,
     isModalOpen,
@@ -207,7 +209,9 @@ export const Purchases: FC = () => {
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
             />
 
-            {purchases.length > 0 && (
+            {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
+
+            {purchases.length > 0 && !isLoading && (
               <ListContainer>
                 <FlatList
                   contentContainerStyle={{ paddingBottom: 40 }}
@@ -232,7 +236,7 @@ export const Purchases: FC = () => {
                 />
               </ListContainer>
             )}
-            {!purchases.length && (
+            {!purchases.length && !isLoading && (
               <NoPurchasesContainer>
                 <NoPurchasesText>{i18n.t('NoPurchasesText')}</NoPurchasesText>
               </NoPurchasesContainer>

@@ -19,6 +19,7 @@ import {
   StyledLinearGradient,
   WelcomeText,
   RedirectToPurchasesButton,
+  Loader,
 } from './Home.styles';
 import { HomeScreenPurchaseCard } from './HomeScreenPurchaseCard';
 
@@ -94,7 +95,7 @@ export const Home: FC = () => {
                 {i18n.t('Home.LastFivePurchasesTitle')}
               </LastFivePurchasesTitle>
 
-              {lastFivePurchases.length > 0 && (
+              {lastFivePurchases.length > 0 && !isLoading && (
                 <ListContainer>
                   <FlatList
                     contentContainerStyle={{ paddingRight: 20, paddingLeft: 15, paddingBottom: 40 }}
@@ -117,7 +118,9 @@ export const Home: FC = () => {
               )}
             </LastFivePurchasesContainer>
 
-            {!lastFivePurchases.length && (
+            {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
+
+            {!lastFivePurchases.length && !isLoading && (
               <NoLastFivePurchasesContainer>
                 <NoLastFivePurchasesText>{i18n.t('NoPurchasesText')}</NoLastFivePurchasesText>
                 <RedirectToPurchasesButton

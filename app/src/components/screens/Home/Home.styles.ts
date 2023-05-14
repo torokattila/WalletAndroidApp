@@ -1,5 +1,13 @@
 import styled from 'styled-components/native';
-import { ScrollView, ScrollViewProps, StyleProp, Text, View, ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  ScrollViewProps,
+  StyleProp,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Button } from '@components/shared';
 
@@ -77,4 +85,9 @@ export const ListContainer = styled(View)`
   margin-top: 10px;
   width: 100%;
   flex: 1;
+`;
+
+export const Loader = styled(ActivityIndicator)`
+  padding-top: 20%;
+  align-self: center;
 `;
