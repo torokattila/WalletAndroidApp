@@ -28,7 +28,7 @@ export const StyledLinearGradient = styled(LinearGradient)`
 export const ScreenTitleContainer = styled(View)`
   align-items: center;
   flex-direction: row;
-  padding-top: 7%;
+  padding-top: 15%;
   padding-left: 5%;
   margin-bottom: 12%;
   align-self: flex-start;

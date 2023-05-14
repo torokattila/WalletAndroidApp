@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef, memo } from 'react';
 import { Animated } from 'react-native';
 import { StyledTouchableOpacity } from './ModalBackground.styles';
 
@@ -7,7 +7,7 @@ type ModalBackgroundProps = {
   isVisible: boolean;
 };
 
-export const ModalBackground: FC<ModalBackgroundProps> = ({ onHide, isVisible, ...props }) => {
+const ModalBackgroundComponent: FC<ModalBackgroundProps> = ({ onHide, isVisible, ...props }) => {
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   const fadeIn = () => {
@@ -39,3 +39,5 @@ export const ModalBackground: FC<ModalBackgroundProps> = ({ onHide, isVisible, .
 
   return <AnimatedBackground onPress={onHide} style={{ opacity: fadeAnimation }} {...props} />;
 };
+
+export const ModalBackground = memo(ModalBackgroundComponent);

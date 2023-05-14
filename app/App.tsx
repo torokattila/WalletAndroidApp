@@ -1,6 +1,7 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { FC, PropsWithChildren, useEffect, useRef } from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import { StatusBar } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import i18n from 'i18n-js';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
@@ -53,8 +54,15 @@ const App = (): JSX.Element => {
               <UserProvider>
                 <NavigationInterceptorProvider>
                   <AppLoader>
-                    <StatusBar barStyle="default" animated={true} />
-                    <Navigation />
+                    <StatusBar
+                      barStyle="default"
+                      translucent
+                      backgroundColor="transparent"
+                      animated={true}
+                    />
+                    <SafeAreaView style={{ flex: 1 }}>
+                      <Navigation />
+                    </SafeAreaView>
                   </AppLoader>
                 </NavigationInterceptorProvider>
               </UserProvider>

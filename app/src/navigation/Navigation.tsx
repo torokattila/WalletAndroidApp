@@ -28,7 +28,6 @@ export const Navigation: FC = () => {
   return (
     <RootStack.Navigator
       screenOptions={{
-        statusBarStyle: 'dark',
         headerBackTitleVisible: false,
       }}
       initialRouteName={initialRouteName}

@@ -44,7 +44,7 @@ export const StyledLinearGradient = styled(LinearGradient)`
 export const StyledGradientText = styled(Text)`
   color: ${({ theme }) => theme.colors.white[100]};
   font-size: 40px;
-  padding-top: 7%;
+  padding-top: 15%;
   font-family: 'NunitoSans-Light';
 `;
 

@@ -32,7 +32,7 @@ export const WelcomeText = styled(Text)`
   color: ${({ theme }) => theme.colors.white[100]};
   font-size: 25px;
   align-self: flex-start;
-  padding-top: 7%;
+  padding-top: 15%;
   padding-left: 5%;
   padding-bottom: 20%;
   font-family: 'NunitoSans-Light';

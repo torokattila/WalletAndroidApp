@@ -155,7 +155,7 @@ export const English = {
     DeletePurchaseSuccess: 'Purchase deleted!',
   },
   SignOut: 'Sign out',
-  BalanceTitle: 'Your Available Balance',
+  BalanceTitle: 'Your available balance',
   NameTemplate: '<firstname> <lastname>',
   Incomes: {
     ScreenTitle: 'Incomes',

@@ -30,7 +30,7 @@ export const StyledLinearGradient = styled(LinearGradient)`
 export const ScreenTitleContainer = styled(View)`
   align-items: center;
   flex-direction: row;
-  padding-top: 7%;
+  padding-top: 15%;
   padding-left: 5%;
   align-self: flex-start;
 `;
@@ -166,7 +166,7 @@ export const dropdownStyle: StyleProp<ViewStyle> = {
   paddingHorizontal: 15,
   paddingVertical: 3,
   height: 35,
-  width: WIDTH * 0.35,
+  width: WIDTH * 0.4,
 };
 
 export const dropdownContainerStyle: StyleProp<ViewStyle> = {
