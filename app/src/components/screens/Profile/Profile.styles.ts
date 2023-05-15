@@ -3,9 +3,11 @@ import { ScrollView, StyleProp, Text, TouchableOpacity, View, ViewStyle } from '
 import LinearGradient from 'react-native-linear-gradient';
 import { Icon } from '@components/shared';
 
-export const Container = styled(View)`
+export const Container = styled(View)<{ isDarkMode: boolean }>`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.white[100]};
+  background-color: ${({ isDarkMode, theme }) => {
+    return isDarkMode ? '#000' : theme.colors.white[100];
+  }};
 `;
 
 export const scrollViewStyle: StyleProp<ViewStyle> = {
@@ -109,9 +111,23 @@ export const StyledIcon = styled(Icon)`
   margin-right: 15px;
 `;
 
+export const SwitchDarkModeContainer = styled(View)`
+  flex-direction: column;
+  align-self: flex-start;
+  margin-left: 30px;
+  width: 100%;
+`;
+
 export const SwitchDarkModeText = styled(Text)`
   align-self: flex-start;
-  margin-left: 25px;
   margin-top: 25px;
   color: ${({ theme }) => theme.colors.purple[300]};
+`;
+
+export const IconsAndSwitchContainer = styled(View)`
+  margin-top: 10px;
+  flex-direction: row;
+  align-items: center;
+  width: 30%;
+  justify-content: space-evenly;
 `;

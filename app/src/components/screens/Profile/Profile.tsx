@@ -1,9 +1,11 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
+import { Switch } from 'react-native';
 import i18n from 'i18n-js';
 import { ConfirmDialog, Icon } from '@components/shared';
 import { theme } from '@styles/theme';
 import { useProfile } from '@hooks/useProfile';
-import { useDarkModeStore } from '@stores/darkMode.store';
+import { useDarkMode } from '@hooks/useDarkMode';
 import {
   Container,
   ContentContainer,
@@ -20,9 +22,10 @@ import {
   OptionCardTitle,
   StyledIcon,
   SwitchDarkModeText,
+  SwitchDarkModeContainer,
+  IconsAndSwitchContainer,
 } from './Profile.styles';
 import { Dialog } from './Dialog';
-import { Switch } from 'react-native';
 
 const cardShadow = {
   elevation: 4,
@@ -62,11 +65,11 @@ export const Profile: FC = () => {
     isNewPassword,
     isNewPasswordConfirm,
   } = useProfile();
-  const { isDarkMode, toggleDarkMode } = useDarkModeStore();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   return (
     <>
-      <Container>
+      <Container isDarkMode={isDarkMode}>
         <StyledLinearGradient
           colors={['#8E65F7', '#4547B8']}
           useAngle
@@ -107,8 +110,24 @@ export const Profile: FC = () => {
                 <OptionCardTitle>{i18n.t('SignOut')}</OptionCardTitle>
               </OptionCard>
 
-              <SwitchDarkModeText>{i18n.t('ChangeThemeText')}</SwitchDarkModeText>
-              <Switch value={isDarkMode} onValueChange={toggleDarkMode} />
+              <SwitchDarkModeContainer>
+                <SwitchDarkModeText>{i18n.t('DarkThemeText')}</SwitchDarkModeText>
+
+                <IconsAndSwitchContainer>
+                  <Icon type="sun" iconColor={theme.colors.purple[300]} />
+                  <Switch
+                    value={isDarkMode}
+                    onValueChange={toggleDarkMode}
+                    trackColor={{ false: '#d9caff', true: '#d9caff' }}
+                    thumbColor={theme.colors.purple[300]}
+                  />
+                  <Icon
+                    type="moon"
+                    iconColor={theme.colors.purple[300]}
+                    style={{ marginLeft: 5 }}
+                  />
+                </IconsAndSwitchContainer>
+              </SwitchDarkModeContainer>
             </OptionsContainer>
           </ContentContainer>
         </StyledLinearGradient>

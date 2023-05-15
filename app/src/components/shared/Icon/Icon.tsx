@@ -29,6 +29,8 @@ import { HamburgerBig } from './hamburger-big';
 import { EntertainmentBig } from './entertainment-big';
 import { ClothingBig } from './clothing-big';
 import { OtherPurchaseBig } from './other-purchase-big';
+import { Sun } from './sun';
+import { Moon } from './moon';
 
 export type IconType =
   | 'backspace'
@@ -51,6 +53,7 @@ export type IconType =
   | 'identity-card'
   | 'income'
   | 'logout'
+  | 'moon'
   | 'other-purchase'
   | 'other-purchase-big'
   | 'plus'
@@ -58,6 +61,7 @@ export type IconType =
   | 'profile-image'
   | 'purchase'
   | 'success-tick'
+  | 'sun'
   | 'trash'
   | 'visa';
 
@@ -108,6 +112,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Income iconColor={iconColor} {...props} />;
     case 'logout':
       return <Logout iconColor={iconColor} {...props} />;
+    case 'moon':
+      return <Moon iconColor={iconColor} {...props} />;
     case 'other-purchase':
       return <OtherPurchase iconColor={iconColor} {...props} />;
     case 'other-purchase-big':
@@ -122,6 +128,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Purchase iconColor={iconColor} {...props} />;
     case 'success-tick':
       return <SuccessTick iconColor={iconColor} {...props} />;
+    case 'sun':
+      return <Sun iconColor={iconColor} {...props} />;
     case 'trash':
       return <Trash iconColor={iconColor} {...props} />;
     case 'visa':
