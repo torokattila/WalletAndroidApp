@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { Icon } from '@components/shared';
 import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
+import { useDarkMode } from '@hooks/useDarkMode';
 import {
   Amount,
   Category,
@@ -30,17 +31,28 @@ const cardShadow = {
   shadowRadius: 14,
 };
 
-export const HomeScreenPurchaseCard: FC<HomeScreenPurchaseCardProps> = ({ purchase, onPress }) => (
-  <Container style={cardShadow} onPress={onPress} underlayColor="#DDDDDD">
-    <>
-      <IconContainer style={cardShadow}>{cardIcon[purchase.category]}</IconContainer>
+export const HomeScreenPurchaseCard: FC<HomeScreenPurchaseCardProps> = ({ purchase, onPress }) => {
+  const { isDarkMode } = useDarkMode();
 
-      <CategoryAndAmountContainer>
-        {<Category>{i18n.t(`Purchases.Categories.${purchase.category}`)}</Category>}
-        <Amount>- {purchase.amount} Ft</Amount>
-      </CategoryAndAmountContainer>
+  return (
+    <Container
+      style={!isDarkMode && cardShadow}
+      onPress={onPress}
+      underlayColor={isDarkMode ? theme.colors.grey[700] : '#DDDDDD'}
+      isDarkMode={isDarkMode}
+    >
+      <>
+        <IconContainer isDarkMode={isDarkMode} style={cardShadow}>
+          {cardIcon[purchase.category]}
+        </IconContainer>
 
-      <PurchaseDate>{format(purchase.updatedAt.toDate(), 'yyyy-MM.dd.')}</PurchaseDate>
-    </>
-  </Container>
-);
+        <CategoryAndAmountContainer>
+          {<Category>{i18n.t(`Purchases.Categories.${purchase.category}`)}</Category>}
+          <Amount>- {purchase.amount} Ft</Amount>
+        </CategoryAndAmountContainer>
+
+        <PurchaseDate>{format(purchase.updatedAt.toDate(), 'yyyy-MM.dd.')}</PurchaseDate>
+      </>
+    </Container>
+  );
+};

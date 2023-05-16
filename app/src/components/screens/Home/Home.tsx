@@ -3,6 +3,7 @@ import React, { FC, useEffect, useMemo } from 'react';
 import i18n from 'i18n-js';
 import { Dimensions, FlatList, RefreshControl } from 'react-native';
 import { CreditCard } from '@components/CreditCard';
+import { useDarkMode } from '@hooks/useDarkMode';
 import { usePurchase } from '@hooks/usePurchase';
 import { useHome } from '@hooks/useHome';
 import { theme } from '@styles/theme';
@@ -36,6 +37,7 @@ const buttonShadow = {
 };
 
 export const Home: FC = () => {
+  const { isDarkMode } = useDarkMode();
   const { screenRefreshing, setScreenRefreshing } = useHome();
   const {
     purchases,
@@ -77,6 +79,7 @@ export const Home: FC = () => {
             colors={['#4547B8', '#8E65F7']}
           />
         }
+        isDarkMode={isDarkMode}
       >
         <StyledLinearGradient
           colors={['#2C1F5F', '#4c397a', '#9068ee', '#b296f1', '#ffffff', '#3f087a57']}
@@ -87,7 +90,7 @@ export const Home: FC = () => {
         >
           <WelcomeText>Hello {user?.firstname}!</WelcomeText>
 
-          <ContentContainer>
+          <ContentContainer isDarkMode={isDarkMode}>
             <CreditCard name={localizedName} balance={user?.balance} />
 
             <LastFivePurchasesContainer>

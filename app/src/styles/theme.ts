@@ -6,6 +6,9 @@ type ColorRange = {
   200?: string;
   300?: string;
   400?: string;
+  500?: string;
+  600?: string;
+  700?: string;
 };
 
 declare module 'styled-components' {
@@ -27,11 +30,16 @@ export const theme: DefaultTheme = {
       100: '#9F9F9F',
       200: '#F1F0F3',
       300: '#696969',
+      400: '#121212',
+      500: '#1E1E1E',
+      600: '#7c7c7c',
+      700: '#252525',
     },
     purple: {
       100: '#3F087A',
       200: '#3f087a57',
       300: '#8E65F7',
+      400: '#8E65F757',
     },
     green: {
       100: '#A3DA57',

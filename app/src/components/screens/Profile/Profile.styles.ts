@@ -5,9 +5,8 @@ import { Icon } from '@components/shared';
 
 export const Container = styled(View)<{ isDarkMode: boolean }>`
   flex: 1;
-  background-color: ${({ isDarkMode, theme }) => {
-    return isDarkMode ? '#000' : theme.colors.white[100];
-  }};
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
 `;
 
 export const scrollViewStyle: StyleProp<ViewStyle> = {
@@ -43,8 +42,9 @@ export const ScreenTitleText = styled(Text)`
   font-family: 'NunitoSans-Light';
 `;
 
-export const ContentContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white[200]};
+export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   width: 100%;
@@ -57,16 +57,18 @@ export const ContentContainer = styled(View)`
   position: relative;
 `;
 
-export const ImageContainer = styled(View)`
+export const ImageContainer = styled(View)<{ isDarkMode: boolean }>`
   position: absolute;
   border-radius: 100px;
   width: 110px;
   height: 110px;
-  background-color: ${({ theme }) => theme.colors.white[200]};
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
   align-self: center;
   top: -8.5%;
   border-width: 6px;
-  border-color: ${({ theme }) => theme.colors.white[200]};
+  border-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -82,19 +84,23 @@ export const NameEmailContainer = styled(View)`
 export const Name = styled(Text)`
   font-family: 'NunitoSans-Bold';
   font-size: 20px;
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
-export const Email = styled(Text)``;
+export const Email = styled(Text)`
+  color: ${({ theme }) => theme.colors.grey[600]};
+`;
 
 export const OptionsContainer = styled(ScrollView)`
   flex: 1;
   margin-top: 40px;
 `;
 
-export const OptionCard = styled(TouchableOpacity)`
+export const OptionCard = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   width: 90%;
   padding: 15px;
-  background-color: ${({ theme }) => theme.colors.white[100]};
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[500] : theme.colors.white[100]};
   border-radius: 12px;
   margin-top: 20px;
   margin-left: 5px;
@@ -105,6 +111,7 @@ export const OptionCard = styled(TouchableOpacity)`
 
 export const OptionCardTitle = styled(Text)`
   font-family: 'NunitoSans-SemiBold';
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const StyledIcon = styled(Icon)`

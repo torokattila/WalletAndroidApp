@@ -11,7 +11,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import { Button } from '@components/shared';
 
-export const Container = styled(ScrollView)<ScrollViewProps>`
+export const Container = styled(ScrollView)<ScrollViewProps & { isDarkMode?: boolean }>`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.white[100]};
 `;
@@ -38,8 +38,9 @@ export const WelcomeText = styled(Text)`
   font-family: 'NunitoSans-Light';
 `;
 
-export const ContentContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white[200]};
+export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   align-items: center;

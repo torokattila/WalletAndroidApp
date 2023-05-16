@@ -4,10 +4,11 @@ import styled from 'styled-components/native';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width - 150;
 
-export const Container = styled(TouchableHighlight)`
+export const Container = styled(TouchableHighlight)<{ isDarkMode: boolean }>`
   width: ${() => CARD_WIDTH}px;
   padding: 15px;
-  background-color: ${({ theme }) => theme.colors.white[100]};
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[500] : theme.colors.white[100]};
   border-radius: 14px;
   margin-top: 15px;
   margin-left: 5px;
@@ -16,8 +17,9 @@ export const Container = styled(TouchableHighlight)`
   position: relative;
 `;
 
-export const IconContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.purple[100]};
+export const IconContainer = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
   padding: 10px;
   width: 65%;
   height: 45%;

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-detect';
 import { Icon, ModalBackground } from '@components/shared';
+import { useDarkMode } from '@hooks/useDarkMode';
 import { theme } from '@styles/theme';
 import {
   buttonShadow,
@@ -63,6 +64,8 @@ export const Dialog: FC<DialogProps> = ({
   handleTogglePasswordVisible,
   passwordsVisibility,
 }) => {
+  const { isDarkMode } = useDarkMode();
+
   const dialogTitle = isBasicDetailsDialog
     ? i18n.t('Profile.BasicDetailsTitle')
     : i18n.t('Profile.ChangePasswordTitle');
@@ -74,7 +77,7 @@ export const Dialog: FC<DialogProps> = ({
     <GestureRecognizer onSwipeDown={onClose}>
       <Modal animationType="slide" transparent visible={isOpen} onRequestClose={onClose} animated>
         <ModalBackground onHide={onClose} isVisible={isOpen} />
-        <ContentContainer style={shadow}>
+        <ContentContainer style={shadow} isDarkMode={isDarkMode}>
           <KeyboardAvoidingView keyboardVerticalOffset={140} behavior="position" enabled>
             <UpperLine />
             <Content>
@@ -91,11 +94,16 @@ export const Dialog: FC<DialogProps> = ({
                         inputMode="text"
                         placeholder={errors.firstname ? errors.firstname : i18n.t('FirstNameLabel')}
                         placeholderTextColor={
-                          errors.firstname ? theme.colors.red : theme.colors.purple[200]
+                          errors.firstname
+                            ? theme.colors.red
+                            : isDarkMode
+                            ? theme.colors.purple[400]
+                            : theme.colors.purple[200]
                         }
                         returnKeyType="next"
                         blurOnSubmit={false}
                         onSubmitEditing={() => lastnameRef.current.focus()}
+                        isDarkMode={isDarkMode}
                       />
 
                       <Label>{i18n.t('LastNameLabel')}</Label>
@@ -107,8 +115,13 @@ export const Dialog: FC<DialogProps> = ({
                         hasError={!!errors.lastname}
                         placeholder={errors.lastname ? errors.lastname : i18n.t('LastNameLabel')}
                         placeholderTextColor={
-                          errors.lastname ? theme.colors.red : theme.colors.purple[200]
+                          errors.lastname
+                            ? theme.colors.red
+                            : isDarkMode
+                            ? theme.colors.purple[400]
+                            : theme.colors.purple[200]
                         }
+                        isDarkMode={isDarkMode}
                       />
                     </InputContainer>
                   </>
@@ -128,18 +141,25 @@ export const Dialog: FC<DialogProps> = ({
                               : i18n.t('Profile.CurrentPasswordTitle')
                           }
                           placeholderTextColor={
-                            errors.oldPassword ? theme.colors.red : theme.colors.purple[200]
+                            errors.oldPassword
+                              ? theme.colors.red
+                              : isDarkMode
+                              ? theme.colors.purple[400]
+                              : theme.colors.purple[200]
                           }
                           returnKeyType="next"
                           blurOnSubmit={false}
                           onSubmitEditing={() => newPasswordRef.current.focus()}
+                          isDarkMode={isDarkMode}
                         />
                         <StyledIconButton
                           onPress={() => handleTogglePasswordVisible('oldPassword')}
                         >
                           <Icon
                             type={passwordsVisibility.isOldPassword ? 'eye' : 'eye-outlined'}
-                            iconColor={theme.colors.purple[100]}
+                            iconColor={
+                              isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]
+                            }
                           />
                         </StyledIconButton>
                       </View>
@@ -157,18 +177,25 @@ export const Dialog: FC<DialogProps> = ({
                               : i18n.t('Profile.NewPasswordTitle')
                           }
                           placeholderTextColor={
-                            errors.newPassword ? theme.colors.red : theme.colors.purple[200]
+                            errors.newPassword
+                              ? theme.colors.red
+                              : isDarkMode
+                              ? theme.colors.purple[400]
+                              : theme.colors.purple[200]
                           }
                           returnKeyType="next"
                           blurOnSubmit={false}
                           onSubmitEditing={() => newPasswordConfirmRef.current.focus()}
+                          isDarkMode={isDarkMode}
                         />
                         <StyledIconButton
                           onPress={() => handleTogglePasswordVisible('newPassword')}
                         >
                           <Icon
                             type={passwordsVisibility.isNewPassword ? 'eye' : 'eye-outlined'}
-                            iconColor={theme.colors.purple[100]}
+                            iconColor={
+                              isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]
+                            }
                           />
                         </StyledIconButton>
                       </View>
@@ -186,15 +213,22 @@ export const Dialog: FC<DialogProps> = ({
                               : i18n.t('Profile.NewPasswordConfirmTitle')
                           }
                           placeholderTextColor={
-                            errors.newPasswordConfirm ? theme.colors.red : theme.colors.purple[200]
+                            errors.newPasswordConfirm
+                              ? theme.colors.red
+                              : isDarkMode
+                              ? theme.colors.purple[400]
+                              : theme.colors.purple[200]
                           }
+                          isDarkMode={isDarkMode}
                         />
                         <StyledIconButton
                           onPress={() => handleTogglePasswordVisible('newPasswordConfirm')}
                         >
                           <Icon
                             type={passwordsVisibility.isNewPasswordConfirm ? 'eye' : 'eye-outlined'}
-                            iconColor={theme.colors.purple[100]}
+                            iconColor={
+                              isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]
+                            }
                           />
                         </StyledIconButton>
                       </View>
@@ -205,7 +239,7 @@ export const Dialog: FC<DialogProps> = ({
 
               <StyledButton
                 size="large"
-                style={buttonShadow}
+                style={!isDarkMode && buttonShadow}
                 onPress={onSave}
                 text={i18n.t('SaveButtonTitle')}
                 withActivityIndicator

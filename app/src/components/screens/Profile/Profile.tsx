@@ -67,6 +67,8 @@ export const Profile: FC = () => {
   } = useProfile();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
+  const cardIconColor = isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100];
+
   return (
     <>
       <Container isDarkMode={isDarkMode}>
@@ -82,31 +84,50 @@ export const Profile: FC = () => {
             <Icon type="profile" iconColor="#fff" />
           </ScreenTitleContainer>
 
-          <ContentContainer>
-            <ImageContainer>
-              <Icon type="profile-image" iconColor={theme.colors.purple[100]} />
+          <ContentContainer isDarkMode={isDarkMode}>
+            <ImageContainer isDarkMode={isDarkMode}>
+              <Icon
+                type="profile-image"
+                iconColor={isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]}
+              />
             </ImageContainer>
 
             <NameEmailContainer>
               <Name>{localizedName}</Name>
-              <Email>{email}</Email>
+              <Email isDarkMode={isDarkMode}>{email}</Email>
             </NameEmailContainer>
 
             <OptionsContainer contentContainerStyle={scrollViewStyle}>
-              <OptionCard style={cardShadow} onPress={handleBasicDetailsPress}>
-                <StyledIcon type="identity-card" iconColor={theme.colors.purple[100]} />
+              <OptionCard
+                style={!isDarkMode && cardShadow}
+                onPress={handleBasicDetailsPress}
+                isDarkMode={isDarkMode}
+              >
+                <StyledIcon type="identity-card" iconColor={cardIconColor} />
                 <OptionCardTitle>{i18n.t('Profile.BasicDetailsTitle')}</OptionCardTitle>
               </OptionCard>
-              <OptionCard style={cardShadow} onPress={handleChangePasswordPress}>
-                <StyledIcon type="change-password" iconColor={theme.colors.purple[100]} />
+              <OptionCard
+                style={!isDarkMode && cardShadow}
+                onPress={handleChangePasswordPress}
+                isDarkMode={isDarkMode}
+              >
+                <StyledIcon type="change-password" iconColor={cardIconColor} />
                 <OptionCardTitle>{i18n.t('Profile.ChangePasswordTitle')}</OptionCardTitle>
               </OptionCard>
-              <OptionCard style={cardShadow} onPress={handleDeleteProfilePress}>
-                <StyledIcon type="delete-profile" iconColor={theme.colors.purple[100]} />
+              <OptionCard
+                style={!isDarkMode && cardShadow}
+                onPress={handleDeleteProfilePress}
+                isDarkMode={isDarkMode}
+              >
+                <StyledIcon type="delete-profile" iconColor={cardIconColor} />
                 <OptionCardTitle>{i18n.t('Profile.DeleteProfileTitle')}</OptionCardTitle>
               </OptionCard>
-              <OptionCard style={cardShadow} onPress={handleSignOutButtonPress}>
-                <StyledIcon type="logout" iconColor={theme.colors.purple[100]} />
+              <OptionCard
+                style={!isDarkMode && cardShadow}
+                onPress={handleSignOutButtonPress}
+                isDarkMode={isDarkMode}
+              >
+                <StyledIcon type="logout" iconColor={cardIconColor} />
                 <OptionCardTitle>{i18n.t('SignOut')}</OptionCardTitle>
               </OptionCard>
 

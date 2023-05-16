@@ -7,10 +7,12 @@ const screenWidth = Dimensions.get('screen').width;
 
 export type StyledTextInputProps = TextInputProps & {
   hasError: boolean;
+  isDarkMode?: boolean;
 };
 
-export const ContentContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white[100]};
+export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
   flex: 1;
   height: 75%;
   width: 100%;
@@ -40,6 +42,7 @@ export const Title = styled(Text)`
   text-align: center;
   font-size: 17px;
   font-family: 'NunitoSans-ExtraBold';
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const FormContainer = styled(View)`
@@ -56,17 +59,19 @@ export const InputContainer = styled(View)`
 export const Label = styled(Text)`
   margin: 15px 0px 10px 15px;
   font-family: 'NunitoSans-Bold';
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const StyledTextInput = styled(TextInput)<StyledTextInputProps>`
   border-width: 2px;
-  border-color: ${({ hasError, theme }) =>
-    hasError ? theme.colors.red : theme.colors.purple[100]};
+  border-color: ${({ hasError, theme, isDarkMode }) =>
+    hasError ? theme.colors.red : isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
   width: ${() => screenWidth - 100}px;
   border-radius: 25px;
   padding-left: 20px;
   padding-right: 20px;
-  color: ${({ theme }) => theme.colors.purple[100]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
   font-family: 'NunitoSans-Bold';
 `;
 
