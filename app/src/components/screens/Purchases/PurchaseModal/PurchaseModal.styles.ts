@@ -9,13 +9,13 @@ import {
   Dimensions,
 } from 'react-native';
 import { Button } from '@components/shared';
-4;
 import { theme as globalTheme } from '@styles/theme';
 
 const WIDTH = Dimensions.get('screen').width;
 
-export const ContentContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white[100]};
+export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
   flex: 1;
   height: 75%;
   width: 100%;
@@ -56,12 +56,13 @@ export const Title = styled(Text)`
   text-align: center;
   font-size: 17px;
   font-family: 'NunitoSans-ExtraBold';
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
-export const InputNumberText = styled(Text)`
+export const InputNumberText = styled(Text)<{ isDarkMode: boolean }>`
   font-size: 50px;
   margin: 20px 20px 0px 20px;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme, isDarkMode }) => (isDarkMode ? theme.colors.white[200] : theme.colors.black)};
   font-family: 'NunitoSans-Light';
 `;
 
@@ -81,6 +82,7 @@ export const DropdownLabel = styled(Text)`
   margin-bottom: 10px;
   align-self: center;
   font-family: 'NunitoSans-Bold';
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const dropdownStyle: StyleProp<ViewStyle> = {
@@ -89,7 +91,6 @@ export const dropdownStyle: StyleProp<ViewStyle> = {
   width: WIDTH * 0.6,
   borderRadius: 12,
   alignSelf: 'center',
-  backgroundColor: globalTheme.colors.white[100],
   paddingHorizontal: 15,
   paddingVertical: 3,
 };
@@ -109,6 +110,10 @@ export const dropdownItemContaineStyle: StyleProp<ViewStyle> = {
 
 export const dropdownTextStyle: StyleProp<TextStyle> = {
   color: globalTheme.colors.purple[300],
+};
+
+export const selectedTextStyle: StyleProp<TextStyle> = {
+  color: globalTheme.colors.grey[600],
 };
 
 export const StyledButton = styled(Button)`

@@ -7,6 +7,7 @@ import { KeyboardAvoidingView, Modal } from 'react-native';
 import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
 import { ConfirmDialog, Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
+import { useDarkMode } from '@hooks/useDarkMode';
 import { usePurchase } from '@hooks/usePurchase';
 import {
   Content,
@@ -23,6 +24,7 @@ import {
   StyledButton,
   dropdownItemContaineStyle,
   ErrorText,
+  selectedTextStyle,
 } from './PurchaseModal.styles';
 
 type PurchaseModalProps = {
@@ -54,6 +56,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
   isEditMode,
   purchase,
 }) => {
+  const { isDarkMode } = useDarkMode();
   const {
     amount,
     categories,
@@ -103,7 +106,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
           animated
         >
           <ModalBackground onHide={onClose} isVisible={isVisible} />
-          <ContentContainer style={shadow}>
+          <ContentContainer style={shadow} isDarkMode={isDarkMode}>
             <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
               <UpperLine />
               {isEditMode && (
@@ -116,23 +119,41 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                 <Title>{modalTitle}</Title>
 
                 {errors.amount && <ErrorText>{errors.amount}</ErrorText>}
-                <InputNumberText numberOfLines={1} ellipsizeMode="head">
+                <InputNumberText numberOfLines={1} ellipsizeMode="head" isDarkMode={isDarkMode}>
                   {amount} Ft
                 </InputNumberText>
 
                 <DropdownContainer>
                   <DropdownLabel>{i18n.t('Dialog.Purchases.Category')}</DropdownLabel>
                   <Dropdown
-                    style={[shadow, dropdownStyle]}
+                    style={[
+                      shadow,
+                      dropdownStyle,
+                      {
+                        backgroundColor: isDarkMode
+                          ? theme.colors.grey[500]
+                          : theme.colors.white[100],
+                      },
+                    ]}
                     data={categories}
                     value={category}
                     placeholder={dropdownPlaceholder}
-                    containerStyle={[shadow, dropdownContainerStyle]}
+                    containerStyle={[
+                      !isDarkMode && shadow,
+                      dropdownContainerStyle,
+                      {
+                        backgroundColor: isDarkMode
+                          ? theme.colors.grey[500]
+                          : theme.colors.white[100],
+                      },
+                    ]}
                     itemTextStyle={dropdownTextStyle}
-                    itemContainerStyle={dropdownItemContaineStyle}
+                    itemContainerStyle={[dropdownItemContaineStyle]}
                     labelField={'label'}
                     valueField={'value'}
                     onChange={handleDropdownChange}
+                    selectedTextStyle={selectedTextStyle}
+                    activeColor={isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]}
                     mode="modal"
                   />
                   {errors.category && <ErrorText>{errors.category}</ErrorText>}
@@ -145,7 +166,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
 
                 <StyledButton
                   size="large"
-                  style={buttonShadow}
+                  style={!isDarkMode && buttonShadow}
                   onPress={isEditMode ? handleUpdatePurchase : handleCreatePurchase}
                   withActivityIndicator
                   isLoading={isLoading}

@@ -19,4 +19,5 @@ export const NumberButton = styled(TouchableOpacity)`
 
 export const Number = styled(Text)`
   font-size: 25px;
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;

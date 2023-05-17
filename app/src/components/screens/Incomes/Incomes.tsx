@@ -7,6 +7,7 @@ import DatePicker from 'react-native-date-picker';
 import { AddButton, Icon } from '@components/shared';
 import { useUser } from '@hooks/useUser';
 import { useIncome } from '@hooks/useIncome';
+import { useDarkMode } from '@hooks/useDarkMode';
 import { theme } from '@styles/theme';
 import { formatDate } from '@core/date-utils';
 import {
@@ -44,6 +45,7 @@ const shadow = {
 };
 
 export const Incomes: FC = () => {
+  const { isDarkMode } = useDarkMode();
   const { user } = useUser();
   const {
     isLoading,
