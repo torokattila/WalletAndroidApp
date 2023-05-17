@@ -18,6 +18,7 @@ import {
   Title,
   UpperLine,
 } from './IncomeModal.styles';
+import { useDarkMode } from '@hooks/useDarkMode';
 
 type IncomeModalProps = {
   isVisible: boolean;
@@ -43,6 +44,7 @@ const buttonShadow = {
 };
 
 export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMode, income }) => {
+  const { isDarkMode } = useDarkMode();
   const {
     amount,
     title,
@@ -88,7 +90,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
           animated
         >
           <ModalBackground onHide={onClose} isVisible={isVisible} />
-          <ContentContainer style={shadow}>
+          <ContentContainer style={shadow} isDarkMode={isDarkMode}>
             <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
               <UpperLine />
               {isEditMode && (
@@ -101,12 +103,14 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
                 <InputNumberText
                   numberOfLines={1}
                   ellipsizeMode="head"
+                  isDarkMode={isDarkMode}
                 >{`${amount} Ft`}</InputNumberText>
                 {errors.amount && <InputNumberErrorText>{errors.amount}</InputNumberErrorText>}
                 <StyledTextInput
                   value={title}
                   onChange={handleTitleChange}
                   placeholder={i18n.t('Dialog.Incomes.TitleInputPlaceholder')}
+                  isDarkMode={isDarkMode}
                 />
 
                 <ModalNumberKeyboard
@@ -116,7 +120,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
 
                 <StyledButton
                   size="large"
-                  style={buttonShadow}
+                  style={!isDarkMode && buttonShadow}
                   onPress={isEditMode ? handleUpdateIncome : handleCreateIncome}
                   withActivityIndicator
                   isLoading={isLoading}

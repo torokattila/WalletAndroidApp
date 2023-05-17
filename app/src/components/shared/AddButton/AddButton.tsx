@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { theme } from '@styles/theme';
+import { useDarkMode } from '@hooks/useDarkMode';
 import { StyledButton, StyledIcon } from './AddButton.styles';
 
 type AddButtonProps = {
@@ -14,8 +15,12 @@ const shadow = {
   shadowRadius: 25,
 };
 
-export const AddButton: FC<AddButtonProps> = ({ onPress }) => (
-  <StyledButton style={[shadow]} onPress={onPress}>
-    <StyledIcon type="plus" iconColor={theme.colors.white[100]} />
-  </StyledButton>
-);
+export const AddButton: FC<AddButtonProps> = ({ onPress }) => {
+  const { isDarkMode } = useDarkMode();
+
+  return (
+    <StyledButton style={[shadow]} onPress={onPress} isDarkMode={isDarkMode}>
+      <StyledIcon type="plus" iconColor={theme.colors.white[100]} />
+    </StyledButton>
+  );
+};

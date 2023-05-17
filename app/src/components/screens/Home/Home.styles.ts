@@ -75,6 +75,7 @@ export const NoLastFivePurchasesText = styled(Text)`
   text-align: center;
   font-family: 'NunitoSans-Light';
   font-size: 18px;
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const RedirectToPurchasesButton = styled(Button)`

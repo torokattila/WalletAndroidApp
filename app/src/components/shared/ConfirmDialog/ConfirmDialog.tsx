@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Modal } from 'react-native';
 import { theme } from '@styles/theme';
+import { useDarkMode } from '@hooks/useDarkMode';
 import {
   Background,
   Content,
@@ -39,23 +40,29 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
   primaryButtonText,
   secondaryButtonText,
   onPressSecondaryButton,
-}) => (
-  <Modal animationType="fade" transparent={true} visible={isVisible}>
-    <Background>
-      <ContentContainer>
-        <Content style={shadow}>
-          <Title>{title}</Title>
-          <Description>{description}</Description>
+}) => {
+  const { isDarkMode } = useDarkMode();
 
-          <PrimaryButton onPress={onPressPrimaryButton}>
-            <PrimaryButtonText>{primaryButtonText}</PrimaryButtonText>
-          </PrimaryButton>
+  return (
+    <Modal animationType="fade" transparent={true} visible={isVisible}>
+      <Background>
+        <ContentContainer>
+          <Content style={shadow} isDarkMode={isDarkMode}>
+            <Title>{title}</Title>
+            <Description>{description}</Description>
 
-          <SecondaryButton onPress={onPressSecondaryButton}>
-            <SecondaryButtonText>{secondaryButtonText}</SecondaryButtonText>
-          </SecondaryButton>
-        </Content>
-      </ContentContainer>
-    </Background>
-  </Modal>
-);
+            <PrimaryButton onPress={onPressPrimaryButton}>
+              <PrimaryButtonText>{primaryButtonText}</PrimaryButtonText>
+            </PrimaryButton>
+
+            <SecondaryButton onPress={onPressSecondaryButton} isDarkMode={isDarkMode}>
+              <SecondaryButtonText isDarkMode={isDarkMode}>
+                {secondaryButtonText}
+              </SecondaryButtonText>
+            </SecondaryButton>
+          </Content>
+        </ContentContainer>
+      </Background>
+    </Modal>
+  );
+};

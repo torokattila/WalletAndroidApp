@@ -127,7 +127,7 @@ export const Home: FC = () => {
               <NoLastFivePurchasesContainer>
                 <NoLastFivePurchasesText>{i18n.t('NoPurchasesText')}</NoLastFivePurchasesText>
                 <RedirectToPurchasesButton
-                  style={buttonShadow}
+                  style={!isDarkMode && buttonShadow}
                   onPress={() => navigation.navigate('Purchases')}
                   text={i18n.t('Home.RedirectToPurchasesButtonText')}
                   size="small"

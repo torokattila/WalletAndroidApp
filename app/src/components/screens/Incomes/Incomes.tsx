@@ -101,7 +101,7 @@ export const Incomes: FC = () => {
             <BalanceTitle>{i18n.t('BalanceTitle')}</BalanceTitle>
             <Balance>{user.balance} Ft</Balance>
           </BalanceContainer>
-          <ContentContainer>
+          <ContentContainer isDarkMode={isDarkMode}>
             <AllIncomeTitle>{i18n.t('Incomes.AllIncomeTitle')}</AllIncomeTitle>
 
             <DatePickerContainer>
@@ -149,6 +149,7 @@ export const Incomes: FC = () => {
               onCancel={handleFromDatePickerClose}
               cancelText={i18n.t('DatePicker.CancelButtonText')}
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+              theme={isDarkMode ? 'dark' : 'auto'}
             />
             <DatePicker
               modal
@@ -162,6 +163,7 @@ export const Incomes: FC = () => {
               onCancel={handleToDatePickerClose}
               cancelText={i18n.t('DatePicker.CancelButtonText')}
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+              theme={isDarkMode ? 'dark' : 'auto'}
             />
 
             {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}

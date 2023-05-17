@@ -2,8 +2,9 @@ import styled from 'styled-components/native';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Button } from '@components/shared';
 
-export const ContentContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white[100]};
+export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
   flex: 1;
   height: 75%;
   width: 100%;
@@ -44,12 +45,13 @@ export const Title = styled(Text)`
   text-align: center;
   font-size: 17px;
   font-family: 'NunitoSans-ExtraBold';
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
-export const InputNumberText = styled(Text)`
+export const InputNumberText = styled(Text)<{ isDarkMode: boolean }>`
   font-size: 50px;
   margin: 20px 20px 0px 20px;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme, isDarkMode }) => (isDarkMode ? theme.colors.white[200] : theme.colors.black)};
   font-family: 'NunitoSans-Light';
 `;
 
@@ -58,13 +60,16 @@ export const InputNumberErrorText = styled(Text)`
   margin-left: 20px;
 `;
 
-export const StyledTextInput = styled(TextInput)`
-  background-color: ${({ theme }) => theme.colors.grey[200]};
+export const StyledTextInput = styled(TextInput)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]};
   border-radius: 30px;
   padding-left: 20px;
   padding-right: 20px;
   font-weight: bold;
   margin: 15px 15px 0px 15px;
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[100] : theme.colors.grey[500]};
 `;
 
 export const StyledButton = styled(Button)`

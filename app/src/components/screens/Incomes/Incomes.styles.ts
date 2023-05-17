@@ -46,8 +46,9 @@ export const Balance = styled(Text)`
   font-size: 30px;
 `;
 
-export const ContentContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white[200]};
+export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   align-items: flex-start;
@@ -66,6 +67,7 @@ export const AllIncomeTitle = styled(Text)`
   font-size: 20px;
   margin-top: 20px;
   margin-left: 20px;
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const DatePickerContainer = styled(View)`
@@ -84,6 +86,7 @@ export const DatePickerButtonContainer = styled(View)`
 
 export const DatePickerButtonLabel = styled(Text)`
   margin-left: 6px;
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const DatePickerButton = styled(TouchableOpacity)`
@@ -144,6 +147,7 @@ export const NoIncomesText = styled(Text)`
   text-align: center;
   font-family: 'NunitoSans-Light';
   font-size: 18px;
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const Loader = styled(ActivityIndicator)`

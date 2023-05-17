@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { Income } from '@model/domain';
 import { theme } from '@styles/theme';
 import { Icon } from '@components/shared';
+import { useDarkMode } from '@hooks/useDarkMode';
 import {
   Amount,
   Container,
@@ -25,17 +26,21 @@ const cardShadow = {
   shadowRadius: 14,
 };
 
-export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => (
-  <Container style={cardShadow} onPress={onPress}>
-    <IconContainer style={cardShadow}>
-      <Icon type="dollar" iconColor={theme.colors.white[100]} />
-    </IconContainer>
+export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => {
+  const { isDarkMode } = useDarkMode();
 
-    <TitleAndAmountContainer>
-      {income.title && <Title>{income.title}</Title>}
-      <Amount>+ {income.amount} Ft</Amount>
-    </TitleAndAmountContainer>
+  return (
+    <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
+      <IconContainer style={cardShadow} isDarkMode={isDarkMode}>
+        <Icon type="dollar" iconColor={theme.colors.white[100]} />
+      </IconContainer>
 
-    <IncomeDate>{format(income.updatedAt.toDate(), 'yyyy-MM.dd.')}</IncomeDate>
-  </Container>
-);
+      <TitleAndAmountContainer>
+        {income.title && <Title>{income.title}</Title>}
+        <Amount>+ {income.amount} Ft</Amount>
+      </TitleAndAmountContainer>
+
+      <IncomeDate>{format(income.updatedAt.toDate(), 'yyyy-MM.dd.')}</IncomeDate>
+    </Container>
+  );
+};
