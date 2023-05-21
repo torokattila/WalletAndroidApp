@@ -1,5 +1,4 @@
 import { Income, Purchase } from '@model/domain';
-import { PermissionsAndroid } from 'react-native';
 import { writeFile, DownloadDirectoryPath } from 'react-native-fs';
 import PushNotification, { Importance } from 'react-native-push-notification';
 import uuid from 'react-native-uuid';
@@ -80,28 +79,7 @@ export const useDownload = (
 
   const handleDownloadButtonClick = async (): Promise<void> => {
     try {
-      let isPermittedExternalStorage = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-      );
-
-      if (!isPermittedExternalStorage) {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: i18n.t('Permissions.StoragePermissionNeededTitle'),
-            buttonNeutral: i18n.t('Permissions.AskMeLaterTitle'),
-            buttonNegative: i18n.t('Dialog.Cancel'),
-            buttonPositive: 'OK',
-            message: '',
-          }
-        );
-
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          exportToExcel();
-        }
-      } else {
-        exportToExcel();
-      }
+      exportToExcel();
     } catch (error) {
       console.error('error: ', error);
       toast.show({
