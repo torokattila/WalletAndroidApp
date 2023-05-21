@@ -1,0 +1,1 @@
+[Download APK](https://github.com/torokattila/WalletAndroidApp/blob/master/app-universal-release.apk)
