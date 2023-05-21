@@ -2,6 +2,7 @@ import React, { FC, useRef } from 'react';
 import i18n from 'i18n-js';
 import { KeyboardAvoidingView, View } from 'react-native';
 import useRegistration from '@hooks/useRegistration';
+import { useDarkMode } from '@hooks/useDarkMode';
 import { AuthStackParams } from '@navigation/AuthStack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { theme } from '@styles/theme';
@@ -28,6 +29,7 @@ import {
 type RegistrationProps = NativeStackScreenProps<AuthStackParams, 'Registration'>;
 
 export const Registration: FC<RegistrationProps> = ({ navigation }) => {
+  const { isDarkMode } = useDarkMode();
   const {
     firstname,
     lastname,
@@ -60,10 +62,14 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
       >
         <StyledGradientText>{i18n.t('Registration')}</StyledGradientText>
 
-        <BottomContainer contentContainerStyle={scrollViewStyle}>
+        <BottomContainer
+          contentContainerStyle={scrollViewStyle}
+          isDarkMode={isDarkMode}
+          showsVerticalScrollIndicator={false}
+        >
           <StyledImage source={require('../../../assets/wallet.png')} />
-          <StyledTitle>Wallet</StyledTitle>
-          <StyledSubtitle>{i18n.t('LoginSubtitle')}</StyledSubtitle>
+          <StyledTitle isDarkMode={isDarkMode}>Wallet</StyledTitle>
+          <StyledSubtitle isDarkMode={isDarkMode}>{i18n.t('LoginSubtitle')}</StyledSubtitle>
 
           <FormContainer>
             <KeyboardAvoidingView
@@ -79,11 +85,16 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 inputMode="text"
                 placeholder={errors.firstname ? errors.firstname : i18n.t('FirstNameLabel')}
                 placeholderTextColor={
-                  errors.firstname ? theme.colors.red : theme.colors.purple[200]
+                  errors.firstname
+                    ? theme.colors.red
+                    : isDarkMode
+                    ? theme.colors.purple[400]
+                    : theme.colors.purple[200]
                 }
                 returnKeyType="next"
                 blurOnSubmit={false}
                 onSubmitEditing={() => lastnameRef.current.focus()}
+                isDarkMode={isDarkMode}
               />
               <StyledTextInput
                 ref={lastnameRef}
@@ -92,10 +103,17 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 onChange={(e) => handleInputChange(e, 'lastname')}
                 hasError={!!errors.lastname}
                 placeholder={errors.lastname ? errors.lastname : i18n.t('LastNameLabel')}
-                placeholderTextColor={errors.lastname ? theme.colors.red : theme.colors.purple[200]}
+                placeholderTextColor={
+                  errors.lastname
+                    ? theme.colors.red
+                    : isDarkMode
+                    ? theme.colors.purple[400]
+                    : theme.colors.purple[200]
+                }
                 returnKeyType="next"
                 blurOnSubmit={false}
                 onSubmitEditing={() => emailRef.current.focus()}
+                isDarkMode={isDarkMode}
               />
               <StyledTextInput
                 ref={emailRef}
@@ -105,10 +123,17 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 hasError={!!errors.email}
                 autoCapitalize="none"
                 placeholder={errors.email ? errors.email : i18n.t('EmailAddressLabel')}
-                placeholderTextColor={errors.email ? theme.colors.red : theme.colors.purple[200]}
+                placeholderTextColor={
+                  errors.email
+                    ? theme.colors.red
+                    : isDarkMode
+                    ? theme.colors.purple[400]
+                    : theme.colors.purple[200]
+                }
                 returnKeyType="next"
                 blurOnSubmit={false}
                 onSubmitEditing={() => passwordRef.current.focus()}
+                isDarkMode={isDarkMode}
               />
               <View>
                 <StyledTextInput
@@ -119,16 +144,21 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                   hasError={!!errors.password}
                   placeholder={errors.password ? errors.password : i18n.t('PasswordLabel')}
                   placeholderTextColor={
-                    errors.password ? theme.colors.red : theme.colors.purple[200]
+                    errors.password
+                      ? theme.colors.red
+                      : isDarkMode
+                      ? theme.colors.purple[400]
+                      : theme.colors.purple[200]
                   }
                   returnKeyType="next"
                   blurOnSubmit={false}
                   onSubmitEditing={() => passwordConfirmRef.current.focus()}
+                  isDarkMode={isDarkMode}
                 />
                 <StyledIconButton onPress={() => setIsPassword(!isPassword)}>
                   <Icon
                     type={isPassword ? 'eye' : 'eye-outlined'}
-                    iconColor={theme.colors.purple[100]}
+                    iconColor={isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]}
                   />
                 </StyledIconButton>
               </View>
@@ -143,13 +173,18 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                     errors.passwordConfirm ? errors.passwordConfirm : i18n.t('PasswordConfirmLabel')
                   }
                   placeholderTextColor={
-                    errors.passwordConfirm ? theme.colors.red : theme.colors.purple[200]
+                    errors.passwordConfirm
+                      ? theme.colors.red
+                      : isDarkMode
+                      ? theme.colors.purple[400]
+                      : theme.colors.purple[200]
                   }
+                  isDarkMode={isDarkMode}
                 />
                 <StyledIconButton onPress={() => setIsPasswordConfirm(!isPasswordConfirm)}>
                   <Icon
                     type={isPasswordConfirm ? 'eye' : 'eye-outlined'}
-                    iconColor={theme.colors.purple[100]}
+                    iconColor={isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]}
                   />
                 </StyledIconButton>
               </View>
@@ -164,9 +199,11 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
             </KeyboardAvoidingView>
           </FormContainer>
 
-          <VerifyEmailAddressText>{i18n.t('VerifyEmailAddressText')}</VerifyEmailAddressText>
+          <VerifyEmailAddressText isDarkMode={isDarkMode}>
+            {i18n.t('VerifyEmailAddressText')}
+          </VerifyEmailAddressText>
 
-          <StyledRedirectQuestionText>
+          <StyledRedirectQuestionText isDarkMode={isDarkMode}>
             {i18n.t('AlreadyHaveAnAccountLabel')}
           </StyledRedirectQuestionText>
           <StyledRedirectButton
