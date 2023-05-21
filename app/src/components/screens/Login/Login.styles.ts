@@ -18,6 +18,7 @@ const screenWidth = Dimensions.get('screen').width;
 
 export type StyledTextInputProps = TextInputProps & {
   hasError: boolean;
+  isDarkMode?: boolean;
 };
 
 export const Container = styled(ScrollView)`
@@ -44,8 +45,9 @@ export const StyledGradientText = styled(Text)`
   font-family: 'NunitoSans-Light';
 `;
 
-export const BottomContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white[100]};
+export const BottomContainer = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
   align-self: center;
   flex-direction: column;
   align-items: center;
@@ -58,15 +60,17 @@ export const BottomContainer = styled(View)`
   border-top-right-radius: 35px;
 `;
 
-export const StyledTitle = styled(Text)`
-  color: ${({ theme }) => theme.colors.purple[100]};
+export const StyledTitle = styled(Text)<{ isDarkMode: boolean }>`
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
   font-size: 30px;
   text-align: center;
   font-family: 'NunitoSans-Bold';
 `;
 
-export const StyledSubtitle = styled(Text)`
-  color: ${({ theme }) => theme.colors.purple[100]};
+export const StyledSubtitle = styled(Text)<{ isDarkMode: boolean }>`
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
   font-size: 15px;
   text-align: center;
   font-family: 'NunitoSans-Regular';
@@ -86,13 +90,14 @@ export const FormContainer = styled(View)`
 export const StyledTextInput = styled(TextInput)<StyledTextInputProps>`
   border-width: 2px;
   position: relative;
-  border-color: ${({ hasError, theme }) =>
-    hasError ? theme.colors.red : theme.colors.purple[100]};
+  border-color: ${({ hasError, theme, isDarkMode }) =>
+    hasError ? theme.colors.red : isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
   width: ${() => screenWidth - 50}px;
   border-radius: 25px;
   padding-left: 20px;
   padding-right: 20px;
-  color: ${({ theme }) => theme.colors.purple[100]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
   font-family: 'NunitoSans-Bold';
 `;
 
@@ -115,8 +120,9 @@ export const ButtonText = styled(Text)`
   font-size: 15px;
 `;
 
-export const StyledRedirectQuestionText = styled(Text)`
-  color: ${({ theme }) => theme.colors.purple[100]};
+export const StyledRedirectQuestionText = styled(Text)<{ isDarkMode: boolean }>`
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
   font-size: 15px;
   text-align: center;
   font-family: 'NunitoSans-Regular';

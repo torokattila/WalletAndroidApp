@@ -7,6 +7,7 @@ import { RootStackParams } from '@navigation/Navigation';
 import { theme } from '@styles/theme';
 import { Icon } from '@components/shared';
 import useLogin from '@hooks/useLogin';
+import { useDarkMode } from '@hooks/useDarkMode';
 import {
   Container,
   scrollViewStyle,
@@ -27,6 +28,7 @@ import {
 type LoginProps = NativeStackScreenProps<AuthStackParams & RootStackParams, 'Login'>;
 
 export const Login: FC<LoginProps> = ({ navigation }) => {
+  const { isDarkMode } = useDarkMode();
   const {
     email,
     password,
@@ -51,10 +53,10 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
       >
         <StyledGradientText>{i18n.t('Login')}</StyledGradientText>
 
-        <BottomContainer>
+        <BottomContainer isDarkMode={isDarkMode}>
           <StyledImage source={require('../../../assets/wallet.png')} />
-          <StyledTitle>Wallet</StyledTitle>
-          <StyledSubtitle>{i18n.t('LoginSubtitle')}</StyledSubtitle>
+          <StyledTitle isDarkMode={isDarkMode}>Wallet</StyledTitle>
+          <StyledSubtitle isDarkMode={isDarkMode}>{i18n.t('LoginSubtitle')}</StyledSubtitle>
 
           <KeyboardAvoidingView keyboardVerticalOffset={40} behavior="position" enabled>
             <FormContainer>
@@ -64,10 +66,17 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
                 hasError={!!errors.email}
                 inputMode="email"
                 placeholder={errors.email ? errors.email : i18n.t('EmailAddressLabel')}
-                placeholderTextColor={errors.email ? theme.colors.red : theme.colors.purple[200]}
+                placeholderTextColor={
+                  errors.email
+                    ? theme.colors.red
+                    : isDarkMode
+                    ? theme.colors.purple[400]
+                    : theme.colors.purple[200]
+                }
                 returnKeyType="next"
                 blurOnSubmit={false}
                 onSubmitEditing={() => passwordRef.current.focus()}
+                isDarkMode={isDarkMode}
               />
               <View>
                 <StyledTextInput
@@ -78,13 +87,18 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
                   secureTextEntry={isPassword}
                   placeholder={errors.password ? errors.password : i18n.t('PasswordLabel')}
                   placeholderTextColor={
-                    errors.password ? theme.colors.red : theme.colors.purple[200]
+                    errors.password
+                      ? theme.colors.red
+                      : isDarkMode
+                      ? theme.colors.purple[400]
+                      : theme.colors.purple[200]
                   }
+                  isDarkMode={isDarkMode}
                 />
                 <StyledIconButton onPress={() => setIsPassword(!isPassword)}>
                   <Icon
                     type={isPassword ? 'eye' : 'eye-outlined'}
-                    iconColor={theme.colors.purple[100]}
+                    iconColor={isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]}
                   />
                 </StyledIconButton>
               </View>
@@ -99,7 +113,7 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
             </FormContainer>
           </KeyboardAvoidingView>
 
-          <StyledRedirectQuestionText>
+          <StyledRedirectQuestionText isDarkMode={isDarkMode}>
             {i18n.t('DontYouHaveAnAccountLabel')}
           </StyledRedirectQuestionText>
           <StyledRedirectButton
