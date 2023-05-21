@@ -59,8 +59,9 @@ export const PurchasesThisMonth = styled(Text)`
   font-size: 30px;
 `;
 
-export const ContentContainer = styled(View)`
-  background-color: ${({ theme }) => theme.colors.white[200]};
+export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   align-items: flex-start;
@@ -79,6 +80,7 @@ export const AllPurchasesTitle = styled(Text)`
   font-size: 20px;
   margin-top: 20px;
   margin-left: 20px;
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const ClearFilterAndDownloadContainer = styled(View)`
@@ -99,7 +101,7 @@ export const FiltersContainer = styled(View)`
   position: relative;
 `;
 
-export const DateFiltersContainer = styled(Animated.View)`
+export const DateFiltersContainer = styled(Animated.View)<{ isDarkMode: boolean }>`
   flex-direction: row;
   justify-content: flex-start;
   position: relative;
@@ -107,17 +109,19 @@ export const DateFiltersContainer = styled(Animated.View)`
   border-color: ${({ theme }) => theme.colors.purple[300]};
   border-radius: 12px;
   padding: 8px 10px;
-  background-color: ${({ theme }) => theme.colors.white[100]};
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
   margin-top: 10px;
 `;
 
-export const CloseDateFiltersButton = styled(TouchableOpacity)`
+export const CloseDateFiltersButton = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   border-radius: 25px;
   width: 34px;
   height: 34px;
   border-width: 1.5px;
   border-color: ${({ theme }) => theme.colors.purple[300]};
-  background-color: ${({ theme }) => theme.colors.white[100]};
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -132,9 +136,10 @@ export const CategoryAndShowDateFiltersButtonContainer = styled(View)`
   width: 100%;
 `;
 
-export const ShowDateFiltersButton = styled(TouchableOpacity)`
+export const ShowDateFiltersButton = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   margin-left: 20px;
-  background-color: ${({ theme }) => theme.colors.white[100]};
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
   border-color: ${({ theme }) => theme.colors.purple[300]};
   border-width: 1.5px;
   border-radius: 12px;
@@ -145,6 +150,7 @@ export const ShowDateFiltersButton = styled(TouchableOpacity)`
 export const ShowDateFiltersButtonText = styled(Text)`
   font-family: 'NunitoSans-SemiBold';
   font-size: 15px;
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const CategoryFilterContainer = styled(View)`
@@ -155,6 +161,7 @@ export const CategoryFilterContainer = styled(View)`
 
 export const CategoryFilterLabel = styled(Text)`
   margin-left: 6px;
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const dropdownStyle: StyleProp<ViewStyle> = {
@@ -186,12 +193,17 @@ export const dropdownTextStyle: StyleProp<TextStyle> = {
   color: globalTheme.colors.purple[300],
 };
 
+export const selectedTextStyle: StyleProp<TextStyle> = {
+  color: globalTheme.colors.grey[600],
+};
+
 export const DatePickerButtonContainer = styled(View)`
   flex-direction: column;
 `;
 
 export const DatePickerButtonLabel = styled(Text)`
   margin-left: 6px;
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const DatePickerButton = styled(TouchableOpacity)`

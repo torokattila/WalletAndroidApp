@@ -9,6 +9,7 @@ import { theme } from '@styles/theme';
 import { formatDate } from '@core/date-utils';
 import { AddButton, Icon } from '@components/shared';
 import { usePurchase } from '@hooks/usePurchase';
+import { useDarkMode } from '@hooks/useDarkMode';
 import {
   AllPurchasesTitle,
   CategoryAndShowDateFiltersButtonContainer,
@@ -39,6 +40,7 @@ import {
   PurchasesThisMonthTitle,
   ScreenTitleContainer,
   ScreenTitleText,
+  selectedTextStyle,
   ShowDateFiltersButton,
   ShowDateFiltersButtonText,
   StyledLinearGradient,
@@ -55,6 +57,7 @@ const shadow = {
 };
 
 export const Purchases: FC = () => {
+  const { isDarkMode } = useDarkMode();
   const {
     isLoading,
     handleModalOpen,
@@ -115,7 +118,7 @@ export const Purchases: FC = () => {
             <PurchasesThisMonth>{allPurchasesAmountForThisMonth} Ft</PurchasesThisMonth>
           </PurchasesThisMonthContainer>
 
-          <ContentContainer>
+          <ContentContainer isDarkMode={isDarkMode}>
             <AllPurchasesTitle>{i18n.t('Purchases.AllPurchasesTitle')}</AllPurchasesTitle>
 
             <ClearFilterAndDownloadContainer>
@@ -135,28 +138,55 @@ export const Purchases: FC = () => {
               <CategoryFilterContainer>
                 <CategoryFilterLabel>{i18n.t('Purchases.FilterForCategory')}</CategoryFilterLabel>
                 <Dropdown
-                  style={[shadow, dropdownStyle]}
+                  style={[
+                    !isDarkMode && shadow,
+                    dropdownStyle,
+                    {
+                      backgroundColor: isDarkMode
+                        ? theme.colors.grey[500]
+                        : theme.colors.white[100],
+                    },
+                  ]}
                   data={filterCategories}
                   value={filterCategory.current}
                   placeholder={dropdownPlaceholder}
-                  containerStyle={[shadow, dropdownContainerStyle]}
+                  containerStyle={[
+                    !isDarkMode && shadow,
+                    dropdownContainerStyle,
+                    {
+                      backgroundColor: isDarkMode
+                        ? theme.colors.grey[500]
+                        : theme.colors.white[100],
+                    },
+                  ]}
                   itemTextStyle={dropdownTextStyle}
                   itemContainerStyle={dropdownItemContaineStyle}
                   labelField={'label'}
                   valueField={'value'}
+                  selectedTextStyle={selectedTextStyle}
+                  activeColor={isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]}
                   onChange={handleFilterCategoryChange}
                   mode="modal"
                 />
               </CategoryFilterContainer>
 
-              <ShowDateFiltersButton style={shadow} onPress={showDateFilters}>
+              <ShowDateFiltersButton
+                style={!isDarkMode && shadow}
+                onPress={showDateFilters}
+                isDarkMode={isDarkMode}
+              >
                 <ShowDateFiltersButtonText>{i18n.t('FilterForDate')}</ShowDateFiltersButtonText>
               </ShowDateFiltersButton>
             </CategoryAndShowDateFiltersButtonContainer>
 
             <FiltersContainer>
               {isDateFiltersShown && (
-                <DateFiltersContainer style={shadow} entering={FadeInLeft} exiting={FadeOutLeft}>
+                <DateFiltersContainer
+                  style={!isDarkMode && shadow}
+                  isDarkMode={isDarkMode}
+                  entering={FadeInLeft}
+                  exiting={FadeOutLeft}
+                >
                   <DatePickerButtonContainer>
                     <DatePickerButtonLabel>
                       {i18n.t('DatePicker.FilterFromDateText')}
@@ -175,7 +205,11 @@ export const Purchases: FC = () => {
                     </DatePickerButton>
                   </DatePickerButtonContainer>
 
-                  <CloseDateFiltersButton style={shadow} onPress={hideDateFilters}>
+                  <CloseDateFiltersButton
+                    style={!isDarkMode && shadow}
+                    onPress={hideDateFilters}
+                    isDarkMode={isDarkMode}
+                  >
                     <Icon type="close" iconColor={theme.colors.purple[300]} />
                   </CloseDateFiltersButton>
                 </DateFiltersContainer>
@@ -194,6 +228,7 @@ export const Purchases: FC = () => {
               onCancel={handleFromDatePickerClose}
               cancelText={i18n.t('DatePicker.CancelButtonText')}
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+              theme={isDarkMode ? 'dark' : 'auto'}
             />
             <DatePicker
               modal
@@ -207,6 +242,7 @@ export const Purchases: FC = () => {
               onCancel={handleToDatePickerClose}
               cancelText={i18n.t('DatePicker.CancelButtonText')}
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+              theme={isDarkMode ? 'dark' : 'auto'}
             />
 
             {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}

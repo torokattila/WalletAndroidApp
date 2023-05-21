@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import i18n from 'i18n-js';
 import { Icon } from '@components/shared';
 import { Purchase } from '@model/domain';
+import { useDarkMode } from '@hooks/useDarkMode';
 import { theme } from '@styles/theme';
 import {
   Amount,
@@ -33,15 +34,21 @@ const cardShadow = {
   shadowRadius: 14,
 };
 
-export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => (
-  <Container style={cardShadow} onPress={onPress}>
-    <IconContainer style={cardShadow}>{cardIcon[purchase.category]}</IconContainer>
+export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
+  const { isDarkMode } = useDarkMode();
 
-    <CategoryAndAmountContainer>
-      {<Category>{i18n.t(`Purchases.Categories.${purchase.category}`)}</Category>}
-      <Amount>- {purchase.amount} Ft</Amount>
-    </CategoryAndAmountContainer>
+  return (
+    <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
+      <IconContainer style={cardShadow} isDarkMode={isDarkMode}>
+        {cardIcon[purchase.category]}
+      </IconContainer>
 
-    <PurchaseDate>{format(purchase.updatedAt.toDate(), 'yyyy-MM.dd.')}</PurchaseDate>
-  </Container>
-);
+      <CategoryAndAmountContainer>
+        {<Category>{i18n.t(`Purchases.Categories.${purchase.category}`)}</Category>}
+        <Amount>- {purchase.amount} Ft</Amount>
+      </CategoryAndAmountContainer>
+
+      <PurchaseDate>{format(purchase.updatedAt.toDate(), 'yyyy-MM.dd.')}</PurchaseDate>
+    </Container>
+  );
+};

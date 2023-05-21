@@ -1,10 +1,11 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
 
-export const Container = styled(TouchableOpacity)`
+export const Container = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   width: 95%;
   padding: 15px;
-  background-color: ${({ theme }) => theme.colors.white[100]};
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[500] : theme.colors.white[100]};
   border-radius: 14px;
   margin-top: 15px;
   margin-left: 5px;
@@ -26,6 +27,7 @@ export const CategoryAndAmountContainer = styled(View)`
 
 export const Category = styled(Text)`
   font-family: 'NunitoSans-Bold';
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const Amount = styled(Text)`
@@ -39,4 +41,5 @@ export const PurchaseDate = styled(Text)`
   right: 20px;
   bottom: 10px;
   font-family: 'NunitoSans-Bold';
+  color: ${({ theme }) => theme.colors.grey[600]};
 `;
