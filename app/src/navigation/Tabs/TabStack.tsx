@@ -26,6 +26,7 @@ export const TabStack: FC = () => {
         headerShown: false,
         tabBarStyle: {
           height: 70,
+          borderTopWidth: 0,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           position: 'absolute',
