@@ -109,6 +109,10 @@ export const Hungarian = {
     },
     CategoryError: 'A kategória megadása kötelező!',
   },
+  Categories: {
+    ScreenTitle: 'Kategóriák',
+    MyCategoriesTitle: 'Saját kategóriák',
+  },
   Home: {
     LastFivePurchasesTitle: 'Utolsó 5 vásárlás',
     RedirectToPurchasesButtonText: 'Tovább a vásárlásokhoz',
@@ -235,6 +239,10 @@ export const English = {
       other: 'Other',
     },
     CategoryError: 'Category is required!',
+  },
+  Categories: {
+    ScreenTitle: 'Categories',
+    MyCategoriesTitle: 'My categories',
   },
   Home: {
     LastFivePurchasesTitle: 'Last 5 purchases',

@@ -8,7 +8,7 @@ import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { CategoryService } from '@model/services/category';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
-export const useCategory = (category: Category) => {
+export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();
   const { userId } = useUserId();
 
