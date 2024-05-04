@@ -40,7 +40,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
   async createdPurchase(
     userId: string,
     amount: string,
-    category: PurchaseCategory
+    category: PurchaseCategory | string
   ): Promise<Purchase> {
     const purchasesCollectionRef = collection(getDB(), 'purchases');
     const insertedPurchase = await addDoc(purchasesCollectionRef, {

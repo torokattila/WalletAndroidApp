@@ -10,7 +10,7 @@ import { useDownload } from './useDownload';
 
 type CategoryDropdownValueType = {
   label: string;
-  value: PurchaseCategory;
+  value: PurchaseCategory | string;
 };
 
 const categories: CategoryDropdownValueType[] = [
@@ -31,7 +31,7 @@ export const usePurchase = (purchase?: Purchase) => {
 
   const [amount, setAmount] = useState('0');
   const [allPurchasesAmountForThisMonth, setAllPurchasesAmountForThisMonth] = useState(0);
-  const [category, setCategory] = useState<PurchaseCategory | null>(null);
+  const [category, setCategory] = useState<PurchaseCategory | string | null>(null);
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
