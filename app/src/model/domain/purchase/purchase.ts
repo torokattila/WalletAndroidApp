@@ -14,7 +14,7 @@ type PurchaseProps = {
   amount: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
-  category: PurchaseCategory;
+  category: PurchaseCategory | string;
 };
 
 export class Purchase {
@@ -23,7 +23,7 @@ export class Purchase {
   readonly amount: string;
   readonly createdAt: Timestamp;
   readonly updatedAt: Timestamp;
-  readonly category: PurchaseCategory;
+  readonly category: PurchaseCategory | string;
 
   constructor(props: PurchaseProps) {
     this.id = props.id;
