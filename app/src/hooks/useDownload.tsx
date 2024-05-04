@@ -19,6 +19,11 @@ export const useDownload = (
     const workBook = XLSX.utils.book_new();
 
     let resultWorkSheet: any[] = [];
+    const totalAmount: number = !sheet.length
+      ? 0
+      : sheet
+          .map((item: Income | Purchase) => Number(item.amount))
+          .reduce((acc, curr) => acc + curr);
 
     if (sheet.length > 0 && sheet[0] instanceof Income) {
       resultWorkSheet = (sheet as Income[]).map((income) => {
@@ -40,6 +45,10 @@ export const useDownload = (
         };
       });
     }
+
+    resultWorkSheet.push({
+      [`${i18n.t('ExcelColumns.Total')}`]: totalAmount.toString(),
+    });
 
     const workSheet = XLSX.utils.json_to_sheet(resultWorkSheet);
 

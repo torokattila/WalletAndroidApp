@@ -111,6 +111,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
                   onChange={handleTitleChange}
                   placeholder={i18n.t('Dialog.Incomes.TitleInputPlaceholder')}
                   isDarkMode={isDarkMode}
+                  placeholderTextColor={theme.colors.grey[600]}
                 />
 
                 <ModalNumberKeyboard

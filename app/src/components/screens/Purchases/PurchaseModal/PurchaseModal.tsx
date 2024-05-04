@@ -138,6 +138,9 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                     data={categories}
                     value={category}
                     placeholder={dropdownPlaceholder}
+                    placeholderStyle={{
+                      color: theme.colors.grey[600],
+                    }}
                     containerStyle={[
                       !isDarkMode && shadow,
                       dropdownContainerStyle,

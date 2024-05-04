@@ -149,6 +149,9 @@ export const Purchases: FC = () => {
                   ]}
                   data={filterCategories}
                   value={filterCategory.current}
+                  placeholderStyle={{
+                    color: theme.colors.grey[600],
+                  }}
                   placeholder={dropdownPlaceholder}
                   containerStyle={[
                     !isDarkMode && shadow,

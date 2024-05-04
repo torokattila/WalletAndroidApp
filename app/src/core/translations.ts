@@ -112,6 +112,7 @@ export const Hungarian = {
     Modified: 'Utolsó módosítás dátuma',
     Title: 'Cím',
     Category: 'Kategória',
+    Total: 'Összesen',
   },
   DarkThemeText: 'Sötét téma',
 };
@@ -230,6 +231,7 @@ export const English = {
     Modified: 'Date of last modification',
     Title: 'Title',
     Category: 'Category',
+    Total: 'Total',
   },
   DarkThemeText: 'Dark theme',
 };
