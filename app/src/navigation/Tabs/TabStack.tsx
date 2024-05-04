@@ -6,12 +6,14 @@ import { Home, Incomes, Profile, Purchases } from '@components/screens';
 import { TabIcon } from '@components/TabIcon';
 import { TabButton } from '@components/TabButton';
 import { useDarkMode } from '@hooks/useDarkMode';
+import { Categories } from '@components/screens/Categories';
 
 export type TabStackParams = {
   Home: {};
   Profile: {};
   Incomes: {};
   Purchases: {};
+  Categories: {};
 };
 
 const BottomTabs = createBottomTabNavigator<TabStackParams>();
@@ -85,6 +87,14 @@ export const TabStack: FC = () => {
         options={{
           tabBarButton: (props) => <TabButton {...props} />,
           tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="purchase" />,
+        }}
+      />
+      <BottomTabs.Screen
+        name="Categories"
+        component={Categories}
+        options={{
+          tabBarButton: (props) => <TabButton {...props} />,
+          tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="category" />,
         }}
       />
     </BottomTabs.Navigator>
