@@ -65,6 +65,7 @@ export const Hungarian = {
       Title: 'Új kategória hozzáadása',
       TitleError: 'A kategória címe kötelező',
       EditCategoryTitle: 'Kategória szerkesztése',
+      TitleInputPlaceholder: 'Kategória neve',
     },
     AreYouSureTitle: 'Biztos vagy benne?',
     CannotBeUndoneTitle: 'A művelet nem visszavonható!',
@@ -112,6 +113,7 @@ export const Hungarian = {
   Categories: {
     ScreenTitle: 'Kategóriák',
     MyCategoriesTitle: 'Saját kategóriák',
+    NoCategoriesText: 'Még nem adtál hozzá saját kategóriát',
   },
   Home: {
     LastFivePurchasesTitle: 'Utolsó 5 vásárlás',
@@ -196,6 +198,7 @@ export const English = {
       Title: 'Add new category',
       TitleError: 'Title is required!',
       EditCategoryTitle: 'Edit category',
+      TitleInputPlaceholder: 'Title of the category',
     },
     AreYouSureTitle: 'Are you sure?',
     CannotBeUndoneTitle: 'The operation cannot be undone!',
@@ -243,6 +246,7 @@ export const English = {
   Categories: {
     ScreenTitle: 'Categories',
     MyCategoriesTitle: 'My categories',
+    NoCategoriesText: 'There are no categories yet.',
   },
   Home: {
     LastFivePurchasesTitle: 'Last 5 purchases',

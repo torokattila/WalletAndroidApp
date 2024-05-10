@@ -72,3 +72,21 @@ export const Loader = styled(ActivityIndicator)`
   padding-top: 20%;
   align-self: center;
 `;
+
+export const ListContainer = styled(View)`
+  margin-top: 60px;
+  width: 100%;
+  flex: 1;
+`;
+
+export const NoIncomesContainer = styled(View)`
+  margin-top: 20%;
+  align-self: center;
+`;
+
+export const NoIncomesText = styled(Text)`
+  text-align: center;
+  font-family: 'NunitoSans-Light';
+  font-size: 18px;
+  color: ${({ theme }) => theme.colors.grey[600]};
+`;

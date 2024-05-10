@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { useDarkMode } from '@hooks/useDarkMode';
 import React, { FC } from 'react';
 import i18n from 'i18n-js';
@@ -9,10 +10,16 @@ import {
   ScreenTitleContainer,
   ScreenTitleText,
   StyledLinearGradient,
+  ListContainer,
+  NoIncomesContainer,
+  NoIncomesText,
 } from './Categories.styles';
 import { theme } from '@styles/theme';
-import { Icon } from '@components/shared';
+import { AddButton, Icon } from '@components/shared';
 import { useCategory } from '@hooks/useCategory';
+import { CategoryModal } from './CategoryModal';
+import { FlatList, RefreshControl } from 'react-native';
+import { CategoryCard } from './CategoryCard';
 
 export const Categories: FC = () => {
   const { isDarkMode } = useDarkMode();
@@ -60,9 +67,49 @@ export const Categories: FC = () => {
             <MyCategoriesTitle>{i18n.t('Categories.MyCategoriesTitle')}</MyCategoriesTitle>
 
             {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
+
+            {categories.length > 0 && !isLoading && (
+              <ListContainer>
+                <FlatList
+                  contentContainerStyle={{ paddingBottom: 40 }}
+                  style={{ paddingHorizontal: 10, marginTop: -15 }}
+                  showsVerticalScrollIndicator={false}
+                  data={categories}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={screenRefreshing}
+                      onRefresh={handlePullToRefresh}
+                      colors={['#4547B8', '#8E65F7']}
+                    />
+                  }
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => (
+                    <CategoryCard
+                      key={item.id}
+                      category={item}
+                      onPress={() => handleEditModalOpen(item)}
+                    />
+                  )}
+                />
+              </ListContainer>
+            )}
+
+            {!categories.length && !isLoading && (
+              <NoIncomesContainer>
+                <NoIncomesText>{i18n.t('Categories.NoCategoriesText')}</NoIncomesText>
+              </NoIncomesContainer>
+            )}
+
+            <AddButton onPress={handleModalOpen} />
           </ContentContainer>
         </StyledLinearGradient>
       </Container>
+      <CategoryModal
+        isVisible={isModalOpen}
+        onClose={handleModalClose}
+        isEditMode={isEditModeModal}
+        existingCategory={selectedCategory}
+      />
     </>
   );
 };

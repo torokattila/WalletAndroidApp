@@ -194,6 +194,7 @@ export const useCategory = (category?: Category) => {
   }, [isLoading, categories, screenRefreshing]);
 
   return {
+    title,
     fetchCategories,
     handlePullToRefresh,
     stopRefreshing,
@@ -202,6 +203,7 @@ export const useCategory = (category?: Category) => {
     handleUpdateCategory,
     handleDeleteCategory,
     errors,
+    setErrors,
     isLoading,
     categories,
     isConfirmDialogOpen,
