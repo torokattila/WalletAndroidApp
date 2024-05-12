@@ -24,6 +24,7 @@
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
     "firebase": "^9.17.1",
+    "google-translate-api-x": "^10.6.8",
     "i18n-js": "^3.8.0",
     "react": "18.2.0",
     "react-native": "0.71.3",
