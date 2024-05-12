@@ -43,11 +43,17 @@ export const HomeScreenPurchaseCard: FC<HomeScreenPurchaseCardProps> = ({ purcha
     >
       <>
         <IconContainer isDarkMode={isDarkMode} style={cardShadow}>
-          {cardIcon[purchase.category]}
+          {cardIcon[purchase.category] ?? cardIcon.other}
         </IconContainer>
 
         <CategoryAndAmountContainer>
-          {<Category>{i18n.t(`Purchases.Categories.${purchase.category}`)}</Category>}
+          {
+            <Category>
+              {i18n.t(`Purchases.Categories.${purchase.category}`, {
+                defaultValue: purchase.category,
+              })}
+            </Category>
+          }
           <Amount>- {purchase.amount} Ft</Amount>
         </CategoryAndAmountContainer>
 

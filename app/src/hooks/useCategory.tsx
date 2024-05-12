@@ -41,7 +41,7 @@ export const useCategory = (category?: Category) => {
 
       setCategories(allCategories);
     } catch (error) {
-      console.error(`Error during fetching categies: ${error}`);
+      console.error(`Error during fetching categories: ${error}`);
     } finally {
       setIsLoading(false);
     }

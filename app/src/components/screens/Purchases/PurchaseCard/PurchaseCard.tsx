@@ -40,11 +40,17 @@ export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
   return (
     <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
       <IconContainer style={cardShadow} isDarkMode={isDarkMode}>
-        {cardIcon[purchase.category]}
+        {cardIcon[purchase.category] ?? cardIcon.other}
       </IconContainer>
 
       <CategoryAndAmountContainer>
-        {<Category>{i18n.t(`Purchases.Categories.${purchase.category}`)}</Category>}
+        {
+          <Category>
+            {i18n.t(`Purchases.Categories.${purchase.category}`, {
+              defaultValue: purchase.category,
+            })}
+          </Category>
+        }
         <Amount>- {purchase.amount} Ft</Amount>
       </CategoryAndAmountContainer>
 

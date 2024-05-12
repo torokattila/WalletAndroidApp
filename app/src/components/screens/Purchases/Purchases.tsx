@@ -69,7 +69,7 @@ export const Purchases: FC = () => {
     handleEditModalOpen,
     allPurchasesAmountForThisMonth,
     fromDate,
-    filterCategories,
+    allCategories,
     handleFromDatePickerOpen,
     handleToDatePickerOpen,
     handleFromDatePickerClose,
@@ -147,7 +147,7 @@ export const Purchases: FC = () => {
                         : theme.colors.white[100],
                     },
                   ]}
-                  data={filterCategories}
+                  data={allCategories}
                   value={filterCategory.current}
                   placeholderStyle={{
                     color: theme.colors.grey[600],

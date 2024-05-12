@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import i18n from 'i18n-js';
-import { Purchase, PurchaseCategory } from '@model/domain';
+import { Category, Purchase, PurchaseCategory } from '@model/domain';
 import { PurchaseService } from '@model/services';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { useUserId } from './useUserId';
 import { useUser } from './useUser';
 import { useDownload } from './useDownload';
+import { CategoryService } from '@model/services/category';
 
 type CategoryDropdownValueType = {
   label: string;
@@ -29,6 +30,8 @@ export const usePurchase = (purchase?: Purchase) => {
   const { userId } = useUserId();
   const { retry: fetchUser, user } = useUser();
 
+  const categoryService = new CategoryService();
+
   const [amount, setAmount] = useState('0');
   const [allPurchasesAmountForThisMonth, setAllPurchasesAmountForThisMonth] = useState(0);
   const [category, setCategory] = useState<PurchaseCategory | string | null>(null);
@@ -48,6 +51,7 @@ export const usePurchase = (purchase?: Purchase) => {
   const isDateFilterChanged = useRef(false);
   const [isDateFiltersShown, setIsDateFiltersShown] = useState(false);
   const [screenRefreshing, setScreenRefreshing] = useState(false);
+  const [allCategories, setAllCategories] = useState<CategoryDropdownValueType[]>([]);
 
   useEffect(() => {
     if (purchase) {
@@ -77,6 +81,27 @@ export const usePurchase = (purchase?: Purchase) => {
       setPurchases(allPurchases);
     } catch (error) {
       console.error(`Error during fetching purchases: ${error}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchAllCategories = async () => {
+    setIsLoading(true);
+
+    try {
+      const categoriesList = await categoryService.getAllCategories(user.id);
+
+      const categoriesWithLabelAndValue: CategoryDropdownValueType[] = categoriesList.map(
+        (categ) => ({
+          label: categ.title,
+          value: categ.title,
+        })
+      );
+
+      setAllCategories([...filterCategories, ...categoriesWithLabelAndValue]);
+    } catch (error) {
+      console.error(`Error during fetching categories: ${error}`);
     } finally {
       setIsLoading(false);
     }
@@ -328,8 +353,10 @@ export const usePurchase = (purchase?: Purchase) => {
     if (userId) {
       fetchPurchases();
       fetchThisMonthPurchasesAmount();
+      fetchAllCategories();
     } else {
       setPurchases([]);
+      setAllCategories([]);
       setIsLoading(false);
     }
   }, [userId]);
@@ -389,5 +416,6 @@ export const usePurchase = (purchase?: Purchase) => {
     screenRefreshing,
     handlePullToRefresh,
     stopRefreshing,
+    allCategories,
   };
 };
