@@ -1,11 +1,21 @@
-import { Income, Purchase } from '@model/domain';
-import { writeFile, DownloadDirectoryPath } from 'react-native-fs';
+import { formatDate } from '@core/date-utils';
+import { getLocale } from '@core/translation-utils';
+import { Income, Purchase, PurchaseCategory } from '@model/domain';
+import { useToastNotificationStore } from '@stores/toastNotification.store';
+import translate from 'google-translate-api-x';
+import i18n from 'i18n-js';
+import { DownloadDirectoryPath, writeFile } from 'react-native-fs';
 import PushNotification, { Importance } from 'react-native-push-notification';
 import uuid from 'react-native-uuid';
 import XLSX from 'xlsx';
-import i18n from 'i18n-js';
-import { formatDate } from '@core/date-utils';
-import { useToastNotificationStore } from '@stores/toastNotification.store';
+import { CategoryDropdownValueType } from './usePurchase';
+
+const categories: CategoryDropdownValueType[] = [
+  { label: i18n.t('Purchases.Categories.food'), value: PurchaseCategory.FOOD },
+  { label: i18n.t('Purchases.Categories.clothing'), value: PurchaseCategory.CLOTHING },
+  { label: i18n.t('Purchases.Categories.entertainment'), value: PurchaseCategory.ENTERTAINMENT },
+  { label: i18n.t('Purchases.Categories.other'), value: PurchaseCategory.OTHER },
+];
 
 export const useDownload = (
   sheet: Income[] | Purchase[],
@@ -14,6 +24,7 @@ export const useDownload = (
   fileName: string
 ) => {
   const toast = useToastNotificationStore();
+  const locale = getLocale();
 
   const exportToExcel = async (): Promise<void> => {
     const workBook = XLSX.utils.book_new();
@@ -35,13 +46,46 @@ export const useDownload = (
         };
       });
     } else if (sheet.length > 0 && sheet[0] instanceof Purchase) {
-      resultWorkSheet = (sheet as Purchase[]).map((purchase) => {
+      const sheetWithTranslatedCategories: Purchase[] = [];
+
+      for (const purchase of sheet as Purchase[]) {
+        const isCategoryExistsInDefaultCategories = categories.find(
+          (cat) => cat.value.toLowerCase().trim() === purchase.category
+        );
+
+        if (!isCategoryExistsInDefaultCategories) {
+          const translatedCategory = (
+            await translate(purchase.category, {
+              to: locale === 'hun' ? 'hu' : 'en',
+            })
+          ).text;
+
+          sheetWithTranslatedCategories.push({
+            id: purchase.id,
+            amount: purchase.amount,
+            category: translatedCategory,
+            createdAt: purchase.createdAt,
+            updatedAt: purchase.updatedAt,
+            userId: purchase.userId,
+          });
+        } else {
+          sheetWithTranslatedCategories.push({
+            id: purchase.id,
+            amount: purchase.amount,
+            category: i18n.t(`Purchases.Categories.${purchase.category}`) ?? '',
+            createdAt: purchase.createdAt,
+            updatedAt: purchase.updatedAt,
+            userId: purchase.userId,
+          });
+        }
+      }
+
+      resultWorkSheet = (sheetWithTranslatedCategories as Purchase[]).map((purchase) => {
         return {
           [`${i18n.t('ExcelColumns.Amount')}`]: purchase.amount,
           [`${i18n.t('ExcelColumns.Created')}`]: formatDate(purchase.createdAt.toDate()),
           [`${i18n.t('ExcelColumns.Modified')}`]: formatDate(purchase.updatedAt.toDate()),
-          [`${i18n.t('ExcelColumns.Category')}`]:
-            i18n.t(`Purchases.Categories.${purchase.category}`) ?? '',
+          [`${i18n.t('ExcelColumns.Category')}`]: purchase.category,
         };
       });
     }

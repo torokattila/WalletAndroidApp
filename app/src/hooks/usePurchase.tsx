@@ -11,7 +11,7 @@ import { useDownload } from './useDownload';
 import { useUser } from './useUser';
 import { useUserId } from './useUserId';
 
-type CategoryDropdownValueType = {
+export type CategoryDropdownValueType = {
   label: string;
   value: PurchaseCategory | string;
 };

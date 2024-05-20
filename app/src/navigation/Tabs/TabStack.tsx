@@ -66,14 +66,6 @@ export const TabStack: FC = () => {
         }}
       />
       <BottomTabs.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarButton: (props) => <TabButton {...props} />,
-          tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="profile" />,
-        }}
-      />
-      <BottomTabs.Screen
         name="Incomes"
         component={Incomes}
         options={{
@@ -95,6 +87,14 @@ export const TabStack: FC = () => {
         options={{
           tabBarButton: (props) => <TabButton {...props} />,
           tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="category" />,
+        }}
+      />
+      <BottomTabs.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarButton: (props) => <TabButton {...props} />,
+          tabBarIcon: ({ focused }) => <TabIcon isHighlighted={focused} icon="profile" />,
         }}
       />
     </BottomTabs.Navigator>
