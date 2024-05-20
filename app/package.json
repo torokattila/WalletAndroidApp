@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "npx react-native start",
     "watchman:fix": "watchman shutdown-server && watchman watch-del-all",
-    "test": "jest"
+    "test": "jest",
+    "build:android-apk": "cd android/ && ./gradlew assembleRelease"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.11",
