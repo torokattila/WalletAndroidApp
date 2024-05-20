@@ -7,6 +7,8 @@ import i18n from 'i18n-js';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { CategoryService } from '@model/services/category';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+import translate from 'google-translate-api-x';
+import { getLocale } from '@core/translation-utils';
 
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();
@@ -21,6 +23,8 @@ export const useCategory = (category?: Category) => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [isEditModeModal, setIsEditModeModal] = useState(false);
   const [screenRefreshing, setScreenRefreshing] = useState(false);
+
+  const locale = getLocale();
 
   useEffect(() => {
     if (category) {
@@ -38,6 +42,14 @@ export const useCategory = (category?: Category) => {
 
     try {
       const allCategories = await categoryService.getAllCategories(user.id);
+      const translatedCategories: Category[] = [];
+
+      for (const categ of allCategories) {
+        translatedCategories.push({
+          ...categ,
+          title: (await translate(categ.title, { to: locale === 'hun' ? 'hu' : 'en' })).text,
+        });
+      }
 
       setCategories(allCategories);
     } catch (error) {

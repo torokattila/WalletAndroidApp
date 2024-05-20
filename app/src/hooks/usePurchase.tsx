@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef, useState } from 'react';
-import i18n from 'i18n-js';
-import { Category, Purchase, PurchaseCategory } from '@model/domain';
+import { getLocale } from '@core/translation-utils';
+import { Purchase, PurchaseCategory } from '@model/domain';
 import { PurchaseService } from '@model/services';
-import { useToastNotificationStore } from '@stores/toastNotification.store';
-import { useUserId } from './useUserId';
-import { useUser } from './useUser';
-import { useDownload } from './useDownload';
 import { CategoryService } from '@model/services/category';
+import { useToastNotificationStore } from '@stores/toastNotification.store';
+import translate from 'google-translate-api-x';
+import i18n from 'i18n-js';
+import { useEffect, useRef, useState } from 'react';
+import { useDownload } from './useDownload';
+import { useUser } from './useUser';
+import { useUserId } from './useUserId';
 
 type CategoryDropdownValueType = {
   label: string;
@@ -53,14 +55,35 @@ export const usePurchase = (purchase?: Purchase) => {
   const [screenRefreshing, setScreenRefreshing] = useState(false);
   const [allCategories, setAllCategories] = useState<CategoryDropdownValueType[]>([]);
 
+  const locale = getLocale();
+
   useEffect(() => {
-    if (purchase) {
-      setAmount(purchase.amount);
-      setCategory(purchase.category);
-    } else {
-      setAmount('0');
-      setCategory(null);
-    }
+    const setAmountAndCategory = async () => {
+      if (purchase) {
+        setAmount(purchase.amount);
+
+        const isCategoryExistsInDefaultCategories = categories.find(
+          (cat) => cat.value.toLowerCase().trim() === purchase.category
+        );
+
+        if (isCategoryExistsInDefaultCategories) {
+          setCategory(purchase.category);
+        } else {
+          const translatedCategory = (
+            await translate(purchase.category, {
+              to: locale === 'hun' ? 'hu' : 'en',
+            })
+          ).text;
+
+          setCategory(translatedCategory);
+        }
+      } else {
+        setAmount('0');
+        setCategory(null);
+      }
+    };
+
+    setAmountAndCategory();
   }, [purchase]);
 
   const purchaseService = new PurchaseService();
@@ -92,12 +115,14 @@ export const usePurchase = (purchase?: Purchase) => {
     try {
       const categoriesList = await categoryService.getAllCategories(user.id);
 
-      const categoriesWithLabelAndValue: CategoryDropdownValueType[] = categoriesList.map(
-        (categ) => ({
-          label: categ.title,
-          value: categ.title,
-        })
-      );
+      const categoriesWithLabelAndValue: CategoryDropdownValueType[] = [];
+
+      for (const categ of categoriesList) {
+        categoriesWithLabelAndValue.push({
+          label: (await translate(categ.title, { to: locale === 'hun' ? 'hu' : 'en' })).text,
+          value: (await translate(categ.title, { to: locale === 'hun' ? 'hu' : 'en' })).text,
+        });
+      }
 
       setAllCategories([...filterCategories, ...categoriesWithLabelAndValue]);
     } catch (error) {
