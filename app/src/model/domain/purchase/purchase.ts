@@ -15,6 +15,7 @@ type PurchaseProps = {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   category: PurchaseCategory | string;
+  secondaryCategory?: string | null;
 };
 
 export class Purchase {
@@ -24,6 +25,7 @@ export class Purchase {
   readonly createdAt: Timestamp;
   readonly updatedAt: Timestamp;
   readonly category: PurchaseCategory | string;
+  readonly secondaryCategory?: string | null;
 
   constructor(props: PurchaseProps) {
     this.id = props.id;
@@ -32,5 +34,6 @@ export class Purchase {
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
     this.category = props.category;
+    this.secondaryCategory = props.secondaryCategory;
   }
 }

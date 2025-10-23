@@ -27,6 +27,7 @@ export type PurchaseModel = {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   category: PurchaseCategory;
+  secondaryCategory?: string | null;
 };
 
 export class PurchaseService extends BaseService<PurchaseModel> {
@@ -40,13 +41,15 @@ export class PurchaseService extends BaseService<PurchaseModel> {
   async createdPurchase(
     userId: string,
     amount: string,
-    category: PurchaseCategory | string
+    category: PurchaseCategory | string,
+    secondaryCategory?: string | null
   ): Promise<Purchase> {
     const purchasesCollectionRef = collection(getDB(), 'purchases');
     const insertedPurchase = await addDoc(purchasesCollectionRef, {
       userId,
       amount,
       category,
+      secondaryCategory,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     });
@@ -72,7 +75,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     const queryData = query(
       this.collection,
       where('userId', '==', userId),
-      orderBy('updatedAt', 'desc'),
+      orderBy('createdAt', 'desc'),
       limit(9998)
     );
 
@@ -109,6 +112,8 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     const purchaseData: Partial<Purchase> = {
       amount: data.amount,
       category: data.category,
+      secondaryCategory: data.secondaryCategory ?? null,
+      createdAt: data.createdAt,
     };
 
     await this.userService.updateBasicDetails(userId, {

@@ -101,6 +101,7 @@ export const Hungarian = {
     AllPurchasesTitle: 'Összes vásárlás',
     FilterForCategory: 'Szűrés kategóriára',
     ChooseCategory: 'Kategória kiválasztása',
+    SecondaryCategory: 'Másodlagos kategória (opcionális)',
     Categories: {
       all: 'Összes',
       food: 'Élelmiszer',
@@ -234,6 +235,7 @@ export const English = {
     AllPurchasesTitle: 'All purchases',
     FilterForCategory: 'Filter for category',
     ChooseCategory: 'Choose category',
+    SecondaryCategory: 'Secondary category (optional)',
     Categories: {
       all: 'All',
       food: 'Food',

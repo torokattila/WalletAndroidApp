@@ -3,6 +3,7 @@ import React, { FC, useEffect } from 'react';
 import i18n from 'i18n-js';
 import GestureRecognizer from 'react-native-swipe-detect';
 import { Dropdown } from 'react-native-element-dropdown';
+import DatePicker from 'react-native-date-picker';
 import { KeyboardAvoidingView, Modal } from 'react-native';
 import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
@@ -25,6 +26,8 @@ import {
   dropdownItemContaineStyle,
   ErrorText,
   selectedTextStyle,
+  StyledTextInput,
+  CalendarIconContainer,
 } from './PurchaseModal.styles';
 
 type PurchaseModalProps = {
@@ -73,6 +76,13 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
     handleNumberChange,
     handleBackspacePress,
     allCategories,
+    secondaryCategory,
+    handleSecondaryCategoryChange,
+    isCreatedAtPickerOpen,
+    createdAt,
+    handleCreatedAtChange,
+    handleCreatedAtPickerClose,
+    handleCreatedAtPickerOpen,
   } = usePurchase(purchase);
 
   const modalTitle = isEditMode
@@ -112,9 +122,14 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
             <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
               <UpperLine />
               {isEditMode && (
-                <DeleteIconContainer onPress={handleConfirmDialogOpen}>
-                  <Icon type="trash" iconColor={theme.colors.white[100]} />
-                </DeleteIconContainer>
+                <>
+                  <CalendarIconContainer onPress={handleCreatedAtPickerOpen}>
+                    <Icon type="calendar" iconColor={theme.colors.white[100]} />
+                  </CalendarIconContainer>
+                  <DeleteIconContainer onPress={handleConfirmDialogOpen}>
+                    <Icon type="trash" iconColor={theme.colors.white[100]} />
+                  </DeleteIconContainer>
+                </>
               )}
 
               <Content>
@@ -162,6 +177,14 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                     mode="modal"
                   />
                   {errors.category && <ErrorText>{errors.category}</ErrorText>}
+
+                  <StyledTextInput
+                    value={secondaryCategory}
+                    onChange={handleSecondaryCategoryChange}
+                    placeholder={i18n.t('Purchases.SecondaryCategory')}
+                    isDarkMode={isDarkMode}
+                    placeholderTextColor={theme.colors.grey[600]}
+                  />
                 </DropdownContainer>
 
                 <ModalNumberKeyboard
@@ -191,6 +214,20 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
         secondaryButtonText={i18n.t('Dialog.Cancel')}
         title={i18n.t('Dialog.AreYouSureTitle')}
         description={i18n.t('Dialog.CannotBeUndoneTitle')}
+      />
+      <DatePicker
+        modal
+        mode="date"
+        title={null}
+        open={isCreatedAtPickerOpen}
+        date={createdAt}
+        maximumDate={new Date()}
+        androidVariant="iosClone"
+        onConfirm={handleCreatedAtChange}
+        onCancel={handleCreatedAtPickerClose}
+        cancelText={i18n.t('DatePicker.CancelButtonText')}
+        confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+        theme={isDarkMode ? 'dark' : 'auto'}
       />
     </>
   );

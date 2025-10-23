@@ -32,9 +32,11 @@ import { OtherPurchaseBig } from './other-purchase-big';
 import { Sun } from './sun';
 import { Moon } from './moon';
 import { Category } from './category';
+import { Calendar } from './calendar';
 
 export type IconType =
   | 'backspace'
+  | 'calendar'
   | 'category'
   | 'change-password'
   | 'close'
@@ -76,6 +78,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
   switch (type) {
     case 'backspace':
       return <Backspace iconColor={iconColor} {...props} />;
+    case 'calendar':
+      return <Calendar iconColor={iconColor} {...props} />;
     case 'category':
       return <Category iconColor={iconColor} {...props} />;
     case 'change-password':

@@ -5,11 +5,13 @@ import { PurchaseService } from '@model/services';
 import { CategoryService } from '@model/services/category';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import translate from 'google-translate-api-x';
+import { Timestamp } from 'firebase/firestore'; // Ensure this is imported
 import i18n from 'i18n-js';
 import { useEffect, useRef, useState } from 'react';
 import { useDownload } from './useDownload';
 import { useUser } from './useUser';
 import { useUserId } from './useUserId';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 export type CategoryDropdownValueType = {
   label: string;
@@ -37,6 +39,7 @@ export const usePurchase = (purchase?: Purchase) => {
   const [amount, setAmount] = useState('0');
   const [allPurchasesAmountForThisMonth, setAllPurchasesAmountForThisMonth] = useState(0);
   const [category, setCategory] = useState<PurchaseCategory | string | null>(null);
+  const [secondaryCategory, setSecondaryCategory] = useState<string | null>(null);
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +49,10 @@ export const usePurchase = (purchase?: Purchase) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
   const fromDate = useRef(new Date());
+  const [createdAt, setCreatedAt] = useState<Date>(
+    purchase?.createdAt ? purchase.createdAt.toDate() : new Date()
+  );
+  const [isCreatedAtPickerOpen, setIsCreatedAtPickerOpen] = useState(false);
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
   const toDate = useRef(new Date());
   const filterCategory = useRef(null);
@@ -61,6 +68,7 @@ export const usePurchase = (purchase?: Purchase) => {
     const setAmountAndCategory = async () => {
       if (purchase) {
         setAmount(purchase.amount);
+        setSecondaryCategory(purchase.secondaryCategory ?? null);
 
         const isCategoryExistsInDefaultCategories = categories.find(
           (cat) => cat.value.toLowerCase().trim() === purchase.category
@@ -206,10 +214,11 @@ export const usePurchase = (purchase?: Purchase) => {
     if (isFormVerified) {
       try {
         setIsLoading(true);
-        await purchaseService.createdPurchase(userId, amount, category);
+        await purchaseService.createdPurchase(userId, amount, category, secondaryCategory);
         fetchUser();
         setAmount('0');
         setCategory(null);
+        setSecondaryCategory(null);
         toast.show({
           type: 'success',
           title: i18n.t('ToastNotification.NewPurchaseSuccess'),
@@ -238,7 +247,12 @@ export const usePurchase = (purchase?: Purchase) => {
     if (isFormVerified) {
       try {
         setIsLoading(true);
-        await purchaseService.updatePurchase(purchase?.id, userId, { amount, category });
+        await purchaseService.updatePurchase(purchase?.id, userId, {
+          amount,
+          category,
+          secondaryCategory,
+          createdAt: Timestamp.fromDate(createdAt),
+        });
 
         fetchUser();
         fetchPurchases();
@@ -350,6 +364,8 @@ export const usePurchase = (purchase?: Purchase) => {
   const handleFromDatePickerClose = (): void => setIsFromDatePickerOpen(false);
   const handleToDatePickerOpen = (): void => setIsToDatePickerOpen(true);
   const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
+  const handleCreatedAtPickerOpen = (): void => setIsCreatedAtPickerOpen(true);
+  const handleCreatedAtPickerClose = (): void => setIsCreatedAtPickerOpen(false);
 
   const handleFromDateChange = async (date: Date): Promise<void> => {
     isDateFilterChanged.current = true;
@@ -365,6 +381,11 @@ export const usePurchase = (purchase?: Purchase) => {
     await filterPurchases();
   };
 
+  const handleCreatedAtChange = (date: Date): void => {
+    setCreatedAt(date);
+    handleCreatedAtPickerClose();
+  };
+
   const handleClearFilters = async (): Promise<void> => {
     fromDate.current = new Date();
     toDate.current = new Date();
@@ -372,6 +393,10 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsCategoryFilterChanged(false);
     isDateFilterChanged.current = false;
     await fetchPurchases();
+  };
+
+  const handleSecondaryCategoryChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    setSecondaryCategory(e.nativeEvent.text);
   };
 
   useEffect(() => {
@@ -391,6 +416,12 @@ export const usePurchase = (purchase?: Purchase) => {
       stopRefreshing();
     }
   }, [isLoading, purchases, screenRefreshing]);
+
+  useEffect(() => {
+    if (purchase) {
+      setCreatedAt(purchase.createdAt.toDate());
+    }
+  }, [purchase]);
 
   return {
     amount,
@@ -442,5 +473,12 @@ export const usePurchase = (purchase?: Purchase) => {
     handlePullToRefresh,
     stopRefreshing,
     allCategories,
+    secondaryCategory,
+    handleSecondaryCategoryChange,
+    createdAt,
+    isCreatedAtPickerOpen,
+    handleCreatedAtPickerOpen,
+    handleCreatedAtPickerClose,
+    handleCreatedAtChange,
   };
 };

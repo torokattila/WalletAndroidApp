@@ -90,7 +90,7 @@ def reactNativeArchitectures() {
 
 def keystorePropertiesFile = rootProject.file("release.keystore.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+// keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     ndkVersion rootProject.ext.ndkVersion
