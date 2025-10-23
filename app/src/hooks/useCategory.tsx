@@ -10,6 +10,43 @@ import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import translate from 'google-translate-api-x';
 import { getLocale } from '@core/translation-utils';
 
+export type ExtendedCategory = Category & { isDefault?: boolean };
+
+const defaultCategories: ExtendedCategory[] = [
+  {
+    id: '1',
+    title: i18n.t('Purchases.Categories.food'),
+    userId: '',
+    createdAt: null,
+    updatedAt: null,
+    isDefault: true,
+  },
+  {
+    id: '2',
+    title: i18n.t('Purchases.Categories.clothing'),
+    userId: '',
+    createdAt: null,
+    updatedAt: null,
+    isDefault: true,
+  },
+  {
+    id: '3',
+    title: i18n.t('Purchases.Categories.entertainment'),
+    userId: '',
+    createdAt: null,
+    updatedAt: null,
+    isDefault: true,
+  },
+  {
+    id: '4',
+    title: i18n.t('Purchases.Categories.other'),
+    userId: '',
+    createdAt: null,
+    updatedAt: null,
+    isDefault: true,
+  },
+];
+
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();
   const { userId } = useUserId();
@@ -17,7 +54,7 @@ export const useCategory = (category?: Category) => {
   const [title, setTitle] = useState<string>('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<(Category | ExtendedCategory)[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -51,7 +88,7 @@ export const useCategory = (category?: Category) => {
         });
       }
 
-      setCategories(allCategories);
+      setCategories([...defaultCategories, ...allCategories]);
     } catch (error) {
       console.error(`Error during fetching categories: ${error}`);
     } finally {
@@ -172,10 +209,12 @@ export const useCategory = (category?: Category) => {
     setIsEditModeModal(false);
   };
 
-  const handleEditModalOpen = (editableCategory: Category) => {
-    handleModalOpen();
-    setSelectedCategory(editableCategory);
-    setIsEditModeModal(true);
+  const handleEditModalOpen = (editableCategory: Category | ExtendedCategory) => {
+    if (!('isDefault' in editableCategory && editableCategory.isDefault)) {
+      handleModalOpen();
+      setSelectedCategory(editableCategory);
+      setIsEditModeModal(true);
+    }
   };
 
   const handleTitleChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {

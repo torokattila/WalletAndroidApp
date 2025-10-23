@@ -30,12 +30,3 @@ export const Title = styled(Text)`
   font-family: 'NunitoSans-Bold';
   color: ${({ theme }) => theme.colors.grey[600]};
 `;
-
-export const CagetoryDate = styled(Text)`
-  align-self: flex-end;
-  position: absolute;
-  right: 20px;
-  bottom: 10px;
-  font-family: 'NunitoSans-Bold';
-  color: ${({ theme }) => theme.colors.grey[600]};
-`;
