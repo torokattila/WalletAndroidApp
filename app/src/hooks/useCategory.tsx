@@ -52,6 +52,7 @@ export const useCategory = (category?: Category) => {
   const { userId } = useUserId();
 
   const [title, setTitle] = useState<string>('');
+  const [color, setColor] = useState<string>(category?.color ?? '#fff');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<(Category | ExtendedCategory)[]>([]);
@@ -66,6 +67,10 @@ export const useCategory = (category?: Category) => {
   useEffect(() => {
     if (category) {
       setTitle(category.title);
+
+      if (category?.color) {
+        setColor(category.color);
+      }
     } else {
       setTitle('');
     }
@@ -122,7 +127,7 @@ export const useCategory = (category?: Category) => {
     if (isFormVerified) {
       try {
         setIsLoading(true);
-        await categoryService.createCategory(userId, title);
+        await categoryService.createCategory(userId, title, color);
         fetchUser();
         setTitle('');
         toast.show({
@@ -153,7 +158,7 @@ export const useCategory = (category?: Category) => {
     if (isFormVerified) {
       try {
         setIsLoading(true);
-        await categoryService.updateCategory(category?.id, { title });
+        await categoryService.updateCategory(category?.id, { title, color });
         fetchUser();
         fetchCategories();
         toast.show({
@@ -221,6 +226,8 @@ export const useCategory = (category?: Category) => {
     setTitle(e.nativeEvent.text);
   };
 
+  const handleColorChange = (c: string) => setColor(c);
+
   const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
   const handleConfirmDialogClose = () => setIsConfirmDialogOpen(false);
 
@@ -246,6 +253,7 @@ export const useCategory = (category?: Category) => {
 
   return {
     title,
+    color,
     fetchCategories,
     handlePullToRefresh,
     stopRefreshing,
@@ -269,5 +277,6 @@ export const useCategory = (category?: Category) => {
     handleConfirmDialogOpen,
     handleConfirmDialogDelete,
     handleConfirmDialogClose,
+    handleColorChange,
   };
 };

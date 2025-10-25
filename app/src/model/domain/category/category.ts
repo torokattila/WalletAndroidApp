@@ -6,6 +6,7 @@ type CategoryProps = {
   title: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  color?: string | null;
 };
 
 export class Category {
@@ -14,6 +15,7 @@ export class Category {
   readonly title: string;
   readonly createdAt: Timestamp;
   readonly updatedAt: Timestamp;
+  readonly color?: string | null;
 
   constructor(props: CategoryProps) {
     this.id = props.id;
@@ -21,5 +23,6 @@ export class Category {
     this.title = props.title;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
+    this.color = props.color ?? null;
   }
 }

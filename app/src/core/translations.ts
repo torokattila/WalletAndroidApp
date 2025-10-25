@@ -115,9 +115,11 @@ export const Hungarian = {
     ScreenTitle: 'Kategóriák',
     MyCategoriesTitle: 'Saját kategóriák',
     NoCategoriesText: 'Még nem adtál hozzá saját kategóriát',
+    PickColor: 'Szín kiválasztása',
   },
   Home: {
     LastFivePurchasesTitle: 'Utolsó 5 vásárlás',
+    MonthlyStatement: 'Havi kimutatás',
     RedirectToPurchasesButtonText: 'Tovább a vásárlásokhoz',
   },
   NoPurchasesText: 'Még nem vásároltál semmit.',
@@ -249,9 +251,11 @@ export const English = {
     ScreenTitle: 'Categories',
     MyCategoriesTitle: 'My categories',
     NoCategoriesText: 'There are no categories yet.',
+    PickColor: 'Change color',
   },
   Home: {
     LastFivePurchasesTitle: 'Last 5 purchases',
+    MonthlyStatement: 'Monthly statement',
     RedirectToPurchasesButtonText: 'Go to the purchases',
   },
   NoPurchasesText: 'There are no purchases yet.',
