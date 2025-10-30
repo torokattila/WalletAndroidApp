@@ -39,8 +39,6 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   align-items: flex-start;
   width: 100%;
   flex: 1;
-  margin-top: 5%;
-  height: 10%;
   padding: 10px;
   border-top-left-radius: 35px;
   border-top-right-radius: 35px;

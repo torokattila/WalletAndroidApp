@@ -75,10 +75,12 @@ export const usePurchase = (purchase?: Purchase) => {
         );
 
         if (isCategoryExistsInDefaultCategories) {
-          setCategory(purchase.category);
+          setCategory(purchase.category as PurchaseCategory | string);
         } else {
+          const categoryText =
+            typeof purchase.category === 'string' ? purchase.category : purchase.category.title;
           const translatedCategory = (
-            await translate(purchase.category, {
+            await translate(categoryText, {
               to: locale === 'hun' ? 'hu' : 'en',
             })
           ).text;
@@ -107,7 +109,7 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsLoading(true);
 
     try {
-      const allPurchases = await purchaseService.getAllPurchases(user.id);
+      const allPurchases = await purchaseService.joinCategoriesIntoPurchases(user.id);
 
       setPurchases(allPurchases);
     } catch (error) {

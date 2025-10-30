@@ -4,7 +4,7 @@ import { Category } from '@model/domain';
 import { theme } from '@styles/theme';
 import React, { FC } from 'react';
 import { Container, IconContainer, Title, TitleAndAmountContainer } from './CategoryCard.styles';
-import { ExtendedCategory } from '@hooks/useCategory';
+import { ExtendedCategory } from '@model/domain/constants/categories';
 
 type CategoryCardProps = {
   category: Category | ExtendedCategory;
@@ -24,7 +24,7 @@ export const CategoryCard: FC<CategoryCardProps> = ({ category, onPress }) => {
 
   return (
     <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
-      <IconContainer style={cardShadow} isDarkMode={isDarkMode}>
+      <IconContainer style={cardShadow} isDarkMode={isDarkMode} color={category.color}>
         <Icon type="category" iconColor={theme.colors.white[100]} />
       </IconContainer>
 

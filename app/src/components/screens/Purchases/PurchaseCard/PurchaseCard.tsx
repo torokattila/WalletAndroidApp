@@ -44,9 +44,12 @@ export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
   const [translatedCategory, setTranslatedCategory] = useState(purchase.category);
 
   useEffect(() => {
+    console.log('category: ', purchase.categoryObject);
     const translateCategory = async () => {
+      const categoryText =
+        typeof purchase.category === 'string' ? purchase.category : purchase.category.title;
       const temporaryTranslatedCategory = (
-        await translate(purchase.category, {
+        await translate(categoryText, {
           to: locale === 'hun' ? 'hu' : 'en',
         })
       ).text;
@@ -55,12 +58,18 @@ export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
     };
 
     translateCategory();
-  }, [locale, purchase.category]);
+  }, [locale, purchase.category, purchase.categoryObject]);
 
   return (
     <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
-      <IconContainer style={cardShadow} isDarkMode={isDarkMode}>
-        {cardIcon[purchase.category] ?? cardIcon.other}
+      <IconContainer
+        style={cardShadow}
+        isDarkMode={isDarkMode}
+        categoryColor={purchase.categoryObject?.color}
+      >
+        {cardIcon[
+          typeof purchase.category === 'string' ? purchase.category : purchase.category.title
+        ] ?? cardIcon.other}
       </IconContainer>
 
       <CategoriesContainer>

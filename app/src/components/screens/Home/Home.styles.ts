@@ -62,7 +62,7 @@ export const LastFivePurchasesContainer = styled(View)`
 export const LastFivePurchasesTitle = styled(Text)`
   font-size: 22px;
   margin-left: 15px;
-  font-family: 'NunitoSans-Light';
+  font-family: 'NunitoSans-SemiBold';
   color: ${({ theme }) => theme.colors.purple[300]};
 `;
 
@@ -84,7 +84,6 @@ export const RedirectToPurchasesButton = styled(Button)`
 `;
 
 export const ListContainer = styled(View)`
-  margin-top: 10px;
   width: 100%;
   flex: 1;
 `;

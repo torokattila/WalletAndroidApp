@@ -80,7 +80,7 @@ export const ColorPickerContainer = styled(View)`
 `;
 
 export const ColorPickerButton = styled(Button)`
-  padding: 12px;
-  width: 40%;
+  padding: 12px 16px;
+  width: 55%;
   align-self: center;
 `;

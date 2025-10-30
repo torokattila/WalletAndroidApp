@@ -1,51 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { getLocale } from '@core/translation-utils';
 import { Category } from '@model/domain';
+import { defaultCategories, ExtendedCategory } from '@model/domain/constants/categories';
+import { CategoryService } from '@model/services/category';
+import { useToastNotificationStore } from '@stores/toastNotification.store';
+import translate from 'google-translate-api-x';
+import i18n from 'i18n-js';
+import { useEffect, useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useUser } from './useUser';
 import { useUserId } from './useUserId';
-import { useEffect, useState } from 'react';
-import i18n from 'i18n-js';
-import { useToastNotificationStore } from '@stores/toastNotification.store';
-import { CategoryService } from '@model/services/category';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import translate from 'google-translate-api-x';
-import { getLocale } from '@core/translation-utils';
-
-export type ExtendedCategory = Category & { isDefault?: boolean };
-
-const defaultCategories: ExtendedCategory[] = [
-  {
-    id: '1',
-    title: i18n.t('Purchases.Categories.food'),
-    userId: '',
-    createdAt: null,
-    updatedAt: null,
-    isDefault: true,
-  },
-  {
-    id: '2',
-    title: i18n.t('Purchases.Categories.clothing'),
-    userId: '',
-    createdAt: null,
-    updatedAt: null,
-    isDefault: true,
-  },
-  {
-    id: '3',
-    title: i18n.t('Purchases.Categories.entertainment'),
-    userId: '',
-    createdAt: null,
-    updatedAt: null,
-    isDefault: true,
-  },
-  {
-    id: '4',
-    title: i18n.t('Purchases.Categories.other'),
-    userId: '',
-    createdAt: null,
-    updatedAt: null,
-    isDefault: true,
-  },
-];
 
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();

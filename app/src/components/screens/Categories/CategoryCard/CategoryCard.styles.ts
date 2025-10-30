@@ -10,12 +10,17 @@ export const Container = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   margin-top: 15px;
   margin-left: 5px;
   flex-direction: row;
+  align-items: center;
   position: relative;
 `;
 
-export const IconContainer = styled(View)<{ isDarkMode: boolean }>`
-  background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
+export const IconContainer = styled(View)<{ isDarkMode: boolean; color?: string }>`
+  background-color: ${({ theme, isDarkMode, color }) => {
+    if (color) {
+      return color;
+    }
+    return isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100];
+  }};
   padding: 10px;
   border-radius: 10px;
 `;

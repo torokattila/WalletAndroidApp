@@ -6,7 +6,7 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
     isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
   flex: 1;
-  height: 75%;
+  height: 85%;
   width: 100%;
   border-top-left-radius: 35px;
   border-top-right-radius: 35px;
