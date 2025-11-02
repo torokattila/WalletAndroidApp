@@ -129,8 +129,12 @@ export const usePurchase = (purchase?: Purchase) => {
 
       for (const categ of categoriesList) {
         categoriesWithLabelAndValue.push({
-          label: (await translate(categ.title, { to: locale === 'hun' ? 'hu' : 'en' })).text,
-          value: (await translate(categ.title, { to: locale === 'hun' ? 'hu' : 'en' })).text,
+          label: categ?.isDefault
+            ? (await translate(categ.title, { to: locale === 'hun' ? 'hu' : 'en' })).text
+            : categ.title,
+          value: categ?.isDefault
+            ? (await translate(categ.title, { to: locale === 'hun' ? 'hu' : 'en' })).text
+            : categ.title,
         });
       }
 

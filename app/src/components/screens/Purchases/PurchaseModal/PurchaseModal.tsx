@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect } from 'react';
 import i18n from 'i18n-js';
@@ -165,6 +166,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                         backgroundColor: isDarkMode
                           ? theme.colors.grey[500]
                           : theme.colors.white[100],
+                        maxHeight: 230,
                       },
                     ]}
                     itemTextStyle={dropdownTextStyle}
@@ -174,7 +176,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                     onChange={handleDropdownChange}
                     selectedTextStyle={selectedTextStyle}
                     activeColor={isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]}
-                    mode="modal"
+                    mode="default"
                   />
                   {errors.category && <ErrorText>{errors.category}</ErrorText>}
 
