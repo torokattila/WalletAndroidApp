@@ -1,32 +1,32 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
-import React, { FC, useEffect, useMemo } from 'react';
-import i18n from 'i18n-js';
-import { Dimensions, FlatList, RefreshControl } from 'react-native';
+import React from 'react';
 import { CreditCard } from '@components/CreditCard';
 import { useDarkMode } from '@hooks/useDarkMode';
-import { usePurchase } from '@hooks/usePurchase';
 import { useHome } from '@hooks/useHome';
+import { usePurchase } from '@hooks/usePurchase';
+import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
+import i18n from 'i18n-js';
+import { FC, useEffect, useMemo } from 'react';
+import { FlatList, RefreshControl } from 'react-native';
+import { PieChart } from 'react-native-gifted-charts';
 import { PurchaseModal } from '../Purchases/PurchaseModal';
 import {
   Container,
   ContentContainer,
-  LastFivePurchasesContainer,
-  LastFivePurchasesTitle,
   ListContainer,
-  NoLastFivePurchasesText,
+  Loader,
   NoLastFivePurchasesContainer,
+  NoLastFivePurchasesText,
+  PieChartCenterAmount,
+  PieChartContainer,
+  RedirectToPurchasesButton,
   scrollViewStyle,
   StyledLinearGradient,
   WelcomeText,
-  RedirectToPurchasesButton,
-  Loader,
 } from './Home.styles';
-import { HomeScreenPurchaseCard } from './HomeScreenPurchaseCard';
-
-const { width } = Dimensions.get('window');
-const CARD_WIDTH = width - 150;
-const INTERVAL = CARD_WIDTH + 10;
+import PieChartPurchaseCard from './PieChartPurchaseCard/PieChartPurchaseCard';
 
 const buttonShadow = {
   elevation: 10,
@@ -41,7 +41,6 @@ export const Home: FC = () => {
   const { screenRefreshing, setScreenRefreshing } = useHome();
   const {
     purchases,
-    handleEditModalOpen,
     isModalOpen,
     handleModalClose,
     isEditModeModal,
@@ -50,9 +49,6 @@ export const Home: FC = () => {
     isLoading,
   } = usePurchase();
   const { user, localizedName, navigation } = useHome();
-  const lastFivePurchases = useMemo(() => {
-    return purchases.slice(0, 5);
-  }, [purchases]);
 
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
@@ -66,6 +62,59 @@ export const Home: FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, purchases, screenRefreshing]);
+
+  const aggregatePurchasesByCategory = (purchasesProp: Purchase[]) => {
+    if (!purchasesProp || purchasesProp.length === 0) {
+      return [];
+    }
+
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+
+    const purchasesForCurrentMonth = purchasesProp.filter((purchase) => {
+      const purchaseDate = purchase.updatedAt.toDate();
+      return purchaseDate.getMonth() === currentMonth && purchaseDate.getFullYear() === currentYear;
+    });
+
+    if (purchasesForCurrentMonth.length === 0) {
+      return [];
+    }
+
+    const totalAmount = purchasesForCurrentMonth.reduce(
+      (sum, purchase) => sum + parseFloat(purchase.amount || '0'),
+      0
+    );
+
+    const categoryTotals: { [category: string]: { amount: number; color: string } } = {};
+
+    purchasesForCurrentMonth.forEach((purchase) => {
+      const category: string =
+        typeof purchase.categoryObject?.title === 'string'
+          ? purchase.categoryObject.title
+          : typeof purchase.category === 'string'
+          ? purchase.category
+          : '';
+      const amount = parseFloat(purchase.amount || '0');
+      const color = purchase.categoryObject?.color || theme.colors.grey[500];
+
+      if (categoryTotals[category]) {
+        categoryTotals[category].amount += amount;
+      } else {
+        categoryTotals[category] = { amount, color };
+      }
+    });
+
+    return Object.entries(categoryTotals)
+      .map(([category, { amount, color }]) => ({
+        label: category,
+        value: amount,
+        percentage: Math.round((amount / totalAmount) * 100), // Calculate percentage based on current month total
+        color,
+      }))
+      .sort((a, b) => b.percentage - a.percentage);
+  };
+
+  const donutChartData = useMemo(() => aggregatePurchasesByCategory(purchases), [purchases]);
 
   return (
     <>
@@ -93,37 +142,50 @@ export const Home: FC = () => {
           <ContentContainer isDarkMode={isDarkMode}>
             <CreditCard name={localizedName} balance={user?.balance} />
 
-            <LastFivePurchasesContainer>
-              <LastFivePurchasesTitle>
-                {i18n.t('Home.LastFivePurchasesTitle')}
-              </LastFivePurchasesTitle>
+            {donutChartData.length > 0 && (
+              <PieChartContainer>
+                <PieChart
+                  data={donutChartData ?? []}
+                  donut
+                  radius={100}
+                  innerRadius={60}
+                  textSize={16}
+                  showText
+                  centerLabelComponent={() => (
+                    <PieChartCenterAmount>
+                      {donutChartData.reduce((sum, item) => sum + item.value, 0)} Ft
+                    </PieChartCenterAmount>
+                  )}
+                />
 
-              {lastFivePurchases.length > 0 && !isLoading && (
                 <ListContainer>
                   <FlatList
-                    contentContainerStyle={{ paddingRight: 20, paddingLeft: 15, paddingBottom: 40 }}
-                    showsHorizontalScrollIndicator={false}
-                    data={lastFivePurchases}
-                    keyExtractor={(item) => item.id}
-                    scrollEnabled
-                    snapToInterval={INTERVAL}
-                    horizontal
-                    pagingEnabled
-                    decelerationRate="fast"
-                    renderItem={({ item }) => (
-                      <HomeScreenPurchaseCard
-                        purchase={item}
-                        onPress={() => handleEditModalOpen(item)}
+                    contentContainerStyle={{
+                      paddingBottom: 40,
+                    }}
+                    style={{
+                      paddingHorizontal: 10,
+                    }}
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={screenRefreshing}
+                        onRefresh={handlePullToRefresh}
+                        colors={['#4547B8', '#8E65F7']}
                       />
-                    )}
+                    }
+                    data={donutChartData}
+                    scrollEnabled
+                    keyExtractor={(item, index) => `${item.label}-${index.toString()}`}
+                    renderItem={({ item }) => <PieChartPurchaseCard donutChartData={item} />}
+                    showsVerticalScrollIndicator={false}
                   />
                 </ListContainer>
-              )}
-            </LastFivePurchasesContainer>
+              </PieChartContainer>
+            )}
 
             {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
 
-            {!lastFivePurchases.length && !isLoading && (
+            {!donutChartData.length && !isLoading && (
               <NoLastFivePurchasesContainer>
                 <NoLastFivePurchasesText>{i18n.t('NoPurchasesText')}</NoLastFivePurchasesText>
                 <RedirectToPurchasesButton

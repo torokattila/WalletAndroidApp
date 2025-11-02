@@ -1,17 +1,9 @@
-import styled from 'styled-components/native';
-import {
-  ActivityIndicator,
-  ScrollView,
-  ScrollViewProps,
-  StyleProp,
-  Text,
-  View,
-  ViewStyle,
-} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { Button } from '@components/shared';
+import { ActivityIndicator, StyleProp, Text, View, ViewProps, ViewStyle } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import styled from 'styled-components/native';
 
-export const Container = styled(ScrollView)<ScrollViewProps & { isDarkMode?: boolean }>`
+export const Container = styled(View)<ViewProps & { isDarkMode?: boolean }>`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.white[100]};
 `;
@@ -54,15 +46,18 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   position: relative;
 `;
 
-export const LastFivePurchasesContainer = styled(View)`
-  margin-top: 35%;
-  align-self: flex-start;
+export const PieChartContainer = styled(View)`
+  margin-top: 30%;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-export const LastFivePurchasesTitle = styled(Text)`
-  font-size: 22px;
-  margin-left: 15px;
-  font-family: 'NunitoSans-SemiBold';
+export const PieChartCenterAmount = styled(Text)`
+  font-size: 16px;
+  font-family: 'NunitoSans-Bold';
   color: ${({ theme }) => theme.colors.purple[300]};
 `;
 
@@ -73,7 +68,7 @@ export const NoLastFivePurchasesContainer = styled(View)`
 
 export const NoLastFivePurchasesText = styled(Text)`
   text-align: center;
-  font-family: 'NunitoSans-Light';
+  font-family: 'NunitoSans-Regular';
   font-size: 18px;
   color: ${({ theme }) => theme.colors.grey[600]};
 `;
@@ -84,7 +79,10 @@ export const RedirectToPurchasesButton = styled(Button)`
 `;
 
 export const ListContainer = styled(View)`
+  margin-top: 10px;
   width: 100%;
+  flex-grow: 1;
+  max-height: 60%;
   flex: 1;
 `;
 
