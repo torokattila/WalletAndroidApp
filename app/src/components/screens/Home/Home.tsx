@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { CreditCard } from '@components/CreditCard';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { useHome } from '@hooks/useHome';
 import { usePurchase } from '@hooks/usePurchase';
@@ -13,6 +12,8 @@ import { FlatList, RefreshControl } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
 import { PurchaseModal } from '../Purchases/PurchaseModal';
 import {
+  Balance,
+  BalanceTitle,
   Container,
   ContentContainer,
   ListContainer,
@@ -48,7 +49,7 @@ export const Home: FC = () => {
     retry: reloadPurchases,
     isLoading,
   } = usePurchase();
-  const { user, localizedName, navigation } = useHome();
+  const { user, navigation } = useHome();
 
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
@@ -108,6 +109,7 @@ export const Home: FC = () => {
       .map(([category, { amount, color }]) => ({
         label: category,
         value: amount,
+        text: `${category} - ${Math.round((amount / totalAmount) * 100)}%`,
         percentage: Math.round((amount / totalAmount) * 100), // Calculate percentage based on current month total
         color,
       }))
@@ -140,17 +142,28 @@ export const Home: FC = () => {
           <WelcomeText>Hello {user?.firstname}!</WelcomeText>
 
           <ContentContainer isDarkMode={isDarkMode}>
-            <CreditCard name={localizedName} balance={user?.balance} />
+            <BalanceTitle>
+              {i18n.t('BalanceTitle')}: <Balance>{user?.balance} Ft</Balance>
+            </BalanceTitle>
 
             {donutChartData.length > 0 && (
               <PieChartContainer>
                 <PieChart
                   data={donutChartData ?? []}
                   donut
-                  radius={100}
-                  innerRadius={60}
-                  textSize={16}
-                  showText
+                  radius={90}
+                  innerRadius={50}
+                  strokeColor="#ffffff"
+                  strokeWidth={1}
+                  textSize={14}
+                  innerCircleColor={isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]}
+                  showTooltip
+                  tooltipBackgroundColor={
+                    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]
+                  }
+                  focusOnPress
+                  showValuesAsTooltipText
+                  textColor={isDarkMode ? theme.colors.white[200] : theme.colors.purple[100]}
                   centerLabelComponent={() => (
                     <PieChartCenterAmount>
                       {donutChartData.reduce((sum, item) => sum + item.value, 0)} Ft

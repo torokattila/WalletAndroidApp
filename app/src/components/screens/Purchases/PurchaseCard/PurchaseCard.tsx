@@ -1,12 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
+import { Icon } from '@components/shared';
+import { useDarkMode } from '@hooks/useDarkMode';
+import { Purchase } from '@model/domain';
+import { theme } from '@styles/theme';
 import { format } from 'date-fns';
 import i18n from 'i18n-js';
-import translate from 'google-translate-api-x';
-import { getLocale } from '@core/translation-utils';
-import { Icon } from '@components/shared';
-import { Purchase } from '@model/domain';
-import { useDarkMode } from '@hooks/useDarkMode';
-import { theme } from '@styles/theme';
+import React, { FC } from 'react';
 import {
   Amount,
   AmountAndDateContainer,
@@ -40,25 +38,6 @@ const cardShadow = {
 
 export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
   const { isDarkMode } = useDarkMode();
-  const locale = getLocale();
-  const [translatedCategory, setTranslatedCategory] = useState(purchase.category);
-
-  useEffect(() => {
-    console.log('category: ', purchase.categoryObject);
-    const translateCategory = async () => {
-      const categoryText =
-        typeof purchase.category === 'string' ? purchase.category : purchase.category.title;
-      const temporaryTranslatedCategory = (
-        await translate(categoryText, {
-          to: locale === 'hun' ? 'hu' : 'en',
-        })
-      ).text;
-
-      setTranslatedCategory(temporaryTranslatedCategory);
-    };
-
-    translateCategory();
-  }, [locale, purchase.category, purchase.categoryObject]);
 
   return (
     <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
@@ -75,7 +54,7 @@ export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
       <CategoriesContainer>
         <Category isDarkMode={isDarkMode}>
           {i18n.t(`Purchases.Categories.${purchase.category}`, {
-            defaultValue: translatedCategory,
+            defaultValue: purchase.category,
           })}
         </Category>
         {purchase?.secondaryCategory && (

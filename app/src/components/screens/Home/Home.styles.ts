@@ -26,7 +26,7 @@ export const WelcomeText = styled(Text)`
   align-self: flex-start;
   padding-top: 15%;
   padding-left: 5%;
-  padding-bottom: 20%;
+  padding-bottom: 12%;
   font-family: 'NunitoSans-Light';
 `;
 
@@ -38,7 +38,7 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   align-items: center;
   width: 100%;
   flex: 1;
-  margin-top: 10%;
+  margin-top: -5%;
   height: 10%;
   padding: 20px;
   border-top-left-radius: 35px;
@@ -46,8 +46,21 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   position: relative;
 `;
 
+export const BalanceTitle = styled(Text)`
+  font-size: 22px;
+  align-self: flex-start;
+  padding-left: 10px;
+  font-family: 'NunitoSans-SemiBold';
+  color: ${({ theme }) => theme.colors.purple[300]};
+`;
+
+export const Balance = styled(Text)`
+  font-size: 17px;
+  font-family: 'NunitoSans-Regular';
+  color: ${({ theme }) => theme.colors.purple[300]};
+`;
+
 export const PieChartContainer = styled(View)`
-  margin-top: 30%;
   width: 100%;
   flex: 1;
   display: flex;
@@ -79,7 +92,7 @@ export const RedirectToPurchasesButton = styled(Button)`
 `;
 
 export const ListContainer = styled(View)`
-  margin-top: 10px;
+  margin-top: 5px;
   width: 100%;
   flex-grow: 1;
   max-height: 60%;
