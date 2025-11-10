@@ -20,14 +20,34 @@ export const StyledLinearGradient = styled(LinearGradient)`
   align-items: center;
 `;
 
+export const WelcomeAndAmountText = styled(View)`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 12%;
+  width: 100%;
+  padding-left: 7%;
+`;
+
 export const WelcomeText = styled(Text)`
   color: ${({ theme }) => theme.colors.white[100]};
   font-size: 25px;
   align-self: flex-start;
   padding-top: 15%;
-  padding-left: 5%;
-  padding-bottom: 12%;
   font-family: 'NunitoSans-Light';
+`;
+
+export const BalanceTitle = styled(Text)`
+  font-size: 22px;
+  align-self: flex-start;
+  font-family: 'NunitoSans-Regular';
+  color: ${({ theme }) => theme.colors.white[100]};
+`;
+
+export const Balance = styled(Text)`
+  font-size: 17px;
+  font-family: 'NunitoSans-SemiBold';
+  color: ${({ theme }) => theme.colors.grey[200]};
 `;
 
 export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
@@ -46,23 +66,18 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   position: relative;
 `;
 
-export const BalanceTitle = styled(Text)`
-  font-size: 22px;
+export const MonthlyStatementTitle = styled(Text)`
+  font-size: 20px;
+  font-family: 'NunitoSans-Bold';
+  color: ${({ theme }) => theme.colors.grey[600]};
   align-self: flex-start;
-  padding-left: 10px;
-  font-family: 'NunitoSans-SemiBold';
-  color: ${({ theme }) => theme.colors.purple[300]};
-`;
-
-export const Balance = styled(Text)`
-  font-size: 17px;
-  font-family: 'NunitoSans-Regular';
-  color: ${({ theme }) => theme.colors.purple[300]};
+  margin-left: 4%;
 `;
 
 export const PieChartContainer = styled(View)`
   width: 100%;
   flex: 1;
+  margin-top: 3%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -95,7 +110,7 @@ export const ListContainer = styled(View)`
   margin-top: 5px;
   width: 100%;
   flex-grow: 1;
-  max-height: 60%;
+  max-height: 100%;
   flex: 1;
 `;
 

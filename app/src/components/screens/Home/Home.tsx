@@ -18,6 +18,7 @@ import {
   ContentContainer,
   ListContainer,
   Loader,
+  MonthlyStatementTitle,
   NoLastFivePurchasesContainer,
   NoLastFivePurchasesText,
   PieChartCenterAmount,
@@ -25,6 +26,7 @@ import {
   RedirectToPurchasesButton,
   scrollViewStyle,
   StyledLinearGradient,
+  WelcomeAndAmountText,
   WelcomeText,
 } from './Home.styles';
 import PieChartPurchaseCard from './PieChartPurchaseCard/PieChartPurchaseCard';
@@ -139,13 +141,15 @@ export const Home: FC = () => {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
-          <WelcomeText>Hello {user?.firstname}!</WelcomeText>
-
-          <ContentContainer isDarkMode={isDarkMode}>
+          <WelcomeAndAmountText>
+            <WelcomeText>Hello {user?.firstname}!</WelcomeText>
             <BalanceTitle>
               {i18n.t('BalanceTitle')}: <Balance>{user?.balance} Ft</Balance>
             </BalanceTitle>
+          </WelcomeAndAmountText>
 
+          <ContentContainer isDarkMode={isDarkMode}>
+            <MonthlyStatementTitle>{i18n.t('Home.MonthlyStatement')}:</MonthlyStatementTitle>
             {donutChartData.length > 0 && (
               <PieChartContainer>
                 <PieChart
