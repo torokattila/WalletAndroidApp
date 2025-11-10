@@ -1,4 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
+import { Category } from '../category';
 
 export enum PurchaseCategory {
   FOOD = 'food',
@@ -15,6 +16,8 @@ type PurchaseProps = {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   category: PurchaseCategory | string;
+  secondaryCategory?: string | null;
+  categoryObject?: Category | null;
 };
 
 export class Purchase {
@@ -23,7 +26,9 @@ export class Purchase {
   readonly amount: string;
   readonly createdAt: Timestamp;
   readonly updatedAt: Timestamp;
-  readonly category: PurchaseCategory | string;
+  readonly category: PurchaseCategory | Category | string;
+  readonly secondaryCategory?: string | null;
+  readonly categoryObject?: Category | null;
 
   constructor(props: PurchaseProps) {
     this.id = props.id;
@@ -32,5 +37,7 @@ export class Purchase {
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
     this.category = props.category;
+    this.secondaryCategory = props.secondaryCategory;
+    this.categoryObject = props?.categoryObject ?? null;
   }
 }

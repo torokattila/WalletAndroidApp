@@ -24,17 +24,9 @@ import { CategoryCard } from './CategoryCard';
 export const Categories: FC = () => {
   const { isDarkMode } = useDarkMode();
   const {
-    fetchCategories,
     handlePullToRefresh,
-    stopRefreshing,
-    verifyForm,
-    handleCreateCategory,
-    handleUpdateCategory,
-    handleDeleteCategory,
-    errors,
     isLoading,
     categories,
-    isConfirmDialogOpen,
     isModalOpen,
     selectedCategory,
     isEditModeModal,
@@ -42,10 +34,6 @@ export const Categories: FC = () => {
     handleModalOpen,
     handleModalClose,
     handleEditModalOpen,
-    handleTitleChange,
-    handleConfirmDialogOpen,
-    handleConfirmDialogDelete,
-    handleConfirmDialogClose,
   } = useCategory();
 
   return (
@@ -64,7 +52,7 @@ export const Categories: FC = () => {
           </ScreenTitleContainer>
 
           <ContentContainer isDarkMode={isDarkMode}>
-            <MyCategoriesTitle>{i18n.t('Categories.MyCategoriesTitle')}</MyCategoriesTitle>
+            <MyCategoriesTitle>{i18n.t('Categories.ScreenTitle')}</MyCategoriesTitle>
 
             {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
 

@@ -101,6 +101,7 @@ export const Hungarian = {
     AllPurchasesTitle: 'Összes vásárlás',
     FilterForCategory: 'Szűrés kategóriára',
     ChooseCategory: 'Kategória kiválasztása',
+    SecondaryCategory: 'Másodlagos kategória (opcionális)',
     Categories: {
       all: 'Összes',
       food: 'Élelmiszer',
@@ -114,9 +115,11 @@ export const Hungarian = {
     ScreenTitle: 'Kategóriák',
     MyCategoriesTitle: 'Saját kategóriák',
     NoCategoriesText: 'Még nem adtál hozzá saját kategóriát',
+    PickColor: 'Szín kiválasztása',
   },
   Home: {
     LastFivePurchasesTitle: 'Utolsó 5 vásárlás',
+    MonthlyStatement: 'Havi kimutatás',
     RedirectToPurchasesButtonText: 'Tovább a vásárlásokhoz',
   },
   NoPurchasesText: 'Még nem vásároltál semmit.',
@@ -129,6 +132,7 @@ export const Hungarian = {
     Total: 'Összesen',
   },
   DarkThemeText: 'Sötét téma',
+  ChooseMonth: 'Hónap kiválasztása',
 };
 
 export const English = {
@@ -234,6 +238,7 @@ export const English = {
     AllPurchasesTitle: 'All purchases',
     FilterForCategory: 'Filter for category',
     ChooseCategory: 'Choose category',
+    SecondaryCategory: 'Secondary category (optional)',
     Categories: {
       all: 'All',
       food: 'Food',
@@ -247,9 +252,11 @@ export const English = {
     ScreenTitle: 'Categories',
     MyCategoriesTitle: 'My categories',
     NoCategoriesText: 'There are no categories yet.',
+    PickColor: 'Change color',
   },
   Home: {
     LastFivePurchasesTitle: 'Last 5 purchases',
+    MonthlyStatement: 'Monthly statement',
     RedirectToPurchasesButtonText: 'Go to the purchases',
   },
   NoPurchasesText: 'There are no purchases yet.',
@@ -262,4 +269,5 @@ export const English = {
     Total: 'Total',
   },
   DarkThemeText: 'Dark theme',
+  ChooseMonth: 'Choose month',
 };

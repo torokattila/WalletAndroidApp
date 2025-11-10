@@ -1,19 +1,6 @@
-import styled from 'styled-components/native';
-import {
-  ActivityIndicator,
-  Dimensions,
-  StyleProp,
-  Text,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { theme as globalTheme } from '@styles/theme';
-import Animated from 'react-native-reanimated';
-
-const WIDTH = Dimensions.get('screen').width;
+import styled from 'styled-components/native';
 
 export const Container = styled(View)`
   flex: 1;
@@ -52,8 +39,6 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   align-items: flex-start;
   width: 100%;
   flex: 1;
-  margin-top: 5%;
-  height: 10%;
   padding: 10px;
   border-top-left-radius: 35px;
   border-top-right-radius: 35px;
@@ -74,7 +59,7 @@ export const Loader = styled(ActivityIndicator)`
 `;
 
 export const ListContainer = styled(View)`
-  margin-top: 60px;
+  margin-top: 30px;
   width: 100%;
   flex: 1;
 `;

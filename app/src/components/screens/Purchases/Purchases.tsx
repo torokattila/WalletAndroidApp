@@ -160,6 +160,8 @@ export const Purchases: FC = () => {
                       backgroundColor: isDarkMode
                         ? theme.colors.grey[500]
                         : theme.colors.white[100],
+                      maxHeight: 230,
+                      left: 65,
                     },
                   ]}
                   itemTextStyle={dropdownTextStyle}
@@ -169,7 +171,7 @@ export const Purchases: FC = () => {
                   selectedTextStyle={selectedTextStyle}
                   activeColor={isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]}
                   onChange={handleFilterCategoryChange}
-                  mode="modal"
+                  mode="default"
                 />
               </CategoryFilterContainer>
 

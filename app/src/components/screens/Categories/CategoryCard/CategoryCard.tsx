@@ -2,18 +2,12 @@ import { Icon } from '@components/shared';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { Category } from '@model/domain';
 import { theme } from '@styles/theme';
-import { format } from 'date-fns';
 import React, { FC } from 'react';
-import {
-  CagetoryDate,
-  Container,
-  IconContainer,
-  Title,
-  TitleAndAmountContainer,
-} from './CategoryCard.styles';
+import { Container, IconContainer, Title, TitleAndAmountContainer } from './CategoryCard.styles';
+import { ExtendedCategory } from '@model/domain/constants/categories';
 
 type CategoryCardProps = {
-  category: Category;
+  category: Category | ExtendedCategory;
   onPress: () => void;
 };
 
@@ -30,15 +24,13 @@ export const CategoryCard: FC<CategoryCardProps> = ({ category, onPress }) => {
 
   return (
     <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
-      <IconContainer style={cardShadow} isDarkMode={isDarkMode}>
+      <IconContainer style={cardShadow} isDarkMode={isDarkMode} color={category.color}>
         <Icon type="category" iconColor={theme.colors.white[100]} />
       </IconContainer>
 
       <TitleAndAmountContainer>
         {category.title && <Title>{category.title}</Title>}
       </TitleAndAmountContainer>
-
-      <CagetoryDate>{format(category.updatedAt.toDate(), 'yyyy-MM.dd.')}</CagetoryDate>
     </Container>
   );
 };

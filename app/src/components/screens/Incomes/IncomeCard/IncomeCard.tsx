@@ -6,6 +6,7 @@ import { Icon } from '@components/shared';
 import { useDarkMode } from '@hooks/useDarkMode';
 import {
   Amount,
+  AmountAndDateContainer,
   Container,
   IconContainer,
   IncomeDate,
@@ -37,10 +38,12 @@ export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => {
 
       <TitleAndAmountContainer>
         {income.title && <Title>{income.title}</Title>}
-        <Amount>+ {income.amount} Ft</Amount>
       </TitleAndAmountContainer>
 
-      <IncomeDate>{format(income.updatedAt.toDate(), 'yyyy-MM.dd.')}</IncomeDate>
+      <AmountAndDateContainer>
+        <Amount>+ {income.amount} Ft</Amount>
+        <IncomeDate>{format(income.updatedAt.toDate(), 'yyyy.MM.dd.')}</IncomeDate>
+      </AmountAndDateContainer>
     </Container>
   );
 };

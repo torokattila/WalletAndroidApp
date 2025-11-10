@@ -14,6 +14,7 @@ import {
   Container,
   IconContainer,
   PurchaseDate,
+  SecondaryCategory,
 } from './HomeScreenPurchaseCard.styles';
 
 type HomeScreenPurchaseCardProps = { purchase: Purchase; onPress: () => void };
@@ -40,8 +41,10 @@ export const HomeScreenPurchaseCard: FC<HomeScreenPurchaseCardProps> = ({ purcha
 
   useEffect(() => {
     const translateCategory = async () => {
+      const categoryText =
+        typeof purchase.category === 'string' ? purchase.category : purchase.category.title;
       const temporaryTranslatedCategory = (
-        await translate(purchase.category, {
+        await translate(categoryText, {
           to: locale === 'hun' ? 'hu' : 'en',
         })
       ).text;
@@ -60,22 +63,30 @@ export const HomeScreenPurchaseCard: FC<HomeScreenPurchaseCardProps> = ({ purcha
       isDarkMode={isDarkMode}
     >
       <>
-        <IconContainer isDarkMode={isDarkMode} style={cardShadow}>
-          {cardIcon[purchase.category] ?? cardIcon.other}
+        <IconContainer
+          isDarkMode={isDarkMode}
+          style={cardShadow}
+          categoryColor={purchase.categoryObject?.color}
+        >
+          {cardIcon[
+            typeof purchase.category === 'string' ? purchase.category : purchase.category.title
+          ] ?? cardIcon.other}
         </IconContainer>
 
         <CategoryAndAmountContainer>
-          {
-            <Category>
-              {i18n.t(`Purchases.Categories.${purchase.category}`, {
-                defaultValue: translatedCategory,
-              })}
-            </Category>
-          }
+          <Category>
+            {i18n.t(`Purchases.Categories.${purchase.category}`, {
+              defaultValue: translatedCategory,
+            })}
+          </Category>
+          {purchase?.secondaryCategory && (
+            <SecondaryCategory>{purchase.secondaryCategory}</SecondaryCategory>
+          )}
+
           <Amount>- {purchase.amount} Ft</Amount>
         </CategoryAndAmountContainer>
 
-        <PurchaseDate>{format(purchase.updatedAt.toDate(), 'yyyy-MM.dd.')}</PurchaseDate>
+        <PurchaseDate>{format(purchase.updatedAt.toDate(), 'yyyy.MM.dd.')}</PurchaseDate>
       </>
     </Container>
   );

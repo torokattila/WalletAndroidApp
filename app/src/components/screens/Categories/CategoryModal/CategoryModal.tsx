@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ConfirmDialog, Icon, ModalBackground } from '@components/shared';
 import { useCategory } from '@hooks/useCategory';
@@ -5,10 +6,13 @@ import { useDarkMode } from '@hooks/useDarkMode';
 import { Category } from '@model/domain';
 import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
-import React, { FC, useEffect } from 'react';
-import { KeyboardAvoidingView, Modal } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Modal, View } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-detect';
+import CategoryColorPicker from '../CategoryColorPicker';
 import {
+  ColorPickerButton,
+  ColorPickerContainer,
   Content,
   ContentContainer,
   DeleteIconContainer,
@@ -25,7 +29,7 @@ type CategoryModalProps = {
   isEditMode?: boolean;
 };
 
-const shadow = {
+export const shadow = {
   elevation: 8,
   shadowColor: theme.colors.black,
   shadowOffset: { width: -8, height: 20 },
@@ -33,7 +37,7 @@ const shadow = {
   shadowRadius: 35,
 };
 
-const buttonShadow = {
+export const buttonShadow = {
   elevation: 10,
   shadowColor: theme.colors.black,
   shadowOffset: { width: -2, height: 20 },
@@ -59,8 +63,14 @@ export const CategoryModal: FC<CategoryModalProps> = ({
     handleConfirmDialogDelete,
     handleConfirmDialogClose,
     title,
+    color,
     handleTitleChange,
+    handleColorChange,
   } = useCategory(existingCategory);
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState<boolean>(false);
+
+  const openColorPicker = () => setIsColorPickerOpen(true);
+  const closeColorPicker = () => setIsColorPickerOpen(false);
 
   const modalTitle = isEditMode
     ? i18n.t('Dialog.Categories.EditCategoryTitle')
@@ -110,6 +120,23 @@ export const CategoryModal: FC<CategoryModalProps> = ({
                   placeholderTextColor={theme.colors.grey[600]}
                 />
 
+                <ColorPickerContainer>
+                  <ColorPickerButton
+                    size="large"
+                    text={i18n.t('Categories.PickColor')}
+                    onPress={openColorPicker}
+                  />
+                  <View
+                    style={{
+                      ...shadow,
+                      height: 50,
+                      width: 70,
+                      backgroundColor: color,
+                      borderRadius: 20,
+                    }}
+                  />
+                </ColorPickerContainer>
+
                 <StyledButton
                   size="large"
                   style={!isDarkMode && buttonShadow}
@@ -132,6 +159,12 @@ export const CategoryModal: FC<CategoryModalProps> = ({
         secondaryButtonText={i18n.t('Dialog.Cancel')}
         title={i18n.t('Dialog.AreYouSureTitle')}
         description={i18n.t('Dialog.CannotBeUndoneTitle')}
+      />
+      <CategoryColorPicker
+        isVisible={isColorPickerOpen}
+        onClose={closeColorPicker}
+        pickColor={handleColorChange}
+        existingColor={color}
       />
     </>
   );

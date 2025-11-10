@@ -16,29 +16,39 @@ export const Container = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
 export const IconContainer = styled(View)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
     isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
-  padding: 10px;
+  padding: 7px;
   border-radius: 10px;
 `;
 
 export const TitleAndAmountContainer = styled(View)`
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-left: 10px;
 `;
 
 export const Title = styled(Text)`
-  font-family: 'NunitoSans-Bold';
+  font-family: 'NunitoSans-ExtraBold';
   color: ${({ theme }) => theme.colors.grey[600]};
 `;
 
 export const Amount = styled(Text)`
   color: ${({ theme }) => theme.colors.green[400]};
-  font-family: 'NunitoSans-Bold';
+  font-family: 'NunitoSans-ExtraBold';
+  margin-right: 20px;
+`;
+
+export const AmountAndDateContainer = styled(View)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  position: absolute;
+  right: 0px;
+  top: 40%;
 `;
 
 export const IncomeDate = styled(Text)`
   align-self: flex-end;
-  position: absolute;
   right: 20px;
   bottom: 10px;
   font-family: 'NunitoSans-Bold';

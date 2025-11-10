@@ -15,10 +15,13 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { Purchase, PurchaseCategory } from '@model/domain';
+import i18n from 'i18n-js';
+import { Category, Purchase, PurchaseCategory } from '@model/domain';
 import { getDB } from '@model/firebase-config';
 import { BaseService } from '../base.service';
-import { UserService } from '../user';
+import { UserService } from '@model/services/user';
+import { CategoryService } from '../category';
+import { defaultCategories } from '@model/domain/constants/categories';
 
 export type PurchaseModel = {
   id: string;
@@ -27,26 +30,31 @@ export type PurchaseModel = {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   category: PurchaseCategory;
+  secondaryCategory?: string | null;
 };
 
 export class PurchaseService extends BaseService<PurchaseModel> {
   private userService: UserService;
+  private categoryService: CategoryService;
 
   constructor() {
     super('purchases');
     this.userService = new UserService();
+    this.categoryService = new CategoryService();
   }
 
   async createdPurchase(
     userId: string,
     amount: string,
-    category: PurchaseCategory | string
+    category: PurchaseCategory | string,
+    secondaryCategory?: string | null
   ): Promise<Purchase> {
     const purchasesCollectionRef = collection(getDB(), 'purchases');
     const insertedPurchase = await addDoc(purchasesCollectionRef, {
       userId,
       amount,
       category,
+      secondaryCategory,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     });
@@ -72,7 +80,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     const queryData = query(
       this.collection,
       where('userId', '==', userId),
-      orderBy('updatedAt', 'desc'),
+      orderBy('createdAt', 'desc'),
       limit(9998)
     );
 
@@ -83,6 +91,33 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     }
 
     return snapshot?.docs?.map(PurchaseService.toDomainObject);
+  }
+
+  async joinCategoriesIntoPurchases(userId: string): Promise<Purchase[]> {
+    try {
+      const userCategories = await this.categoryService.getAllCategories(userId);
+      const allCategories = [...defaultCategories, ...userCategories];
+      const purchases = await this.getAllPurchases(userId);
+      const purchasesWithCategories = purchases.map((purchase) => {
+        const category = allCategories.find((cat) => {
+          if (cat.isDefault) {
+            return cat.title === i18n.t(`Purchases.Categories.${purchase.category}`);
+          }
+
+          return cat.title === purchase.category;
+        });
+
+        return {
+          ...purchase,
+          categoryObject: category || null,
+        };
+      });
+
+      return purchasesWithCategories;
+    } catch (error) {
+      console.error('Error joining categories into purchases:', error);
+      throw error;
+    }
   }
 
   async getPurchaseById(purchaseId: string): Promise<Purchase> {
@@ -106,9 +141,18 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     });
 
     const docRef = doc(this.collection, purchaseId);
-    const purchaseData: Partial<Purchase> = {
+
+    // Normalize category to ensure it matches PurchaseModel (stored as PurchaseCategory/title string)
+    const normalizedCategory =
+      typeof data.category === 'object'
+        ? (data.category as Category).title
+        : (data.category as PurchaseCategory | undefined);
+
+    const purchaseData: Partial<PurchaseModel> = {
       amount: data.amount,
-      category: data.category,
+      category: normalizedCategory as PurchaseCategory,
+      secondaryCategory: data.secondaryCategory ?? null,
+      createdAt: data.createdAt as unknown as Timestamp,
     };
 
     await this.userService.updateBasicDetails(userId, {
@@ -225,12 +269,19 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     return snapshot?.docs?.map(PurchaseService.toDomainObject);
   }
 
-  static toDomainObject(purchase: QueryDocumentSnapshot<Purchase>): Purchase {
+  static toDomainObject(purchase: QueryDocumentSnapshot<PurchaseModel>): Purchase {
     const { ...purchaseData } = purchase.data();
+
+    // Ensure category is a string (Purchase expects category as string).
+    const normalizedCategory =
+      typeof purchaseData?.category === 'string'
+        ? purchaseData.category
+        : (purchaseData?.category as Category)?.title ?? '';
 
     return new Purchase({
       ...purchaseData,
       id: purchase.id,
+      category: normalizedCategory,
     });
   }
 }

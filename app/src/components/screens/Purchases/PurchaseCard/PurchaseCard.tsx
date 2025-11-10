@@ -1,19 +1,19 @@
-import React, { FC, useEffect, useState } from 'react';
+import { Icon } from '@components/shared';
+import { useDarkMode } from '@hooks/useDarkMode';
+import { Purchase } from '@model/domain';
+import { theme } from '@styles/theme';
 import { format } from 'date-fns';
 import i18n from 'i18n-js';
-import translate from 'google-translate-api-x';
-import { getLocale } from '@core/translation-utils';
-import { Icon } from '@components/shared';
-import { Purchase } from '@model/domain';
-import { useDarkMode } from '@hooks/useDarkMode';
-import { theme } from '@styles/theme';
+import React, { FC } from 'react';
 import {
   Amount,
+  AmountAndDateContainer,
+  CategoriesContainer,
   Category,
-  CategoryAndAmountContainer,
   Container,
   IconContainer,
   PurchaseDate,
+  SecondaryCategory,
 } from './PurchaseCard.styles';
 
 type PurchaseCardProps = {
@@ -38,41 +38,34 @@ const cardShadow = {
 
 export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
   const { isDarkMode } = useDarkMode();
-  const locale = getLocale();
-  const [translatedCategory, setTranslatedCategory] = useState(purchase.category);
-
-  useEffect(() => {
-    const translateCategory = async () => {
-      const temporaryTranslatedCategory = (
-        await translate(purchase.category, {
-          to: locale === 'hun' ? 'hu' : 'en',
-        })
-      ).text;
-
-      setTranslatedCategory(temporaryTranslatedCategory);
-    };
-
-    translateCategory();
-  }, [locale, purchase.category]);
 
   return (
     <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
-      <IconContainer style={cardShadow} isDarkMode={isDarkMode}>
-        {cardIcon[purchase.category] ?? cardIcon.other}
+      <IconContainer
+        style={cardShadow}
+        isDarkMode={isDarkMode}
+        categoryColor={purchase.categoryObject?.color}
+      >
+        {cardIcon[
+          typeof purchase.category === 'string' ? purchase.category : purchase.category.title
+        ] ?? cardIcon.other}
       </IconContainer>
 
-      <CategoryAndAmountContainer>
-        {
-          <Category>
-            {i18n.t(`Purchases.Categories.${purchase.category}`, {
-              defaultValue: translatedCategory,
-            })}
-          </Category>
-        }
-        <Amount>- {purchase.amount} Ft</Amount>
-      </CategoryAndAmountContainer>
+      <CategoriesContainer>
+        <Category isDarkMode={isDarkMode}>
+          {i18n.t(`Purchases.Categories.${purchase.category}`, {
+            defaultValue: purchase.category,
+          })}
+        </Category>
+        {purchase?.secondaryCategory && (
+          <SecondaryCategory>{purchase.secondaryCategory}</SecondaryCategory>
+        )}
+      </CategoriesContainer>
 
-      <PurchaseDate>{format(purchase.updatedAt.toDate(), 'yyyy-MM.dd.')}</PurchaseDate>
+      <AmountAndDateContainer>
+        <Amount>- {purchase.amount} Ft</Amount>
+        <PurchaseDate>{format(purchase.createdAt.toDate(), 'yyyy.MM.dd.')}</PurchaseDate>
+      </AmountAndDateContainer>
     </Container>
   );
 };

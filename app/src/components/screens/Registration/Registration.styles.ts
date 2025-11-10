@@ -102,6 +102,8 @@ export const StyledTextInput = styled(TextInput)<StyledTextInputProps>`
   color: ${({ theme, isDarkMode }) =>
     isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
   font-family: 'NunitoSans-Bold';
+  background-color: ${({ isDarkMode, theme }) =>
+    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
 `;
 
 export const StyledIconButton = styled(TouchableOpacity)`

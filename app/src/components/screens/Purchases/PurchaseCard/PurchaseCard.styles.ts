@@ -13,32 +13,52 @@ export const Container = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   position: relative;
 `;
 
-export const IconContainer = styled(View)<{ isDarkMode: boolean }>`
-  background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
-  padding: 10px;
+export const IconContainer = styled(View)<{ isDarkMode: boolean; categoryColor?: string }>`
+  background-color: ${({ theme, isDarkMode, categoryColor }) => {
+    if (categoryColor) {
+      return categoryColor;
+    }
+    return isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100];
+  }};
+  padding: 7px;
   border-radius: 10px;
 `;
 
-export const CategoryAndAmountContainer = styled(View)`
+export const CategoriesContainer = styled(View)`
   flex-direction: column;
   justify-content: space-between;
   margin-left: 10px;
 `;
 
-export const Category = styled(Text)`
+export const Category = styled(Text)<{ isDarkMode: boolean }>`
+  font-family: 'NunitoSans-ExtraBold';
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[200] : theme.colors.grey[600]};
+`;
+
+export const SecondaryCategory = styled(Text)`
   font-family: 'NunitoSans-Bold';
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme }) => theme.colors.grey[100]};
+`;
+
+export const AmountAndDateContainer = styled(View)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  position: absolute;
+  right: 0px;
+  top: 40%;
 `;
 
 export const Amount = styled(Text)`
   color: ${({ theme }) => theme.colors.red};
-  font-family: 'NunitoSans-Bold';
+  font-family: 'NunitoSans-ExtraBold';
+  margin-right: 20px;
 `;
 
 export const PurchaseDate = styled(Text)`
   align-self: flex-end;
-  position: absolute;
   right: 20px;
   bottom: 10px;
   font-family: 'NunitoSans-Bold';

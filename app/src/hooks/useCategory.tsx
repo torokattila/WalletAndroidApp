@@ -1,23 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { getLocale } from '@core/translation-utils';
 import { Category } from '@model/domain';
+import { defaultCategories, ExtendedCategory } from '@model/domain/constants/categories';
+import { CategoryService } from '@model/services/category';
+import { useToastNotificationStore } from '@stores/toastNotification.store';
+import translate from 'google-translate-api-x';
+import i18n from 'i18n-js';
+import { useEffect, useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useUser } from './useUser';
 import { useUserId } from './useUserId';
-import { useEffect, useState } from 'react';
-import i18n from 'i18n-js';
-import { useToastNotificationStore } from '@stores/toastNotification.store';
-import { CategoryService } from '@model/services/category';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import translate from 'google-translate-api-x';
-import { getLocale } from '@core/translation-utils';
 
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();
   const { userId } = useUserId();
 
   const [title, setTitle] = useState<string>('');
+  const [color, setColor] = useState<string>(category?.color ?? '#fff');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<(Category | ExtendedCategory)[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -29,6 +31,10 @@ export const useCategory = (category?: Category) => {
   useEffect(() => {
     if (category) {
       setTitle(category.title);
+
+      if (category?.color) {
+        setColor(category.color);
+      }
     } else {
       setTitle('');
     }
@@ -51,7 +57,7 @@ export const useCategory = (category?: Category) => {
         });
       }
 
-      setCategories(allCategories);
+      setCategories([...defaultCategories, ...allCategories]);
     } catch (error) {
       console.error(`Error during fetching categories: ${error}`);
     } finally {
@@ -85,7 +91,7 @@ export const useCategory = (category?: Category) => {
     if (isFormVerified) {
       try {
         setIsLoading(true);
-        await categoryService.createCategory(userId, title);
+        await categoryService.createCategory(userId, title, color);
         fetchUser();
         setTitle('');
         toast.show({
@@ -116,7 +122,7 @@ export const useCategory = (category?: Category) => {
     if (isFormVerified) {
       try {
         setIsLoading(true);
-        await categoryService.updateCategory(category?.id, { title });
+        await categoryService.updateCategory(category?.id, { title, color });
         fetchUser();
         fetchCategories();
         toast.show({
@@ -172,15 +178,19 @@ export const useCategory = (category?: Category) => {
     setIsEditModeModal(false);
   };
 
-  const handleEditModalOpen = (editableCategory: Category) => {
-    handleModalOpen();
-    setSelectedCategory(editableCategory);
-    setIsEditModeModal(true);
+  const handleEditModalOpen = (editableCategory: Category | ExtendedCategory) => {
+    if (!('isDefault' in editableCategory && editableCategory.isDefault)) {
+      handleModalOpen();
+      setSelectedCategory(editableCategory);
+      setIsEditModeModal(true);
+    }
   };
 
   const handleTitleChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setTitle(e.nativeEvent.text);
   };
+
+  const handleColorChange = (c: string) => setColor(c);
 
   const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
   const handleConfirmDialogClose = () => setIsConfirmDialogOpen(false);
@@ -207,6 +217,7 @@ export const useCategory = (category?: Category) => {
 
   return {
     title,
+    color,
     fetchCategories,
     handlePullToRefresh,
     stopRefreshing,
@@ -230,5 +241,6 @@ export const useCategory = (category?: Category) => {
     handleConfirmDialogOpen,
     handleConfirmDialogDelete,
     handleConfirmDialogClose,
+    handleColorChange,
   };
 };

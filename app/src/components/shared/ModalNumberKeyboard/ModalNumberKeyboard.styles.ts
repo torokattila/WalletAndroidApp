@@ -14,10 +14,11 @@ export const NumberColumn = styled(View)`
 `;
 
 export const NumberButton = styled(TouchableOpacity)`
-  padding: 15px;
+  padding: 13px;
 `;
 
 export const Number = styled(Text)`
   font-size: 25px;
   color: ${({ theme }) => theme.colors.grey[600]};
+  font-family: 'NunitoSans-SemiBold';
 `;
