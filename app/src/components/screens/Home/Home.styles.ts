@@ -1,5 +1,13 @@
 import { Button } from '@components/shared';
-import { ActivityIndicator, StyleProp, Text, View, ViewProps, ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleProp,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewProps,
+  ViewStyle,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
 
@@ -66,18 +74,45 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   position: relative;
 `;
 
+export const MonthlyStatementAndDateSelectorContainer = styled(View)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+`;
+
 export const MonthlyStatementTitle = styled(Text)`
   font-size: 20px;
   font-family: 'NunitoSans-Bold';
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme }) => theme.colors.purple[300]};
   align-self: flex-start;
-  margin-left: 4%;
+`;
+
+export const DateSelectorButton = styled(TouchableOpacity)`
+  background-color: ${({ theme }) => theme.colors.purple[300]};
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+  padding-left: 2%;
+  padding-right: 2%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+`;
+
+export const DateSelectorText = styled(Text)`
+  color: ${({ theme }) => theme.colors.white[100]};
+  font-family: 'NunitoSans-Bold';
+  font-size: 15px;
+  text-transform: capitalize;
 `;
 
 export const PieChartContainer = styled(View)`
   width: 100%;
   flex: 1;
-  margin-top: 3%;
+  margin-top: -3%;
   display: flex;
   justify-content: center;
   align-items: center;

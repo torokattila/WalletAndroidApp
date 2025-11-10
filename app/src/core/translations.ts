@@ -132,6 +132,7 @@ export const Hungarian = {
     Total: 'Összesen',
   },
   DarkThemeText: 'Sötét téma',
+  ChooseMonth: 'Hónap kiválasztása',
 };
 
 export const English = {
@@ -268,4 +269,5 @@ export const English = {
     Total: 'Total',
   },
   DarkThemeText: 'Dark theme',
+  ChooseMonth: 'Choose month',
 };

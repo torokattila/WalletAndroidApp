@@ -1,14 +1,17 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import { getLocale } from '@core/translation-utils';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { useHome } from '@hooks/useHome';
 import { usePurchase } from '@hooks/usePurchase';
 import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
+import { format } from 'date-fns';
+import { enUS, hu } from 'date-fns/locale';
 import i18n from 'i18n-js';
-import { FC, useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 import { PieChart } from 'react-native-gifted-charts';
 import { PurchaseModal } from '../Purchases/PurchaseModal';
 import {
@@ -16,8 +19,11 @@ import {
   BalanceTitle,
   Container,
   ContentContainer,
+  DateSelectorButton,
+  DateSelectorText,
   ListContainer,
   Loader,
+  MonthlyStatementAndDateSelectorContainer,
   MonthlyStatementTitle,
   NoLastFivePurchasesContainer,
   NoLastFivePurchasesText,
@@ -30,6 +36,7 @@ import {
   WelcomeText,
 } from './Home.styles';
 import PieChartPurchaseCard from './PieChartPurchaseCard/PieChartPurchaseCard';
+import { Icon } from '@components/shared';
 
 const buttonShadow = {
   elevation: 10,
@@ -41,6 +48,7 @@ const buttonShadow = {
 
 export const Home: FC = () => {
   const { isDarkMode } = useDarkMode();
+  const locale = getLocale();
   const { screenRefreshing, setScreenRefreshing } = useHome();
   const {
     purchases,
@@ -52,6 +60,8 @@ export const Home: FC = () => {
     isLoading,
   } = usePurchase();
   const { user, navigation } = useHome();
+  const [selectedMonth, setSelectedMonth] = useState(new Date());
+  const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
 
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
@@ -71,26 +81,26 @@ export const Home: FC = () => {
       return [];
     }
 
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
+    const currentMonth = selectedMonth.getMonth();
+    const currentYear = selectedMonth.getFullYear();
 
-    const purchasesForCurrentMonth = purchasesProp.filter((purchase) => {
+    const purchasesForSelectedMonth = purchasesProp.filter((purchase) => {
       const purchaseDate = purchase.updatedAt.toDate();
       return purchaseDate.getMonth() === currentMonth && purchaseDate.getFullYear() === currentYear;
     });
 
-    if (purchasesForCurrentMonth.length === 0) {
+    if (purchasesForSelectedMonth.length === 0) {
       return [];
     }
 
-    const totalAmount = purchasesForCurrentMonth.reduce(
+    const totalAmount = purchasesForSelectedMonth.reduce(
       (sum, purchase) => sum + parseFloat(purchase.amount || '0'),
       0
     );
 
     const categoryTotals: { [category: string]: { amount: number; color: string } } = {};
 
-    purchasesForCurrentMonth.forEach((purchase) => {
+    purchasesForSelectedMonth.forEach((purchase) => {
       const category: string =
         typeof purchase.categoryObject?.title === 'string'
           ? purchase.categoryObject.title
@@ -112,13 +122,17 @@ export const Home: FC = () => {
         label: category,
         value: amount,
         text: `${category} - ${Math.round((amount / totalAmount) * 100)}%`,
-        percentage: Math.round((amount / totalAmount) * 100), // Calculate percentage based on current month total
+        percentage: Math.round((amount / totalAmount) * 100),
         color,
       }))
       .sort((a, b) => b.percentage - a.percentage);
   };
 
-  const donutChartData = useMemo(() => aggregatePurchasesByCategory(purchases), [purchases]);
+  const donutChartData = useMemo(
+    () => aggregatePurchasesByCategory(purchases),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [purchases, selectedMonth]
+  );
 
   return (
     <>
@@ -149,7 +163,34 @@ export const Home: FC = () => {
           </WelcomeAndAmountText>
 
           <ContentContainer isDarkMode={isDarkMode}>
-            <MonthlyStatementTitle>{i18n.t('Home.MonthlyStatement')}:</MonthlyStatementTitle>
+            <MonthlyStatementAndDateSelectorContainer>
+              <MonthlyStatementTitle>{i18n.t('Home.MonthlyStatement')}:</MonthlyStatementTitle>
+              <DateSelectorButton onPress={() => setIsMonthPickerOpen(true)}>
+                <Icon type="calendar" iconColor={theme.colors.white[100]} />
+                <DateSelectorText>
+                  {format(selectedMonth, 'yyyy MMMM', { locale: locale === 'hun' ? hu : enUS })}
+                </DateSelectorText>
+              </DateSelectorButton>
+            </MonthlyStatementAndDateSelectorContainer>
+
+            <DatePicker
+              modal
+              mode="date"
+              title={null}
+              open={isMonthPickerOpen}
+              date={selectedMonth}
+              maximumDate={new Date()}
+              androidVariant="iosClone"
+              onConfirm={(date) => {
+                setSelectedMonth(date);
+                setIsMonthPickerOpen(false);
+              }}
+              onCancel={() => setIsMonthPickerOpen(false)}
+              cancelText={i18n.t('DatePicker.CancelButtonText')}
+              confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+              theme={isDarkMode ? 'dark' : 'auto'}
+            />
+
             {donutChartData.length > 0 && (
               <PieChartContainer>
                 <PieChart
@@ -157,7 +198,8 @@ export const Home: FC = () => {
                   donut
                   radius={90}
                   innerRadius={50}
-                  strokeColor="#ffffff"
+                  // strokeColor="#ffffff"
+                  strokeColor={!isDarkMode ? theme.colors.white[200] : theme.colors.grey[400]}
                   strokeWidth={1}
                   textSize={14}
                   innerCircleColor={isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]}
