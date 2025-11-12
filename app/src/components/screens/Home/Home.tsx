@@ -198,7 +198,6 @@ export const Home: FC = () => {
                   donut
                   radius={90}
                   innerRadius={50}
-                  // strokeColor="#ffffff"
                   strokeColor={!isDarkMode ? theme.colors.white[200] : theme.colors.grey[400]}
                   strokeWidth={1}
                   textSize={14}
@@ -235,7 +234,17 @@ export const Home: FC = () => {
                     data={donutChartData}
                     scrollEnabled
                     keyExtractor={(item, index) => `${item.label}-${index.toString()}`}
-                    renderItem={({ item }) => <PieChartPurchaseCard donutChartData={item} />}
+                    renderItem={({ item }) => (
+                      <PieChartPurchaseCard
+                        donutChartData={item}
+                        onPress={() =>
+                          navigation.navigate('Purchases', {
+                            category: item.label,
+                            month: selectedMonth,
+                          })
+                        }
+                      />
+                    )}
                     showsVerticalScrollIndicator={false}
                   />
                 </ListContainer>

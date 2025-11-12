@@ -170,29 +170,46 @@ export const usePurchase = (purchase?: Purchase) => {
     }
   };
 
-  const filterPurchases = async (): Promise<void> => {
+  const filterPurchases = async ({
+    categoryParam = PurchaseCategory.ALL,
+    dates = { startDate: new Date(), endDate: new Date() },
+  }: {
+    categoryParam?: string | null;
+    dates?: { startDate: Date; endDate: Date } | null;
+  }): Promise<void> => {
     setIsLoading(true);
 
-    const fromDateMidnight = fromDate;
-    fromDateMidnight.current.setHours(0, 0, 0, 0);
-    const toDateMidnight = toDate;
-    toDateMidnight.current.setHours(23, 59, 0, 0);
-
     try {
+      console.log('Filtering purchases with:', { categoryParam, dates });
+
+      if (!dates || !dates.startDate || !dates.endDate) {
+        throw new Error('Invalid date range provided.');
+      }
+
+      const startDate = dates.startDate;
+      const endDate = dates.endDate;
+
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(23, 59, 59, 999);
+
+      const filterCategoryValue =
+        categoryParam ||
+        (filterCategory.current !== PurchaseCategory.ALL ? filterCategory.current : null);
+
+      console.log('Filter category value:', filterCategoryValue);
+      console.log({ startDate, endDate });
+
       const filteredPurchases = await purchaseService.filterPurchases(
         userId,
-        isDateFilterChanged.current
-          ? {
-              startDate: fromDateMidnight.current,
-              endDate: toDateMidnight.current,
-            }
-          : null,
-        filterCategory.current !== PurchaseCategory.ALL ? filterCategory.current : null
+        { startDate, endDate },
+        filterCategoryValue
       );
+
+      console.log('Filtered purchases:', filteredPurchases);
 
       setPurchases(filteredPurchases);
     } catch (error) {
-      console.error(error);
+      console.error('Error during filtering purchases:', error);
     } finally {
       setIsLoading(false);
     }
@@ -336,11 +353,18 @@ export const usePurchase = (purchase?: Purchase) => {
   const handleDropdownChange = (item: CategoryDropdownValueType): void => setCategory(item.value);
 
   const handleFilterCategoryChange = async (item: CategoryDropdownValueType): Promise<void> => {
-    if (item.value !== PurchaseCategory.ALL) {
-      setIsCategoryFilterChanged(true);
+    try {
+      console.log('Selected category:', item);
+
+      filterCategory.current = item.value;
+
+      await filterPurchases({
+        categoryParam: filterCategory.current,
+        dates: { startDate: fromDate.current, endDate: toDate.current },
+      });
+    } catch (error) {
+      console.error('Error during category filtering:', error);
     }
-    filterCategory.current = item.value;
-    await filterPurchases();
   };
 
   const handleNumberChange = (value: string): void => {
@@ -377,14 +401,14 @@ export const usePurchase = (purchase?: Purchase) => {
     isDateFilterChanged.current = true;
     handleFromDatePickerClose();
     fromDate.current = date;
-    await filterPurchases();
+    await filterPurchases(null);
   };
 
   const handleToDateChange = async (date: Date): Promise<void> => {
     isDateFilterChanged.current = true;
     handleToDatePickerClose();
     toDate.current = date;
-    await filterPurchases();
+    await filterPurchases(null);
   };
 
   const handleCreatedAtChange = (date: Date): void => {
@@ -486,5 +510,6 @@ export const usePurchase = (purchase?: Purchase) => {
     handleCreatedAtPickerOpen,
     handleCreatedAtPickerClose,
     handleCreatedAtChange,
+    filterPurchases,
   };
 };

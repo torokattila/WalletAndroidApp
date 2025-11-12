@@ -224,26 +224,31 @@ export class PurchaseService extends BaseService<PurchaseModel> {
   ): Promise<Purchase[]> {
     let queryData: Query<PurchaseModel>;
 
-    if ((!category || category === PurchaseCategory.ALL) && dates) {
-      queryData = query(
-        this.collection,
-        where('userId', '==', userId),
-        where('updatedAt', '>=', dates.startDate),
-        where('updatedAt', '<=', dates.endDate),
-        orderBy('updatedAt', 'desc'),
-        limit(9998)
-      );
-    } else if (category && dates) {
-      queryData = query(
-        this.collection,
-        where('userId', '==', userId),
-        where('updatedAt', '>=', dates.startDate),
-        where('updatedAt', '<=', dates.endDate),
-        where('category', '==', category),
-        orderBy('updatedAt', 'desc'),
-        limit(9998)
-      );
-    } else if (category && !dates) {
+    if (dates) {
+      const startTimestamp = Timestamp.fromDate(dates.startDate);
+      const endTimestamp = Timestamp.fromDate(dates.endDate);
+
+      if (!category || category === PurchaseCategory.ALL) {
+        queryData = query(
+          this.collection,
+          where('userId', '==', userId),
+          where('updatedAt', '>=', startTimestamp),
+          where('updatedAt', '<=', endTimestamp),
+          orderBy('updatedAt', 'desc'),
+          limit(9998)
+        );
+      } else {
+        queryData = query(
+          this.collection,
+          where('userId', '==', userId),
+          where('updatedAt', '>=', startTimestamp),
+          where('updatedAt', '<=', endTimestamp),
+          where('category', '==', category),
+          orderBy('updatedAt', 'desc'),
+          limit(9998)
+        );
+      }
+    } else if (category) {
       queryData = query(
         this.collection,
         where('userId', '==', userId),

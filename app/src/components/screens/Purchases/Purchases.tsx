@@ -1,15 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, { FC } from 'react';
+import { AddButton, Icon } from '@components/shared';
+import { formatDate } from '@core/date-utils';
+import { useDarkMode } from '@hooks/useDarkMode';
+import { usePurchase } from '@hooks/usePurchase';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
+import { theme } from '@styles/theme';
+import { PurchaseCategory } from '@model/domain';
+import i18n from 'i18n-js';
+import React, { FC, useCallback, useEffect } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 import Animated, { FadeIn, FadeInLeft, FadeOut, FadeOutLeft } from 'react-native-reanimated';
-import i18n from 'i18n-js';
-import { theme } from '@styles/theme';
-import { formatDate } from '@core/date-utils';
-import { AddButton, Icon } from '@components/shared';
-import { usePurchase } from '@hooks/usePurchase';
-import { useDarkMode } from '@hooks/useDarkMode';
+import { PurchaseCard } from './PurchaseCard';
+import { PurchaseModal } from './PurchaseModal';
 import {
   AllPurchasesTitle,
   CategoryAndShowDateFiltersButtonContainer,
@@ -45,8 +50,6 @@ import {
   ShowDateFiltersButtonText,
   StyledLinearGradient,
 } from './Purchases.styles';
-import { PurchaseModal } from './PurchaseModal';
-import { PurchaseCard } from './PurchaseCard';
 
 const shadow = {
   elevation: 10,
@@ -57,6 +60,8 @@ const shadow = {
 };
 
 export const Purchases: FC = () => {
+  const route = useRoute();
+  const { category, month } = route.params as { category?: string; month?: Date };
   const { isDarkMode } = useDarkMode();
   const {
     isLoading,
@@ -90,11 +95,41 @@ export const Purchases: FC = () => {
     handleDownloadButtonClick,
     screenRefreshing,
     handlePullToRefresh,
+    filterPurchases,
   } = usePurchase();
 
-  const dropdownPlaceholder = filterCategory.current
-    ? i18n.t(`Purchases.Categories.${filterCategory.current}`)
-    : i18n.t('Purchases.Categories.all');
+  useEffect(() => {
+    const filterByCategoryAndMonth = async () => {
+      if (!month) {
+        console.error('Month is not defined.');
+        return;
+      }
+
+      const startDate = new Date(month.getFullYear(), month.getMonth(), 1); // First day of the month
+      const endDate = new Date(month.getFullYear(), month.getMonth() + 1, 0); // Last day of the month
+
+      fromDate.current = startDate;
+      toDate.current = endDate;
+
+      await filterPurchases({
+        categoryParam: category || null,
+        dates: { startDate, endDate },
+      });
+    };
+
+    filterByCategoryAndMonth();
+  }, [category, month]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        fromDate.current = new Date();
+        toDate.current = new Date();
+        filterCategory.current = PurchaseCategory.ALL;
+        handleClearFilters();
+      };
+    }, [])
+  );
 
   return (
     <>
@@ -152,7 +187,7 @@ export const Purchases: FC = () => {
                   placeholderStyle={{
                     color: theme.colors.grey[600],
                   }}
-                  placeholder={dropdownPlaceholder}
+                  placeholder={filterCategory.current}
                   containerStyle={[
                     !isDarkMode && shadow,
                     dropdownContainerStyle,
@@ -170,7 +205,7 @@ export const Purchases: FC = () => {
                   valueField={'value'}
                   selectedTextStyle={selectedTextStyle}
                   activeColor={isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]}
-                  onChange={handleFilterCategoryChange}
+                  onChange={handleFilterCategoryChange} // Trigger filtering on category change
                   mode="default"
                 />
               </CategoryFilterContainer>

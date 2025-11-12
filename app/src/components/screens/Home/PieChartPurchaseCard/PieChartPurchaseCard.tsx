@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
+import { useDarkMode } from '@hooks/useDarkMode';
 import { theme } from '@styles/theme';
 import React, { FC } from 'react';
 import { View } from 'react-native';
@@ -10,7 +11,6 @@ import {
   Container,
   Percentage,
 } from './PieChartPurchaseCard.styles';
-import { useDarkMode } from '@hooks/useDarkMode';
 
 type Props = {
   donutChartData: {
@@ -19,6 +19,7 @@ type Props = {
     percentage: number;
     color: string;
   };
+  onPress: () => void;
 };
 
 const cardShadow = {
@@ -29,11 +30,11 @@ const cardShadow = {
   shadowRadius: 14,
 };
 
-const PieChartPurchaseCard: FC<Props> = ({ donutChartData }) => {
+const PieChartPurchaseCard: FC<Props> = ({ donutChartData, onPress }) => {
   const { isDarkMode } = useDarkMode();
 
   return (
-    <Container style={!isDarkMode && cardShadow} isDarkMode={isDarkMode}>
+    <Container style={!isDarkMode && cardShadow} isDarkMode={isDarkMode} onPress={onPress}>
       <View
         style={{
           width: 40,
