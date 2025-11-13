@@ -271,3 +271,10 @@ export const English = {
   DarkThemeText: 'Dark theme',
   ChooseMonth: 'Choose month',
 };
+
+export const categoryTranslationMap: Record<string, string> = {
+  Élelmiszer: 'food',
+  Ruházat: 'clothing',
+  Szórakozás: 'entertainment',
+  Egyéb: 'other',
+};

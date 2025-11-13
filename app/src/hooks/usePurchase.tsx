@@ -1,17 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { getLocale } from '@core/translation-utils';
+import { categoryTranslationMap } from '@core/translations';
 import { Purchase, PurchaseCategory } from '@model/domain';
 import { PurchaseService } from '@model/services';
 import { CategoryService } from '@model/services/category';
+import { useNavigation } from '@react-navigation/native';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
-import translate from 'google-translate-api-x';
 import { Timestamp } from 'firebase/firestore'; // Ensure this is imported
+import translate from 'google-translate-api-x';
 import i18n from 'i18n-js';
 import { useEffect, useRef, useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useDownload } from './useDownload';
 import { useUser } from './useUser';
 import { useUserId } from './useUserId';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 export type CategoryDropdownValueType = {
   label: string;
@@ -33,6 +35,7 @@ const filterCategories: CategoryDropdownValueType[] = [
 export const usePurchase = (purchase?: Purchase) => {
   const { userId } = useUserId();
   const { retry: fetchUser, user } = useUser();
+  const navigation = useNavigation();
 
   const categoryService = new CategoryService();
 
@@ -176,12 +179,10 @@ export const usePurchase = (purchase?: Purchase) => {
   }: {
     categoryParam?: string | null;
     dates?: { startDate: Date; endDate: Date } | null;
-  }): Promise<void> => {
+  } = {}): Promise<void> => {
     setIsLoading(true);
 
     try {
-      console.log('Filtering purchases with:', { categoryParam, dates });
-
       if (!dates || !dates.startDate || !dates.endDate) {
         throw new Error('Invalid date range provided.');
       }
@@ -192,20 +193,15 @@ export const usePurchase = (purchase?: Purchase) => {
       startDate.setHours(0, 0, 0, 0);
       endDate.setHours(23, 59, 59, 999);
 
+      const normalizedCategory = categoryTranslationMap[categoryParam] || categoryParam;
       const filterCategoryValue =
-        categoryParam ||
-        (filterCategory.current !== PurchaseCategory.ALL ? filterCategory.current : null);
-
-      console.log('Filter category value:', filterCategoryValue);
-      console.log({ startDate, endDate });
+        normalizedCategory === PurchaseCategory.ALL ? null : normalizedCategory;
 
       const filteredPurchases = await purchaseService.filterPurchases(
         userId,
         { startDate, endDate },
         filterCategoryValue
       );
-
-      console.log('Filtered purchases:', filteredPurchases);
 
       setPurchases(filteredPurchases);
     } catch (error) {
@@ -354,10 +350,9 @@ export const usePurchase = (purchase?: Purchase) => {
 
   const handleFilterCategoryChange = async (item: CategoryDropdownValueType): Promise<void> => {
     try {
-      console.log('Selected category:', item);
+      const normalizedCategory = categoryTranslationMap[item.value] || item.value;
 
-      filterCategory.current = item.value;
-
+      filterCategory.current = normalizedCategory;
       await filterPurchases({
         categoryParam: filterCategory.current,
         dates: { startDate: fromDate.current, endDate: toDate.current },
@@ -401,14 +396,18 @@ export const usePurchase = (purchase?: Purchase) => {
     isDateFilterChanged.current = true;
     handleFromDatePickerClose();
     fromDate.current = date;
-    await filterPurchases(null);
+    await filterPurchases({
+      dates: { startDate: fromDate.current, endDate: toDate.current },
+    });
   };
 
   const handleToDateChange = async (date: Date): Promise<void> => {
     isDateFilterChanged.current = true;
     handleToDatePickerClose();
     toDate.current = date;
-    await filterPurchases(null);
+    await filterPurchases({
+      dates: { startDate: fromDate.current, endDate: toDate.current },
+    });
   };
 
   const handleCreatedAtChange = (date: Date): void => {
@@ -422,6 +421,10 @@ export const usePurchase = (purchase?: Purchase) => {
     filterCategory.current = PurchaseCategory.ALL;
     setIsCategoryFilterChanged(false);
     isDateFilterChanged.current = false;
+    navigation.setParams({
+      month: new Date(),
+      category: filterCategory.current,
+    } as any);
     await fetchPurchases();
   };
 

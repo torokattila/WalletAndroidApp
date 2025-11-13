@@ -22,6 +22,7 @@ import { BaseService } from '../base.service';
 import { UserService } from '@model/services/user';
 import { CategoryService } from '../category';
 import { defaultCategories } from '@model/domain/constants/categories';
+import { categoryTranslationMap } from '@core/translations';
 
 export type PurchaseModel = {
   id: string;
@@ -216,19 +217,17 @@ export class PurchaseService extends BaseService<PurchaseModel> {
 
   async filterPurchases(
     userId: string,
-    dates: {
-      startDate: Date;
-      endDate: Date;
-    } | null,
+    dates: { startDate: Date; endDate: Date } | null,
     category: string | null
   ): Promise<Purchase[]> {
-    let queryData: Query<PurchaseModel>;
+    const normalizedCategory = categoryTranslationMap[category] || category;
 
+    let queryData: Query<PurchaseModel>;
     if (dates) {
       const startTimestamp = Timestamp.fromDate(dates.startDate);
       const endTimestamp = Timestamp.fromDate(dates.endDate);
 
-      if (!category || category === PurchaseCategory.ALL) {
+      if (!normalizedCategory || normalizedCategory === PurchaseCategory.ALL) {
         queryData = query(
           this.collection,
           where('userId', '==', userId),
@@ -243,7 +242,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
           where('userId', '==', userId),
           where('updatedAt', '>=', startTimestamp),
           where('updatedAt', '<=', endTimestamp),
-          where('category', '==', category),
+          where('category', '==', normalizedCategory),
           orderBy('updatedAt', 'desc'),
           limit(9998)
         );
@@ -252,7 +251,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       queryData = query(
         this.collection,
         where('userId', '==', userId),
-        where('category', '==', category),
+        where('category', '==', normalizedCategory),
         orderBy('updatedAt', 'desc'),
         limit(9998)
       );
@@ -271,7 +270,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       return [];
     }
 
-    return snapshot?.docs?.map(PurchaseService.toDomainObject);
+    return snapshot.docs.map(PurchaseService.toDomainObject);
   }
 
   static toDomainObject(purchase: QueryDocumentSnapshot<PurchaseModel>): Purchase {

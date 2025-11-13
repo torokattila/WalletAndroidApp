@@ -37,6 +37,7 @@ import {
 } from './Home.styles';
 import PieChartPurchaseCard from './PieChartPurchaseCard/PieChartPurchaseCard';
 import { Icon } from '@components/shared';
+import { categoryTranslationMap } from '@core/translations';
 
 const buttonShadow = {
   elevation: 10,
@@ -239,7 +240,7 @@ export const Home: FC = () => {
                         donutChartData={item}
                         onPress={() =>
                           navigation.navigate('Purchases', {
-                            category: item.label,
+                            category: categoryTranslationMap[item.label] || item.label,
                             month: selectedMonth,
                           })
                         }

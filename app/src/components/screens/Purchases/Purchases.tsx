@@ -4,11 +4,11 @@ import { AddButton, Icon } from '@components/shared';
 import { formatDate } from '@core/date-utils';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { usePurchase } from '@hooks/usePurchase';
+import { PurchaseCategory } from '@model/domain';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { theme } from '@styles/theme';
-import { PurchaseCategory } from '@model/domain';
 import i18n from 'i18n-js';
-import React, { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect, useRef } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -61,7 +61,16 @@ const shadow = {
 
 export const Purchases: FC = () => {
   const route = useRoute();
-  const { category, month } = route.params as { category?: string; month?: Date };
+  const { category = PurchaseCategory.ALL, month = new Date() } =
+    (route.params as {
+      category?: string;
+      month?: Date;
+    }) || {};
+  console.log('params: ', route.params);
+
+  const categoryRef = useRef(category);
+  const monthRef = useRef(month);
+
   const { isDarkMode } = useDarkMode();
   const {
     isLoading,
@@ -98,28 +107,37 @@ export const Purchases: FC = () => {
     filterPurchases,
   } = usePurchase();
 
+  useFocusEffect(
+    useCallback(() => {
+      const filterByCategoryAndMonth = async () => {
+        if (!month) {
+          console.error('Month is not defined.');
+          return;
+        }
+
+        const startDate = new Date(month.getFullYear(), month.getMonth(), 1);
+        const endDate = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+
+        fromDate.current = startDate;
+        toDate.current = endDate;
+
+        await filterPurchases({
+          categoryParam: category,
+          dates: { startDate, endDate },
+        });
+      };
+
+      filterByCategoryAndMonth();
+    }, [category, month]) // Depend on category and month to re-run on changes
+  );
+
+  // Update refs when route.params change
   useEffect(() => {
-    const filterByCategoryAndMonth = async () => {
-      if (!month) {
-        console.error('Month is not defined.');
-        return;
-      }
-
-      const startDate = new Date(month.getFullYear(), month.getMonth(), 1); // First day of the month
-      const endDate = new Date(month.getFullYear(), month.getMonth() + 1, 0); // Last day of the month
-
-      fromDate.current = startDate;
-      toDate.current = endDate;
-
-      await filterPurchases({
-        categoryParam: category || null,
-        dates: { startDate, endDate },
-      });
-    };
-
-    filterByCategoryAndMonth();
+    categoryRef.current = category;
+    monthRef.current = month;
   }, [category, month]);
 
+  // Reset filters when leaving the screen
   useFocusEffect(
     useCallback(() => {
       return () => {
