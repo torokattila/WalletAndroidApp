@@ -8,7 +8,7 @@ import { PurchaseCategory } from '@model/domain';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
-import { FC, useCallback, useEffect, useRef } from 'react';
+import React, { FC, useCallback, useEffect, useRef } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -50,6 +50,7 @@ import {
   ShowDateFiltersButtonText,
   StyledLinearGradient,
 } from './Purchases.styles';
+import { formatAmount } from '@core/format-amount';
 
 const shadow = {
   elevation: 10,
@@ -66,7 +67,6 @@ export const Purchases: FC = () => {
       category?: string;
       month?: Date;
     }) || {};
-  console.log('params: ', route.params);
 
   const categoryRef = useRef(category);
   const monthRef = useRef(month);
@@ -111,7 +111,6 @@ export const Purchases: FC = () => {
     useCallback(() => {
       const filterByCategoryAndMonth = async () => {
         if (!month) {
-          console.error('Month is not defined.');
           return;
         }
 
@@ -128,16 +127,14 @@ export const Purchases: FC = () => {
       };
 
       filterByCategoryAndMonth();
-    }, [category, month]) // Depend on category and month to re-run on changes
+    }, [category, month])
   );
 
-  // Update refs when route.params change
   useEffect(() => {
     categoryRef.current = category;
     monthRef.current = month;
   }, [category, month]);
 
-  // Reset filters when leaving the screen
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -168,7 +165,9 @@ export const Purchases: FC = () => {
             <PurchasesThisMonthTitle>
               {i18n.t('Purchases.PurchasesThisMonthTitle')}
             </PurchasesThisMonthTitle>
-            <PurchasesThisMonth>{allPurchasesAmountForThisMonth} Ft</PurchasesThisMonth>
+            <PurchasesThisMonth>
+              {formatAmount(allPurchasesAmountForThisMonth)} Ft
+            </PurchasesThisMonth>
           </PurchasesThisMonthContainer>
 
           <ContentContainer isDarkMode={isDarkMode}>

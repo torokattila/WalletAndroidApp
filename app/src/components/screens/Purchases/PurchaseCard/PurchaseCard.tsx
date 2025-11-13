@@ -1,4 +1,5 @@
 import { Icon } from '@components/shared';
+import { formatAmount } from '@core/format-amount';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
@@ -38,6 +39,7 @@ const cardShadow = {
 
 export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
   const { isDarkMode } = useDarkMode();
+  console.log(purchase);
 
   return (
     <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
@@ -63,7 +65,7 @@ export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
       </CategoriesContainer>
 
       <AmountAndDateContainer>
-        <Amount>- {purchase.amount} Ft</Amount>
+        <Amount>- {formatAmount(purchase.amount)} Ft</Amount>
         <PurchaseDate>{format(purchase.createdAt.toDate(), 'yyyy.MM.dd.')}</PurchaseDate>
       </AmountAndDateContainer>
     </Container>

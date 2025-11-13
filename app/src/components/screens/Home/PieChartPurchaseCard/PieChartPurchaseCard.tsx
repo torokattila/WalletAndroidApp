@@ -11,6 +11,7 @@ import {
   Container,
   Percentage,
 } from './PieChartPurchaseCard.styles';
+import { formatAmount } from '@core/format-amount';
 
 type Props = {
   donutChartData: {
@@ -49,7 +50,7 @@ const PieChartPurchaseCard: FC<Props> = ({ donutChartData, onPress }) => {
         <Percentage>{donutChartData.percentage}%</Percentage>
       </CategoryContainer>
       <AmountContainer>
-        <Amount>-{donutChartData.value} Ft</Amount>
+        <Amount>-{formatAmount(donutChartData.value)} Ft</Amount>
       </AmountContainer>
     </Container>
   );

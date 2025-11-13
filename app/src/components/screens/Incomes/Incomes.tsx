@@ -35,6 +35,7 @@ import {
 } from './Incomes.styles';
 import { IncomeModal } from './IncomeModal';
 import { IncomeCard } from './IncomeCard';
+import { formatAmount } from '@core/format-amount';
 
 const shadow = {
   elevation: 10,
@@ -99,7 +100,7 @@ export const Incomes: FC = () => {
 
           <BalanceContainer>
             <BalanceTitle>{i18n.t('BalanceTitle')}</BalanceTitle>
-            <Balance>{user.balance} Ft</Balance>
+            <Balance>{formatAmount(user.balance)} Ft</Balance>
           </BalanceContainer>
           <ContentContainer isDarkMode={isDarkMode}>
             <AllIncomeTitle>{i18n.t('Incomes.AllIncomeTitle')}</AllIncomeTitle>

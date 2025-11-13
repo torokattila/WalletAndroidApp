@@ -13,6 +13,7 @@ import {
   Title,
   TitleAndAmountContainer,
 } from './IncomeCard.styles';
+import { formatAmount } from '@core/format-amount';
 
 type IncomeCardProps = {
   income: Income;
@@ -41,7 +42,7 @@ export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => {
       </TitleAndAmountContainer>
 
       <AmountAndDateContainer>
-        <Amount>+ {income.amount} Ft</Amount>
+        <Amount>+ {formatAmount(income.amount)} Ft</Amount>
         <IncomeDate>{format(income.updatedAt.toDate(), 'yyyy.MM.dd.')}</IncomeDate>
       </AmountAndDateContainer>
     </Container>
