@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { theme } from '@styles/theme';
 import React, { FC } from 'react';
+import { formatAmount } from '@core/format-amount';
 import { View } from 'react-native';
 import {
   Amount,
@@ -41,6 +42,7 @@ const PieChartPurchaseCard: FC<Props> = ({ donutChartData }) => {
           borderRadius: 100,
           backgroundColor: donutChartData.color,
           marginRight: 10,
+          ...cardShadow,
         }}
       />
       <CategoryContainer>
@@ -48,7 +50,7 @@ const PieChartPurchaseCard: FC<Props> = ({ donutChartData }) => {
         <Percentage>{donutChartData.percentage}%</Percentage>
       </CategoryContainer>
       <AmountContainer>
-        <Amount>-{donutChartData.value} Ft</Amount>
+        <Amount>-{formatAmount(donutChartData.value)} Ft</Amount>
       </AmountContainer>
     </Container>
   );

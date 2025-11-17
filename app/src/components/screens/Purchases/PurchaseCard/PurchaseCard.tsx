@@ -5,6 +5,7 @@ import { theme } from '@styles/theme';
 import { format } from 'date-fns';
 import i18n from 'i18n-js';
 import React, { FC } from 'react';
+import { formatAmount } from '@core/format-amount';
 import {
   Amount,
   AmountAndDateContainer,
@@ -63,7 +64,7 @@ export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
       </CategoriesContainer>
 
       <AmountAndDateContainer>
-        <Amount>- {purchase.amount} Ft</Amount>
+        <Amount>- {formatAmount(purchase.amount)} Ft</Amount>
         <PurchaseDate>{format(purchase.createdAt.toDate(), 'yyyy.MM.dd.')}</PurchaseDate>
       </AmountAndDateContainer>
     </Container>

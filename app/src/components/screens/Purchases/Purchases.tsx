@@ -7,6 +7,7 @@ import Animated, { FadeIn, FadeInLeft, FadeOut, FadeOutLeft } from 'react-native
 import i18n from 'i18n-js';
 import { theme } from '@styles/theme';
 import { formatDate } from '@core/date-utils';
+import { formatAmount } from '@core/format-amount';
 import { AddButton, Icon } from '@components/shared';
 import { usePurchase } from '@hooks/usePurchase';
 import { useDarkMode } from '@hooks/useDarkMode';
@@ -115,7 +116,9 @@ export const Purchases: FC = () => {
             <PurchasesThisMonthTitle>
               {i18n.t('Purchases.PurchasesThisMonthTitle')}
             </PurchasesThisMonthTitle>
-            <PurchasesThisMonth>{allPurchasesAmountForThisMonth} Ft</PurchasesThisMonth>
+            <PurchasesThisMonth>
+              {formatAmount(allPurchasesAmountForThisMonth)} Ft
+            </PurchasesThisMonth>
           </PurchasesThisMonthContainer>
 
           <ContentContainer isDarkMode={isDarkMode}>

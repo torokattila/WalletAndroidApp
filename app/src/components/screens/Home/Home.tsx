@@ -1,5 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
+import { Icon } from '@components/shared';
+import { formatAmount } from '@core/format-amount';
 import { getLocale } from '@core/translation-utils';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { useHome } from '@hooks/useHome';
@@ -16,6 +18,7 @@ import { PieChart } from 'react-native-gifted-charts';
 import { PurchaseModal } from '../Purchases/PurchaseModal';
 import {
   Balance,
+  BalanceContainer,
   BalanceTitle,
   Container,
   ContentContainer,
@@ -36,7 +39,6 @@ import {
   WelcomeText,
 } from './Home.styles';
 import PieChartPurchaseCard from './PieChartPurchaseCard/PieChartPurchaseCard';
-import { Icon } from '@components/shared';
 
 const buttonShadow = {
   elevation: 10,
@@ -149,7 +151,7 @@ export const Home: FC = () => {
         isDarkMode={isDarkMode}
       >
         <StyledLinearGradient
-          colors={['#2C1F5F', '#4c397a', '#9068ee', '#b296f1', '#ffffff', '#3f087a57']}
+          colors={['#4547B8', '#8E65F7']}
           useAngle
           angle={140}
           start={{ x: 0, y: 0 }}
@@ -157,9 +159,10 @@ export const Home: FC = () => {
         >
           <WelcomeAndAmountText>
             <WelcomeText>Hello {user?.firstname}!</WelcomeText>
-            <BalanceTitle>
-              {i18n.t('BalanceTitle')}: <Balance>{user?.balance} Ft</Balance>
-            </BalanceTitle>
+            <BalanceContainer>
+              <BalanceTitle>{i18n.t('BalanceTitle')}</BalanceTitle>
+              <Balance>{formatAmount(user?.balance)} Ft</Balance>
+            </BalanceContainer>
           </WelcomeAndAmountText>
 
           <ContentContainer isDarkMode={isDarkMode}>
@@ -198,7 +201,6 @@ export const Home: FC = () => {
                   donut
                   radius={90}
                   innerRadius={50}
-                  // strokeColor="#ffffff"
                   strokeColor={!isDarkMode ? theme.colors.white[200] : theme.colors.grey[400]}
                   strokeWidth={1}
                   textSize={14}
@@ -212,7 +214,7 @@ export const Home: FC = () => {
                   textColor={isDarkMode ? theme.colors.white[200] : theme.colors.purple[100]}
                   centerLabelComponent={() => (
                     <PieChartCenterAmount>
-                      {donutChartData.reduce((sum, item) => sum + item.value, 0)} Ft
+                      {formatAmount(donutChartData.reduce((sum, item) => sum + item.value, 0))} Ft
                     </PieChartCenterAmount>
                   )}
                 />

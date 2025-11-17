@@ -10,6 +10,7 @@ import { useIncome } from '@hooks/useIncome';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { theme } from '@styles/theme';
 import { formatDate } from '@core/date-utils';
+import { formatAmount } from '@core/format-amount';
 import {
   BalanceContainer,
   BalanceTitle,
@@ -99,7 +100,7 @@ export const Incomes: FC = () => {
 
           <BalanceContainer>
             <BalanceTitle>{i18n.t('BalanceTitle')}</BalanceTitle>
-            <Balance>{user.balance} Ft</Balance>
+            <Balance>{formatAmount(user.balance)} Ft</Balance>
           </BalanceContainer>
           <ContentContainer isDarkMode={isDarkMode}>
             <AllIncomeTitle>{i18n.t('Incomes.AllIncomeTitle')}</AllIncomeTitle>

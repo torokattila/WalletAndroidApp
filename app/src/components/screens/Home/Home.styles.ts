@@ -45,11 +45,15 @@ export const WelcomeText = styled(Text)`
   font-family: 'NunitoSans-Light';
 `;
 
-export const BalanceTitle = styled(Text)`
-  font-size: 22px;
+export const BalanceContainer = styled(View)`
   align-self: flex-start;
-  font-family: 'NunitoSans-Regular';
+  margin-top: -2%;
+`;
+
+export const BalanceTitle = styled(Text)`
   color: ${({ theme }) => theme.colors.white[100]};
+  opacity: 0.6;
+  font-size: 15px;
 `;
 
 export const Balance = styled(Text)`
@@ -66,7 +70,7 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   align-items: center;
   width: 100%;
   flex: 1;
-  margin-top: -5%;
+  margin-top: -9%;
   height: 10%;
   padding: 20px;
   border-top-left-radius: 35px;
