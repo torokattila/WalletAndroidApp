@@ -49,10 +49,10 @@ export const Title = styled(Text)`
 `;
 
 export const InputNumberText = styled(Text)<{ isDarkMode: boolean }>`
-  font-size: 50px;
-  margin: 20px 20px 0px 20px;
+  font-size: 35px;
+  margin: 10px 10px 0px 20px;
   color: ${({ theme, isDarkMode }) => (isDarkMode ? theme.colors.white[200] : theme.colors.black)};
-  font-family: 'NunitoSans-Light';
+  font-family: 'NunitoSans-Bold';
 `;
 
 export const InputNumberErrorText = styled(Text)`

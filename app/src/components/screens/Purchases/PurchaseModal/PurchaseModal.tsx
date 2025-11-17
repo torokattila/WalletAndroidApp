@@ -1,34 +1,35 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect } from 'react';
-import i18n from 'i18n-js';
-import GestureRecognizer from 'react-native-swipe-detect';
-import { Dropdown } from 'react-native-element-dropdown';
-import DatePicker from 'react-native-date-picker';
-import { KeyboardAvoidingView, Modal } from 'react-native';
-import { Purchase } from '@model/domain';
-import { theme } from '@styles/theme';
 import { ConfirmDialog, Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
+import { formatAmount } from '@core/format-amount';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { usePurchase } from '@hooks/usePurchase';
+import { Purchase } from '@model/domain';
+import { theme } from '@styles/theme';
+import i18n from 'i18n-js';
+import React, { FC, useEffect } from 'react';
+import { KeyboardAvoidingView, Modal } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import { Dropdown } from 'react-native-element-dropdown';
+import GestureRecognizer from 'react-native-swipe-detect';
 import {
+  CalendarIconContainer,
   Content,
   ContentContainer,
   DeleteIconContainer,
   DropdownContainer,
+  dropdownContainerStyle,
+  dropdownItemContaineStyle,
+  DropdownLabel,
+  dropdownStyle,
+  dropdownTextStyle,
+  ErrorText,
+  InputNumberText,
+  selectedTextStyle,
+  StyledButton,
+  StyledTextInput,
   Title,
   UpperLine,
-  dropdownContainerStyle,
-  dropdownTextStyle,
-  dropdownStyle,
-  DropdownLabel,
-  InputNumberText,
-  StyledButton,
-  dropdownItemContaineStyle,
-  ErrorText,
-  selectedTextStyle,
-  StyledTextInput,
-  CalendarIconContainer,
 } from './PurchaseModal.styles';
 
 type PurchaseModalProps = {
@@ -134,7 +135,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
 
                 {errors.amount && <ErrorText>{errors.amount}</ErrorText>}
                 <InputNumberText numberOfLines={1} ellipsizeMode="head" isDarkMode={isDarkMode}>
-                  {amount} Ft
+                  {formatAmount(amount)} Ft
                 </InputNumberText>
 
                 <DropdownContainer>
