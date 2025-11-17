@@ -77,15 +77,28 @@ export const usePurchase = (purchase?: Purchase) => {
         if (isCategoryExistsInDefaultCategories) {
           setCategory(purchase.category as PurchaseCategory | string);
         } else {
-          const categoryText =
-            typeof purchase.category === 'string' ? purchase.category : purchase.category.title;
+          const isCategoryAString = typeof purchase.category === 'string';
+          const categoryText = isCategoryAString ? purchase.category : purchase.category.title;
+          const categoryTextWithoutTranslation = isCategoryAString
+            ? purchase.category
+            : purchase.category.title;
           const translatedCategory = (
             await translate(categoryText, {
               to: locale === 'hun' ? 'hu' : 'en',
             })
           ).text;
 
-          setCategory(translatedCategory);
+          if (
+            !isCategoryAString &&
+            purchase.category &&
+            typeof purchase.category === 'object' &&
+            'isDefault' in purchase.category &&
+            !purchase.category.isDefault
+          ) {
+            setCategory(translatedCategory);
+          } else {
+            setCategory(categoryTextWithoutTranslation);
+          }
         }
       } else {
         setAmount('0');

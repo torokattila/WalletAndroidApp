@@ -89,11 +89,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
   const modalTitle = isEditMode
     ? i18n.t('Dialog.Purchases.EditPurchaseTitle')
     : i18n.t('Dialog.Purchases.Title');
-  const dropdownPlaceholder = category
-    ? i18n.t(`Purchases.Categories.${category}`, {
-        defaultValue: category,
-      })
-    : i18n.t('Purchases.ChooseCategory');
+  const dropdownPlaceholder = category ?? i18n.t('Purchases.ChooseCategory');
 
   useEffect(() => {
     if (!isLoading && !errors) {
