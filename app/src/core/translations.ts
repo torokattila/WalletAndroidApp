@@ -46,6 +46,7 @@ export const Hungarian = {
   Incomes: {
     ScreenTitle: 'Jövedelmek',
     AllIncomeTitle: 'Összes jövedelem',
+    ActualMonthlyIncomeTitle: 'Aktuális havi jövedelem',
     NoIncomesText: 'Még nem adtál hozzá jövedelmet.',
   },
   Dialog: {
@@ -183,6 +184,7 @@ export const English = {
   Incomes: {
     ScreenTitle: 'Incomes',
     AllIncomeTitle: 'All income',
+    ActualMonthlyIncomeTitle: 'Actual monthly income',
     NoIncomesText: 'There are no incomes yet.',
   },
   Dialog: {

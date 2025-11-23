@@ -5,7 +5,6 @@ import { FlatList, RefreshControl } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import DatePicker from 'react-native-date-picker';
 import { AddButton, Icon } from '@components/shared';
-import { useUser } from '@hooks/useUser';
 import { useIncome } from '@hooks/useIncome';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { theme } from '@styles/theme';
@@ -47,7 +46,6 @@ const shadow = {
 
 export const Incomes: FC = () => {
   const { isDarkMode } = useDarkMode();
-  const { user } = useUser();
   const {
     isLoading,
     incomes,
@@ -72,6 +70,7 @@ export const Incomes: FC = () => {
     handleDownloadButtonClick,
     screenRefreshing,
     handlePullToRefresh,
+    totalIncome,
   } = useIncome();
 
   return (
@@ -99,8 +98,8 @@ export const Incomes: FC = () => {
           </ScreenTitleContainer>
 
           <BalanceContainer>
-            <BalanceTitle>{i18n.t('BalanceTitle')}</BalanceTitle>
-            <Balance>{formatAmount(user.balance)} Ft</Balance>
+            <BalanceTitle>{i18n.t('Incomes.ActualMonthlyIncomeTitle')}</BalanceTitle>
+            <Balance>{formatAmount(totalIncome)} Ft</Balance>
           </BalanceContainer>
           <ContentContainer isDarkMode={isDarkMode}>
             <AllIncomeTitle>{i18n.t('Incomes.AllIncomeTitle')}</AllIncomeTitle>
