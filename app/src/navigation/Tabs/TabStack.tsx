@@ -12,7 +12,11 @@ export type TabStackParams = {
   Home: {};
   Profile: {};
   Incomes: {};
-  Purchases: {};
+  Purchases: {
+    category?: string;
+    fromDate?: Date;
+    toDate?: Date;
+  };
   Categories: {};
 };
 

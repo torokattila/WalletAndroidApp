@@ -100,7 +100,13 @@ export const Home: FC = () => {
       0
     );
 
-    const categoryTotals: { [category: string]: { amount: number; color: string } } = {};
+    const categoryTotals: {
+      [category: string]: {
+        amount: number;
+        color: string;
+        originalCategory: string;
+      };
+    } = {};
 
     purchasesForSelectedMonth.forEach((purchase) => {
       const category: string =
@@ -111,21 +117,24 @@ export const Home: FC = () => {
           : '';
       const amount = parseFloat(purchase.amount || '0');
       const color = purchase.categoryObject?.color || theme.colors.grey[500];
+      const originalCategory =
+        typeof purchase.category === 'string' ? purchase.category : purchase.category.title;
 
       if (categoryTotals[category]) {
         categoryTotals[category].amount += amount;
       } else {
-        categoryTotals[category] = { amount, color };
+        categoryTotals[category] = { amount, color, originalCategory };
       }
     });
 
     return Object.entries(categoryTotals)
-      .map(([category, { amount, color }]) => ({
+      .map(([category, { amount, color, originalCategory }]) => ({
         label: category,
         value: amount,
         text: `${category} - ${Math.round((amount / totalAmount) * 100)}%`,
         percentage: Math.round((amount / totalAmount) * 100),
         color,
+        originalCategory,
       }))
       .sort((a, b) => b.percentage - a.percentage);
   };
@@ -237,7 +246,29 @@ export const Home: FC = () => {
                     data={donutChartData}
                     scrollEnabled
                     keyExtractor={(item, index) => `${item.label}-${index.toString()}`}
-                    renderItem={({ item }) => <PieChartPurchaseCard donutChartData={item} />}
+                    renderItem={({ item }) => (
+                      <PieChartPurchaseCard
+                        donutChartData={item}
+                        onPress={() => {
+                          const firstDayOfSelectedMonth = new Date(
+                            selectedMonth.getFullYear(),
+                            selectedMonth.getMonth(),
+                            1
+                          );
+                          const lastDayOfSelectedMonth = new Date(
+                            selectedMonth.getFullYear(),
+                            selectedMonth.getMonth() + 1,
+                            0
+                          );
+
+                          navigation.navigate('Purchases', {
+                            category: item.originalCategory,
+                            fromDate: firstDayOfSelectedMonth,
+                            toDate: lastDayOfSelectedMonth,
+                          });
+                        }}
+                      />
+                    )}
                     showsVerticalScrollIndicator={false}
                   />
                 </ListContainer>

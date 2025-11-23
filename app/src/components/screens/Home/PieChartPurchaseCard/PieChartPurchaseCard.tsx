@@ -20,6 +20,7 @@ type Props = {
     percentage: number;
     color: string;
   };
+  onPress?: () => void;
 };
 
 const cardShadow = {
@@ -30,11 +31,11 @@ const cardShadow = {
   shadowRadius: 14,
 };
 
-const PieChartPurchaseCard: FC<Props> = ({ donutChartData }) => {
+const PieChartPurchaseCard: FC<Props> = ({ donutChartData, onPress }) => {
   const { isDarkMode } = useDarkMode();
 
   return (
-    <Container style={!isDarkMode && cardShadow} isDarkMode={isDarkMode}>
+    <Container style={!isDarkMode && cardShadow} isDarkMode={isDarkMode} onPress={onPress}>
       <View
         style={{
           width: 40,

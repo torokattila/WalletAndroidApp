@@ -1,18 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { getLocale } from '@core/translation-utils';
 import { Purchase, PurchaseCategory } from '@model/domain';
+import { defaultCategories } from '@model/domain/constants/categories';
 import { PurchaseService } from '@model/services';
 import { CategoryService } from '@model/services/category';
-import { defaultCategories } from '@model/domain/constants/categories';
+import { TabStackParams } from '@navigation/Tabs';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
-import translate from 'google-translate-api-x';
 import { Timestamp } from 'firebase/firestore'; // Ensure this is imported
+import translate from 'google-translate-api-x';
 import i18n from 'i18n-js';
 import { useEffect, useRef, useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useDownload } from './useDownload';
 import { useUser } from './useUser';
 import { useUserId } from './useUserId';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 export type CategoryDropdownValueType = {
   label: string;
@@ -34,6 +36,8 @@ const filterCategories: CategoryDropdownValueType[] = [
 export const usePurchase = (purchase?: Purchase) => {
   const { userId } = useUserId();
   const { retry: fetchUser } = useUser();
+  const route = useRoute<RouteProp<TabStackParams, 'Purchases'>>();
+  const navigation = useNavigation();
 
   const categoryService = new CategoryService();
 
@@ -459,6 +463,42 @@ export const usePurchase = (purchase?: Purchase) => {
       setCreatedAt(purchase.createdAt.toDate());
     }
   }, [purchase]);
+
+  useEffect(() => {
+    if (route.params?.category && route.params?.fromDate && route.params?.toDate && userId) {
+      filterCategory.current = route.params.category;
+      setIsCategoryFilterChanged(true);
+
+      fromDate.current = new Date(route.params.fromDate);
+      toDate.current = new Date(route.params.toDate);
+      isDateFilterChanged.current = true;
+      filterPurchases();
+    }
+  }, [route.params, userId]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      fromDate.current = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+      toDate.current = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+      filterCategory.current = null;
+      setIsCategoryFilterChanged(false);
+      isDateFilterChanged.current = false;
+      setIsDateFiltersShown(false);
+      filterPurchases();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (!route.params?.category && !route.params?.fromDate && !route.params?.toDate && userId) {
+        fetchPurchases();
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, route.params, userId]);
 
   return {
     amount,
