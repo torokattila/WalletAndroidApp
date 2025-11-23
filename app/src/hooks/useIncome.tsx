@@ -6,12 +6,11 @@ import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { IncomeService } from '@model/services';
 import { Income } from '@model/domain';
 import { useUser } from './useUser';
-import { useUserId } from './useUserId';
 import { useDownload } from './useDownload';
 
 export const useIncome = (income?: Income) => {
   const { retry: fetchUser, user } = useUser();
-  const { userId } = useUserId();
+  const userId = user?.id;
 
   const [amount, setAmount] = useState<string>('0');
   const [title, setTitle] = useState<string>('');

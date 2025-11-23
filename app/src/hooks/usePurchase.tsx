@@ -14,7 +14,6 @@ import { useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useDownload } from './useDownload';
 import { useUser } from './useUser';
-import { useUserId } from './useUserId';
 
 export type CategoryDropdownValueType = {
   label: string;
@@ -34,10 +33,10 @@ const filterCategories: CategoryDropdownValueType[] = [
 ];
 
 export const usePurchase = (purchase?: Purchase) => {
-  const { userId } = useUserId();
-  const { retry: fetchUser } = useUser();
+  const { retry: fetchUser, user } = useUser();
   const route = useRoute<RouteProp<TabStackParams, 'Purchases'>>();
   const navigation = useNavigation();
+  const userId = user?.id;
 
   const categoryService = new CategoryService();
 

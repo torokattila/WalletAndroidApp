@@ -17,7 +17,7 @@ export const StyledLinearGradient = styled(LinearGradient)`
 export const ScreenTitleContainer = styled(View)`
   align-items: center;
   flex-direction: row;
-  padding-top: 20%;
+  padding-top: 15%;
   padding-left: 5%;
   padding-bottom: 16%;
   align-self: flex-start;
@@ -37,6 +37,8 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   align-self: center;
   flex-direction: column;
   align-items: flex-start;
+  margin-top: -10%;
+  height: 10%;
   width: 100%;
   flex: 1;
   padding: 10px;
