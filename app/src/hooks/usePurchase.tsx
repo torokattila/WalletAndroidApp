@@ -48,13 +48,13 @@ export const usePurchase = (purchase?: Purchase) => {
   const [isEditModeModal, setIsEditModeModal] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
-  const fromDate = useRef(new Date());
+  const fromDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
   const [createdAt, setCreatedAt] = useState<Date>(
     purchase?.createdAt ? purchase.createdAt.toDate() : new Date()
   );
   const [isCreatedAtPickerOpen, setIsCreatedAtPickerOpen] = useState(false);
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
-  const toDate = useRef(new Date());
+  const toDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0));
   const filterCategory = useRef(null);
   const [isCategoryFilterChanged, setIsCategoryFilterChanged] = useState(false);
   const isDateFilterChanged = useRef(false);
