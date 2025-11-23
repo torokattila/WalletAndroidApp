@@ -3,6 +3,7 @@ import { getLocale } from '@core/translation-utils';
 import { Purchase, PurchaseCategory } from '@model/domain';
 import { PurchaseService } from '@model/services';
 import { CategoryService } from '@model/services/category';
+import { defaultCategories } from '@model/domain/constants/categories';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import translate from 'google-translate-api-x';
 import { Timestamp } from 'firebase/firestore'; // Ensure this is imported
@@ -203,7 +204,24 @@ export const usePurchase = (purchase?: Purchase) => {
         filterCategory.current !== PurchaseCategory.ALL ? filterCategory.current : null
       );
 
-      setPurchases(filteredPurchases);
+      const userCategories = await categoryService.getAllCategories(userId);
+      const categoriesForJoin = [...defaultCategories, ...userCategories];
+
+      const purchasesWithCategories = filteredPurchases.map((purchaseItem) => {
+        const categoryObj = categoriesForJoin.find((cat) => {
+          if (cat.isDefault) {
+            return cat.title === i18n.t(`Purchases.Categories.${purchaseItem.category}`);
+          }
+          return cat.title === purchaseItem.category;
+        });
+
+        return {
+          ...purchaseItem,
+          categoryObject: categoryObj || null,
+        };
+      });
+
+      setPurchases(purchasesWithCategories);
     } catch (error) {
       console.error(error);
     } finally {
