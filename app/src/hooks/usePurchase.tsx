@@ -33,7 +33,7 @@ const filterCategories: CategoryDropdownValueType[] = [
 
 export const usePurchase = (purchase?: Purchase) => {
   const { userId } = useUserId();
-  const { retry: fetchUser, user } = useUser();
+  const { retry: fetchUser } = useUser();
 
   const categoryService = new CategoryService();
 
@@ -123,7 +123,7 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsLoading(true);
 
     try {
-      const allPurchases = await purchaseService.joinCategoriesIntoPurchases(user.id);
+      const allPurchases = await purchaseService.joinCategoriesIntoPurchases(userId);
 
       setPurchases(allPurchases);
     } catch (error) {
@@ -137,7 +137,7 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsLoading(true);
 
     try {
-      const categoriesList = await categoryService.getAllCategories(user.id);
+      const categoriesList = await categoryService.getAllCategories(userId);
 
       const categoriesWithLabelAndValue: CategoryDropdownValueType[] = [];
 
@@ -173,7 +173,7 @@ export const usePurchase = (purchase?: Purchase) => {
 
     try {
       const purchasesAmountCurrentMonth = await purchaseService.getAllPurchaseAmountInCurrentMonth(
-        user.id
+        userId
       );
 
       setAllPurchasesAmountForThisMonth(purchasesAmountCurrentMonth);
