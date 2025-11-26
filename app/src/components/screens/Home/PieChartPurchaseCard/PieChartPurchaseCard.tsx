@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { theme } from '@styles/theme';
 import React, { FC } from 'react';
+import { formatAmount } from '@core/format-amount';
 import { View } from 'react-native';
 import {
   Amount,
@@ -19,6 +20,7 @@ type Props = {
     percentage: number;
     color: string;
   };
+  onPress?: () => void;
 };
 
 const cardShadow = {
@@ -29,11 +31,11 @@ const cardShadow = {
   shadowRadius: 14,
 };
 
-const PieChartPurchaseCard: FC<Props> = ({ donutChartData }) => {
+const PieChartPurchaseCard: FC<Props> = ({ donutChartData, onPress }) => {
   const { isDarkMode } = useDarkMode();
 
   return (
-    <Container style={!isDarkMode && cardShadow} isDarkMode={isDarkMode}>
+    <Container style={!isDarkMode && cardShadow} isDarkMode={isDarkMode} onPress={onPress}>
       <View
         style={{
           width: 40,
@@ -41,6 +43,7 @@ const PieChartPurchaseCard: FC<Props> = ({ donutChartData }) => {
           borderRadius: 100,
           backgroundColor: donutChartData.color,
           marginRight: 10,
+          ...cardShadow,
         }}
       />
       <CategoryContainer>
@@ -48,7 +51,7 @@ const PieChartPurchaseCard: FC<Props> = ({ donutChartData }) => {
         <Percentage>{donutChartData.percentage}%</Percentage>
       </CategoryContainer>
       <AmountContainer>
-        <Amount>-{donutChartData.value} Ft</Amount>
+        <Amount>-{formatAmount(donutChartData.value)} Ft</Amount>
       </AmountContainer>
     </Container>
   );

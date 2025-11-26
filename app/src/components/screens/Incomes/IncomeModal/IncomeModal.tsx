@@ -1,12 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect } from 'react';
-import i18n from 'i18n-js';
-import { KeyboardAvoidingView, Modal } from 'react-native';
-import GestureRecognizer from 'react-native-swipe-detect';
-import { theme } from '@styles/theme';
 import { ConfirmDialog, Icon, ModalBackground, ModalNumberKeyboard } from '@components/shared';
+import { formatAmount } from '@core/format-amount';
+import { useDarkMode } from '@hooks/useDarkMode';
 import { useIncome } from '@hooks/useIncome';
 import { Income } from '@model/domain';
+import { theme } from '@styles/theme';
+import i18n from 'i18n-js';
+import React, { FC, useEffect } from 'react';
+import { KeyboardAvoidingView, Modal } from 'react-native';
+import GestureRecognizer from 'react-native-swipe-detect';
 import {
   Content,
   ContentContainer,
@@ -18,7 +20,6 @@ import {
   Title,
   UpperLine,
 } from './IncomeModal.styles';
-import { useDarkMode } from '@hooks/useDarkMode';
 
 type IncomeModalProps = {
   isVisible: boolean;
@@ -104,7 +105,7 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
                   numberOfLines={1}
                   ellipsizeMode="head"
                   isDarkMode={isDarkMode}
-                >{`${amount} Ft`}</InputNumberText>
+                >{`${formatAmount(amount)} Ft`}</InputNumberText>
                 {errors.amount && <InputNumberErrorText>{errors.amount}</InputNumberErrorText>}
                 <StyledTextInput
                   value={title}

@@ -78,7 +78,7 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
 export const AllPurchasesTitle = styled(Text)`
   font-family: 'NunitoSans-Bold';
   font-size: 20px;
-  margin-top: 20px;
+  margin-top: 8px;
   margin-left: 20px;
   color: ${({ theme }) => theme.colors.grey[600]};
 `;
@@ -226,7 +226,7 @@ export const DeleteFiltersButton = styled(TouchableOpacity)`
   border-radius: 30px;
   align-items: center;
   justify-content: center;
-  bottom: -8px;
+  bottom: 7px;
   margin-right: 10px;
 `;
 
@@ -238,7 +238,7 @@ export const DownloadButton = styled(TouchableOpacity)`
   border-radius: 30px;
   align-items: center;
   justify-content: center;
-  bottom: -8px;
+  bottom: 7px;
 `;
 
 export const ListContainer = styled(View)`

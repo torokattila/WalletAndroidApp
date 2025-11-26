@@ -6,12 +6,11 @@ import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { IncomeService } from '@model/services';
 import { Income } from '@model/domain';
 import { useUser } from './useUser';
-import { useUserId } from './useUserId';
 import { useDownload } from './useDownload';
 
 export const useIncome = (income?: Income) => {
   const { retry: fetchUser, user } = useUser();
-  const { userId } = useUserId();
+  const userId = user?.id;
 
   const [amount, setAmount] = useState<string>('0');
   const [title, setTitle] = useState<string>('');
@@ -20,9 +19,9 @@ export const useIncome = (income?: Income) => {
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
-  const fromDate = useRef(new Date());
+  const fromDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
-  const toDate = useRef(new Date());
+  const toDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0));
   const [isFilterChanged, setIsFilterChanged] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
@@ -278,6 +277,19 @@ export const useIncome = (income?: Income) => {
     }
   }, [isLoading, incomes, screenRefreshing]);
 
+  const totalIncome = incomes
+    .filter((currentIncome) => {
+      const incomeDate =
+        typeof currentIncome.updatedAt === 'object' &&
+        currentIncome.updatedAt !== null &&
+        'toDate' in currentIncome.updatedAt &&
+        typeof currentIncome.updatedAt.toDate === 'function'
+          ? currentIncome.updatedAt.toDate()
+          : new Date(currentIncome.updatedAt as unknown as string | number);
+      return incomeDate >= fromDate.current && incomeDate <= toDate.current;
+    })
+    .reduce((sum, currentIncome) => sum + parseFloat(currentIncome.amount), 0);
+
   return {
     amount,
     setAmount,
@@ -292,6 +304,7 @@ export const useIncome = (income?: Income) => {
     setErrors,
     isLoading,
     incomes,
+    totalIncome,
     retry: fetchIncomes,
     isFromDatePickerOpen,
     handleFromDatePickerOpen,

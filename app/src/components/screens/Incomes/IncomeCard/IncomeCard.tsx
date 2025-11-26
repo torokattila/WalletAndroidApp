@@ -4,6 +4,7 @@ import { Income } from '@model/domain';
 import { theme } from '@styles/theme';
 import { Icon } from '@components/shared';
 import { useDarkMode } from '@hooks/useDarkMode';
+import { formatAmount } from '@core/format-amount';
 import {
   Amount,
   AmountAndDateContainer,
@@ -41,7 +42,7 @@ export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => {
       </TitleAndAmountContainer>
 
       <AmountAndDateContainer>
-        <Amount>+ {income.amount} Ft</Amount>
+        <Amount>+ {formatAmount(income.amount)} Ft</Amount>
         <IncomeDate>{format(income.updatedAt.toDate(), 'yyyy.MM.dd.')}</IncomeDate>
       </AmountAndDateContainer>
     </Container>

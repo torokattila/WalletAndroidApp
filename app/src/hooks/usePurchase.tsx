@@ -1,17 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { getLocale } from '@core/translation-utils';
 import { Purchase, PurchaseCategory } from '@model/domain';
+import { defaultCategories } from '@model/domain/constants/categories';
 import { PurchaseService } from '@model/services';
 import { CategoryService } from '@model/services/category';
+import { TabStackParams } from '@navigation/Tabs';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
-import translate from 'google-translate-api-x';
 import { Timestamp } from 'firebase/firestore'; // Ensure this is imported
+import translate from 'google-translate-api-x';
 import i18n from 'i18n-js';
 import { useEffect, useRef, useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useDownload } from './useDownload';
 import { useUser } from './useUser';
-import { useUserId } from './useUserId';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 export type CategoryDropdownValueType = {
   label: string;
@@ -31,8 +33,10 @@ const filterCategories: CategoryDropdownValueType[] = [
 ];
 
 export const usePurchase = (purchase?: Purchase) => {
-  const { userId } = useUserId();
   const { retry: fetchUser, user } = useUser();
+  const route = useRoute<RouteProp<TabStackParams, 'Purchases'>>();
+  const navigation = useNavigation();
+  const userId = user?.id;
 
   const categoryService = new CategoryService();
 
@@ -48,13 +52,13 @@ export const usePurchase = (purchase?: Purchase) => {
   const [isEditModeModal, setIsEditModeModal] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
-  const fromDate = useRef(new Date());
+  const fromDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
   const [createdAt, setCreatedAt] = useState<Date>(
     purchase?.createdAt ? purchase.createdAt.toDate() : new Date()
   );
   const [isCreatedAtPickerOpen, setIsCreatedAtPickerOpen] = useState(false);
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
-  const toDate = useRef(new Date());
+  const toDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0));
   const filterCategory = useRef(null);
   const [isCategoryFilterChanged, setIsCategoryFilterChanged] = useState(false);
   const isDateFilterChanged = useRef(false);
@@ -77,15 +81,28 @@ export const usePurchase = (purchase?: Purchase) => {
         if (isCategoryExistsInDefaultCategories) {
           setCategory(purchase.category as PurchaseCategory | string);
         } else {
-          const categoryText =
-            typeof purchase.category === 'string' ? purchase.category : purchase.category.title;
+          const isCategoryAString = typeof purchase.category === 'string';
+          const categoryText = isCategoryAString ? purchase.category : purchase.category.title;
+          const categoryTextWithoutTranslation = isCategoryAString
+            ? purchase.category
+            : purchase.category.title;
           const translatedCategory = (
             await translate(categoryText, {
               to: locale === 'hun' ? 'hu' : 'en',
             })
           ).text;
 
-          setCategory(translatedCategory);
+          if (
+            !isCategoryAString &&
+            purchase.category &&
+            typeof purchase.category === 'object' &&
+            'isDefault' in purchase.category &&
+            !purchase.category.isDefault
+          ) {
+            setCategory(translatedCategory);
+          } else {
+            setCategory(categoryTextWithoutTranslation);
+          }
         }
       } else {
         setAmount('0');
@@ -109,7 +126,7 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsLoading(true);
 
     try {
-      const allPurchases = await purchaseService.joinCategoriesIntoPurchases(user.id);
+      const allPurchases = await purchaseService.joinCategoriesIntoPurchases(userId);
 
       setPurchases(allPurchases);
     } catch (error) {
@@ -123,7 +140,7 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsLoading(true);
 
     try {
-      const categoriesList = await categoryService.getAllCategories(user.id);
+      const categoriesList = await categoryService.getAllCategories(userId);
 
       const categoriesWithLabelAndValue: CategoryDropdownValueType[] = [];
 
@@ -159,7 +176,7 @@ export const usePurchase = (purchase?: Purchase) => {
 
     try {
       const purchasesAmountCurrentMonth = await purchaseService.getAllPurchaseAmountInCurrentMonth(
-        user.id
+        userId
       );
 
       setAllPurchasesAmountForThisMonth(purchasesAmountCurrentMonth);
@@ -190,7 +207,24 @@ export const usePurchase = (purchase?: Purchase) => {
         filterCategory.current !== PurchaseCategory.ALL ? filterCategory.current : null
       );
 
-      setPurchases(filteredPurchases);
+      const userCategories = await categoryService.getAllCategories(userId);
+      const categoriesForJoin = [...defaultCategories, ...userCategories];
+
+      const purchasesWithCategories = filteredPurchases.map((purchaseItem) => {
+        const categoryObj = categoriesForJoin.find((cat) => {
+          if (cat.isDefault) {
+            return cat.title === i18n.t(`Purchases.Categories.${purchaseItem.category}`);
+          }
+          return cat.title === purchaseItem.category;
+        });
+
+        return {
+          ...purchaseItem,
+          categoryObject: categoryObj || null,
+        };
+      });
+
+      setPurchases(purchasesWithCategories);
     } catch (error) {
       console.error(error);
     } finally {
@@ -428,6 +462,42 @@ export const usePurchase = (purchase?: Purchase) => {
       setCreatedAt(purchase.createdAt.toDate());
     }
   }, [purchase]);
+
+  useEffect(() => {
+    if (route.params?.category && route.params?.fromDate && route.params?.toDate && userId) {
+      filterCategory.current = route.params.category;
+      setIsCategoryFilterChanged(true);
+
+      fromDate.current = new Date(route.params.fromDate);
+      toDate.current = new Date(route.params.toDate);
+      isDateFilterChanged.current = true;
+      filterPurchases();
+    }
+  }, [route.params, userId]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      fromDate.current = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+      toDate.current = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+      filterCategory.current = null;
+      setIsCategoryFilterChanged(false);
+      isDateFilterChanged.current = false;
+      setIsDateFiltersShown(false);
+      filterPurchases();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (!route.params?.category && !route.params?.fromDate && !route.params?.toDate && userId) {
+        fetchPurchases();
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, route.params, userId]);
 
   return {
     amount,

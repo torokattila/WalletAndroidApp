@@ -18,6 +18,8 @@ import { getDB } from '@model/firebase-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthService } from '../auth';
 import { BaseService } from '../base.service';
+import { IncomeService } from '../income';
+import { PurchaseService } from '../purchase';
 
 export type UserModel = {
   id: string;
@@ -74,14 +76,18 @@ export class UserService extends BaseService<UserModel> {
       });
 
       await this.setUserId(userSnapshots.docs[0].id);
-      return userSnapshots.docs[0].data();
+      const foundUser = userSnapshots.docs[0].data();
+      const calculatedBalance = await this.calculateUserBalance(foundUser.id);
+
+      return { ...foundUser, balance: calculatedBalance };
     }
 
     const resultUser = this.format(userSnapshots.docs[0]);
+    const calculatedBalance = await this.calculateUserBalance(resultUser.id);
 
     await this.setUserId(resultUser.id);
 
-    return resultUser;
+    return { ...resultUser, balance: calculatedBalance };
   }
 
   async getUserByUserId(userId: string): Promise<User> {
@@ -125,9 +131,9 @@ export class UserService extends BaseService<UserModel> {
     const docRef = doc(this.collection, userId);
 
     let userData: Partial<User> = {
-      lastname: data.lastname.trim(),
-      firstname: data.firstname.trim(),
-      balance: data.balance,
+      lastname: data?.lastname?.trim(),
+      firstname: data?.firstname?.trim(),
+      balance: data?.balance,
     };
 
     await updateDoc(docRef, { ...userData, updatedAt: Timestamp.now() });
@@ -136,6 +142,24 @@ export class UserService extends BaseService<UserModel> {
 
     return userSnapshot.data();
   }
+
+  private calculateUserBalance = async (userId: string): Promise<number> => {
+    const incomeService = new IncomeService();
+    const purchaseService = new PurchaseService();
+
+    try {
+      const incomes = await incomeService.getAllIncomes(userId);
+      const purchases = await purchaseService.getAllPurchases(userId);
+      const totalIncome = incomes.reduce((sum, income) => sum + Number(income.amount), 0);
+      const totalPurchases = purchases.reduce((sum, purchase) => sum + Number(purchase.amount), 0);
+      const calculatedBalance = totalIncome - totalPurchases;
+
+      return calculatedBalance;
+    } catch (error) {
+      console.error('Error calculating user balance:', error);
+      throw error;
+    }
+  };
 
   private async getUserId() {
     const STORAGE_KEY = 'clientId';

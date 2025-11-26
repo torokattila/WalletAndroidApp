@@ -9,11 +9,10 @@ import i18n from 'i18n-js';
 import { useEffect, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useUser } from './useUser';
-import { useUserId } from './useUserId';
 
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();
-  const { userId } = useUserId();
+  const userId = user?.id;
 
   const [title, setTitle] = useState<string>('');
   const [color, setColor] = useState<string>(category?.color ?? '#fff');
