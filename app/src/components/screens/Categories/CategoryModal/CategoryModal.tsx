@@ -7,15 +7,15 @@ import { Category } from '@model/domain';
 import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
 import React, { FC, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Modal, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, TouchableOpacity, View } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-detect';
 import CategoryColorPicker from '../CategoryColorPicker';
 import {
-  ColorPickerButton,
   ColorPickerContainer,
   Content,
   ContentContainer,
   DeleteIconContainer,
+  PickColorText,
   StyledButton,
   StyledTextInput,
   Title,
@@ -121,12 +121,13 @@ export const CategoryModal: FC<CategoryModalProps> = ({
                 />
 
                 <ColorPickerContainer>
-                  <ColorPickerButton
-                    size="large"
-                    text={i18n.t('Categories.PickColor')}
+                  <View>
+                    <PickColorText isDarkMode={isDarkMode}>
+                      {i18n.t('Categories.PickColor')}:
+                    </PickColorText>
+                  </View>
+                  <TouchableOpacity
                     onPress={openColorPicker}
-                  />
-                  <View
                     style={{
                       ...shadow,
                       height: 50,

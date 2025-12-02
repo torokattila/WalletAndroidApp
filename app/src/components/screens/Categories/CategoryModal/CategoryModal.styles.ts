@@ -84,3 +84,10 @@ export const ColorPickerButton = styled(Button)`
   width: 55%;
   align-self: center;
 `;
+
+export const PickColorText = styled(Text)<{ isDarkMode?: boolean }>`
+  color: ${({ theme }) => theme.colors.grey[300]};
+  font-size: 20px;
+  font-family: 'NunitoSans-ExtraBold';
+  margin-left: 15px;
+`;
