@@ -85,9 +85,38 @@ export const ColorPickerButton = styled(Button)`
   align-self: center;
 `;
 
-export const PickColorText = styled(Text)<{ isDarkMode?: boolean }>`
+export const PickColorText = styled(Text)`
   color: ${({ theme }) => theme.colors.grey[300]};
   font-size: 20px;
   font-family: 'NunitoSans-ExtraBold';
+  margin-left: 15px;
+`;
+
+export const IconPickerContainer = styled(View)`
+  display: flex;
+  margin-top: 0%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  height: 100px;
+  margin-left: 15px;
+`;
+
+export const PickIconText = styled(Text)`
+  color: ${({ theme }) => theme.colors.grey[300]};
+  font-size: 20px;
+  font-family: 'NunitoSans-ExtraBold';
+  margin-left: 15px;
+`;
+
+export const IconListContainer = styled(View)`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  width: 100%;
+  height: 100px;
   margin-left: 15px;
 `;

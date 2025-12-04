@@ -15,12 +15,16 @@ import {
   Content,
   ContentContainer,
   DeleteIconContainer,
+  IconListContainer,
+  IconPickerContainer,
   PickColorText,
+  PickIconText,
   StyledButton,
   StyledTextInput,
   Title,
   UpperLine,
 } from './CategoryModal.styles';
+import { IconCard } from '../IconCard';
 
 type CategoryModalProps = {
   isVisible: boolean;
@@ -122,9 +126,7 @@ export const CategoryModal: FC<CategoryModalProps> = ({
 
                 <ColorPickerContainer>
                   <View>
-                    <PickColorText isDarkMode={isDarkMode}>
-                      {i18n.t('Categories.PickColor')}:
-                    </PickColorText>
+                    <PickColorText>{i18n.t('Categories.PickColor')}:</PickColorText>
                   </View>
                   <TouchableOpacity
                     onPress={openColorPicker}
@@ -137,6 +139,20 @@ export const CategoryModal: FC<CategoryModalProps> = ({
                     }}
                   />
                 </ColorPickerContainer>
+
+                <IconPickerContainer>
+                  <View>
+                    <PickIconText>{i18n.t('Categories.PickIcon')}:</PickIconText>
+                  </View>
+                  <IconListContainer>
+                    <IconCard icon="beauty" />
+                    <IconCard icon="dog" />
+                    <IconCard icon="train" />
+                    <IconCard icon="shopping-cart" />
+                    <IconCard icon="car" />
+                    <IconCard icon="no-smoking" />
+                  </IconListContainer>
+                </IconPickerContainer>
 
                 <StyledButton
                   size="large"

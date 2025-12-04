@@ -1,42 +1,50 @@
 import React, { FC } from 'react';
 import { SvgProps } from 'react-native-svg';
 import { Backspace } from './backspace';
+import Beauty from './beauty';
+import { Calendar } from './calendar';
+import { Category } from './category';
 import { ChangePassword } from './change-password';
 import { Close } from './close';
 import { Clothing } from './clothing';
+import { ClothingBig } from './clothing-big';
 import { DeleteFilters } from './delete-filters';
 import { DeleteProfile } from './delete-profile';
+import Dog from './dog';
 import { Dollar } from './dollar';
 import { Download } from './download';
 import { Entertainment } from './entertainment';
+import { EntertainmentBig } from './entertainment-big';
 import { ErrorTriangle } from './error-triangle';
 import { Eye } from './eye';
 import { EyeOutlined } from './eye-outlined';
 import { Hamburger } from './hamburger';
+import { HamburgerBig } from './hamburger-big';
 import { Home } from './home';
 import { IdentityCard } from './identity-card';
 import { Income } from './income';
 import { Logout } from './logout';
+import { Moon } from './moon';
 import { OtherPurchase } from './other-purchase';
+import { OtherPurchaseBig } from './other-purchase-big';
 import { Plus } from './plus';
 import { Profile } from './profile';
 import { ProfileImage } from './profile-image';
 import { Purchase } from './purchase';
 import { SuccessTick } from './success-tick';
+import { Sun } from './sun';
+import Train from './train';
 import { Trash } from './trash';
 import { Visa } from './visa';
-import { HamburgerBig } from './hamburger-big';
-import { EntertainmentBig } from './entertainment-big';
-import { ClothingBig } from './clothing-big';
-import { OtherPurchaseBig } from './other-purchase-big';
-import { Sun } from './sun';
-import { Moon } from './moon';
-import { Category } from './category';
-import { Calendar } from './calendar';
+import ShoppingCart from './shopping-cart';
+import Car from './car';
+import NoSmoking from './no-smoking';
 
 export type IconType =
   | 'backspace'
+  | 'beauty'
   | 'calendar'
+  | 'car'
   | 'category'
   | 'change-password'
   | 'close'
@@ -44,6 +52,7 @@ export type IconType =
   | 'clothing-big'
   | 'delete-filters'
   | 'delete-profile'
+  | 'dog'
   | 'dollar'
   | 'download'
   | 'entertainment'
@@ -58,14 +67,17 @@ export type IconType =
   | 'income'
   | 'logout'
   | 'moon'
+  | 'no-smoking'
   | 'other-purchase'
   | 'other-purchase-big'
   | 'plus'
   | 'profile'
   | 'profile-image'
   | 'purchase'
+  | 'shopping-cart'
   | 'success-tick'
   | 'sun'
+  | 'train'
   | 'trash'
   | 'visa';
 
@@ -78,8 +90,12 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
   switch (type) {
     case 'backspace':
       return <Backspace iconColor={iconColor} {...props} />;
+    case 'beauty':
+      return <Beauty iconColor={iconColor} {...props} />;
     case 'calendar':
       return <Calendar iconColor={iconColor} {...props} />;
+    case 'car':
+      return <Car iconColor={iconColor} {...props} />;
     case 'category':
       return <Category iconColor={iconColor} {...props} />;
     case 'change-password':
@@ -94,6 +110,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <DeleteFilters iconColor={iconColor} {...props} />;
     case 'delete-profile':
       return <DeleteProfile iconColor={iconColor} {...props} />;
+    case 'dog':
+      return <Dog iconColor={iconColor} {...props} />;
     case 'dollar':
       return <Dollar iconColor={iconColor} {...props} />;
     case 'download':
@@ -122,6 +140,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Logout iconColor={iconColor} {...props} />;
     case 'moon':
       return <Moon iconColor={iconColor} {...props} />;
+    case 'no-smoking':
+      return <NoSmoking iconColor={iconColor} {...props} />;
     case 'other-purchase':
       return <OtherPurchase iconColor={iconColor} {...props} />;
     case 'other-purchase-big':
@@ -134,10 +154,14 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <ProfileImage iconColor={iconColor} {...props} />;
     case 'purchase':
       return <Purchase iconColor={iconColor} {...props} />;
+    case 'shopping-cart':
+      return <ShoppingCart iconColor={iconColor} {...props} />;
     case 'success-tick':
       return <SuccessTick iconColor={iconColor} {...props} />;
     case 'sun':
       return <Sun iconColor={iconColor} {...props} />;
+    case 'train':
+      return <Train iconColor={iconColor} {...props} />;
     case 'trash':
       return <Trash iconColor={iconColor} {...props} />;
     case 'visa':
