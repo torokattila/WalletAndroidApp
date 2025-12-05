@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ConfirmDialog, Icon, ModalBackground } from '@components/shared';
+import { ConfirmDialog, Icon, IconType, ModalBackground } from '@components/shared';
 import { useCategory } from '@hooks/useCategory';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { Category } from '@model/domain';
@@ -48,6 +48,23 @@ export const buttonShadow = {
   shadowOpacity: 0.7,
   shadowRadius: 20,
 };
+
+export const icons: IconType[] = [
+  'beauty',
+  'dog',
+  'train',
+  'shopping-cart',
+  'book-shelf',
+  'car',
+  'no-smoking',
+  'hairdresser',
+  'restaurant',
+  'present',
+  'house',
+  'mobile',
+  'gas-station',
+  'gaming',
+];
 
 export const CategoryModal: FC<CategoryModalProps> = ({
   isVisible,
@@ -145,12 +162,9 @@ export const CategoryModal: FC<CategoryModalProps> = ({
                     <PickIconText>{i18n.t('Categories.PickIcon')}:</PickIconText>
                   </View>
                   <IconListContainer>
-                    <IconCard icon="beauty" />
-                    <IconCard icon="dog" />
-                    <IconCard icon="train" />
-                    <IconCard icon="shopping-cart" />
-                    <IconCard icon="car" />
-                    <IconCard icon="no-smoking" />
+                    {icons.map((icon, index) => (
+                      <IconCard key={`icon-${index}`} icon={icon} />
+                    ))}
                   </IconListContainer>
                 </IconPickerContainer>
 
