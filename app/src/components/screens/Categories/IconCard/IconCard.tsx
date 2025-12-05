@@ -15,13 +15,19 @@ const cardShadow = {
 type Props = {
   icon: IconType;
   onPress?: () => void;
+  isSelected?: boolean;
 };
 
-export const IconCard: FC<Props> = ({ icon, onPress }: Props) => {
+export const IconCard: FC<Props> = ({ icon, onPress, isSelected = false }: Props) => {
   const { isDarkMode } = useDarkMode();
 
   return (
-    <IconContainer isDarkMode={isDarkMode} style={cardShadow} onPress={onPress}>
+    <IconContainer
+      isDarkMode={isDarkMode}
+      style={cardShadow}
+      onPress={onPress}
+      isSelected={isSelected}
+    >
       <Icon
         type={icon}
         iconColor={isDarkMode ? theme.colors.white[100] : theme.colors.black[100]}

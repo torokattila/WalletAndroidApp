@@ -85,8 +85,10 @@ export const CategoryModal: FC<CategoryModalProps> = ({
     handleConfirmDialogClose,
     title,
     color,
+    icon,
     handleTitleChange,
     handleColorChange,
+    handleIconChange,
   } = useCategory(existingCategory);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState<boolean>(false);
 
@@ -162,8 +164,13 @@ export const CategoryModal: FC<CategoryModalProps> = ({
                     <PickIconText>{i18n.t('Categories.PickIcon')}:</PickIconText>
                   </View>
                   <IconListContainer>
-                    {icons.map((icon, index) => (
-                      <IconCard key={`icon-${index}`} icon={icon} />
+                    {icons.map((iconType, index) => (
+                      <IconCard
+                        key={`icon-${index}`}
+                        icon={iconType}
+                        isSelected={icon === iconType}
+                        onPress={() => handleIconChange(iconType)}
+                      />
                     ))}
                   </IconListContainer>
                 </IconPickerContainer>

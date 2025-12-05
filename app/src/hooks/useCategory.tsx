@@ -16,6 +16,7 @@ export const useCategory = (category?: Category) => {
 
   const [title, setTitle] = useState<string>('');
   const [color, setColor] = useState<string>(category?.color ?? '#fff');
+  const [icon, setIcon] = useState<string | null>(category?.icon ?? null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<(Category | ExtendedCategory)[]>([]);
@@ -34,8 +35,13 @@ export const useCategory = (category?: Category) => {
       if (category?.color) {
         setColor(category.color);
       }
+
+      if (category?.icon) {
+        setIcon(category.icon);
+      }
     } else {
       setTitle('');
+      setIcon(null);
     }
   }, [category]);
 
@@ -90,9 +96,10 @@ export const useCategory = (category?: Category) => {
     if (isFormVerified) {
       try {
         setIsLoading(true);
-        await categoryService.createCategory(userId, title, color);
+        await categoryService.createCategory(userId, title, color, icon);
         fetchUser();
         setTitle('');
+        setIcon(null);
         toast.show({
           type: 'success',
           title: i18n.t('ToastNotification.NewCategorySuccess'),
@@ -121,7 +128,7 @@ export const useCategory = (category?: Category) => {
     if (isFormVerified) {
       try {
         setIsLoading(true);
-        await categoryService.updateCategory(category?.id, { title, color });
+        await categoryService.updateCategory(category?.id, { title, color, icon });
         fetchUser();
         fetchCategories();
         toast.show({
@@ -191,6 +198,8 @@ export const useCategory = (category?: Category) => {
 
   const handleColorChange = (c: string) => setColor(c);
 
+  const handleIconChange = (iconName: string) => setIcon(iconName);
+
   const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
   const handleConfirmDialogClose = () => setIsConfirmDialogOpen(false);
 
@@ -217,6 +226,7 @@ export const useCategory = (category?: Category) => {
   return {
     title,
     color,
+    icon,
     fetchCategories,
     handlePullToRefresh,
     stopRefreshing,
@@ -241,5 +251,6 @@ export const useCategory = (category?: Category) => {
     handleConfirmDialogDelete,
     handleConfirmDialogClose,
     handleColorChange,
+    handleIconChange,
   };
 };
