@@ -23,7 +23,7 @@ export const ModalNumberKeyboard: FC<ModalNumberKeyboardProps> = ({
       <NumberButton onPress={() => onNumberChange('7')}>
         <Number>7</Number>
       </NumberButton>
-      <NumberButton />
+      <NumberButton isEmpty />
     </NumberColumn>
 
     <NumberColumn>
