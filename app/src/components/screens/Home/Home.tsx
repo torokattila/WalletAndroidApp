@@ -105,6 +105,7 @@ export const Home: FC = () => {
         amount: number;
         color: string;
         originalCategory: string;
+        icon?: string;
       };
     } = {};
 
@@ -119,22 +120,24 @@ export const Home: FC = () => {
       const color = purchase.categoryObject?.color || theme.colors.grey[500];
       const originalCategory =
         typeof purchase.category === 'string' ? purchase.category : purchase.category.title;
+      const icon = purchase?.categoryObject?.icon ?? '';
 
       if (categoryTotals[category]) {
         categoryTotals[category].amount += amount;
       } else {
-        categoryTotals[category] = { amount, color, originalCategory };
+        categoryTotals[category] = { amount, color, originalCategory, icon };
       }
     });
 
     return Object.entries(categoryTotals)
-      .map(([category, { amount, color, originalCategory }]) => ({
+      .map(([category, { amount, color, originalCategory, icon }]) => ({
         label: category,
         value: amount,
         text: `${category} - ${Math.round((amount / totalAmount) * 100)}%`,
         percentage: Math.round((amount / totalAmount) * 100),
         color,
         originalCategory,
+        icon,
       }))
       .sort((a, b) => b.percentage - a.percentage);
   };

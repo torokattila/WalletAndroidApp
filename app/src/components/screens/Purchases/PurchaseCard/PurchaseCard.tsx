@@ -39,11 +39,13 @@ const cardShadow = {
 
 export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
   const { isDarkMode } = useDarkMode();
+  const isCategoryColorWhite =
+    purchase.categoryObject?.color === '#ffffff' || purchase.categoryObject?.color === '#ffffffff';
 
   const categoryIcon = purchase?.categoryObject?.icon ? (
     <Icon
       type={`${(purchase.categoryObject.icon + '-small') as IconType}`}
-      iconColor={theme.colors.white[100]}
+      iconColor={!isCategoryColorWhite ? theme.colors.white[100] : theme.colors.black[100]}
     />
   ) : (
     cardIcon[typeof purchase.category === 'string' ? purchase.category : purchase.category.title] ??

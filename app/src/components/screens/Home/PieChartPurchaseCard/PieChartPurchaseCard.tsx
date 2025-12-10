@@ -12,6 +12,7 @@ import {
   Percentage,
 } from './PieChartPurchaseCard.styles';
 import { useDarkMode } from '@hooks/useDarkMode';
+import { Icon, IconType } from '@components/shared';
 
 type Props = {
   donutChartData: {
@@ -19,6 +20,7 @@ type Props = {
     value: number;
     percentage: number;
     color: string;
+    icon?: string;
   };
   onPress?: () => void;
 };
@@ -33,6 +35,8 @@ const cardShadow = {
 
 const PieChartPurchaseCard: FC<Props> = ({ donutChartData, onPress }) => {
   const { isDarkMode } = useDarkMode();
+  const isWhiteCategoryColor =
+    donutChartData.color === '#ffffff' || donutChartData.color === '#ffffffff';
 
   return (
     <Container style={!isDarkMode && cardShadow} isDarkMode={isDarkMode} onPress={onPress}>
@@ -40,12 +44,19 @@ const PieChartPurchaseCard: FC<Props> = ({ donutChartData, onPress }) => {
         style={{
           width: 40,
           height: 40,
+          padding: 7,
           borderRadius: 100,
           backgroundColor: donutChartData.color,
           marginRight: 10,
           ...cardShadow,
         }}
-      />
+      >
+        <Icon
+          style={{ marginLeft: 1.2 }}
+          type={`${donutChartData?.icon}-small` as IconType}
+          iconColor={!isWhiteCategoryColor ? theme.colors.white[100] : theme.colors.black[100]}
+        />
+      </View>
       <CategoryContainer>
         <Category isDarkMode={isDarkMode}>{donutChartData.label}</Category>
         <Percentage>{donutChartData.percentage}%</Percentage>
