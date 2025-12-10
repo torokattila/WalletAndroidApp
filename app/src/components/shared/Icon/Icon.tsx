@@ -47,13 +47,30 @@ import Restaurant from './restaurant';
 import Mobile from './mobile';
 import GasStation from './gas-station';
 import Gaming from './gaming';
+import BeautySmall from './beauty-small';
+import DogSmall from './dog-small';
+import TrainSmall from './train-small';
+import ShoppingCartSmall from './shopping-cart-small';
+import BookShelfSmall from './book-shelf-small';
+import CarSmall from './car-small';
+import NoSmokingSmall from './no-smoking-small';
+import HairdresserSmall from './hairdresser-small';
+import RestaurantSmall from './restaurant-small';
+import PresentSmall from './present-small';
+import HouseSmall from './house-small';
+import MobileSmall from './mobile-small';
+import GasStationSmall from './gas-station-small';
+import GamingSmall from './gaming-small';
 
 export type IconType =
   | 'backspace'
   | 'beauty'
+  | 'beauty-small'
   | 'book-shelf'
+  | 'book-shelf-small'
   | 'calendar'
   | 'car'
+  | 'car-small'
   | 'category'
   | 'change-password'
   | 'close'
@@ -62,6 +79,7 @@ export type IconType =
   | 'delete-filters'
   | 'delete-profile'
   | 'dog'
+  | 'dog-small'
   | 'dollar'
   | 'download'
   | 'entertainment'
@@ -70,30 +88,40 @@ export type IconType =
   | 'eye'
   | 'eye-outlined'
   | 'gas-station'
+  | 'gas-station-small'
   | 'gaming'
+  | 'gaming-small'
   | 'hairdresser'
+  | 'hairdresser-small'
   | 'hamburger'
   | 'hamburger-big'
   | 'home'
   | 'house'
+  | 'house-small'
   | 'identity-card'
   | 'income'
   | 'logout'
   | 'mobile'
+  | 'mobile-small'
   | 'moon'
   | 'no-smoking'
+  | 'no-smoking-small'
   | 'other-purchase'
   | 'other-purchase-big'
   | 'present'
+  | 'present-small'
   | 'plus'
   | 'profile'
   | 'profile-image'
   | 'purchase'
   | 'restaurant'
+  | 'restaurant-small'
   | 'shopping-cart'
+  | 'shopping-cart-small'
   | 'success-tick'
   | 'sun'
   | 'train'
+  | 'train-small'
   | 'trash'
   | 'visa';
 
@@ -108,12 +136,18 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Backspace iconColor={iconColor} {...props} />;
     case 'beauty':
       return <Beauty iconColor={iconColor} {...props} />;
+    case 'beauty-small':
+      return <BeautySmall iconColor={iconColor} {...props} />;
     case 'book-shelf':
       return <BookShelf iconColor={iconColor} {...props} />;
+    case 'book-shelf-small':
+      return <BookShelfSmall iconColor={iconColor} {...props} />;
     case 'calendar':
       return <Calendar iconColor={iconColor} {...props} />;
     case 'car':
       return <Car iconColor={iconColor} {...props} />;
+    case 'car-small':
+      return <CarSmall iconColor={iconColor} {...props} />;
     case 'category':
       return <Category iconColor={iconColor} {...props} />;
     case 'change-password':
@@ -130,6 +164,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <DeleteProfile iconColor={iconColor} {...props} />;
     case 'dog':
       return <Dog iconColor={iconColor} {...props} />;
+    case 'dog-small':
+      return <DogSmall iconColor={iconColor} {...props} />;
     case 'dollar':
       return <Dollar iconColor={iconColor} {...props} />;
     case 'download':
@@ -146,16 +182,24 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <EyeOutlined iconColor={iconColor} {...props} />;
     case 'gas-station':
       return <GasStation iconColor={iconColor} {...props} />;
+    case 'gas-station-small':
+      return <GasStationSmall iconColor={iconColor} {...props} />;
     case 'gaming':
       return <Gaming iconColor={iconColor} {...props} />;
+    case 'gaming-small':
+      return <GamingSmall iconColor={iconColor} {...props} />;
     case 'hairdresser':
       return <Hairdresser iconColor={iconColor} {...props} />;
+    case 'hairdresser-small':
+      return <HairdresserSmall iconColor={iconColor} {...props} />;
     case 'hamburger':
       return <Hamburger iconColor={iconColor} {...props} />;
     case 'hamburger-big':
       return <HamburgerBig iconColor={iconColor} {...props} />;
     case 'house':
       return <House iconColor={iconColor} {...props} />;
+    case 'house-small':
+      return <HouseSmall iconColor={iconColor} {...props} />;
     case 'home':
       return <Home iconColor={iconColor} {...props} />;
     case 'identity-card':
@@ -164,18 +208,24 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Income iconColor={iconColor} {...props} />;
     case 'mobile':
       return <Mobile iconColor={iconColor} {...props} />;
+    case 'mobile-small':
+      return <MobileSmall iconColor={iconColor} {...props} />;
     case 'logout':
       return <Logout iconColor={iconColor} {...props} />;
     case 'moon':
       return <Moon iconColor={iconColor} {...props} />;
     case 'no-smoking':
       return <NoSmoking iconColor={iconColor} {...props} />;
+    case 'no-smoking-small':
+      return <NoSmokingSmall iconColor={iconColor} {...props} />;
     case 'other-purchase':
       return <OtherPurchase iconColor={iconColor} {...props} />;
     case 'other-purchase-big':
       return <OtherPurchaseBig iconColor={iconColor} {...props} />;
     case 'present':
       return <Present iconColor={iconColor} {...props} />;
+    case 'present-small':
+      return <PresentSmall iconColor={iconColor} {...props} />;
     case 'plus':
       return <Plus iconColor={iconColor} {...props} />;
     case 'profile':
@@ -186,14 +236,20 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Purchase iconColor={iconColor} {...props} />;
     case 'restaurant':
       return <Restaurant iconColor={iconColor} {...props} />;
+    case 'restaurant-small':
+      return <RestaurantSmall iconColor={iconColor} {...props} />;
     case 'shopping-cart':
       return <ShoppingCart iconColor={iconColor} {...props} />;
+    case 'shopping-cart-small':
+      return <ShoppingCartSmall iconColor={iconColor} {...props} />;
     case 'success-tick':
       return <SuccessTick iconColor={iconColor} {...props} />;
     case 'sun':
       return <Sun iconColor={iconColor} {...props} />;
     case 'train':
       return <Train iconColor={iconColor} {...props} />;
+    case 'train-small':
+      return <TrainSmall iconColor={iconColor} {...props} />;
     case 'trash':
       return <Trash iconColor={iconColor} {...props} />;
     case 'visa':
