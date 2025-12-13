@@ -76,7 +76,7 @@ export const ColorPickerContainer = styled(View)`
   gap: 20px;
   width: 100%;
   height: 100px;
-  margin-left: 15px;
+  /* margin-left: 15px; */
 `;
 
 export const ColorPickerButton = styled(Button)`
@@ -100,7 +100,6 @@ export const IconPickerContainer = styled(View)`
   gap: 20px;
   width: 100%;
   height: 100px;
-  margin-left: 15px;
 `;
 
 export const PickIconText = styled(Text)`
@@ -116,7 +115,7 @@ export const IconListContainer = styled(View)`
   flex-wrap: wrap;
   gap: 15px;
   align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100px;
-  margin-left: 15px;
 `;
