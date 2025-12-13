@@ -37,6 +37,9 @@ const PieChartPurchaseCard: FC<Props> = ({ donutChartData, onPress }) => {
   const { isDarkMode } = useDarkMode();
   const isWhiteCategoryColor =
     donutChartData.color === '#ffffff' || donutChartData.color === '#ffffffff';
+  const icon = donutChartData?.icon
+    ? (`${donutChartData?.icon}-small` as IconType)
+    : 'other-purchase';
 
   return (
     <Container style={!isDarkMode && cardShadow} isDarkMode={isDarkMode} onPress={onPress}>
@@ -53,7 +56,7 @@ const PieChartPurchaseCard: FC<Props> = ({ donutChartData, onPress }) => {
       >
         <Icon
           style={{ marginLeft: 1.2 }}
-          type={`${donutChartData?.icon}-small` as IconType}
+          type={icon}
           iconColor={!isWhiteCategoryColor ? theme.colors.white[100] : theme.colors.black[100]}
         />
       </View>
