@@ -50,6 +50,8 @@ export const buttonShadow = {
 };
 
 export const icons: IconType[] = [
+  'apple',
+  'airplane',
   'beauty',
   'dog',
   'train',
@@ -59,6 +61,7 @@ export const icons: IconType[] = [
   'no-smoking',
   'hairdresser',
   'restaurant',
+  'pills',
   'present',
   'house',
   'mobile',

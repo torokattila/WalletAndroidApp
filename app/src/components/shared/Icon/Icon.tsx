@@ -61,8 +61,18 @@ import HouseSmall from './house-small';
 import MobileSmall from './mobile-small';
 import GasStationSmall from './gas-station-small';
 import GamingSmall from './gaming-small';
+import Apple from './apple';
+import AppleSmall from './apple-small';
+import Pills from './pills';
+import PillsSmall from './pills-small';
+import Airplane from './airplane';
+import AirplaneSmall from './airplane-small';
 
 export type IconType =
+  | 'airplane'
+  | 'airplane-small'
+  | 'apple'
+  | 'apple-small'
   | 'backspace'
   | 'beauty'
   | 'beauty-small'
@@ -108,6 +118,8 @@ export type IconType =
   | 'no-smoking-small'
   | 'other-purchase'
   | 'other-purchase-big'
+  | 'pills'
+  | 'pills-small'
   | 'present'
   | 'present-small'
   | 'plus'
@@ -132,6 +144,14 @@ type IconProps = SvgProps & {
 
 export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
   switch (type) {
+    case 'airplane':
+      return <Airplane iconColor={iconColor} {...props} />;
+    case 'airplane-small':
+      return <AirplaneSmall iconColor={iconColor} {...props} />;
+    case 'apple':
+      return <Apple iconColor={iconColor} {...props} />;
+    case 'apple-small':
+      return <AppleSmall iconColor={iconColor} {...props} />;
     case 'backspace':
       return <Backspace iconColor={iconColor} {...props} />;
     case 'beauty':
@@ -222,6 +242,10 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <OtherPurchase iconColor={iconColor} {...props} />;
     case 'other-purchase-big':
       return <OtherPurchaseBig iconColor={iconColor} {...props} />;
+    case 'pills':
+      return <Pills iconColor={iconColor} {...props} />;
+    case 'pills-small':
+      return <PillsSmall iconColor={iconColor} {...props} />;
     case 'present':
       return <Present iconColor={iconColor} {...props} />;
     case 'present-small':
