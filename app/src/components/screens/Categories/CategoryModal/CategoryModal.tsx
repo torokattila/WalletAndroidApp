@@ -7,15 +7,15 @@ import { Category } from '@model/domain';
 import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
 import React, { FC, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Modal, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, TouchableOpacity, View, Dimensions } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-detect';
+import Carousel from 'react-native-reanimated-carousel';
 import CategoryColorPicker from '../CategoryColorPicker';
 import {
   ColorPickerContainer,
   Content,
   ContentContainer,
   DeleteIconContainer,
-  IconListContainer,
   IconPickerContainer,
   PickColorText,
   PickIconText,
@@ -23,6 +23,9 @@ import {
   StyledTextInput,
   Title,
   UpperLine,
+  CarouselContainer,
+  PaginationContainer,
+  PaginationDot,
 } from './CategoryModal.styles';
 import { IconCard } from '../IconCard';
 
@@ -69,6 +72,15 @@ export const icons: IconType[] = [
   'gaming',
 ];
 
+// Helper function to chunk icons into pages with 2 rows of 4 icons each
+const chunkIcons = (iconArray: IconType[], iconsPerPage: number = 8) => {
+  const chunks: IconType[][] = [];
+  for (let i = 0; i < iconArray.length; i += iconsPerPage) {
+    chunks.push(iconArray.slice(i, i + iconsPerPage));
+  }
+  return chunks;
+};
+
 export const CategoryModal: FC<CategoryModalProps> = ({
   isVisible,
   onClose,
@@ -94,6 +106,18 @@ export const CategoryModal: FC<CategoryModalProps> = ({
     handleIconChange,
   } = useCategory(existingCategory);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState<boolean>(false);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const width = Dimensions.get('window').width;
+  const carouselWidth = width * 0.9;
+  const iconWidth = 70;
+  const columnsPerRow = Math.floor(carouselWidth / iconWidth);
+
+  // Fixed 2 rows per page
+  const rows = 2;
+  const iconsPerPage = columnsPerRow * rows;
+
+  const iconPages = chunkIcons(icons, iconsPerPage);
 
   const openColorPicker = () => setIsColorPickerOpen(true);
   const closeColorPicker = () => setIsColorPickerOpen(false);
@@ -166,17 +190,49 @@ export const CategoryModal: FC<CategoryModalProps> = ({
                   <View>
                     <PickIconText>{i18n.t('Categories.PickIcon')}:</PickIconText>
                   </View>
-                  <IconListContainer>
-                    {icons.map((iconType, index) => (
-                      <IconCard
-                        key={`icon-${index}`}
-                        icon={iconType}
-                        isSelected={icon === iconType}
-                        onPress={() => handleIconChange(iconType)}
+                </IconPickerContainer>
+
+                <CarouselContainer>
+                  <Carousel
+                    loop={false}
+                    width={carouselWidth}
+                    height={180}
+                    data={iconPages}
+                    onSnapToItem={(index) => setActiveIndex(index)}
+                    renderItem={({ item: page, index: pageIndex }) => (
+                      <View
+                        style={{
+                          width: carouselWidth,
+                          marginTop: 10,
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignContent: 'center',
+                          gap: 5,
+                        }}
+                      >
+                        {page.map((iconType, iconIndex) => (
+                          <IconCard
+                            key={`icon-${pageIndex}-${iconIndex}`}
+                            icon={iconType}
+                            isSelected={icon === iconType}
+                            onPress={() => handleIconChange(iconType)}
+                          />
+                        ))}
+                      </View>
+                    )}
+                  />
+                  <PaginationContainer>
+                    {iconPages.map((_, index) => (
+                      <PaginationDot
+                        key={`dot-${index}`}
+                        isActive={index === activeIndex}
+                        isDarkMode={isDarkMode}
                       />
                     ))}
-                  </IconListContainer>
-                </IconPickerContainer>
+                  </PaginationContainer>
+                </CarouselContainer>
 
                 <StyledButton
                   size="large"

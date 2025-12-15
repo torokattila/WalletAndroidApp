@@ -11,6 +11,9 @@ export const IconContainer = styled(TouchableOpacity)<{
   }};
   padding: 12px;
   border-radius: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  margin-right: 10px;
   border-width: ${({ isSelected }) => (isSelected ? '3px' : '0px')};
   border-color: ${({ theme, isSelected }) =>
     isSelected ? theme.colors.purple[300] : 'transparent'};
