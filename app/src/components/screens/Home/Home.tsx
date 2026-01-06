@@ -212,7 +212,7 @@ export const Home: FC = () => {
                   data={donutChartData ?? []}
                   donut
                   radius={90}
-                  innerRadius={50}
+                  innerRadius={60}
                   strokeColor={!isDarkMode ? theme.colors.white[200] : theme.colors.grey[400]}
                   strokeWidth={1}
                   textSize={14}
