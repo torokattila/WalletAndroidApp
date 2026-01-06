@@ -1,8 +1,17 @@
 import React, { FC } from 'react';
 import { SvgProps } from 'react-native-svg';
+import Airplane from './airplane';
+import AirplaneSmall from './airplane-small';
+import Apple from './apple';
+import AppleSmall from './apple-small';
 import { Backspace } from './backspace';
 import Beauty from './beauty';
+import BeautySmall from './beauty-small';
+import BookShelf from './book-shelf';
+import BookShelfSmall from './book-shelf-small';
 import { Calendar } from './calendar';
+import Car from './car';
+import CarSmall from './car-small';
 import { Category } from './category';
 import { ChangePassword } from './change-password';
 import { Close } from './close';
@@ -11,6 +20,7 @@ import { ClothingBig } from './clothing-big';
 import { DeleteFilters } from './delete-filters';
 import { DeleteProfile } from './delete-profile';
 import Dog from './dog';
+import DogSmall from './dog-small';
 import { Dollar } from './dollar';
 import { Download } from './download';
 import { Entertainment } from './entertainment';
@@ -18,55 +28,49 @@ import { EntertainmentBig } from './entertainment-big';
 import { ErrorTriangle } from './error-triangle';
 import { Eye } from './eye';
 import { EyeOutlined } from './eye-outlined';
+import Gaming from './gaming';
+import GamingSmall from './gaming-small';
+import GasStation from './gas-station';
+import GasStationSmall from './gas-station-small';
+import Guitar from './guitar';
+import GuitarSmall from './guitar-small';
+import Hairdresser from './hairdresser';
+import HairdresserSmall from './hairdresser-small';
 import { Hamburger } from './hamburger';
 import { HamburgerBig } from './hamburger-big';
 import { Home } from './home';
+import House from './house';
+import HouseSmall from './house-small';
 import { IdentityCard } from './identity-card';
 import { Income } from './income';
 import { Logout } from './logout';
+import Microphone from './microphone';
+import MicrophoneSmall from './microphone-small';
+import Mobile from './mobile';
+import MobileSmall from './mobile-small';
 import { Moon } from './moon';
+import NoSmoking from './no-smoking';
+import NoSmokingSmall from './no-smoking-small';
 import { OtherPurchase } from './other-purchase';
 import { OtherPurchaseBig } from './other-purchase-big';
+import Pills from './pills';
+import PillsSmall from './pills-small';
 import { Plus } from './plus';
+import Present from './present';
+import PresentSmall from './present-small';
 import { Profile } from './profile';
 import { ProfileImage } from './profile-image';
 import { Purchase } from './purchase';
+import Restaurant from './restaurant';
+import RestaurantSmall from './restaurant-small';
+import ShoppingCart from './shopping-cart';
+import ShoppingCartSmall from './shopping-cart-small';
 import { SuccessTick } from './success-tick';
 import { Sun } from './sun';
 import Train from './train';
+import TrainSmall from './train-small';
 import { Trash } from './trash';
 import { Visa } from './visa';
-import ShoppingCart from './shopping-cart';
-import Car from './car';
-import NoSmoking from './no-smoking';
-import Hairdresser from './hairdresser';
-import BookShelf from './book-shelf';
-import Present from './present';
-import House from './house';
-import Restaurant from './restaurant';
-import Mobile from './mobile';
-import GasStation from './gas-station';
-import Gaming from './gaming';
-import BeautySmall from './beauty-small';
-import DogSmall from './dog-small';
-import TrainSmall from './train-small';
-import ShoppingCartSmall from './shopping-cart-small';
-import BookShelfSmall from './book-shelf-small';
-import CarSmall from './car-small';
-import NoSmokingSmall from './no-smoking-small';
-import HairdresserSmall from './hairdresser-small';
-import RestaurantSmall from './restaurant-small';
-import PresentSmall from './present-small';
-import HouseSmall from './house-small';
-import MobileSmall from './mobile-small';
-import GasStationSmall from './gas-station-small';
-import GamingSmall from './gaming-small';
-import Apple from './apple';
-import AppleSmall from './apple-small';
-import Pills from './pills';
-import PillsSmall from './pills-small';
-import Airplane from './airplane';
-import AirplaneSmall from './airplane-small';
 
 export type IconType =
   | 'airplane'
@@ -101,6 +105,8 @@ export type IconType =
   | 'gas-station-small'
   | 'gaming'
   | 'gaming-small'
+  | 'guitar'
+  | 'guitar-small'
   | 'hairdresser'
   | 'hairdresser-small'
   | 'hamburger'
@@ -111,6 +117,8 @@ export type IconType =
   | 'identity-card'
   | 'income'
   | 'logout'
+  | 'microphone'
+  | 'microphone-small'
   | 'mobile'
   | 'mobile-small'
   | 'moon'
@@ -208,6 +216,10 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Gaming iconColor={iconColor} {...props} />;
     case 'gaming-small':
       return <GamingSmall iconColor={iconColor} {...props} />;
+    case 'guitar':
+      return <Guitar iconColor={iconColor} {...props} />;
+    case 'guitar-small':
+      return <GuitarSmall iconColor={iconColor} {...props} />;
     case 'hairdresser':
       return <Hairdresser iconColor={iconColor} {...props} />;
     case 'hairdresser-small':
@@ -232,6 +244,10 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <MobileSmall iconColor={iconColor} {...props} />;
     case 'logout':
       return <Logout iconColor={iconColor} {...props} />;
+    case 'microphone':
+      return <Microphone iconColor={iconColor} {...props} />;
+    case 'microphone-small':
+      return <MicrophoneSmall iconColor={iconColor} {...props} />;
     case 'moon':
       return <Moon iconColor={iconColor} {...props} />;
     case 'no-smoking':
