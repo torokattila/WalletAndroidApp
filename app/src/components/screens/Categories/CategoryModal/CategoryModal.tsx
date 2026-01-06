@@ -68,10 +68,12 @@ export const icons: IconType[] = [
   'restaurant',
   'pills',
   'present',
+  'shirt',
   'house',
   'mobile',
   'gas-station',
   'gaming',
+  'wine-glasses',
 ];
 
 // Helper function to chunk icons into pages with 2 rows of 4 icons each

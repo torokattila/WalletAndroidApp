@@ -9,6 +9,7 @@ import i18n from 'i18n-js';
 import { useEffect, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useUser } from './useUser';
+import { IconType } from '@components/shared';
 
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();
@@ -16,7 +17,7 @@ export const useCategory = (category?: Category) => {
 
   const [title, setTitle] = useState<string>('');
   const [color, setColor] = useState<string>(category?.color ?? '#fff');
-  const [icon, setIcon] = useState<string | null>(category?.icon ?? null);
+  const [icon, setIcon] = useState<IconType | null>(category?.icon ?? null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<(Category | ExtendedCategory)[]>([]);
@@ -198,7 +199,7 @@ export const useCategory = (category?: Category) => {
 
   const handleColorChange = (c: string) => setColor(c);
 
-  const handleIconChange = (iconName: string) => setIcon(iconName);
+  const handleIconChange = (iconName: IconType) => setIcon(iconName);
 
   const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
   const handleConfirmDialogClose = () => setIsConfirmDialogOpen(false);

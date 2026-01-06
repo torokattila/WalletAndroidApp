@@ -12,6 +12,7 @@ export const defaultCategories: ExtendedCategory[] = [
     updatedAt: null,
     isDefault: true,
     color: '#58c962',
+    icon: 'hamburger',
   },
   {
     id: '2',
@@ -21,6 +22,7 @@ export const defaultCategories: ExtendedCategory[] = [
     updatedAt: null,
     isDefault: true,
     color: '#822df1',
+    icon: 'shirt',
   },
   {
     id: '3',
@@ -30,6 +32,7 @@ export const defaultCategories: ExtendedCategory[] = [
     updatedAt: null,
     isDefault: true,
     color: '#db3434',
+    icon: 'wine-glasses',
   },
   {
     id: '4',
@@ -39,5 +42,6 @@ export const defaultCategories: ExtendedCategory[] = [
     updatedAt: null,
     isDefault: true,
     color: '#964B00',
+    icon: 'other-purchase',
   },
 ];

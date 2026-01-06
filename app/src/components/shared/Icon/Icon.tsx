@@ -71,6 +71,10 @@ import Train from './train';
 import TrainSmall from './train-small';
 import { Trash } from './trash';
 import { Visa } from './visa';
+import Shirt from './shirt';
+import ShirtSmall from './shirt-small';
+import WineGlasses from './wine-glasses';
+import WineGlassesSmall from './wine-glasses-small';
 
 export type IconType =
   | 'airplane'
@@ -136,6 +140,8 @@ export type IconType =
   | 'purchase'
   | 'restaurant'
   | 'restaurant-small'
+  | 'shirt'
+  | 'shirt-small'
   | 'shopping-cart'
   | 'shopping-cart-small'
   | 'success-tick'
@@ -143,7 +149,9 @@ export type IconType =
   | 'train'
   | 'train-small'
   | 'trash'
-  | 'visa';
+  | 'visa'
+  | 'wine-glasses'
+  | 'wine-glasses-small';
 
 type IconProps = SvgProps & {
   type: IconType;
@@ -274,6 +282,10 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <ProfileImage iconColor={iconColor} {...props} />;
     case 'purchase':
       return <Purchase iconColor={iconColor} {...props} />;
+    case 'shirt':
+      return <Shirt iconColor={iconColor} {...props} />;
+    case 'shirt-small':
+      return <ShirtSmall iconColor={iconColor} {...props} />;
     case 'restaurant':
       return <Restaurant iconColor={iconColor} {...props} />;
     case 'restaurant-small':
@@ -294,6 +306,10 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <Trash iconColor={iconColor} {...props} />;
     case 'visa':
       return <Visa iconColor={iconColor} {...props} />;
+    case 'wine-glasses':
+      return <WineGlasses iconColor={iconColor} {...props} />;
+    case 'wine-glasses-small':
+      return <WineGlassesSmall iconColor={iconColor} {...props} />;
     default:
       return;
   }
