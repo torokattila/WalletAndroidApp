@@ -123,7 +123,7 @@ export const PieChartContainer = styled(View)`
 `;
 
 export const PieChartCenterAmount = styled(Text)`
-  font-size: 16px;
+  font-size: 18px;
   font-family: 'NunitoSans-Bold';
   color: ${({ theme }) => theme.colors.purple[300]};
 `;
