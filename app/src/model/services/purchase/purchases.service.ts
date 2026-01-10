@@ -195,8 +195,8 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     const queryData = query(
       this.collection,
       where('userId', '==', userId),
-      where('updatedAt', '>=', firstDayOfTheMonth),
-      where('updatedAt', '<=', lastDayOfTheMonth)
+      where('createdAt', '>=', firstDayOfTheMonth),
+      where('createdAt', '<=', lastDayOfTheMonth)
     );
 
     const snapshot = await getDocs(queryData);
