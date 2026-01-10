@@ -117,6 +117,7 @@ export const Hungarian = {
     MyCategoriesTitle: 'Saját kategóriák',
     NoCategoriesText: 'Még nem adtál hozzá saját kategóriát',
     PickColor: 'Szín kiválasztása',
+    PickIcon: 'Ikon kiválasztása',
   },
   Home: {
     LastFivePurchasesTitle: 'Utolsó 5 vásárlás',
@@ -255,6 +256,7 @@ export const English = {
     MyCategoriesTitle: 'My categories',
     NoCategoriesText: 'There are no categories yet.',
     PickColor: 'Change color',
+    PickIcon: 'Pick icon',
   },
   Home: {
     LastFivePurchasesTitle: 'Last 5 purchases',

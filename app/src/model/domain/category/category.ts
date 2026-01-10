@@ -1,3 +1,4 @@
+import { IconType } from '@components/shared';
 import { Timestamp } from 'firebase/firestore';
 
 type CategoryProps = {
@@ -7,7 +8,7 @@ type CategoryProps = {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   color?: string | null;
-  icon?: string | null;
+  icon?: IconType | null;
   isDefault?: boolean | null;
 };
 
@@ -18,7 +19,7 @@ export class Category {
   readonly createdAt: Timestamp;
   readonly updatedAt: Timestamp;
   readonly color?: string | null;
-  readonly icon?: string | null;
+  readonly icon?: IconType | null;
   readonly isDefault?: boolean | null;
 
   constructor(props: CategoryProps) {

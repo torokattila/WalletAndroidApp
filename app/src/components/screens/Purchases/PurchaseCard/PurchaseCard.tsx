@@ -1,4 +1,4 @@
-import { Icon } from '@components/shared';
+import { Icon, IconType } from '@components/shared';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
@@ -39,6 +39,18 @@ const cardShadow = {
 
 export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
   const { isDarkMode } = useDarkMode();
+  const isCategoryColorWhite =
+    purchase.categoryObject?.color === '#ffffff' || purchase.categoryObject?.color === '#ffffffff';
+
+  const categoryIcon = purchase?.categoryObject?.icon ? (
+    <Icon
+      type={`${(purchase.categoryObject.icon + '-small') as IconType}`}
+      iconColor={!isCategoryColorWhite ? theme.colors.white[100] : theme.colors.black[100]}
+    />
+  ) : (
+    cardIcon[typeof purchase.category === 'string' ? purchase.category : purchase.category.title] ??
+    cardIcon.other
+  );
 
   return (
     <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
@@ -47,9 +59,7 @@ export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
         isDarkMode={isDarkMode}
         categoryColor={purchase.categoryObject?.color}
       >
-        {cardIcon[
-          typeof purchase.category === 'string' ? purchase.category : purchase.category.title
-        ] ?? cardIcon.other}
+        {categoryIcon}
       </IconContainer>
 
       <CategoriesContainer>

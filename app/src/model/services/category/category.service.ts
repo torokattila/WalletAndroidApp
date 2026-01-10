@@ -31,12 +31,18 @@ export class CategoryService extends BaseService<CategoryModel> {
     super('categories');
   }
 
-  async createCategory(userId: string, title: string, color?: string): Promise<Category> {
+  async createCategory(
+    userId: string,
+    title: string,
+    color?: string,
+    icon?: string | null
+  ): Promise<Category> {
     const categoriesCollectionRef = collection(getDB(), 'categories');
     const insertedCategory = await addDoc(categoriesCollectionRef, {
       userId,
       title,
       color,
+      icon,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     });
@@ -63,6 +69,7 @@ export class CategoryService extends BaseService<CategoryModel> {
     const categoryData: Partial<Category> = {
       title: data?.title?.trim(),
       color: data?.color,
+      icon: data?.icon,
     };
 
     await updateDoc(docRef, { ...categoryData, updatedAt: Timestamp.now() });

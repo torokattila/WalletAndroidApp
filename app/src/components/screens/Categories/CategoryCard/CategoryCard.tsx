@@ -1,4 +1,4 @@
-import { Icon } from '@components/shared';
+import { Icon, IconType } from '@components/shared';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { Category } from '@model/domain';
 import { theme } from '@styles/theme';
@@ -21,11 +21,15 @@ const cardShadow = {
 
 export const CategoryCard: FC<CategoryCardProps> = ({ category, onPress }) => {
   const { isDarkMode } = useDarkMode();
+  const isWhiteCategoryColor = category.color === '#ffffff' || category.color === '#ffffffff';
 
   return (
     <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
       <IconContainer style={cardShadow} isDarkMode={isDarkMode} color={category.color}>
-        <Icon type="category" iconColor={theme.colors.white[100]} />
+        <Icon
+          type={category.icon ? (category.icon as IconType) : 'category'}
+          iconColor={!isWhiteCategoryColor ? theme.colors.white[100] : theme.colors.black[100]}
+        />
       </IconContainer>
 
       <TitleAndAmountContainer>

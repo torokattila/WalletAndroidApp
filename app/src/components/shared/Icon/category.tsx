@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import Svg, { G, Path } from 'react-native-svg';
 
 export const Category: FC<{ iconColor: string }> = ({ iconColor, ...props }) => (
-  <Svg fill={iconColor} height={24} viewBox="0 0 24 24" width={24} {...props}>
+  <Svg fill={iconColor} height={28} viewBox="0 0 24 24" width={28} {...props}>
     <G
       stroke={iconColor}
       strokeLinecap="round"

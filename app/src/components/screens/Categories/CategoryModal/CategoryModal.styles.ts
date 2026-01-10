@@ -76,11 +76,84 @@ export const ColorPickerContainer = styled(View)`
   gap: 20px;
   width: 100%;
   height: 100px;
-  margin-left: 15px;
 `;
 
 export const ColorPickerButton = styled(Button)`
   padding: 12px 16px;
   width: 55%;
   align-self: center;
+`;
+
+export const PickColorText = styled(Text)`
+  color: ${({ theme }) => theme.colors.grey[300]};
+  font-size: 20px;
+  font-family: 'NunitoSans-ExtraBold';
+  margin-left: 15px;
+`;
+
+export const IconPickerContainer = styled(View)`
+  display: flex;
+  margin-top: 0%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+`;
+
+export const PickIconText = styled(Text)`
+  color: ${({ theme }) => theme.colors.grey[300]};
+  font-size: 20px;
+  font-family: 'NunitoSans-ExtraBold';
+  margin-left: 15px;
+`;
+
+export const IconListContainer = styled(View)`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100px;
+`;
+
+export const CarouselContainer = styled(View)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+
+export const IconRow = styled(View)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
+  gap: 12px;
+`;
+
+export const PaginationContainer = styled(View)`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const PaginationDot = styled(View)<{ isActive: boolean; isDarkMode: boolean }>`
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background-color: ${({ theme, isActive, isDarkMode }) =>
+    isActive
+      ? isDarkMode
+        ? theme.colors.purple[300]
+        : theme.colors.purple[300]
+      : isDarkMode
+      ? theme.colors.grey[100]
+      : theme.colors.grey[300]};
+  opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
 `;

@@ -1,26 +1,33 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ConfirmDialog, Icon, ModalBackground } from '@components/shared';
+import { ConfirmDialog, Icon, IconType, ModalBackground } from '@components/shared';
 import { useCategory } from '@hooks/useCategory';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { Category } from '@model/domain';
 import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
 import React, { FC, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Modal, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, TouchableOpacity, View, Dimensions } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-detect';
+import Carousel from 'react-native-reanimated-carousel';
 import CategoryColorPicker from '../CategoryColorPicker';
 import {
-  ColorPickerButton,
   ColorPickerContainer,
   Content,
   ContentContainer,
   DeleteIconContainer,
+  IconPickerContainer,
+  PickColorText,
+  PickIconText,
   StyledButton,
   StyledTextInput,
   Title,
   UpperLine,
+  CarouselContainer,
+  PaginationContainer,
+  PaginationDot,
 } from './CategoryModal.styles';
+import { IconCard } from '../IconCard';
 
 type CategoryModalProps = {
   isVisible: boolean;
@@ -45,6 +52,39 @@ export const buttonShadow = {
   shadowRadius: 20,
 };
 
+export const icons: IconType[] = [
+  'apple',
+  'airplane',
+  'beauty',
+  'dog',
+  'train',
+  'shopping-cart',
+  'book-shelf',
+  'car',
+  'microphone',
+  'no-smoking',
+  'guitar',
+  'hairdresser',
+  'restaurant',
+  'pills',
+  'present',
+  'shirt',
+  'house',
+  'mobile',
+  'gas-station',
+  'gaming',
+  'wine-glasses',
+];
+
+// Helper function to chunk icons into pages with 2 rows of 4 icons each
+const chunkIcons = (iconArray: IconType[], iconsPerPage: number = 8) => {
+  const chunks: IconType[][] = [];
+  for (let i = 0; i < iconArray.length; i += iconsPerPage) {
+    chunks.push(iconArray.slice(i, i + iconsPerPage));
+  }
+  return chunks;
+};
+
 export const CategoryModal: FC<CategoryModalProps> = ({
   isVisible,
   onClose,
@@ -64,10 +104,24 @@ export const CategoryModal: FC<CategoryModalProps> = ({
     handleConfirmDialogClose,
     title,
     color,
+    icon,
     handleTitleChange,
     handleColorChange,
+    handleIconChange,
   } = useCategory(existingCategory);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState<boolean>(false);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const width = Dimensions.get('window').width;
+  const carouselWidth = width * 0.9;
+  const iconWidth = 70;
+  const columnsPerRow = Math.floor(carouselWidth / iconWidth);
+
+  // Fixed 2 rows per page
+  const rows = 2;
+  const iconsPerPage = columnsPerRow * rows;
+
+  const iconPages = chunkIcons(icons, iconsPerPage);
 
   const openColorPicker = () => setIsColorPickerOpen(true);
   const closeColorPicker = () => setIsColorPickerOpen(false);
@@ -121,12 +175,11 @@ export const CategoryModal: FC<CategoryModalProps> = ({
                 />
 
                 <ColorPickerContainer>
-                  <ColorPickerButton
-                    size="large"
-                    text={i18n.t('Categories.PickColor')}
+                  <View>
+                    <PickColorText>{i18n.t('Categories.PickColor')}:</PickColorText>
+                  </View>
+                  <TouchableOpacity
                     onPress={openColorPicker}
-                  />
-                  <View
                     style={{
                       ...shadow,
                       height: 50,
@@ -136,6 +189,54 @@ export const CategoryModal: FC<CategoryModalProps> = ({
                     }}
                   />
                 </ColorPickerContainer>
+
+                <IconPickerContainer>
+                  <View>
+                    <PickIconText>{i18n.t('Categories.PickIcon')}:</PickIconText>
+                  </View>
+                </IconPickerContainer>
+
+                <CarouselContainer>
+                  <Carousel
+                    loop={false}
+                    width={carouselWidth}
+                    height={180}
+                    data={iconPages}
+                    onSnapToItem={(index) => setActiveIndex(index)}
+                    renderItem={({ item: page, index: pageIndex }) => (
+                      <View
+                        style={{
+                          width: carouselWidth,
+                          marginTop: 10,
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignContent: 'center',
+                          gap: 5,
+                        }}
+                      >
+                        {page.map((iconType, iconIndex) => (
+                          <IconCard
+                            key={`icon-${pageIndex}-${iconIndex}`}
+                            icon={iconType}
+                            isSelected={icon === iconType}
+                            onPress={() => handleIconChange(iconType)}
+                          />
+                        ))}
+                      </View>
+                    )}
+                  />
+                  <PaginationContainer>
+                    {iconPages.map((_, index) => (
+                      <PaginationDot
+                        key={`dot-${index}`}
+                        isActive={index === activeIndex}
+                        isDarkMode={isDarkMode}
+                      />
+                    ))}
+                  </PaginationContainer>
+                </CarouselContainer>
 
                 <StyledButton
                   size="large"
