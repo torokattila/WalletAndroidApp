@@ -75,6 +75,7 @@ import Shirt from './shirt';
 import ShirtSmall from './shirt-small';
 import WineGlasses from './wine-glasses';
 import WineGlassesSmall from './wine-glasses-small';
+import { OtherPurchaseSmall } from './other-purchase-small';
 
 export type IconType =
   | 'airplane'
@@ -129,6 +130,7 @@ export type IconType =
   | 'no-smoking'
   | 'no-smoking-small'
   | 'other-purchase'
+  | 'other-purchase-small'
   | 'other-purchase-big'
   | 'pills'
   | 'pills-small'
@@ -266,6 +268,8 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <OtherPurchase iconColor={iconColor} {...props} />;
     case 'other-purchase-big':
       return <OtherPurchaseBig iconColor={iconColor} {...props} />;
+    case 'other-purchase-small':
+      return <OtherPurchaseSmall iconColor={iconColor} {...props} />;
     case 'pills':
       return <Pills iconColor={iconColor} {...props} />;
     case 'pills-small':
