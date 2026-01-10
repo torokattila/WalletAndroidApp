@@ -228,19 +228,19 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       queryData = query(
         this.collection,
         where('userId', '==', userId),
-        where('updatedAt', '>=', dates.startDate),
-        where('updatedAt', '<=', dates.endDate),
-        orderBy('updatedAt', 'desc'),
+        where('createdAt', '>=', dates.startDate),
+        where('createdAt', '<=', dates.endDate),
+        orderBy('createdAt', 'desc'),
         limit(9998)
       );
     } else if (category && dates) {
       queryData = query(
         this.collection,
         where('userId', '==', userId),
-        where('updatedAt', '>=', dates.startDate),
-        where('updatedAt', '<=', dates.endDate),
+        where('createdAt', '>=', dates.startDate),
+        where('createdAt', '<=', dates.endDate),
         where('category', '==', category),
-        orderBy('updatedAt', 'desc'),
+        orderBy('createdAt', 'desc'),
         limit(9998)
       );
     } else if (category && !dates) {
@@ -248,14 +248,14 @@ export class PurchaseService extends BaseService<PurchaseModel> {
         this.collection,
         where('userId', '==', userId),
         where('category', '==', category),
-        orderBy('updatedAt', 'desc'),
+        orderBy('createdAt', 'desc'),
         limit(9998)
       );
     } else {
       queryData = query(
         this.collection,
         where('userId', '==', userId),
-        orderBy('updatedAt', 'desc'),
+        orderBy('createdAt', 'desc'),
         limit(9998)
       );
     }
@@ -271,8 +271,6 @@ export class PurchaseService extends BaseService<PurchaseModel> {
 
   static toDomainObject(purchase: QueryDocumentSnapshot<PurchaseModel>): Purchase {
     const { ...purchaseData } = purchase.data();
-
-    // Ensure category is a string (Purchase expects category as string).
     const normalizedCategory =
       typeof purchaseData?.category === 'string'
         ? purchaseData.category

@@ -87,7 +87,7 @@ export const Home: FC = () => {
     const currentYear = selectedMonth.getFullYear();
 
     const purchasesForSelectedMonth = purchasesProp.filter((purchase) => {
-      const purchaseDate = purchase.updatedAt.toDate();
+      const purchaseDate = purchase.createdAt.toDate();
       return purchaseDate.getMonth() === currentMonth && purchaseDate.getFullYear() === currentYear;
     });
 
