@@ -157,13 +157,13 @@ export const Home: FC = () => {
           <RefreshControl
             refreshing={screenRefreshing}
             onRefresh={handlePullToRefresh}
-            colors={['#4547B8', '#8E65F7']}
+            colors={['#e84393', '#e84393']}
           />
         }
         isDarkMode={isDarkMode}
       >
         <StyledLinearGradient
-          colors={['#4547B8', '#8E65F7']}
+          colors={['#e84393', '#e84393']}
           useAngle
           angle={140}
           start={{ x: 0, y: 0 }}
@@ -179,7 +179,9 @@ export const Home: FC = () => {
 
           <ContentContainer isDarkMode={isDarkMode}>
             <MonthlyStatementAndDateSelectorContainer>
-              <MonthlyStatementTitle>{i18n.t('Home.MonthlyStatement')}:</MonthlyStatementTitle>
+              <MonthlyStatementTitle isDarkMode={isDarkMode}>
+                {i18n.t('Home.MonthlyStatement')}:
+              </MonthlyStatementTitle>
               <DateSelectorButton onPress={() => setIsMonthPickerOpen(true)}>
                 <Icon type="calendar" iconColor={theme.colors.white[100]} />
                 <DateSelectorText>
@@ -213,10 +215,10 @@ export const Home: FC = () => {
                   donut
                   radius={90}
                   innerRadius={60}
-                  strokeColor={!isDarkMode ? theme.colors.white[200] : theme.colors.grey[400]}
+                  strokeColor={!isDarkMode ? theme.colors.white[200] : theme.colors.grey[800]}
                   strokeWidth={1}
                   textSize={14}
-                  innerCircleColor={isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]}
+                  innerCircleColor={isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]}
                   showTooltip
                   tooltipBackgroundColor={
                     isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]

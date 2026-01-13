@@ -3,8 +3,7 @@ import styled from 'styled-components/native';
 import { Icon } from '../Icon';
 
 export const StyledButton = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
-  background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
+  background-color: ${({ theme }) => theme.colors.magenta[100]};
   position: absolute;
   padding: 12px;
   border-radius: 30px;

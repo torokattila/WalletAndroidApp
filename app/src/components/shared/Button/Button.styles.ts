@@ -14,7 +14,7 @@ type ButtonProps = TouchableOpacityProps & {
 const screenWidth = Dimensions.get('screen').width;
 
 export const StyledButton = styled(TouchableOpacity)<ButtonProps>`
-  background-color: ${({ theme }) => theme.colors.purple[100]};
+  background-color: ${({ theme }) => theme.colors.magenta[100]};
   border-radius: 30px;
   width: ${({ size }) => (size === 'large' ? `${screenWidth - 50}px` : 'auto')};
   justify-content: center;

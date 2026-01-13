@@ -5,7 +5,7 @@ export const Container = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   width: 95%;
   padding: 15px;
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[500] : theme.colors.white[100]};
+    isDarkMode ? theme.colors.grey[900] : theme.colors.white[100]};
   border-radius: 14px;
   margin-top: 15px;
   margin-left: 5px;
@@ -14,8 +14,7 @@ export const Container = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
 `;
 
 export const IconContainer = styled(View)<{ isDarkMode: boolean }>`
-  background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]};
+  background-color: ${({ theme }) => theme.colors.magenta[100]};
   padding: 7px;
   border-radius: 10px;
 `;
@@ -26,9 +25,10 @@ export const TitleAndAmountContainer = styled(View)`
   margin-left: 10px;
 `;
 
-export const Title = styled(Text)`
+export const Title = styled(Text)<{ isDarkMode: boolean }>`
   font-family: 'NunitoSans-ExtraBold';
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const Amount = styled(Text)`

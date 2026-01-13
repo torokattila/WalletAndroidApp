@@ -64,7 +64,7 @@ export const Balance = styled(Text)`
 
 export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   align-items: center;
@@ -85,15 +85,16 @@ export const MonthlyStatementAndDateSelectorContainer = styled(View)`
   width: 100%;
 `;
 
-export const MonthlyStatementTitle = styled(Text)`
+export const MonthlyStatementTitle = styled(Text)<{ isDarkMode: boolean }>`
   font-size: 20px;
   font-family: 'NunitoSans-Bold';
-  color: ${({ theme }) => theme.colors.purple[300]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.magenta[100]};
   align-self: flex-start;
 `;
 
 export const DateSelectorButton = styled(TouchableOpacity)`
-  background-color: ${({ theme }) => theme.colors.purple[300]};
+  background-color: ${({ theme }) => theme.colors.magenta[100]};
   border-radius: 10px;
   display: flex;
   flex-direction: row;
@@ -125,7 +126,7 @@ export const PieChartContainer = styled(View)`
 export const PieChartCenterAmount = styled(Text)`
   font-size: 18px;
   font-family: 'NunitoSans-Bold';
-  color: ${({ theme }) => theme.colors.purple[300]};
+  color: ${({ theme }) => theme.colors.magenta[100]};
 `;
 
 export const NoLastFivePurchasesContainer = styled(View)`

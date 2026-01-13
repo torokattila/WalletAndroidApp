@@ -36,9 +36,9 @@ export const TabStack: FC = () => {
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           position: 'absolute',
-          shadowOpacity: 0.2,
+          shadowOpacity: 0.1,
           shadowColor: theme.colors.black,
-          backgroundColor: isDarkMode ? theme.colors.grey[500] : theme.colors.white[100],
+          backgroundColor: isDarkMode ? theme.colors.grey[1000] : theme.colors.white[100],
           shadowOffset: {
             width: 0,
             height: -2,
