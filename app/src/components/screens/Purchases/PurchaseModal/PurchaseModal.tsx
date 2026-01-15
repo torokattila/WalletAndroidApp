@@ -118,7 +118,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
           <ModalBackground onHide={onClose} isVisible={isVisible} />
           <ContentContainer style={shadow} isDarkMode={isDarkMode}>
             <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
-              <UpperLine />
+              <UpperLine isDarkMode={isDarkMode} />
               {isEditMode && (
                 <>
                   <CalendarIconContainer onPress={handleCreatedAtPickerOpen}>
@@ -131,7 +131,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
               )}
 
               <Content>
-                <Title>{modalTitle}</Title>
+                <Title isDarkMode={isDarkMode}>{modalTitle}</Title>
 
                 {errors.amount && <ErrorText>{errors.amount}</ErrorText>}
                 <InputNumberText numberOfLines={1} ellipsizeMode="head" isDarkMode={isDarkMode}>
@@ -139,14 +139,16 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                 </InputNumberText>
 
                 <DropdownContainer>
-                  <DropdownLabel>{i18n.t('Dialog.Purchases.Category')}</DropdownLabel>
+                  <DropdownLabel isDarkMode={isDarkMode}>
+                    {i18n.t('Dialog.Purchases.Category')}
+                  </DropdownLabel>
                   <Dropdown
                     style={[
                       shadow,
                       dropdownStyle,
                       {
                         backgroundColor: isDarkMode
-                          ? theme.colors.grey[500]
+                          ? theme.colors.grey[800]
                           : theme.colors.white[100],
                       },
                     ]}
@@ -154,14 +156,14 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                     value={category}
                     placeholder={dropdownPlaceholder}
                     placeholderStyle={{
-                      color: theme.colors.grey[600],
+                      color: theme.colors.magenta[100],
                     }}
                     containerStyle={[
                       !isDarkMode && shadow,
                       dropdownContainerStyle,
                       {
                         backgroundColor: isDarkMode
-                          ? theme.colors.grey[500]
+                          ? theme.colors.grey[800]
                           : theme.colors.white[100],
                         maxHeight: 230,
                       },
@@ -172,17 +174,18 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                     valueField={'value'}
                     onChange={handleDropdownChange}
                     selectedTextStyle={selectedTextStyle}
-                    activeColor={isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]}
+                    activeColor={isDarkMode ? theme.colors.grey[900] : theme.colors.magenta[200]}
                     mode="default"
                   />
                   {errors.category && <ErrorText>{errors.category}</ErrorText>}
 
                   <StyledTextInput
+                    style={shadow}
                     value={secondaryCategory}
                     onChange={handleSecondaryCategoryChange}
                     placeholder={i18n.t('Purchases.SecondaryCategory')}
                     isDarkMode={isDarkMode}
-                    placeholderTextColor={theme.colors.grey[600]}
+                    placeholderTextColor={theme.colors.magenta[200]}
                   />
                 </DropdownContainer>
 

@@ -16,7 +16,7 @@ const WIDTH = Dimensions.get('screen').width;
 
 export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[100]};
   flex: 1;
   height: 85%;
   width: 100%;
@@ -27,8 +27,8 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   padding: 20px;
 `;
 
-export const UpperLine = styled(View)`
-  background-color: silver;
+export const UpperLine = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) => (isDarkMode ? theme.colors.white[100] : 'silver')};
   margin-top: 5px;
   height: 3px;
   width: 50px;
@@ -43,7 +43,7 @@ export const Content = styled(View)`
 `;
 
 export const CalendarIconContainer = styled(TouchableOpacity)`
-  background-color: ${({ theme }) => theme.colors.purple[300]};
+  background-color: ${({ theme }) => theme.colors.magenta[100]};
   border-radius: 30px;
   padding: 10px;
   justify-content: center;
@@ -64,11 +64,12 @@ export const DeleteIconContainer = styled(TouchableOpacity)`
   top: 10px;
 `;
 
-export const Title = styled(Text)`
+export const Title = styled(Text)<{ isDarkMode: boolean }>`
   text-align: center;
   font-size: 17px;
   font-family: 'NunitoSans-ExtraBold';
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const InputNumberText = styled(Text)<{ isDarkMode: boolean }>`
@@ -95,25 +96,25 @@ export const DropdownContainer = styled(View)`
 
 export const StyledTextInput = styled(TextInput)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]};
+    isDarkMode ? theme.colors.grey[900] : theme.colors.grey[200]};
   border-radius: 30px;
   padding-left: 20px;
   padding-right: 20px;
   font-weight: bold;
   margin: 8px 15px 0px 15px;
-  color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[100] : theme.colors.grey[500]};
+  color: ${({ theme }) => theme.colors.magenta[100]};
 `;
 
-export const DropdownLabel = styled(Text)`
+export const DropdownLabel = styled(Text)<{ isDarkMode: boolean }>`
   margin-bottom: 0px;
   align-self: center;
   font-family: 'NunitoSans-Bold';
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const dropdownStyle: StyleProp<ViewStyle> = {
-  borderColor: globalTheme.colors.purple[300],
+  borderColor: globalTheme.colors.magenta[100],
   borderWidth: 1.5,
   width: WIDTH * 0.6,
   borderRadius: 12,
@@ -122,7 +123,7 @@ export const dropdownStyle: StyleProp<ViewStyle> = {
 };
 
 export const dropdownContainerStyle: StyleProp<ViewStyle> = {
-  borderColor: globalTheme.colors.purple[300],
+  borderColor: globalTheme.colors.magenta[100],
   borderWidth: 1.5,
   borderRadius: 12,
   width: WIDTH * 0.6,
@@ -135,7 +136,7 @@ export const dropdownItemContaineStyle: StyleProp<ViewStyle> = {
 };
 
 export const dropdownTextStyle: StyleProp<TextStyle> = {
-  color: globalTheme.colors.purple[300],
+  color: globalTheme.colors.magenta[100],
 };
 
 export const SecondaryCategoryContainer = styled(View)`
@@ -145,7 +146,7 @@ export const SecondaryCategoryContainer = styled(View)`
 `;
 
 export const selectedTextStyle: StyleProp<TextStyle> = {
-  color: globalTheme.colors.grey[600],
+  color: globalTheme.colors.magenta[100],
 };
 
 export const StyledButton = styled(Button)`

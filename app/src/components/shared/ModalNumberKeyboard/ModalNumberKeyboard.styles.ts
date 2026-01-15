@@ -14,15 +14,17 @@ export const NumberColumn = styled(View)`
   gap: 10px;
 `;
 
-export const NumberButton = styled(TouchableOpacity)<{ isEmpty?: boolean }>`
+export const NumberButton = styled(TouchableOpacity)<{ isEmpty?: boolean; isDarkMode: boolean }>`
   padding: 10px 18px;
   border-width: ${({ isEmpty }) => (isEmpty ? '0' : '3')}px;
   border-radius: 25px;
-  border-color: ${({ theme }) => theme.colors.grey[600]};
+  border-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
-export const Number = styled(Text)`
+export const Number = styled(Text)<{ isDarkMode: boolean }>`
   font-size: 25px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
   font-family: 'NunitoSans-SemiBold';
 `;

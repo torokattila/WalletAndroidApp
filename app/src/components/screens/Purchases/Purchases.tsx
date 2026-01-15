@@ -158,7 +158,7 @@ export const Purchases: FC = () => {
                   data={allCategories}
                   value={filterCategory.current}
                   placeholderStyle={{
-                    color: theme.colors.magenta[600],
+                    color: theme.colors.magenta[100],
                   }}
                   placeholder={dropdownPlaceholder}
                   containerStyle={[
@@ -177,7 +177,7 @@ export const Purchases: FC = () => {
                   labelField={'label'}
                   valueField={'value'}
                   selectedTextStyle={selectedTextStyle}
-                  activeColor={isDarkMode ? theme.colors.grey[900] : theme.colors.grey[200]}
+                  activeColor={isDarkMode ? theme.colors.grey[900] : theme.colors.magenta[200]}
                   onChange={handleFilterCategoryChange}
                   mode="default"
                 />
