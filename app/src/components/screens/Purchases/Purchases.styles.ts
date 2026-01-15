@@ -254,10 +254,12 @@ export const NoPurchasesContainer = styled(View)`
   align-self: center;
 `;
 
-export const NoPurchasesText = styled(Text)`
+export const NoPurchasesText = styled(Text)<{ isDarkMode: boolean }>`
   text-align: center;
   font-family: 'NunitoSans-Light';
   font-size: 18px;
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const Loader = styled(ActivityIndicator)`

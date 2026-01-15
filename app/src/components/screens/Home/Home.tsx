@@ -280,11 +280,13 @@ export const Home: FC = () => {
               </PieChartContainer>
             )}
 
-            {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
+            {isLoading && <Loader color={theme.colors.magenta[100]} size="large" />}
 
             {!donutChartData.length && !isLoading && (
               <NoLastFivePurchasesContainer>
-                <NoLastFivePurchasesText>{i18n.t('NoPurchasesText')}</NoLastFivePurchasesText>
+                <NoLastFivePurchasesText isDarkMode={isDarkMode}>
+                  {i18n.t('NoPurchasesText')}
+                </NoLastFivePurchasesText>
                 <RedirectToPurchasesButton
                   style={!isDarkMode && buttonShadow}
                   onPress={() => navigation.navigate('Purchases')}

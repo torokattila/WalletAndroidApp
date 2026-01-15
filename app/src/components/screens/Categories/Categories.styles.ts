@@ -33,7 +33,7 @@ export const ScreenTitleText = styled(Text)`
 
 export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   align-items: flex-start;
@@ -47,12 +47,13 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   position: relative;
 `;
 
-export const MyCategoriesTitle = styled(Text)`
+export const MyCategoriesTitle = styled(Text)<{ isDarkMode: boolean }>`
   font-family: 'NunitoSans-Bold';
   font-size: 20px;
   margin-top: 20px;
   margin-left: 20px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const Loader = styled(ActivityIndicator)`
@@ -71,9 +72,10 @@ export const NoIncomesContainer = styled(View)`
   align-self: center;
 `;
 
-export const NoIncomesText = styled(Text)`
+export const NoIncomesText = styled(Text)<{ isDarkMode: boolean }>`
   text-align: center;
   font-family: 'NunitoSans-Light';
   font-size: 18px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;

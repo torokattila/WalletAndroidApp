@@ -44,7 +44,7 @@ export const ScreenTitleText = styled(Text)`
 
 export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   width: 100%;
@@ -63,12 +63,12 @@ export const ImageContainer = styled(View)<{ isDarkMode: boolean }>`
   width: 110px;
   height: 110px;
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]};
   align-self: center;
   top: -8.5%;
   border-width: 6px;
   border-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]};
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -81,14 +81,16 @@ export const NameEmailContainer = styled(View)`
   margin-top: 12%;
 `;
 
-export const Name = styled(Text)`
+export const Name = styled(Text)<{ isDarkMode: boolean }>`
   font-family: 'NunitoSans-Bold';
   font-size: 20px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
-export const Email = styled(Text)`
-  color: ${({ theme }) => theme.colors.grey[600]};
+export const Email = styled(Text)<{ isDarkMode: boolean }>`
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const OptionsContainer = styled(ScrollView)`
@@ -100,7 +102,7 @@ export const OptionCard = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   width: 90%;
   padding: 15px;
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[500] : theme.colors.white[100]};
+    isDarkMode ? theme.colors.grey[900] : theme.colors.white[100]};
   border-radius: 12px;
   margin-top: 20px;
   margin-left: 5px;
@@ -109,9 +111,10 @@ export const OptionCard = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   align-items: center;
 `;
 
-export const OptionCardTitle = styled(Text)`
+export const OptionCardTitle = styled(Text)<{ isDarkMode: boolean }>`
   font-family: 'NunitoSans-SemiBold';
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const StyledIcon = styled(Icon)`
@@ -128,7 +131,7 @@ export const SwitchDarkModeContainer = styled(View)`
 export const SwitchDarkModeText = styled(Text)`
   align-self: flex-start;
   margin-top: 25px;
-  color: ${({ theme }) => theme.colors.purple[300]};
+  color: ${({ theme }) => theme.colors.magenta[100]};
 `;
 
 export const IconsAndSwitchContainer = styled(View)`

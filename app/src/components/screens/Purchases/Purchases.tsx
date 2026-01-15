@@ -258,7 +258,7 @@ export const Purchases: FC = () => {
               theme={isDarkMode ? 'dark' : 'auto'}
             />
 
-            {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
+            {isLoading && <Loader color={theme.colors.magenta[100]} size="large" />}
 
             {purchases.length > 0 && !isLoading && (
               <ListContainer>
@@ -287,7 +287,9 @@ export const Purchases: FC = () => {
             )}
             {!purchases.length && !isLoading && (
               <NoPurchasesContainer>
-                <NoPurchasesText>{i18n.t('NoPurchasesText')}</NoPurchasesText>
+                <NoPurchasesText isDarkMode={isDarkMode}>
+                  {i18n.t('NoPurchasesText')}
+                </NoPurchasesText>
               </NoPurchasesContainer>
             )}
             <AddButton onPress={handleModalOpen} />

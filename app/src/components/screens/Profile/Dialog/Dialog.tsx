@@ -79,14 +79,14 @@ export const Dialog: FC<DialogProps> = ({
         <ModalBackground onHide={onClose} isVisible={isOpen} />
         <ContentContainer style={shadow} isDarkMode={isDarkMode}>
           <KeyboardAvoidingView keyboardVerticalOffset={140} behavior="position" enabled>
-            <UpperLine />
+            <UpperLine isDarkMode={isDarkMode} />
             <Content>
-              <Title>{dialogTitle}</Title>
+              <Title isDarkMode={isDarkMode}>{dialogTitle}</Title>
               <FormContainer>
                 {isBasicDetailsDialog ? (
                   <>
                     <InputContainer>
-                      <Label>{i18n.t('FirstNameLabel')}</Label>
+                      <Label isDarkMode={isDarkMode}>{i18n.t('FirstNameLabel')}</Label>
                       <StyledTextInput
                         value={inputValues.firstname}
                         onChange={(e) => handleInputChange(e, 'firstname')}
@@ -96,9 +96,9 @@ export const Dialog: FC<DialogProps> = ({
                         placeholderTextColor={
                           errors.firstname
                             ? theme.colors.red
-                            : isDarkMode
-                            ? theme.colors.purple[400]
-                            : theme.colors.purple[200]
+                            : errors.lastname
+                            ? theme.colors.red
+                            : theme.colors.magenta[200]
                         }
                         returnKeyType="next"
                         blurOnSubmit={false}
@@ -106,7 +106,7 @@ export const Dialog: FC<DialogProps> = ({
                         isDarkMode={isDarkMode}
                       />
 
-                      <Label>{i18n.t('LastNameLabel')}</Label>
+                      <Label isDarkMode={isDarkMode}>{i18n.t('LastNameLabel')}</Label>
                       <StyledTextInput
                         ref={lastnameRef}
                         inputMode="text"
@@ -115,11 +115,7 @@ export const Dialog: FC<DialogProps> = ({
                         hasError={!!errors.lastname}
                         placeholder={errors.lastname ? errors.lastname : i18n.t('LastNameLabel')}
                         placeholderTextColor={
-                          errors.lastname
-                            ? theme.colors.red
-                            : isDarkMode
-                            ? theme.colors.purple[400]
-                            : theme.colors.purple[200]
+                          errors.lastname ? theme.colors.red : theme.colors.magenta[200]
                         }
                         isDarkMode={isDarkMode}
                       />
@@ -129,7 +125,9 @@ export const Dialog: FC<DialogProps> = ({
                   <InputContainer>
                     <>
                       <View>
-                        <Label>{i18n.t('Profile.CurrentPasswordTitle')}</Label>
+                        <Label isDarkMode={isDarkMode}>
+                          {i18n.t('Profile.CurrentPasswordTitle')}
+                        </Label>
                         <StyledTextInput
                           secureTextEntry={passwordsVisibility.isOldPassword}
                           value={inputValues.oldPassword}
@@ -141,11 +139,7 @@ export const Dialog: FC<DialogProps> = ({
                               : i18n.t('Profile.CurrentPasswordTitle')
                           }
                           placeholderTextColor={
-                            errors.oldPassword
-                              ? theme.colors.red
-                              : isDarkMode
-                              ? theme.colors.purple[400]
-                              : theme.colors.purple[200]
+                            errors.oldPassword ? theme.colors.red : theme.colors.magenta[200]
                           }
                           returnKeyType="next"
                           blurOnSubmit={false}
@@ -157,14 +151,12 @@ export const Dialog: FC<DialogProps> = ({
                         >
                           <Icon
                             type={passwordsVisibility.isOldPassword ? 'eye' : 'eye-outlined'}
-                            iconColor={
-                              isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]
-                            }
+                            iconColor={theme.colors.magenta[100]}
                           />
                         </StyledIconButton>
                       </View>
                       <View>
-                        <Label>{i18n.t('Profile.NewPasswordTitle')}</Label>
+                        <Label isDarkMode={isDarkMode}>{i18n.t('Profile.NewPasswordTitle')}</Label>
                         <StyledTextInput
                           ref={newPasswordRef}
                           secureTextEntry={passwordsVisibility.isNewPassword}
@@ -177,11 +169,7 @@ export const Dialog: FC<DialogProps> = ({
                               : i18n.t('Profile.NewPasswordTitle')
                           }
                           placeholderTextColor={
-                            errors.newPassword
-                              ? theme.colors.red
-                              : isDarkMode
-                              ? theme.colors.purple[400]
-                              : theme.colors.purple[200]
+                            errors.newPassword ? theme.colors.red : theme.colors.magenta[200]
                           }
                           returnKeyType="next"
                           blurOnSubmit={false}
@@ -193,14 +181,14 @@ export const Dialog: FC<DialogProps> = ({
                         >
                           <Icon
                             type={passwordsVisibility.isNewPassword ? 'eye' : 'eye-outlined'}
-                            iconColor={
-                              isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]
-                            }
+                            iconColor={theme.colors.magenta[100]}
                           />
                         </StyledIconButton>
                       </View>
                       <View>
-                        <Label>{i18n.t('Profile.NewPasswordConfirmTitle')}</Label>
+                        <Label isDarkMode={isDarkMode}>
+                          {i18n.t('Profile.NewPasswordConfirmTitle')}
+                        </Label>
                         <StyledTextInput
                           ref={newPasswordConfirmRef}
                           secureTextEntry={passwordsVisibility.isNewPasswordConfirm}
@@ -213,11 +201,7 @@ export const Dialog: FC<DialogProps> = ({
                               : i18n.t('Profile.NewPasswordConfirmTitle')
                           }
                           placeholderTextColor={
-                            errors.newPasswordConfirm
-                              ? theme.colors.red
-                              : isDarkMode
-                              ? theme.colors.purple[400]
-                              : theme.colors.purple[200]
+                            errors.newPasswordConfirm ? theme.colors.red : theme.colors.magenta[200]
                           }
                           isDarkMode={isDarkMode}
                         />
@@ -226,9 +210,7 @@ export const Dialog: FC<DialogProps> = ({
                         >
                           <Icon
                             type={passwordsVisibility.isNewPasswordConfirm ? 'eye' : 'eye-outlined'}
-                            iconColor={
-                              isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]
-                            }
+                            iconColor={theme.colors.magenta[100]}
                           />
                         </StyledIconButton>
                       </View>

@@ -2,8 +2,8 @@ import { Button } from '@components/shared';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
 
-export const UpperLine = styled(View)`
-  background-color: silver;
+export const UpperLine = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ isDarkMode, theme }) => (isDarkMode ? theme.colors.white[100] : 'silver')};
   margin-top: 5px;
   height: 3px;
   width: 50px;
@@ -12,7 +12,7 @@ export const UpperLine = styled(View)`
 
 export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[100]};
   flex: 1;
   height: 90%;
   width: 100%;
@@ -30,11 +30,12 @@ export const Content = styled(View)`
   position: relative;
 `;
 
-export const Title = styled(Text)`
+export const Title = styled(Text)<{ isDarkMode: boolean }>`
   text-align: center;
   font-size: 17px;
   font-family: 'NunitoSans-ExtraBold';
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const DeleteIconContainer = styled(TouchableOpacity)`
@@ -50,14 +51,13 @@ export const DeleteIconContainer = styled(TouchableOpacity)`
 
 export const StyledTextInput = styled(TextInput)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]};
+    isDarkMode ? theme.colors.grey[900] : theme.colors.grey[200]};
   border-radius: 30px;
   padding-left: 20px;
   padding-right: 20px;
   font-weight: bold;
   margin: 7% 15px 0px 15px;
-  color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[100] : theme.colors.grey[500]};
+  color: ${({ theme }) => theme.colors.magenta[100]};
 `;
 
 export const StyledButton = styled(Button)`
@@ -84,8 +84,9 @@ export const ColorPickerButton = styled(Button)`
   align-self: center;
 `;
 
-export const PickColorText = styled(Text)`
-  color: ${({ theme }) => theme.colors.grey[300]};
+export const PickColorText = styled(Text)<{ isDarkMode: boolean }>`
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[300]};
   font-size: 20px;
   font-family: 'NunitoSans-ExtraBold';
   margin-left: 15px;
@@ -100,8 +101,9 @@ export const IconPickerContainer = styled(View)`
   width: 100%;
 `;
 
-export const PickIconText = styled(Text)`
-  color: ${({ theme }) => theme.colors.grey[300]};
+export const PickIconText = styled(Text)<{ isDarkMode: boolean }>`
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[300]};
   font-size: 20px;
   font-family: 'NunitoSans-ExtraBold';
   margin-left: 15px;
@@ -150,8 +152,8 @@ export const PaginationDot = styled(View)<{ isActive: boolean; isDarkMode: boole
   background-color: ${({ theme, isActive, isDarkMode }) =>
     isActive
       ? isDarkMode
-        ? theme.colors.purple[300]
-        : theme.colors.purple[300]
+        ? theme.colors.magenta[100]
+        : theme.colors.magenta[100]
       : isDarkMode
       ? theme.colors.grey[100]
       : theme.colors.grey[300]};

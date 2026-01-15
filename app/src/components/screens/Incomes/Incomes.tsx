@@ -81,7 +81,7 @@ export const Incomes: FC = () => {
           <RefreshControl
             refreshing={screenRefreshing}
             onRefresh={handlePullToRefresh}
-            colors={['#4547B8', '#8E65F7']}
+            colors={['#e84393', '#e84393']}
           />
         }
       >
@@ -168,7 +168,7 @@ export const Incomes: FC = () => {
               theme={isDarkMode ? 'dark' : 'auto'}
             />
 
-            {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
+            {isLoading && <Loader color={theme.colors.magenta[100]} size="large" />}
 
             {incomes.length > 0 && !isLoading && (
               <ListContainer>
@@ -181,7 +181,7 @@ export const Incomes: FC = () => {
                     <RefreshControl
                       refreshing={screenRefreshing}
                       onRefresh={handlePullToRefresh}
-                      colors={['#4547B8', '#8E65F7']}
+                      colors={['#e84393', '#e84393']}
                     />
                   }
                   keyExtractor={(item) => item.id}
@@ -198,7 +198,9 @@ export const Incomes: FC = () => {
 
             {!incomes.length && !isLoading && (
               <NoIncomesContainer>
-                <NoIncomesText>{i18n.t('Incomes.NoIncomesText')}</NoIncomesText>
+                <NoIncomesText isDarkMode={isDarkMode}>
+                  {i18n.t('Incomes.NoIncomesText')}
+                </NoIncomesText>
               </NoIncomesContainer>
             )}
             <AddButton onPress={handleModalOpen} />

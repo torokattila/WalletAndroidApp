@@ -134,11 +134,12 @@ export const NoLastFivePurchasesContainer = styled(View)`
   align-self: center;
 `;
 
-export const NoLastFivePurchasesText = styled(Text)`
+export const NoLastFivePurchasesText = styled(Text)<{ isDarkMode: boolean }>`
   text-align: center;
   font-family: 'NunitoSans-Regular';
   font-size: 18px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const RedirectToPurchasesButton = styled(Button)`

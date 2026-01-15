@@ -24,16 +24,16 @@ export const CategoryCard: FC<CategoryCardProps> = ({ category, onPress }) => {
   const isWhiteCategoryColor = category.color === '#ffffff' || category.color === '#ffffffff';
 
   return (
-    <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
+    <Container style={cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
       <IconContainer style={cardShadow} isDarkMode={isDarkMode} color={category.color}>
         <Icon
           type={category.icon ? (category.icon as IconType) : 'category'}
-          iconColor={!isWhiteCategoryColor ? theme.colors.white[100] : theme.colors.black[100]}
+          iconColor={!isWhiteCategoryColor ? theme.colors.white[100] : theme.colors.grey[900]}
         />
       </IconContainer>
 
       <TitleAndAmountContainer>
-        {category.title && <Title>{category.title}</Title>}
+        {category.title && <Title isDarkMode={isDarkMode}>{category.title}</Title>}
       </TitleAndAmountContainer>
     </Container>
   );

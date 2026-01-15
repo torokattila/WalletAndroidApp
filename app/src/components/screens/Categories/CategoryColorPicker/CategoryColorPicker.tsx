@@ -76,7 +76,7 @@ export const CategoryColorPicker: FC<CategoryColorPickerProps> = ({
         >
           <ModalBackground onHide={onClose} isVisible={isVisible} />
           <ContentContainer style={shadow} isDarkMode={isDarkMode}>
-            <UpperLine />
+            <UpperLine isDarkMode={isDarkMode} />
             <ColorPicker
               value={resultColor}
               sliderThickness={25}

@@ -156,7 +156,7 @@ export const CategoryModal: FC<CategoryModalProps> = ({
           <ModalBackground onHide={onClose} isVisible={isVisible} />
           <ContentContainer style={shadow} isDarkMode={isDarkMode}>
             <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
-              <UpperLine />
+              <UpperLine isDarkMode={isDarkMode} />
               {isEditMode && (
                 <DeleteIconContainer onPress={handleConfirmDialogOpen}>
                   <Icon type="trash" iconColor={theme.colors.white[100]} />
@@ -164,19 +164,22 @@ export const CategoryModal: FC<CategoryModalProps> = ({
               )}
 
               <Content>
-                <Title>{modalTitle}</Title>
+                <Title isDarkMode={isDarkMode}>{modalTitle}</Title>
 
                 <StyledTextInput
+                  style={shadow}
                   value={title}
                   onChange={handleTitleChange}
                   placeholder={i18n.t('Dialog.Categories.TitleInputPlaceholder')}
                   isDarkMode={isDarkMode}
-                  placeholderTextColor={theme.colors.grey[600]}
+                  placeholderTextColor={theme.colors.magenta[200]}
                 />
 
                 <ColorPickerContainer>
                   <View>
-                    <PickColorText>{i18n.t('Categories.PickColor')}:</PickColorText>
+                    <PickColorText isDarkMode={isDarkMode}>
+                      {i18n.t('Categories.PickColor')}:
+                    </PickColorText>
                   </View>
                   <TouchableOpacity
                     onPress={openColorPicker}
@@ -192,7 +195,9 @@ export const CategoryModal: FC<CategoryModalProps> = ({
 
                 <IconPickerContainer>
                   <View>
-                    <PickIconText>{i18n.t('Categories.PickIcon')}:</PickIconText>
+                    <PickIconText isDarkMode={isDarkMode}>
+                      {i18n.t('Categories.PickIcon')}:
+                    </PickIconText>
                   </View>
                 </IconPickerContainer>
 

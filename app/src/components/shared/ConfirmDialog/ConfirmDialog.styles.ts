@@ -19,7 +19,7 @@ export const Content = styled(View)<{ isDarkMode: boolean }>`
   flex-direction: column;
   border-radius: 20px;
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[100]};
   align-items: center;
   justify-content: space-around;
   width: 90%;
@@ -32,17 +32,19 @@ export const TextContainer = styled(View)`
   padding-right: 10px;
 `;
 
-export const Title = styled(Text)`
+export const Title = styled(Text)<{ isDarkMode: boolean }>`
   text-align: left;
   margin-bottom: 10px;
   font-size: 20px;
   font-family: 'NunitoSans-SemiBold';
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
-export const Description = styled(Text)`
+export const Description = styled(Text)<{ isDarkMode: boolean }>`
   font-size: 15px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const PrimaryButton = styled(TouchableOpacity)`

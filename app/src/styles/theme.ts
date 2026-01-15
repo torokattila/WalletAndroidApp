@@ -61,6 +61,7 @@ export const theme: DefaultTheme = {
     red: '#E23D3D',
     magenta: {
       100: '#e84393',
+      200: '#ec64a665',
     },
     white: {
       100: '#fff',

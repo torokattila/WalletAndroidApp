@@ -13,12 +13,12 @@ export const Container = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   position: relative;
 `;
 
-export const IconContainer = styled(View)<{ isDarkMode: boolean; categoryColor?: string }>`
-  background-color: ${({ theme, isDarkMode, categoryColor }) => {
+export const IconContainer = styled(View)<{ categoryColor?: string }>`
+  background-color: ${({ theme, categoryColor }) => {
     if (categoryColor) {
       return categoryColor;
     }
-    return isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100];
+    return theme.colors.magenta[100];
   }};
   padding: 7px;
   border-radius: 10px;

@@ -145,11 +145,12 @@ export const NoIncomesContainer = styled(View)`
   align-self: center;
 `;
 
-export const NoIncomesText = styled(Text)`
+export const NoIncomesText = styled(Text)<{ isDarkMode: boolean }>`
   text-align: center;
   font-family: 'NunitoSans-Light';
   font-size: 18px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const Loader = styled(ActivityIndicator)`

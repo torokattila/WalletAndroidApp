@@ -67,13 +67,13 @@ export const Profile: FC = () => {
   } = useProfile();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
-  const cardIconColor = isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100];
+  const cardIconColor = theme.colors.magenta[100];
 
   return (
     <>
       <Container isDarkMode={isDarkMode}>
         <StyledLinearGradient
-          colors={['#8E65F7', '#4547B8']}
+          colors={['#e84393', '#e84393']}
           useAngle
           angle={140}
           start={{ x: 0, y: 0 }}
@@ -86,33 +86,34 @@ export const Profile: FC = () => {
 
           <ContentContainer isDarkMode={isDarkMode}>
             <ImageContainer isDarkMode={isDarkMode}>
-              <Icon
-                type="profile-image"
-                iconColor={isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]}
-              />
+              <Icon type="profile-image" iconColor={theme.colors.magenta[100]} />
             </ImageContainer>
 
             <NameEmailContainer>
-              <Name>{localizedName}</Name>
+              <Name isDarkMode={isDarkMode}>{localizedName}</Name>
               <Email isDarkMode={isDarkMode}>{email}</Email>
             </NameEmailContainer>
 
             <OptionsContainer contentContainerStyle={scrollViewStyle}>
               <OptionCard
-                style={!isDarkMode && cardShadow}
+                style={cardShadow}
                 onPress={handleBasicDetailsPress}
                 isDarkMode={isDarkMode}
               >
                 <StyledIcon type="identity-card" iconColor={cardIconColor} />
-                <OptionCardTitle>{i18n.t('Profile.BasicDetailsTitle')}</OptionCardTitle>
+                <OptionCardTitle isDarkMode={isDarkMode}>
+                  {i18n.t('Profile.BasicDetailsTitle')}
+                </OptionCardTitle>
               </OptionCard>
               <OptionCard
-                style={!isDarkMode && cardShadow}
+                style={cardShadow}
                 onPress={handleChangePasswordPress}
                 isDarkMode={isDarkMode}
               >
                 <StyledIcon type="change-password" iconColor={cardIconColor} />
-                <OptionCardTitle>{i18n.t('Profile.ChangePasswordTitle')}</OptionCardTitle>
+                <OptionCardTitle isDarkMode={isDarkMode}>
+                  {i18n.t('Profile.ChangePasswordTitle')}
+                </OptionCardTitle>
               </OptionCard>
               <OptionCard
                 style={!isDarkMode && cardShadow}
@@ -120,7 +121,9 @@ export const Profile: FC = () => {
                 isDarkMode={isDarkMode}
               >
                 <StyledIcon type="delete-profile" iconColor={cardIconColor} />
-                <OptionCardTitle>{i18n.t('Profile.DeleteProfileTitle')}</OptionCardTitle>
+                <OptionCardTitle isDarkMode={isDarkMode}>
+                  {i18n.t('Profile.DeleteProfileTitle')}
+                </OptionCardTitle>
               </OptionCard>
               <OptionCard
                 style={!isDarkMode && cardShadow}
@@ -128,23 +131,23 @@ export const Profile: FC = () => {
                 isDarkMode={isDarkMode}
               >
                 <StyledIcon type="logout" iconColor={cardIconColor} />
-                <OptionCardTitle>{i18n.t('SignOut')}</OptionCardTitle>
+                <OptionCardTitle isDarkMode={isDarkMode}>{i18n.t('SignOut')}</OptionCardTitle>
               </OptionCard>
 
               <SwitchDarkModeContainer>
                 <SwitchDarkModeText>{i18n.t('DarkThemeText')}</SwitchDarkModeText>
 
                 <IconsAndSwitchContainer>
-                  <Icon type="sun" iconColor={theme.colors.purple[300]} />
+                  <Icon type="sun" iconColor={theme.colors.magenta[100]} />
                   <Switch
                     value={isDarkMode}
                     onValueChange={toggleDarkMode}
-                    trackColor={{ false: '#d9caff', true: '#d9caff' }}
-                    thumbColor={theme.colors.purple[300]}
+                    trackColor={{ false: '#f1c2d8', true: '#f3c6da' }}
+                    thumbColor={theme.colors.magenta[100]}
                   />
                   <Icon
                     type="moon"
-                    iconColor={theme.colors.purple[300]}
+                    iconColor={theme.colors.magenta[100]}
                     style={{ marginLeft: 5 }}
                   />
                 </IconsAndSwitchContainer>

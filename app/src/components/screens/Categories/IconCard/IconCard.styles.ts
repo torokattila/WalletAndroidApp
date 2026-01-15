@@ -7,7 +7,7 @@ export const IconContainer = styled(TouchableOpacity)<{
   isSelected?: boolean;
 }>`
   background-color: ${({ theme, isDarkMode }) => {
-    return isDarkMode ? theme.colors.grey[700] : theme.colors.white[100];
+    return isDarkMode ? theme.colors.grey[900] : theme.colors.white[100];
   }};
   padding: 12px;
   border-radius: 10px;
@@ -16,5 +16,5 @@ export const IconContainer = styled(TouchableOpacity)<{
   margin-right: 10px;
   border-width: ${({ isSelected }) => (isSelected ? '3px' : '0px')};
   border-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.colors.purple[300] : 'transparent'};
+    isSelected ? theme.colors.magenta[100] : 'transparent'};
 `;
