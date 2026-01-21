@@ -221,7 +221,7 @@ export const Home: FC = () => {
                   innerCircleColor={isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]}
                   showTooltip
                   tooltipBackgroundColor={
-                    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]
+                    isDarkMode ? theme.colors.grey[900] : theme.colors.white[200]
                   }
                   focusOnPress
                   showValuesAsTooltipText
@@ -245,7 +245,7 @@ export const Home: FC = () => {
                       <RefreshControl
                         refreshing={screenRefreshing}
                         onRefresh={handlePullToRefresh}
-                        colors={['#4547B8', '#8E65F7']}
+                        colors={['#e84393', '#e84393']}
                       />
                     }
                     data={donutChartData}
