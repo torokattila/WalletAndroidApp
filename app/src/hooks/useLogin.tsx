@@ -1,4 +1,4 @@
-import { AuthService } from '@model/services';
+import { getAuthService } from '@model/services';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import i18n from 'i18n-js';
 import { useState } from 'react';
@@ -17,7 +17,7 @@ const useLogin = () => {
   const { isLoading, execute } = useAsyncAction();
 
   const toast = useToastNotificationStore();
-  const authService = new AuthService();
+  const authService = getAuthService();
 
   const loginUser = {
     email,

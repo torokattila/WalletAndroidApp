@@ -1,16 +1,16 @@
 /* eslint-disable curly */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useCallback } from 'react';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import i18n from 'i18n-js';
-import { useToastNotificationStore } from '@stores/toastNotification.store';
-import { IncomeService } from '@model/services';
 import { Income } from '@model/domain';
-import { useUser } from './useUser';
-import { useDownload } from './useDownload';
-import { useModal } from './common/useModal';
+import { getIncomeService } from '@model/services';
+import { useToastNotificationStore } from '@stores/toastNotification.store';
+import i18n from 'i18n-js';
+import { useCallback, useEffect, useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useAsyncAction } from './common/useAsyncAction';
 import { useDateRange } from './common/useDateRange';
+import { useModal } from './common/useModal';
+import { useDownload } from './useDownload';
+import { useUser } from './useUser';
 
 export const useIncome = (income?: Income) => {
   const { retry: fetchUser, user } = useUser();
@@ -30,7 +30,7 @@ export const useIncome = (income?: Income) => {
   const [screenRefreshing, setScreenRefreshing] = useState(false);
 
   const toast = useToastNotificationStore();
-  const incomeService = new IncomeService();
+  const incomeService = getIncomeService();
   const { handleDownloadButtonClick } = useDownload(
     incomes,
     dateRange.fromDate,

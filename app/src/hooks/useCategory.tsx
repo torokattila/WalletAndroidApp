@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { IconType } from '@components/shared';
 import { getLocale } from '@core/translation-utils';
 import { Category } from '@model/domain';
 import { defaultCategories, ExtendedCategory } from '@model/domain/constants/categories';
-import { CategoryService } from '@model/services/category';
+import { getCategoryService } from '@model/services';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import translate from 'google-translate-api-x';
 import i18n from 'i18n-js';
 import { useEffect, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import { useUser } from './useUser';
-import { IconType } from '@components/shared';
-import { useModal } from './common/useModal';
 import { useAsyncAction } from './common/useAsyncAction';
+import { useModal } from './common/useModal';
+import { useUser } from './useUser';
 
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();
@@ -47,7 +47,7 @@ export const useCategory = (category?: Category) => {
   }, [category]);
 
   const toast = useToastNotificationStore();
-  const categoryService = new CategoryService();
+  const categoryService = getCategoryService();
 
   const fetchCategories = async () => {
     await execute(async () => {

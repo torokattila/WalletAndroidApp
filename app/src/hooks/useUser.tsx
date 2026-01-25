@@ -1,15 +1,8 @@
-import React, {
-  createContext,
-  FC,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
 import { User } from '@model/domain';
-import { UserService } from '@model/services';
-import { useUserId } from './useUserId';
+import { getUserService } from '@model/services';
+import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { useAuth } from './useAuth';
+import { useUserId } from './useUserId';
 
 type UserContextProps = {
   user: User;
@@ -35,7 +28,7 @@ const UserContext = createContext<UserContextProps>({
 });
 
 export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
-  const userService = new UserService();
+  const userService = getUserService();
 
   const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);

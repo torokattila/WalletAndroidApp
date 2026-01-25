@@ -1,3 +1,6 @@
+import { User } from '@model/domain';
+import { getDB } from '@model/firebase-config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   addDoc,
   collection,
@@ -13,13 +16,9 @@ import {
   where,
 } from 'firebase/firestore';
 import uuid from 'react-native-uuid';
-import { User } from '@model/domain';
-import { getDB } from '@model/firebase-config';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthService } from '../auth';
 import { BaseService } from '../base.service';
-import { IncomeService } from '../income';
-import { PurchaseService } from '../purchase';
+import { getIncomeService, getPurchaseService } from '../ServiceContainer';
 
 export type UserModel = {
   id: string;
@@ -144,8 +143,8 @@ export class UserService extends BaseService<UserModel> {
   }
 
   private calculateUserBalance = async (userId: string): Promise<number> => {
-    const incomeService = new IncomeService();
-    const purchaseService = new PurchaseService();
+    const incomeService = getIncomeService();
+    const purchaseService = getPurchaseService();
 
     try {
       const incomes = await incomeService.getAllIncomes(userId);

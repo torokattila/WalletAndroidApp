@@ -1,3 +1,6 @@
+import { Category, Purchase, PurchaseCategory } from '@model/domain';
+import { defaultCategories } from '@model/domain/constants/categories';
+import { getDB } from '@model/firebase-config';
 import {
   addDoc,
   collection,
@@ -16,12 +19,8 @@ import {
   where,
 } from 'firebase/firestore';
 import i18n from 'i18n-js';
-import { Category, Purchase, PurchaseCategory } from '@model/domain';
-import { getDB } from '@model/firebase-config';
 import { BaseService } from '../base.service';
-import { UserService } from '@model/services/user';
-import { CategoryService } from '../category';
-import { defaultCategories } from '@model/domain/constants/categories';
+import { getCategoryService, getUserService } from '../ServiceContainer';
 
 export type PurchaseModel = {
   id: string;
@@ -34,13 +33,11 @@ export type PurchaseModel = {
 };
 
 export class PurchaseService extends BaseService<PurchaseModel> {
-  private userService: UserService;
-  private categoryService: CategoryService;
+  private userService = getUserService();
+  private categoryService = getCategoryService();
 
   constructor() {
     super('purchases');
-    this.userService = new UserService();
-    this.categoryService = new CategoryService();
   }
 
   async createdPurchase(
@@ -49,6 +46,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     category: PurchaseCategory | string,
     secondaryCategory?: string | null
   ): Promise<Purchase> {
+    const userService = getUserService();
     const purchasesCollectionRef = collection(getDB(), 'purchases');
     const insertedPurchase = await addDoc(purchasesCollectionRef, {
       userId,
@@ -59,9 +57,9 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       updatedAt: Timestamp.now(),
     });
 
-    const currentUser = await this.userService.getUserByUserId(userId);
+    const currentUser = await userService.getUserByUserId(userId);
     const currentBalance = currentUser?.balance;
-    await this.userService.updateBasicDetails(userId, {
+    await userService.updateBasicDetails(userId, {
       ...currentUser,
       balance: currentBalance - Number(amount),
     });

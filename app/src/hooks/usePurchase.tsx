@@ -3,8 +3,7 @@
 import { getLocale } from '@core/translation-utils';
 import { Purchase, PurchaseCategory } from '@model/domain';
 import { defaultCategories } from '@model/domain/constants/categories';
-import { PurchaseService } from '@model/services';
-import { CategoryService } from '@model/services/category';
+import { getCategoryService, getPurchaseService } from '@model/services';
 import { TabStackParams } from '@navigation/Tabs';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
@@ -13,9 +12,9 @@ import translate from 'google-translate-api-x';
 import i18n from 'i18n-js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+import { useAsyncAction, useDateRange, useModal } from './common';
 import { useDownload } from './useDownload';
 import { useUser } from './useUser';
-import { useAsyncAction, useDateRange, useModal } from './common';
 
 export type CategoryDropdownValueType = {
   label: string;
@@ -40,7 +39,8 @@ export const usePurchase = (purchase?: Purchase) => {
   const navigation = useNavigation();
   const userId = user?.id;
 
-  const categoryService = new CategoryService();
+  const categoryService = getCategoryService();
+  const purchaseService = getPurchaseService();
 
   const [amount, setAmount] = useState('0');
   const [allPurchasesAmountForThisMonth, setAllPurchasesAmountForThisMonth] = useState(0);
@@ -112,7 +112,6 @@ export const usePurchase = (purchase?: Purchase) => {
     setAmountAndCategory();
   }, [purchase]);
 
-  const purchaseService = new PurchaseService();
   const toast = useToastNotificationStore();
   const { handleDownloadButtonClick } = useDownload(
     purchases,

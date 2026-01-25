@@ -1,4 +1,4 @@
-import { UserService } from '@model/services';
+import { getUserService } from '@model/services';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import i18n from 'i18n-js';
 import { useState } from 'react';
@@ -21,7 +21,7 @@ const useRegistration = () => {
   const { isLoading, execute } = useAsyncAction();
 
   const toast = useToastNotificationStore();
-  const userService = new UserService();
+  const userService = getUserService();
 
   const registeredUser = {
     firstname,

@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import i18n from 'i18n-js';
-import { FirebaseError } from 'firebase/app';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { getLocalizedName } from '@core/name';
-import { AuthService } from '@model/services';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { getAuthService } from '@model/services';
 import { RootStackParams } from '@navigation/Navigation';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
-import { useUser } from './useUser';
+import { FirebaseError } from 'firebase/app';
+import i18n from 'i18n-js';
+import { useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useAsyncAction } from './common/useAsyncAction';
+import { useUser } from './useUser';
 
-const authService = new AuthService();
+const authService = getAuthService();
 
 export const useProfile = () => {
   const navigation = useNavigation<NavigationProp<RootStackParams>>();

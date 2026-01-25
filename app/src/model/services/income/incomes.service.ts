@@ -1,3 +1,5 @@
+import { Income } from '@model/domain';
+import { getDB } from '@model/firebase-config';
 import {
   addDoc,
   collection,
@@ -14,10 +16,8 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { getDB } from '@model/firebase-config';
-import { Income } from '@model/domain';
 import { BaseService } from '../base.service';
-import { UserService } from '../user';
+import { getUserService } from '../ServiceContainer';
 
 export type IncomeModel = {
   id: string;
@@ -29,14 +29,12 @@ export type IncomeModel = {
 };
 
 export class IncomeService extends BaseService<IncomeModel> {
-  private userService: UserService;
-
   constructor() {
     super('incomes');
-    this.userService = new UserService();
   }
 
   async createIncome(userId: string, amount: string, title: string): Promise<Income> {
+    const userService = getUserService();
     const incomesCollectionRef = collection(getDB(), 'incomes');
     const insertedIncome = await addDoc(incomesCollectionRef, {
       userId,
@@ -46,9 +44,9 @@ export class IncomeService extends BaseService<IncomeModel> {
       updatedAt: Timestamp.now(),
     });
 
-    const currentUser = await this.userService.getUserByUserId(userId);
+    const currentUser = await userService.getUserByUserId(userId);
     const currentBalance = currentUser?.balance;
-    await this.userService.updateBasicDetails(userId, {
+    await userService.updateBasicDetails(userId, {
       ...currentUser,
       balance: currentBalance + Number(amount),
     });
@@ -60,10 +58,11 @@ export class IncomeService extends BaseService<IncomeModel> {
   }
 
   async updateIncome(incomeId: string, userId: string, data: Partial<Income>): Promise<Income> {
+    const userService = getUserService();
     const currentIncome = await this.getIncomeById(incomeId);
-    const currentUser = await this.userService.getUserByUserId(userId);
+    const currentUser = await userService.getUserByUserId(userId);
 
-    const updatedUser = await this.userService.updateBasicDetails(userId, {
+    const updatedUser = await userService.updateBasicDetails(userId, {
       ...currentUser,
       balance: currentUser.balance - Number(currentIncome.amount),
     });
@@ -74,7 +73,7 @@ export class IncomeService extends BaseService<IncomeModel> {
       title: data?.title?.trim(),
     };
 
-    await this.userService.updateBasicDetails(userId, {
+    await userService.updateBasicDetails(userId, {
       ...updatedUser,
       balance: updatedUser.balance + Number(data.amount),
     });
@@ -87,10 +86,11 @@ export class IncomeService extends BaseService<IncomeModel> {
   }
 
   async deleteIncome(incomeId: string, userId: string): Promise<void> {
+    const userService = getUserService();
     const currentIncome = await this.getIncomeById(incomeId);
-    const currentUser = await this.userService.getUserByUserId(userId);
+    const currentUser = await userService.getUserByUserId(userId);
 
-    await this.userService.updateBasicDetails(userId, {
+    await userService.updateBasicDetails(userId, {
       ...currentUser,
       balance: currentUser.balance - Number(currentIncome.amount),
     });
