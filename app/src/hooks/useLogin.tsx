@@ -1,9 +1,11 @@
+import { AuthService } from '@model/services';
+import { useToastNotificationStore } from '@stores/toastNotification.store';
+import i18n from 'i18n-js';
 import { useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import * as Yup from 'yup';
-import i18n from 'i18n-js';
-import { AuthService } from '@model/services';
-import { useToastNotificationStore } from '@stores/toastNotification.store';
+import { useAsyncAction } from './common/useAsyncAction';
+import { useFormValidation } from './common/useFormValidation';
 import { useUser } from './useUser';
 
 const useLogin = () => {
@@ -11,8 +13,8 @@ const useLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPassword, setIsPassword] = useState(true);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [isLoading, setIsLoading] = useState(false);
+  const { errors, validateAll } = useFormValidation();
+  const { isLoading, execute } = useAsyncAction();
 
   const toast = useToastNotificationStore();
   const authService = new AuthService();
@@ -44,51 +46,35 @@ const useLogin = () => {
   };
 
   const verifyForm = async (): Promise<boolean> => {
-    try {
-      await LoginSchema.validate(loginUser, { abortEarly: false });
-      setErrors({});
-
-      return Promise.resolve(true);
-    } catch (error: any) {
-      const newErrors: { [key: string]: string } = {};
-
-      for (const err of error.inner) {
-        newErrors[err.path] = err.message;
-      }
-
-      setErrors(newErrors);
-      return Promise.resolve(false);
-    }
+    return await validateAll(loginUser, LoginSchema);
   };
 
   const handleSubmit = async () => {
     const isFormVerified = await verifyForm();
 
     if (isFormVerified) {
-      setIsLoading(true);
-
-      try {
-        await authService.loginWithEmailAndPassword(email, password);
-        fetchUser();
-      } catch (error) {
-        switch (error.code) {
-          case 'auth/user-not-found':
-          case 'auth/wrong-password':
-            toast.show({
-              type: 'error',
-              title: i18n.t('ToastNotification.InvalidCredentialsTitle'),
-            });
-            return;
-          default:
-            toast.show({
-              type: 'error',
-              title: i18n.t('ToastNotification.SomethingWentWrong'),
-            });
-            return;
+      await execute(async () => {
+        try {
+          await authService.loginWithEmailAndPassword(email, password);
+          fetchUser();
+        } catch (error) {
+          switch (error.code) {
+            case 'auth/user-not-found':
+            case 'auth/wrong-password':
+              toast.show({
+                type: 'error',
+                title: i18n.t('ToastNotification.InvalidCredentialsTitle'),
+              });
+              return;
+            default:
+              toast.show({
+                type: 'error',
+                title: i18n.t('ToastNotification.SomethingWentWrong'),
+              });
+              return;
+          }
         }
-      } finally {
-        setIsLoading(false);
-      }
+      });
     }
   };
 

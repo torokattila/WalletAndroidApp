@@ -5,13 +5,11 @@ import { formatAmount } from '@core/format-amount';
 import { getLocale } from '@core/translation-utils';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { useHome } from '@hooks/useHome';
-import { usePurchase } from '@hooks/usePurchase';
-import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
 import { format } from 'date-fns';
 import { enUS, hu } from 'date-fns/locale';
 import i18n from 'i18n-js';
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { PieChart } from 'react-native-gifted-charts';
@@ -20,6 +18,7 @@ import {
   Balance,
   BalanceContainer,
   BalanceTitle,
+  buttonShadow,
   Container,
   ContentContainer,
   DateSelectorButton,
@@ -40,113 +39,27 @@ import {
 } from './Home.styles';
 import PieChartPurchaseCard from './PieChartPurchaseCard/PieChartPurchaseCard';
 
-const buttonShadow = {
-  elevation: 10,
-  shadowColor: theme.colors.black,
-  shadowOffset: { width: -2, height: 20 },
-  shadowOpacity: 0.7,
-  shadowRadius: 20,
-};
-
 export const Home: FC = () => {
   const { isDarkMode } = useDarkMode();
   const locale = getLocale();
-  const { screenRefreshing, setScreenRefreshing } = useHome();
   const {
-    purchases,
+    user,
+    donutChartData,
+    isLoading,
+    screenRefreshing,
+    handlePullToRefresh,
+    selectedMonth,
+    isMonthPickerOpen,
+    handleMonthPickerOpen,
+    handleMonthPickerClose,
+    handleMonthChange,
     isModalOpen,
     handleModalClose,
     isEditModeModal,
     selectedPurchase,
-    retry: reloadPurchases,
-    isLoading,
-  } = usePurchase();
-  const { user, navigation } = useHome();
-  const [selectedMonth, setSelectedMonth] = useState(new Date());
-  const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
-
-  const handlePullToRefresh = async () => {
-    setScreenRefreshing(true);
-
-    await reloadPurchases();
-  };
-
-  useEffect(() => {
-    if (!isLoading && screenRefreshing) {
-      setScreenRefreshing(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, purchases, screenRefreshing]);
-
-  const aggregatePurchasesByCategory = (purchasesProp: Purchase[]) => {
-    if (!purchasesProp || purchasesProp.length === 0) {
-      return [];
-    }
-
-    const currentMonth = selectedMonth.getMonth();
-    const currentYear = selectedMonth.getFullYear();
-
-    const purchasesForSelectedMonth = purchasesProp.filter((purchase) => {
-      const purchaseDate = purchase.createdAt.toDate();
-      return purchaseDate.getMonth() === currentMonth && purchaseDate.getFullYear() === currentYear;
-    });
-
-    if (purchasesForSelectedMonth.length === 0) {
-      return [];
-    }
-
-    const totalAmount = purchasesForSelectedMonth.reduce(
-      (sum, purchase) => sum + parseFloat(purchase.amount || '0'),
-      0
-    );
-
-    const categoryTotals: {
-      [category: string]: {
-        amount: number;
-        color: string;
-        originalCategory: string;
-        icon?: string;
-      };
-    } = {};
-
-    purchasesForSelectedMonth.forEach((purchase) => {
-      const category: string =
-        typeof purchase.categoryObject?.title === 'string'
-          ? purchase.categoryObject.title
-          : typeof purchase.category === 'string'
-          ? purchase.category
-          : '';
-      const amount = parseFloat(purchase.amount || '0');
-      const color = purchase.categoryObject?.color || theme.colors.grey[500];
-      const originalCategory =
-        typeof purchase.category === 'string' ? purchase.category : purchase.category.title;
-      const icon = purchase?.categoryObject?.icon ?? '';
-
-      if (categoryTotals[category]) {
-        categoryTotals[category].amount += amount;
-      } else {
-        categoryTotals[category] = { amount, color, originalCategory, icon };
-      }
-    });
-
-    return Object.entries(categoryTotals)
-      .map(([category, { amount, color, originalCategory, icon }]) => ({
-        label: category,
-        value: amount,
-        text: `${category} - ${Math.round((amount / totalAmount) * 100)}%`,
-        percentage: Math.round((amount / totalAmount) * 100),
-        color,
-        originalCategory,
-        icon,
-      }))
-      .sort((a, b) => b.percentage - a.percentage);
-  };
-
-  const donutChartData = useMemo(
-    () => aggregatePurchasesByCategory(purchases),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [purchases, selectedMonth]
-  );
+    navigateToPurchases,
+    navigation,
+  } = useHome();
 
   return (
     <>
@@ -182,7 +95,7 @@ export const Home: FC = () => {
               <MonthlyStatementTitle isDarkMode={isDarkMode}>
                 {i18n.t('Home.MonthlyStatement')}:
               </MonthlyStatementTitle>
-              <DateSelectorButton onPress={() => setIsMonthPickerOpen(true)}>
+              <DateSelectorButton onPress={handleMonthPickerOpen}>
                 <Icon type="calendar" iconColor={theme.colors.white[100]} />
                 <DateSelectorText>
                   {format(selectedMonth, 'yyyy MMMM', { locale: locale === 'hun' ? hu : enUS })}
@@ -198,11 +111,8 @@ export const Home: FC = () => {
               date={selectedMonth}
               maximumDate={new Date()}
               androidVariant="iosClone"
-              onConfirm={(date) => {
-                setSelectedMonth(date);
-                setIsMonthPickerOpen(false);
-              }}
-              onCancel={() => setIsMonthPickerOpen(false)}
+              onConfirm={handleMonthChange}
+              onCancel={handleMonthPickerClose}
               cancelText={i18n.t('DatePicker.CancelButtonText')}
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
               theme={isDarkMode ? 'dark' : 'auto'}
@@ -266,11 +176,11 @@ export const Home: FC = () => {
                             0
                           );
 
-                          navigation.navigate('Purchases', {
-                            category: item.originalCategory,
-                            fromDate: firstDayOfSelectedMonth,
-                            toDate: lastDayOfSelectedMonth,
-                          });
+                          navigateToPurchases(
+                            item.originalCategory,
+                            firstDayOfSelectedMonth,
+                            lastDayOfSelectedMonth
+                          );
                         }}
                       />
                     )}

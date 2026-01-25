@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
+import { theme as globalTheme } from '@styles/theme';
 
 export const Container = styled(View)<ViewProps & { isDarkMode?: boolean }>`
   flex: 1;
@@ -159,3 +160,11 @@ export const Loader = styled(ActivityIndicator)`
   padding-top: 20%;
   align-self: center;
 `;
+
+export const buttonShadow = {
+  elevation: 10,
+  shadowColor: globalTheme.colors.black,
+  shadowOffset: { width: -2, height: 20 },
+  shadowOpacity: 0.7,
+  shadowRadius: 20,
+};

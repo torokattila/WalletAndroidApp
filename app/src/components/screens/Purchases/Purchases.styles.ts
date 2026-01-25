@@ -9,7 +9,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { theme as globalTheme } from '@styles/theme';
 import Animated from 'react-native-reanimated';
 
@@ -18,13 +17,6 @@ const WIDTH = Dimensions.get('screen').width;
 export const Container = styled(View)`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.white[100]};
-`;
-
-export const StyledLinearGradient = styled(LinearGradient)`
-  height: 100%;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
 `;
 
 export const ScreenTitleContainer = styled(View)`

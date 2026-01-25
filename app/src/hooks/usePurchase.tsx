@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { getLocale } from '@core/translation-utils';
 import { Purchase, PurchaseCategory } from '@model/domain';
@@ -7,13 +8,14 @@ import { CategoryService } from '@model/services/category';
 import { TabStackParams } from '@navigation/Tabs';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
-import { Timestamp } from 'firebase/firestore'; // Ensure this is imported
+import { Timestamp } from 'firebase/firestore';
 import translate from 'google-translate-api-x';
 import i18n from 'i18n-js';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useDownload } from './useDownload';
 import { useUser } from './useUser';
+import { useAsyncAction, useDateRange, useModal } from './common';
 
 export type CategoryDropdownValueType = {
   label: string;
@@ -44,21 +46,18 @@ export const usePurchase = (purchase?: Purchase) => {
   const [allPurchasesAmountForThisMonth, setAllPurchasesAmountForThisMonth] = useState(0);
   const [category, setCategory] = useState<PurchaseCategory | string | null>(null);
   const [secondaryCategory, setSecondaryCategory] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const { isLoading, execute } = useAsyncAction();
+  const modal = useModal<Purchase>();
+  const dateRange = useDateRange();
+
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
-  const [isEditModeModal, setIsEditModeModal] = useState(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
-  const fromDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
   const [createdAt, setCreatedAt] = useState<Date>(
     purchase?.createdAt ? purchase.createdAt.toDate() : new Date()
   );
   const [isCreatedAtPickerOpen, setIsCreatedAtPickerOpen] = useState(false);
-  const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
-  const toDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0));
   const filterCategory = useRef(null);
   const [isCategoryFilterChanged, setIsCategoryFilterChanged] = useState(false);
   const isDateFilterChanged = useRef(false);
@@ -117,31 +116,21 @@ export const usePurchase = (purchase?: Purchase) => {
   const toast = useToastNotificationStore();
   const { handleDownloadButtonClick } = useDownload(
     purchases,
-    fromDate.current,
-    toDate.current,
+    dateRange.fromDate,
+    dateRange.toDate,
     'purchases'
   );
 
-  const fetchPurchases = async () => {
-    setIsLoading(true);
-
-    try {
+  const fetchPurchases = useCallback(async () => {
+    await execute(async () => {
       const allPurchases = await purchaseService.joinCategoriesIntoPurchases(userId);
-
       setPurchases(allPurchases);
-    } catch (error) {
-      console.error(`Error during fetching purchases: ${error}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    });
+  }, [userId]);
 
-  const fetchAllCategories = async () => {
-    setIsLoading(true);
-
-    try {
+  const fetchAllCategories = useCallback(async () => {
+    await execute(async () => {
       const categoriesList = await categoryService.getAllCategories(userId);
-
       const categoriesWithLabelAndValue: CategoryDropdownValueType[] = [];
 
       for (const categ of categoriesList) {
@@ -156,12 +145,8 @@ export const usePurchase = (purchase?: Purchase) => {
       }
 
       setAllCategories([...filterCategories, ...categoriesWithLabelAndValue]);
-    } catch (error) {
-      console.error(`Error during fetching categories: ${error}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    });
+  }, [userId, locale]);
 
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
@@ -171,37 +156,23 @@ export const usePurchase = (purchase?: Purchase) => {
 
   const stopRefreshing = () => setScreenRefreshing(false);
 
-  const fetchThisMonthPurchasesAmount = async (): Promise<void> => {
-    setIsLoading(true);
-
-    try {
+  const fetchThisMonthPurchasesAmount = useCallback(async () => {
+    await execute(async () => {
       const purchasesAmountCurrentMonth = await purchaseService.getAllPurchaseAmountInCurrentMonth(
         userId
       );
-
       setAllPurchasesAmountForThisMonth(purchasesAmountCurrentMonth);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    });
+  }, [userId]);
 
-  const filterPurchases = async (): Promise<void> => {
-    setIsLoading(true);
-
-    const fromDateMidnight = fromDate;
-    fromDateMidnight.current.setHours(0, 0, 0, 0);
-    const toDateMidnight = toDate;
-    toDateMidnight.current.setHours(23, 59, 0, 0);
-
-    try {
+  const filterPurchases = useCallback(async () => {
+    await execute(async () => {
       const filteredPurchases = await purchaseService.filterPurchases(
         userId,
         isDateFilterChanged.current
           ? {
-              startDate: fromDateMidnight.current,
-              endDate: toDateMidnight.current,
+              startDate: dateRange.fromDate,
+              endDate: dateRange.toDate,
             }
           : null,
         filterCategory.current !== PurchaseCategory.ALL ? filterCategory.current : null
@@ -225,12 +196,8 @@ export const usePurchase = (purchase?: Purchase) => {
       });
 
       setPurchases(purchasesWithCategories);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    });
+  }, [userId, dateRange.fromDate, dateRange.toDate]);
 
   const verifyForm = (): boolean => {
     if (amount === '0') {
@@ -249,78 +216,45 @@ export const usePurchase = (purchase?: Purchase) => {
   };
 
   const handleCreatePurchase = async (): Promise<void> => {
-    const isFormVerified = verifyForm();
+    if (!verifyForm()) return;
 
-    if (isFormVerified) {
-      try {
-        setIsLoading(true);
-        await purchaseService.createdPurchase(userId, amount, category, secondaryCategory);
-        fetchUser();
-        setAmount('0');
-        setCategory(null);
-        setSecondaryCategory(null);
-        toast.show({
-          type: 'success',
-          title: i18n.t('ToastNotification.NewPurchaseSuccess'),
-        });
-      } catch (error) {
-        setErrors({
-          generalError: error,
-        });
-        toast.show({
-          type: 'error',
-          title: i18n.t('ToastNotification.SomethingWentWrong'),
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    }
+    await execute(async () => {
+      await purchaseService.createdPurchase(userId, amount, category, secondaryCategory);
+      fetchUser();
+      setAmount('0');
+      setCategory(null);
+      setSecondaryCategory(null);
+      toast.show({
+        type: 'success',
+        title: i18n.t('ToastNotification.NewPurchaseSuccess'),
+      });
+    });
   };
 
   const handleUpdatePurchase = async (): Promise<void> => {
-    if (!purchase) {
-      return;
-    }
+    if (!purchase || !verifyForm()) return;
 
-    const isFormVerified = verifyForm();
+    await execute(async () => {
+      await purchaseService.updatePurchase(purchase?.id, userId, {
+        amount,
+        category,
+        secondaryCategory,
+        createdAt: Timestamp.fromDate(createdAt),
+      });
 
-    if (isFormVerified) {
-      try {
-        setIsLoading(true);
-        await purchaseService.updatePurchase(purchase?.id, userId, {
-          amount,
-          category,
-          secondaryCategory,
-          createdAt: Timestamp.fromDate(createdAt),
-        });
-
-        fetchUser();
-        fetchPurchases();
-        toast.show({
-          type: 'success',
-          title: i18n.t('ToastNotification.EditPurchaseSuccess'),
-        });
-      } catch (error) {
-        setErrors({
-          generalError: error,
-        });
-        toast.show({
-          type: 'error',
-          title: i18n.t('ToastNotification.SomethingWentWrong'),
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    }
+      fetchUser();
+      fetchPurchases();
+      toast.show({
+        type: 'success',
+        title: i18n.t('ToastNotification.EditPurchaseSuccess'),
+      });
+    });
   };
 
   const handleDeletePurchase = async (): Promise<void> => {
-    if (!purchase) {
-      return;
-    }
+    if (!purchase) return;
 
-    try {
-      setIsLoading(true);
+    await execute(async () => {
       await purchaseService.deletePurchase(purchase?.id, userId);
       fetchUser();
       fetchPurchases();
@@ -328,35 +262,21 @@ export const usePurchase = (purchase?: Purchase) => {
         type: 'success',
         title: i18n.t('ToastNotification.DeletePurchaseSuccess'),
       });
-    } catch (error) {
-      setErrors({
-        generalError: error,
-      });
-      toast.show({
-        type: 'error',
-        title: i18n.t('ToastNotification.SomethingWentWrong'),
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
-  const handleModalOpen = (): void => {
-    setIsModalOpen(true);
+  const handleModalOpen = () => modal.open();
+
+  const handleModalClose = () => {
+    modal.close();
+    setAmount('0');
+    setCategory(null);
+    setSecondaryCategory(null);
+    setCreatedAt(new Date());
   };
 
-  const handleModalClose = (): void => {
-    setIsModalOpen(false);
-    setSelectedPurchase(null);
-    setIsModalOpen(false);
-    setIsEditModeModal(false);
-    setCategory(PurchaseCategory.ALL);
-  };
-
-  const handleEditModalOpen = (editableIncome: Purchase) => {
-    handleModalOpen();
-    setSelectedPurchase(editableIncome);
-    setIsEditModeModal(true);
+  const handleEditModalOpen = (editablePurchase: Purchase) => {
+    modal.open(editablePurchase);
   };
 
   const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
@@ -399,25 +319,18 @@ export const usePurchase = (purchase?: Purchase) => {
 
   const showDateFilters = (): void => setIsDateFiltersShown(true);
   const hideDateFilters = (): void => setIsDateFiltersShown(false);
-
-  const handleFromDatePickerOpen = (): void => setIsFromDatePickerOpen(true);
-  const handleFromDatePickerClose = (): void => setIsFromDatePickerOpen(false);
-  const handleToDatePickerOpen = (): void => setIsToDatePickerOpen(true);
-  const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
   const handleCreatedAtPickerOpen = (): void => setIsCreatedAtPickerOpen(true);
   const handleCreatedAtPickerClose = (): void => setIsCreatedAtPickerOpen(false);
 
   const handleFromDateChange = async (date: Date): Promise<void> => {
     isDateFilterChanged.current = true;
-    handleFromDatePickerClose();
-    fromDate.current = date;
+    dateRange.setFromDate(date);
     await filterPurchases();
   };
 
   const handleToDateChange = async (date: Date): Promise<void> => {
     isDateFilterChanged.current = true;
-    handleToDatePickerClose();
-    toDate.current = date;
+    dateRange.setToDate(date);
     await filterPurchases();
   };
 
@@ -427,8 +340,7 @@ export const usePurchase = (purchase?: Purchase) => {
   };
 
   const handleClearFilters = async (): Promise<void> => {
-    fromDate.current = new Date();
-    toDate.current = new Date();
+    dateRange.clearDates();
     filterCategory.current = PurchaseCategory.ALL;
     setIsCategoryFilterChanged(false);
     isDateFilterChanged.current = false;
@@ -447,7 +359,6 @@ export const usePurchase = (purchase?: Purchase) => {
     } else {
       setPurchases([]);
       setAllCategories([]);
-      setIsLoading(false);
     }
   }, [userId]);
 
@@ -468,17 +379,25 @@ export const usePurchase = (purchase?: Purchase) => {
       filterCategory.current = route.params.category;
       setIsCategoryFilterChanged(true);
 
-      fromDate.current = new Date(route.params.fromDate);
-      toDate.current = new Date(route.params.toDate);
+      const fromDate = new Date(route.params.fromDate);
+      const toDate = new Date(route.params.toDate);
+      dateRange.setFromDate(fromDate);
+      dateRange.setToDate(toDate);
       isDateFilterChanged.current = true;
-      filterPurchases();
+      // Don't call filterPurchases here - let the dates update first
     }
   }, [route.params, userId]);
 
+  // Separate effect to filter purchases when dates are updated from navigation
+  useEffect(() => {
+    if (isCategoryFilterChanged && dateRange.fromDate && dateRange.toDate && userId) {
+      filterPurchases();
+    }
+  }, [dateRange.fromDate, dateRange.toDate, isCategoryFilterChanged, userId, filterPurchases]);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
-      fromDate.current = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-      toDate.current = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+      dateRange.clearDates();
       filterCategory.current = null;
       setIsCategoryFilterChanged(false);
       isDateFilterChanged.current = false;
@@ -508,9 +427,9 @@ export const usePurchase = (purchase?: Purchase) => {
     handleModalOpen,
     handleModalClose,
     handleEditModalOpen,
-    isModalOpen,
-    isEditModeModal,
-    selectedPurchase,
+    isModalOpen: modal.isOpen,
+    isEditModeModal: modal.isEditMode,
+    selectedPurchase: modal.data,
     categories,
     filterCategories,
     handleDropdownChange,
@@ -524,17 +443,17 @@ export const usePurchase = (purchase?: Purchase) => {
     handleConfirmDialogClose,
     handleNumberChange,
     handleBackspacePress,
-    handleFromDatePickerOpen,
-    fromDate,
-    handleFromDatePickerClose,
-    handleToDatePickerOpen,
-    toDate,
-    handleToDatePickerClose,
+    handleFromDatePickerOpen: dateRange.openFromDatePicker,
+    fromDate: dateRange.fromDate,
+    handleFromDatePickerClose: dateRange.closeFromDatePicker,
+    handleToDatePickerOpen: dateRange.openToDatePicker,
+    toDate: dateRange.toDate,
+    handleToDatePickerClose: dateRange.closeToDatePicker,
     handleFromDateChange,
     handleToDateChange,
-    isFromDatePickerOpen,
-    isToDatePickerOpen,
-    isDateFilterChanged,
+    isFromDatePickerOpen: dateRange.isFromDatePickerOpen,
+    isToDatePickerOpen: dateRange.isToDatePickerOpen,
+    isDateFilterChanged: isDateFilterChanged.current,
     isCategoryFilterChanged,
     filterCategory,
     handleClearFilters,

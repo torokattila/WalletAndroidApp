@@ -1,5 +1,6 @@
+/* eslint-disable curly */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import i18n from 'i18n-js';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
@@ -7,6 +8,9 @@ import { IncomeService } from '@model/services';
 import { Income } from '@model/domain';
 import { useUser } from './useUser';
 import { useDownload } from './useDownload';
+import { useModal } from './common/useModal';
+import { useAsyncAction } from './common/useAsyncAction';
+import { useDateRange } from './common/useDateRange';
 
 export const useIncome = (income?: Income) => {
   const { retry: fetchUser, user } = useUser();
@@ -15,18 +19,24 @@ export const useIncome = (income?: Income) => {
   const [amount, setAmount] = useState<string>('0');
   const [title, setTitle] = useState<string>('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { isLoading, execute } = useAsyncAction();
+  const modal = useModal<Income>();
+  const dateRange = useDateRange();
+
   const [incomes, setIncomes] = useState<Income[]>([]);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
-  const fromDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
-  const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
-  const toDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0));
   const [isFilterChanged, setIsFilterChanged] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
-  const [isEditModeModal, setIsEditModeModal] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [screenRefreshing, setScreenRefreshing] = useState(false);
+
+  const toast = useToastNotificationStore();
+  const incomeService = new IncomeService();
+  const { handleDownloadButtonClick } = useDownload(
+    incomes,
+    dateRange.fromDate,
+    dateRange.toDate,
+    'incomes'
+  );
 
   useEffect(() => {
     if (income) {
@@ -38,220 +48,94 @@ export const useIncome = (income?: Income) => {
     }
   }, [income]);
 
-  const toast = useToastNotificationStore();
-  const { handleDownloadButtonClick } = useDownload(
-    incomes,
-    fromDate.current,
-    toDate.current,
-    'incomes'
-  );
-  const incomeService = new IncomeService();
-
-  const fetchIncomes = async () => {
-    setIsLoading(true);
-
-    try {
+  const fetchIncomes = useCallback(async () => {
+    await execute(async () => {
       const allIncomes = await incomeService.getAllIncomes(user.id);
-
       setIncomes(allIncomes);
-    } catch (error) {
-      console.error(`Error during fetching incomes: ${error}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    });
+  }, [user.id]);
+
+  const filterIncomes = useCallback(async () => {
+    await execute(async () => {
+      const filteredIncomes = await incomeService.getIncomesByDate(
+        userId,
+        dateRange.fromDate,
+        dateRange.toDate
+      );
+      setIncomes(filteredIncomes);
+    });
+  }, [userId, dateRange.fromDate, dateRange.toDate]);
 
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
-
     await fetchIncomes();
   };
 
   const stopRefreshing = () => setScreenRefreshing(false);
 
-  const filterIncomes = async () => {
-    setIsLoading(true);
-
-    const fromDateMidnight = fromDate;
-    fromDateMidnight.current.setHours(0, 0, 0, 0);
-    const endDateMidnight = toDate;
-    endDateMidnight.current.setHours(23, 59, 0, 0);
-
-    try {
-      const filteredIncomes = await incomeService.getIncomesByDate(
-        userId,
-        fromDateMidnight.current,
-        endDateMidnight.current
-      );
-
-      setIncomes(filteredIncomes);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const verifyForm = (): boolean => {
     if (amount === '0') {
-      setErrors({
-        amount: i18n.t('Dialog.Incomes.AmountError'),
-      });
+      setErrors({ amount: i18n.t('Dialog.Incomes.AmountError') });
       return false;
-    } else {
-      setErrors({});
-      return true;
     }
+    setErrors({});
+    return true;
   };
 
   const handleCreateIncome = async (): Promise<void> => {
-    const isFormVerified = verifyForm();
+    if (!verifyForm()) return;
 
-    if (isFormVerified) {
-      try {
-        setIsLoading(true);
-        await incomeService.createIncome(userId, amount, title);
-        fetchUser();
-        setAmount('0');
-        setTitle('');
-        toast.show({
-          type: 'success',
-          title: i18n.t('ToastNotification.NewIncomeSuccess'),
-        });
-      } catch (error: any) {
-        setErrors({
-          generalError: error,
-        });
-        toast.show({
-          type: 'error',
-          title: i18n.t('ToastNotification.SomethingWentWrong'),
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    }
+    await execute(async () => {
+      await incomeService.createIncome(userId, amount, title);
+      fetchUser();
+      setAmount('0');
+      setTitle('');
+      toast.show({
+        type: 'success',
+        title: i18n.t('ToastNotification.NewIncomeSuccess'),
+      });
+    });
   };
 
   const handleUpdateIncome = async (): Promise<void> => {
-    if (!income) {
-      return;
-    }
+    if (!income || !verifyForm()) return;
 
-    const isFormVerified = verifyForm();
-
-    if (isFormVerified) {
-      try {
-        setIsLoading(true);
-        await incomeService.updateIncome(income?.id, userId, { amount, title });
-        fetchUser();
-        fetchIncomes();
-        toast.show({
-          type: 'success',
-          title: i18n.t('ToastNotification.EditIncomeSuccess'),
-        });
-      } catch (error: any) {
-        setErrors({
-          generalError: error,
-        });
-        toast.show({
-          type: 'error',
-          title: i18n.t('ToastNotification.SomethingWentWrong'),
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    }
+    await execute(async () => {
+      await incomeService.updateIncome(income.id, userId, { amount, title });
+      fetchUser();
+      fetchIncomes();
+      toast.show({
+        type: 'success',
+        title: i18n.t('ToastNotification.EditIncomeSuccess'),
+      });
+    });
   };
 
   const handleDeleteIncome = async (): Promise<void> => {
-    if (!income) {
-      return;
-    }
+    if (!income) return;
 
-    try {
-      setIsLoading(true);
-      await incomeService.deleteIncome(income?.id, userId);
+    await execute(async () => {
+      await incomeService.deleteIncome(income.id, userId);
       fetchUser();
       fetchIncomes();
       toast.show({
         type: 'success',
         title: i18n.t('ToastNotification.DeleteIncomeSuccess'),
       });
-    } catch (error: any) {
-      setErrors({
-        generalError: error,
-      });
-      toast.show({
-        type: 'error',
-        title: i18n.t('ToastNotification.SomethingWentWrong'),
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
-  const handleFromDatePickerOpen = (): void => setIsFromDatePickerOpen(true);
-  const handleFromDatePickerClose = (): void => setIsFromDatePickerOpen(false);
-  const handleToDatePickerOpen = (): void => setIsToDatePickerOpen(true);
-  const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
+  const handleModalOpen = () => modal.open();
 
-  const handleFromDateChange = async (date: Date): Promise<void> => {
-    setIsFilterChanged(true);
-    handleFromDatePickerClose();
-    fromDate.current = date;
-    await filterIncomes();
-  };
-
-  const handleToDateChange = async (date: Date): Promise<void> => {
-    setIsFilterChanged(true);
-    handleToDatePickerClose();
-    toDate.current = date;
-    await filterIncomes();
-  };
-
-  const handleClearFilters = async (): Promise<void> => {
-    fromDate.current = new Date();
-    toDate.current = new Date();
-    setIsFilterChanged(false);
-    await fetchIncomes();
-  };
-
-  const handleModalOpen = (): void => setIsModalOpen(true);
-  const handleModalClose = (): void => {
-    setIsModalOpen(false);
-    setSelectedIncome(null);
-    setIsModalOpen(false);
-    setIsEditModeModal(false);
+  const handleModalClose = () => {
+    modal.close();
+    setAmount('0');
+    setTitle('');
+    setErrors({});
   };
 
   const handleEditModalOpen = (editableIncome: Income) => {
-    handleModalOpen();
-    setSelectedIncome(editableIncome);
-    setIsEditModeModal(true);
-  };
-
-  const handleTitleChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    setTitle(e.nativeEvent.text);
-  };
-
-  const handleNumberChange = (value: string): void => {
-    let newInputNumber = '';
-
-    if (amount === '0') {
-      newInputNumber = '' + value;
-    } else {
-      newInputNumber = amount + value;
-    }
-
-    setAmount(newInputNumber);
-  };
-
-  const handleBackspacePress = (): void => {
-    if (amount.length <= 1) {
-      setAmount('0');
-    } else {
-      setAmount(amount.slice(0, -1));
-    }
+    modal.open(editableIncome);
   };
 
   const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
@@ -262,12 +146,42 @@ export const useIncome = (income?: Income) => {
     handleConfirmDialogClose();
   };
 
+  const handleTitleChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    setTitle(e.nativeEvent.text);
+  };
+
+  const handleNumberChange = (value: string) => {
+    const newAmount = amount === '0' ? value : amount + value;
+    setAmount(newAmount);
+  };
+
+  const handleBackspacePress = () => {
+    setAmount(amount.length === 1 ? '0' : amount.slice(0, -1));
+  };
+
+  const handleFromDateChange = async (date: Date) => {
+    setIsFilterChanged(true);
+    dateRange.setFromDate(date);
+    await filterIncomes();
+  };
+
+  const handleToDateChange = async (date: Date) => {
+    setIsFilterChanged(true);
+    dateRange.setToDate(date);
+    await filterIncomes();
+  };
+
+  const handleClearFilters = async () => {
+    dateRange.clearDates();
+    setIsFilterChanged(false);
+    await fetchIncomes();
+  };
+
   useEffect(() => {
     if (userId) {
       fetchIncomes();
     } else {
       setIncomes([]);
-      setIsLoading(false);
     }
   }, [userId]);
 
@@ -277,61 +191,44 @@ export const useIncome = (income?: Income) => {
     }
   }, [isLoading, incomes, screenRefreshing]);
 
-  const totalIncome = incomes
-    .filter((currentIncome) => {
-      const incomeDate =
-        typeof currentIncome.updatedAt === 'object' &&
-        currentIncome.updatedAt !== null &&
-        'toDate' in currentIncome.updatedAt &&
-        typeof currentIncome.updatedAt.toDate === 'function'
-          ? currentIncome.updatedAt.toDate()
-          : new Date(currentIncome.updatedAt as unknown as string | number);
-      return incomeDate >= fromDate.current && incomeDate <= toDate.current;
-    })
-    .reduce((sum, currentIncome) => sum + parseFloat(currentIncome.amount), 0);
-
   return {
     amount,
-    setAmount,
     title,
-    handleTitleChange,
-    isConfirmDialogOpen,
-    setIsConfirmDialogOpen,
-    handleCreateIncome,
-    handleUpdateIncome,
-    handleDeleteIncome,
     errors,
     setErrors,
     isLoading,
+    screenRefreshing,
     incomes,
-    totalIncome,
-    retry: fetchIncomes,
-    isFromDatePickerOpen,
-    handleFromDatePickerOpen,
-    handleFromDatePickerClose,
-    handleFromDateChange,
-    fromDate,
-    isToDatePickerOpen,
-    handleToDatePickerOpen,
-    handleToDatePickerClose,
-    handleToDateChange,
-    toDate,
-    handleClearFilters,
-    isFilterChanged,
+    isModalOpen: modal.isOpen,
+    selectedIncome: modal.data,
+    isEditModeModal: modal.isEditMode,
     handleModalOpen,
     handleModalClose,
     handleEditModalOpen,
-    isModalOpen,
-    selectedIncome,
-    isEditModeModal,
-    handleDownloadButtonClick,
-    handleNumberChange,
-    handleBackspacePress,
+    isConfirmDialogOpen,
     handleConfirmDialogOpen,
     handleConfirmDialogDelete,
     handleConfirmDialogClose,
+    fromDate: dateRange.fromDate,
+    toDate: dateRange.toDate,
+    isFromDatePickerOpen: dateRange.isFromDatePickerOpen,
+    isToDatePickerOpen: dateRange.isToDatePickerOpen,
+    handleFromDatePickerOpen: dateRange.openFromDatePicker,
+    handleFromDatePickerClose: dateRange.closeFromDatePicker,
+    handleToDatePickerOpen: dateRange.openToDatePicker,
+    handleToDatePickerClose: dateRange.closeToDatePicker,
+    handleFromDateChange,
+    handleToDateChange,
+    isFilterChanged,
+    handleClearFilters,
+    handleTitleChange,
+    handleNumberChange,
+    handleBackspacePress,
+    handleCreateIncome,
+    handleUpdateIncome,
+    handleDeleteIncome,
     handlePullToRefresh,
     stopRefreshing,
-    screenRefreshing,
+    handleDownloadButtonClick,
   };
 };

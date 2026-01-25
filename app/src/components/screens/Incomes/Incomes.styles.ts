@@ -1,18 +1,6 @@
-import styled from 'styled-components/native';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-
-export const Container = styled(View)`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.white[100]};
-`;
-
-export const StyledLinearGradient = styled(LinearGradient)`
-  height: 100%;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+import styled from 'styled-components/native';
+import { theme as globalTheme } from '@styles/theme';
 
 export const ScreenTitleContainer = styled(View)`
   align-items: center;
@@ -157,3 +145,11 @@ export const Loader = styled(ActivityIndicator)`
   padding-top: 20%;
   align-self: center;
 `;
+
+export const shadow = {
+  elevation: 10,
+  shadowColor: globalTheme.colors.black,
+  shadowOffset: { width: -2, height: 20 },
+  shadowOpacity: 0.7,
+  shadowRadius: 20,
+};

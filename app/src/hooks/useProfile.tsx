@@ -8,6 +8,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '@navigation/Navigation';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { useUser } from './useUser';
+import { useAsyncAction } from './common/useAsyncAction';
 
 const authService = new AuthService();
 
@@ -15,6 +16,7 @@ export const useProfile = () => {
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
   const toast = useToastNotificationStore();
   const { user, retry: fetchUser, updateDetails } = useUser();
+  const { isLoading, execute } = useAsyncAction();
 
   const localizedName = getLocalizedName(user?.lastname, user?.firstname);
 
@@ -29,7 +31,6 @@ export const useProfile = () => {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [isNewPasswordConfirm, setIsNewPasswordConfirm] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [isLoading, setIsLoading] = useState(false);
   const [isDeleteProfileDialogVisible, setIsDeleteProfileDialogVisible] = useState(false);
 
   const handleInputChange = (
@@ -99,8 +100,7 @@ export const useProfile = () => {
     const isFormVerified = verifyBasicDetails();
 
     if (isFormVerified) {
-      setIsLoading(true);
-      try {
+      await execute(async () => {
         await updateDetails({ ...user, firstname, lastname });
         toast.show({
           type: 'success',
@@ -108,17 +108,7 @@ export const useProfile = () => {
         });
         handleBasicDetailsClose();
         fetchUser();
-      } catch (error) {
-        setErrors({
-          generalError: error,
-        });
-        toast.show({
-          type: 'error',
-          title: i18n.t('ToastNotification.SomethingWentWrong'),
-        });
-      } finally {
-        setIsLoading(false);
-      }
+      });
     }
   };
 
@@ -160,8 +150,7 @@ export const useProfile = () => {
     const isFormVerified = verifyPasswordChangeForm();
 
     if (isFormVerified) {
-      setIsLoading(true);
-      try {
+      await execute(async () => {
         if (newPassword !== newPasswordConfirm) {
           throw new FirebaseError('password-mismatch', 'Passwords are different');
         }
@@ -174,7 +163,7 @@ export const useProfile = () => {
         });
 
         handleChangePasswordClose();
-      } catch (error) {
+      }).catch((error) => {
         console.error(error);
         switch (error.code) {
           case 'auth/wrong-password':
@@ -207,9 +196,7 @@ export const useProfile = () => {
             });
             return;
         }
-      } finally {
-        setIsLoading(false);
-      }
+      });
     }
   };
 
@@ -217,20 +204,11 @@ export const useProfile = () => {
   const handleDeleteProfileDialogClose = (): void => setIsDeleteProfileDialogVisible(false);
 
   const handleDeleteProfileSubmit = async (): Promise<void> => {
-    try {
+    await execute(async () => {
       await authService.deleteAccount();
       navigation.navigate('Auth');
-    } catch (error) {
-      setErrors({
-        generalError: error,
-      });
-      toast.show({
-        type: 'error',
-        title: i18n.t('ToastNotification.SomethingWentWrong'),
-      });
-    } finally {
-      handleDeleteProfileDialogClose();
-    }
+    });
+    handleDeleteProfileDialogClose();
   };
 
   const handleSignOutButtonPress = async () => {

@@ -54,8 +54,10 @@ export const useDownload = (
         );
 
         if (!isCategoryExistsInDefaultCategories) {
+          const categoryText =
+            typeof purchase.category === 'string' ? purchase.category : purchase.category.title;
           const translatedCategory = (
-            await translate(purchase.category, {
+            await translate(categoryText, {
               to: locale === 'hun' ? 'hu' : 'en',
             })
           ).text;

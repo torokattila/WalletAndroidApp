@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useUser } from './useUser';
 import { IconType } from '@components/shared';
+import { useModal } from './common/useModal';
+import { useAsyncAction } from './common/useAsyncAction';
 
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();
@@ -19,12 +21,10 @@ export const useCategory = (category?: Category) => {
   const [color, setColor] = useState<string>(category?.color ?? '#fff');
   const [icon, setIcon] = useState<IconType | null>(category?.icon ?? null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, execute } = useAsyncAction();
   const [categories, setCategories] = useState<(Category | ExtendedCategory)[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [isEditModeModal, setIsEditModeModal] = useState(false);
+  const modal = useModal<Category>();
   const [screenRefreshing, setScreenRefreshing] = useState(false);
 
   const locale = getLocale();
@@ -50,9 +50,7 @@ export const useCategory = (category?: Category) => {
   const categoryService = new CategoryService();
 
   const fetchCategories = async () => {
-    setIsLoading(true);
-
-    try {
+    await execute(async () => {
       const allCategories = await categoryService.getAllCategories(user.id);
       const translatedCategories: Category[] = [];
 
@@ -64,11 +62,7 @@ export const useCategory = (category?: Category) => {
       }
 
       setCategories([...defaultCategories, ...allCategories]);
-    } catch (error) {
-      console.error(`Error during fetching categories: ${error}`);
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
   const handlePullToRefresh = async () => {
@@ -95,8 +89,7 @@ export const useCategory = (category?: Category) => {
     const isFormVerified = verifyForm();
 
     if (isFormVerified) {
-      try {
-        setIsLoading(true);
+      await execute(async () => {
         await categoryService.createCategory(userId, title, color, icon);
         fetchUser();
         setTitle('');
@@ -105,17 +98,7 @@ export const useCategory = (category?: Category) => {
           type: 'success',
           title: i18n.t('ToastNotification.NewCategorySuccess'),
         });
-      } catch (error: any) {
-        setErrors({
-          generalError: error,
-        });
-        toast.show({
-          type: 'error',
-          title: i18n.t('ToastNotification.SomethingWentWrong'),
-        });
-      } finally {
-        setIsLoading(false);
-      }
+      });
     }
   };
 
@@ -127,8 +110,7 @@ export const useCategory = (category?: Category) => {
     const isFormVerified = verifyForm();
 
     if (isFormVerified) {
-      try {
-        setIsLoading(true);
+      await execute(async () => {
         await categoryService.updateCategory(category?.id, { title, color, icon });
         fetchUser();
         fetchCategories();
@@ -136,17 +118,7 @@ export const useCategory = (category?: Category) => {
           type: 'success',
           title: i18n.t('ToastNotification.EditCategorySuccess'),
         });
-      } catch (error: any) {
-        setErrors({
-          generalError: error,
-        });
-        toast.show({
-          type: 'error',
-          title: i18n.t('ToastNotification.SomethingWentWrong'),
-        });
-      } finally {
-        setIsLoading(false);
-      }
+      });
     }
   };
 
@@ -155,8 +127,7 @@ export const useCategory = (category?: Category) => {
       return;
     }
 
-    try {
-      setIsLoading(true);
+    await execute(async () => {
       await categoryService.deleteCategory(category?.id);
       fetchUser();
       fetchCategories();
@@ -164,32 +135,20 @@ export const useCategory = (category?: Category) => {
         type: 'success',
         title: i18n.t('ToastNotification.DeleteCategorySuccess'),
       });
-    } catch (error: any) {
-      setErrors({
-        generalError: error,
-      });
-      toast.show({
-        type: 'error',
-        title: i18n.t('ToastNotification.SomethingWentWrong'),
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
-  const handleModalOpen = (): void => setIsModalOpen(true);
+  const handleModalOpen = (): void => modal.open();
+
   const handleModalClose = (): void => {
-    setIsModalOpen(false);
-    setSelectedCategory(null);
-    setIsModalOpen(false);
-    setIsEditModeModal(false);
+    modal.close();
+    setTitle('');
+    setIcon(null);
   };
 
   const handleEditModalOpen = (editableCategory: Category | ExtendedCategory) => {
     if (!('isDefault' in editableCategory && editableCategory.isDefault)) {
-      handleModalOpen();
-      setSelectedCategory(editableCategory);
-      setIsEditModeModal(true);
+      modal.open(editableCategory as Category);
     }
   };
 
@@ -214,7 +173,6 @@ export const useCategory = (category?: Category) => {
       fetchCategories();
     } else {
       setCategories([]);
-      setIsLoading(false);
     }
   }, [userId]);
 
@@ -240,9 +198,9 @@ export const useCategory = (category?: Category) => {
     isLoading,
     categories,
     isConfirmDialogOpen,
-    isModalOpen,
-    selectedCategory,
-    isEditModeModal,
+    isModalOpen: modal.isOpen,
+    selectedCategory: modal.data,
+    isEditModeModal: modal.isEditMode,
     screenRefreshing,
     handleModalOpen,
     handleModalClose,

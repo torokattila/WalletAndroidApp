@@ -1,16 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
+import { AddButton, Icon, ScreenContainer } from '@components/shared';
+import { formatDate } from '@core/date-utils';
+import { formatAmount } from '@core/format-amount';
+import { useDarkMode } from '@hooks/useDarkMode';
+import { usePurchase } from '@hooks/usePurchase';
+import { theme } from '@styles/theme';
+import i18n from 'i18n-js';
 import React, { FC } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 import Animated, { FadeIn, FadeInLeft, FadeOut, FadeOutLeft } from 'react-native-reanimated';
-import i18n from 'i18n-js';
-import { theme } from '@styles/theme';
-import { formatDate } from '@core/date-utils';
-import { formatAmount } from '@core/format-amount';
-import { AddButton, Icon } from '@components/shared';
-import { usePurchase } from '@hooks/usePurchase';
-import { useDarkMode } from '@hooks/useDarkMode';
+import { PurchaseCard } from './PurchaseCard';
+import { PurchaseModal } from './PurchaseModal';
 import {
   AllPurchasesTitle,
   CategoryAndShowDateFiltersButtonContainer,
@@ -18,7 +20,6 @@ import {
   CategoryFilterLabel,
   ClearFilterAndDownloadContainer,
   CloseDateFiltersButton,
-  Container,
   ContentContainer,
   DateFiltersContainer,
   DatePickerButton,
@@ -44,10 +45,7 @@ import {
   selectedTextStyle,
   ShowDateFiltersButton,
   ShowDateFiltersButtonText,
-  StyledLinearGradient,
 } from './Purchases.styles';
-import { PurchaseModal } from './PurchaseModal';
-import { PurchaseCard } from './PurchaseCard';
 
 const shadow = {
   elevation: 10,
@@ -99,203 +97,195 @@ export const Purchases: FC = () => {
 
   return (
     <>
-      <Container>
-        <StyledLinearGradient
-          colors={['#e84393', '#e84393']}
-          useAngle
-          angle={140}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          <ScreenTitleContainer>
-            <ScreenTitleText>{i18n.t('Purchases.ScreenTitle')}</ScreenTitleText>
-            <Icon type="purchase" iconColor="#fff" />
-          </ScreenTitleContainer>
+      <ScreenContainer
+        withGradient
+        isDarkMode={isDarkMode}
+        gradientContent={
+          <>
+            <ScreenTitleContainer>
+              <ScreenTitleText>{i18n.t('Purchases.ScreenTitle')}</ScreenTitleText>
+              <Icon type="purchase" iconColor="#fff" />
+            </ScreenTitleContainer>
 
-          <PurchasesThisMonthContainer>
-            <PurchasesThisMonthTitle>
-              {i18n.t('Purchases.PurchasesThisMonthTitle')}
-            </PurchasesThisMonthTitle>
-            <PurchasesThisMonth>
-              {formatAmount(allPurchasesAmountForThisMonth)} Ft
-            </PurchasesThisMonth>
-          </PurchasesThisMonthContainer>
+            <PurchasesThisMonthContainer>
+              <PurchasesThisMonthTitle>
+                {i18n.t('Purchases.PurchasesThisMonthTitle')}
+              </PurchasesThisMonthTitle>
+              <PurchasesThisMonth>
+                {formatAmount(allPurchasesAmountForThisMonth)} Ft
+              </PurchasesThisMonth>
+            </PurchasesThisMonthContainer>
+          </>
+        }
+      >
+        <ContentContainer isDarkMode={isDarkMode}>
+          <AllPurchasesTitle isDarkMode={isDarkMode}>
+            {i18n.t('Purchases.AllPurchasesTitle')}
+          </AllPurchasesTitle>
 
-          <ContentContainer isDarkMode={isDarkMode}>
-            <AllPurchasesTitle isDarkMode={isDarkMode}>
-              {i18n.t('Purchases.AllPurchasesTitle')}
-            </AllPurchasesTitle>
+          <ClearFilterAndDownloadContainer>
+            {(isCategoryFilterChanged || isDateFilterChanged) && (
+              <Animated.View entering={FadeIn} exiting={FadeOut}>
+                <DeleteFiltersButton onPress={handleClearFilters}>
+                  <Icon type="delete-filters" iconColor={theme.colors.magenta[100]} />
+                </DeleteFiltersButton>
+              </Animated.View>
+            )}
+            <DownloadButton onPress={handleDownloadButtonClick}>
+              <Icon type="download" iconColor={theme.colors.magenta[100]} />
+            </DownloadButton>
+          </ClearFilterAndDownloadContainer>
 
-            <ClearFilterAndDownloadContainer>
-              {(isCategoryFilterChanged || isDateFilterChanged.current) && (
-                <Animated.View entering={FadeIn} exiting={FadeOut}>
-                  <DeleteFiltersButton onPress={handleClearFilters}>
-                    <Icon type="delete-filters" iconColor={theme.colors.magenta[100]} />
-                  </DeleteFiltersButton>
-                </Animated.View>
-              )}
-              <DownloadButton onPress={handleDownloadButtonClick}>
-                <Icon type="download" iconColor={theme.colors.magenta[100]} />
-              </DownloadButton>
-            </ClearFilterAndDownloadContainer>
+          <CategoryAndShowDateFiltersButtonContainer>
+            <CategoryFilterContainer>
+              <CategoryFilterLabel isDarkMode={isDarkMode}>
+                {i18n.t('Purchases.FilterForCategory')}
+              </CategoryFilterLabel>
+              <Dropdown
+                iconColor="#e84393"
+                style={[
+                  !isDarkMode && shadow,
+                  dropdownStyle,
+                  {
+                    backgroundColor: isDarkMode ? theme.colors.grey[800] : theme.colors.white[100],
+                  },
+                ]}
+                data={allCategories}
+                value={filterCategory.current}
+                placeholderStyle={{
+                  color: theme.colors.magenta[100],
+                }}
+                placeholder={dropdownPlaceholder}
+                containerStyle={[
+                  shadow,
+                  dropdownContainerStyle,
+                  {
+                    backgroundColor: isDarkMode ? theme.colors.grey[800] : theme.colors.white[100],
+                    maxHeight: 230,
+                    left: 65,
+                  },
+                ]}
+                itemTextStyle={dropdownTextStyle}
+                itemContainerStyle={dropdownItemContaineStyle}
+                labelField={'label'}
+                valueField={'value'}
+                selectedTextStyle={selectedTextStyle}
+                activeColor={isDarkMode ? theme.colors.grey[900] : theme.colors.magenta[200]}
+                onChange={handleFilterCategoryChange}
+                mode="default"
+              />
+            </CategoryFilterContainer>
 
-            <CategoryAndShowDateFiltersButtonContainer>
-              <CategoryFilterContainer>
-                <CategoryFilterLabel isDarkMode={isDarkMode}>
-                  {i18n.t('Purchases.FilterForCategory')}
-                </CategoryFilterLabel>
-                <Dropdown
-                  iconColor="#e84393"
-                  style={[
-                    !isDarkMode && shadow,
-                    dropdownStyle,
-                    {
-                      backgroundColor: isDarkMode
-                        ? theme.colors.grey[800]
-                        : theme.colors.white[100],
-                    },
-                  ]}
-                  data={allCategories}
-                  value={filterCategory.current}
-                  placeholderStyle={{
-                    color: theme.colors.magenta[100],
-                  }}
-                  placeholder={dropdownPlaceholder}
-                  containerStyle={[
-                    shadow,
-                    dropdownContainerStyle,
-                    {
-                      backgroundColor: isDarkMode
-                        ? theme.colors.grey[800]
-                        : theme.colors.white[100],
-                      maxHeight: 230,
-                      left: 65,
-                    },
-                  ]}
-                  itemTextStyle={dropdownTextStyle}
-                  itemContainerStyle={dropdownItemContaineStyle}
-                  labelField={'label'}
-                  valueField={'value'}
-                  selectedTextStyle={selectedTextStyle}
-                  activeColor={isDarkMode ? theme.colors.grey[900] : theme.colors.magenta[200]}
-                  onChange={handleFilterCategoryChange}
-                  mode="default"
-                />
-              </CategoryFilterContainer>
+            <ShowDateFiltersButton
+              style={!isDarkMode && shadow}
+              onPress={showDateFilters}
+              isDarkMode={isDarkMode}
+            >
+              <ShowDateFiltersButtonText>{i18n.t('FilterForDate')}</ShowDateFiltersButtonText>
+            </ShowDateFiltersButton>
+          </CategoryAndShowDateFiltersButtonContainer>
 
-              <ShowDateFiltersButton
+          <FiltersContainer>
+            {isDateFiltersShown && (
+              <DateFiltersContainer
                 style={!isDarkMode && shadow}
-                onPress={showDateFilters}
                 isDarkMode={isDarkMode}
+                entering={FadeInLeft}
+                exiting={FadeOutLeft}
               >
-                <ShowDateFiltersButtonText>{i18n.t('FilterForDate')}</ShowDateFiltersButtonText>
-              </ShowDateFiltersButton>
-            </CategoryAndShowDateFiltersButtonContainer>
+                <DatePickerButtonContainer>
+                  <DatePickerButtonLabel isDarkMode={isDarkMode}>
+                    {i18n.t('DatePicker.FilterFromDateText')}
+                  </DatePickerButtonLabel>
+                  <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
+                    <DatePickerText>{formatDate(fromDate)}</DatePickerText>
+                  </DatePickerButton>
+                </DatePickerButtonContainer>
 
-            <FiltersContainer>
-              {isDateFiltersShown && (
-                <DateFiltersContainer
-                  style={!isDarkMode && shadow}
+                <DatePickerButtonContainer>
+                  <DatePickerButtonLabel isDarkMode={isDarkMode}>
+                    {i18n.t('DatePicker.FilterToDateText')}
+                  </DatePickerButtonLabel>
+                  <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
+                    <DatePickerText>{formatDate(toDate)}</DatePickerText>
+                  </DatePickerButton>
+                </DatePickerButtonContainer>
+
+                <CloseDateFiltersButton
+                  style={shadow}
+                  onPress={hideDateFilters}
                   isDarkMode={isDarkMode}
-                  entering={FadeInLeft}
-                  exiting={FadeOutLeft}
                 >
-                  <DatePickerButtonContainer>
-                    <DatePickerButtonLabel isDarkMode={isDarkMode}>
-                      {i18n.t('DatePicker.FilterFromDateText')}
-                    </DatePickerButtonLabel>
-                    <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
-                      <DatePickerText>{formatDate(fromDate.current)}</DatePickerText>
-                    </DatePickerButton>
-                  </DatePickerButtonContainer>
-
-                  <DatePickerButtonContainer>
-                    <DatePickerButtonLabel isDarkMode={isDarkMode}>
-                      {i18n.t('DatePicker.FilterToDateText')}
-                    </DatePickerButtonLabel>
-                    <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
-                      <DatePickerText>{formatDate(toDate.current)}</DatePickerText>
-                    </DatePickerButton>
-                  </DatePickerButtonContainer>
-
-                  <CloseDateFiltersButton
-                    style={shadow}
-                    onPress={hideDateFilters}
-                    isDarkMode={isDarkMode}
-                  >
-                    <Icon type="close" iconColor={theme.colors.magenta[100]} />
-                  </CloseDateFiltersButton>
-                </DateFiltersContainer>
-              )}
-            </FiltersContainer>
-
-            <DatePicker
-              modal
-              mode="date"
-              title={null}
-              open={isFromDatePickerOpen}
-              date={fromDate.current}
-              maximumDate={new Date()}
-              androidVariant="iosClone"
-              onConfirm={handleFromDateChange}
-              onCancel={handleFromDatePickerClose}
-              cancelText={i18n.t('DatePicker.CancelButtonText')}
-              confirmText={i18n.t('DatePicker.ConfirmButtonText')}
-              theme={isDarkMode ? 'dark' : 'auto'}
-            />
-            <DatePicker
-              modal
-              mode="date"
-              title={null}
-              open={isToDatePickerOpen}
-              date={toDate.current}
-              minimumDate={fromDate.current}
-              androidVariant="iosClone"
-              onConfirm={handleToDateChange}
-              onCancel={handleToDatePickerClose}
-              cancelText={i18n.t('DatePicker.CancelButtonText')}
-              confirmText={i18n.t('DatePicker.ConfirmButtonText')}
-              theme={isDarkMode ? 'dark' : 'auto'}
-            />
-
-            {isLoading && <Loader color={theme.colors.magenta[100]} size="large" />}
-
-            {purchases.length > 0 && !isLoading && (
-              <ListContainer>
-                <FlatList
-                  contentContainerStyle={{ paddingBottom: 40 }}
-                  style={{
-                    paddingHorizontal: 10,
-                    marginTop: -15,
-                  }}
-                  refreshControl={
-                    <RefreshControl
-                      refreshing={screenRefreshing}
-                      onRefresh={handlePullToRefresh}
-                      colors={['#e84393', '#e84393']}
-                    />
-                  }
-                  showsVerticalScrollIndicator={false}
-                  data={purchases}
-                  keyExtractor={(item) => item.id}
-                  scrollEnabled
-                  renderItem={({ item }) => (
-                    <PurchaseCard purchase={item} onPress={() => handleEditModalOpen(item)} />
-                  )}
-                />
-              </ListContainer>
+                  <Icon type="close" iconColor={theme.colors.magenta[100]} />
+                </CloseDateFiltersButton>
+              </DateFiltersContainer>
             )}
-            {!purchases.length && !isLoading && (
-              <NoPurchasesContainer>
-                <NoPurchasesText isDarkMode={isDarkMode}>
-                  {i18n.t('NoPurchasesText')}
-                </NoPurchasesText>
-              </NoPurchasesContainer>
-            )}
-            <AddButton onPress={handleModalOpen} />
-          </ContentContainer>
-        </StyledLinearGradient>
-      </Container>
+          </FiltersContainer>
+
+          <DatePicker
+            modal
+            mode="date"
+            title={null}
+            open={isFromDatePickerOpen}
+            date={fromDate}
+            maximumDate={new Date()}
+            androidVariant="iosClone"
+            onConfirm={handleFromDateChange}
+            onCancel={handleFromDatePickerClose}
+            cancelText={i18n.t('DatePicker.CancelButtonText')}
+            confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+            theme={isDarkMode ? 'dark' : 'auto'}
+          />
+          <DatePicker
+            modal
+            mode="date"
+            title={null}
+            open={isToDatePickerOpen}
+            date={toDate}
+            minimumDate={fromDate}
+            androidVariant="iosClone"
+            onConfirm={handleToDateChange}
+            onCancel={handleToDatePickerClose}
+            cancelText={i18n.t('DatePicker.CancelButtonText')}
+            confirmText={i18n.t('DatePicker.ConfirmButtonText')}
+            theme={isDarkMode ? 'dark' : 'auto'}
+          />
+
+          {isLoading && <Loader color={theme.colors.magenta[100]} size="large" />}
+
+          {purchases.length > 0 && !isLoading && (
+            <ListContainer>
+              <FlatList
+                contentContainerStyle={{ paddingBottom: 40 }}
+                style={{
+                  paddingHorizontal: 10,
+                  marginTop: -15,
+                }}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={screenRefreshing}
+                    onRefresh={handlePullToRefresh}
+                    colors={['#e84393', '#e84393']}
+                  />
+                }
+                showsVerticalScrollIndicator={false}
+                data={purchases}
+                keyExtractor={(item) => item.id}
+                scrollEnabled
+                renderItem={({ item }) => (
+                  <PurchaseCard purchase={item} onPress={() => handleEditModalOpen(item)} />
+                )}
+              />
+            </ListContainer>
+          )}
+          {!purchases.length && !isLoading && (
+            <NoPurchasesContainer>
+              <NoPurchasesText isDarkMode={isDarkMode}>{i18n.t('NoPurchasesText')}</NoPurchasesText>
+            </NoPurchasesContainer>
+          )}
+          <AddButton onPress={handleModalOpen} />
+        </ContentContainer>
+      </ScreenContainer>
       <PurchaseModal
         isVisible={isModalOpen}
         onClose={handleModalClose}
