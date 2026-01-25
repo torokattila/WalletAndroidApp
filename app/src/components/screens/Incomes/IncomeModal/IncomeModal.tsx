@@ -93,14 +93,14 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
           <ModalBackground onHide={onClose} isVisible={isVisible} />
           <ContentContainer style={shadow} isDarkMode={isDarkMode}>
             <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
-              <UpperLine />
+              <UpperLine isDarkMode={isDarkMode} />
               {isEditMode && (
                 <DeleteIconContainer onPress={handleConfirmDialogOpen}>
                   <Icon type="trash" iconColor={theme.colors.white[100]} />
                 </DeleteIconContainer>
               )}
               <Content>
-                <Title>{modalTitle}</Title>
+                <Title isDarkMode={isDarkMode}>{modalTitle}</Title>
                 <InputNumberText
                   numberOfLines={1}
                   ellipsizeMode="head"
@@ -109,10 +109,11 @@ export const IncomeModal: FC<IncomeModalProps> = ({ isVisible, onClose, isEditMo
                 {errors.amount && <InputNumberErrorText>{errors.amount}</InputNumberErrorText>}
                 <StyledTextInput
                   value={title}
+                  style={shadow}
                   onChange={handleTitleChange}
                   placeholder={i18n.t('Dialog.Incomes.TitleInputPlaceholder')}
                   isDarkMode={isDarkMode}
-                  placeholderTextColor={theme.colors.grey[600]}
+                  placeholderTextColor={theme.colors.magenta[200]}
                 />
 
                 <ModalNumberKeyboard

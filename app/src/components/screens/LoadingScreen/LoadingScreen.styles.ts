@@ -20,7 +20,7 @@ export const StyledImage = styled(Image)`
 `;
 
 export const StyledTitle = styled(Text)`
-  color: ${({ theme }) => theme.colors.purple[100]};
+  color: ${({ theme }) => theme.colors.magenta[100]};
   font-size: 30px;
   text-align: center;
   font-family: 'NunitoSans-Bold';

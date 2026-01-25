@@ -61,7 +61,7 @@ export const PurchasesThisMonth = styled(Text)`
 
 export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   align-items: flex-start;
@@ -75,12 +75,13 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   position: relative;
 `;
 
-export const AllPurchasesTitle = styled(Text)`
+export const AllPurchasesTitle = styled(Text)<{ isDarkMode: boolean }>`
   font-family: 'NunitoSans-Bold';
   font-size: 20px;
   margin-top: 8px;
   margin-left: 20px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const ClearFilterAndDownloadContainer = styled(View)`
@@ -106,11 +107,11 @@ export const DateFiltersContainer = styled(Animated.View)<{ isDarkMode: boolean 
   justify-content: flex-start;
   position: relative;
   border-width: 1.5px;
-  border-color: ${({ theme }) => theme.colors.purple[300]};
+  border-color: ${({ theme }) => theme.colors.magenta[100]};
   border-radius: 12px;
   padding: 8px 10px;
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[100]};
   margin-top: 10px;
 `;
 
@@ -119,9 +120,9 @@ export const CloseDateFiltersButton = styled(TouchableOpacity)<{ isDarkMode: boo
   width: 34px;
   height: 34px;
   border-width: 1.5px;
-  border-color: ${({ theme }) => theme.colors.purple[300]};
+  border-color: ${({ theme }) => theme.colors.magenta[100]};
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[100]};
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -138,9 +139,8 @@ export const CategoryAndShowDateFiltersButtonContainer = styled(View)`
 
 export const ShowDateFiltersButton = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   margin-left: 20px;
-  background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
-  border-color: ${({ theme }) => theme.colors.purple[300]};
+  background-color: ${({ theme }) => theme.colors.magenta[100]};
+  border-color: ${({ theme }) => theme.colors.magenta[100]};
   border-width: 1.5px;
   border-radius: 12px;
   padding: 6px 15px;
@@ -150,7 +150,7 @@ export const ShowDateFiltersButton = styled(TouchableOpacity)<{ isDarkMode: bool
 export const ShowDateFiltersButtonText = styled(Text)`
   font-family: 'NunitoSans-SemiBold';
   font-size: 15px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme }) => theme.colors.white[100]};
 `;
 
 export const CategoryFilterContainer = styled(View)`
@@ -159,13 +159,14 @@ export const CategoryFilterContainer = styled(View)`
   padding-left: 20px;
 `;
 
-export const CategoryFilterLabel = styled(Text)`
+export const CategoryFilterLabel = styled(Text)<{ isDarkMode: boolean }>`
   margin-left: 6px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const dropdownStyle: StyleProp<ViewStyle> = {
-  borderColor: globalTheme.colors.purple[300],
+  borderColor: globalTheme.colors.magenta[100],
   borderWidth: 1.5,
   borderRadius: 12,
   alignSelf: 'center',
@@ -177,7 +178,7 @@ export const dropdownStyle: StyleProp<ViewStyle> = {
 };
 
 export const dropdownContainerStyle: StyleProp<ViewStyle> = {
-  borderColor: globalTheme.colors.purple[300],
+  borderColor: globalTheme.colors.magenta[100],
   borderWidth: 1.5,
   borderRadius: 12,
   alignSelf: 'center',
@@ -190,24 +191,25 @@ export const dropdownItemContaineStyle: StyleProp<ViewStyle> = {
 };
 
 export const dropdownTextStyle: StyleProp<TextStyle> = {
-  color: globalTheme.colors.purple[300],
+  color: globalTheme.colors.magenta[100],
 };
 
 export const selectedTextStyle: StyleProp<TextStyle> = {
-  color: globalTheme.colors.grey[600],
+  color: globalTheme.colors.magenta[100],
 };
 
 export const DatePickerButtonContainer = styled(View)`
   flex-direction: column;
 `;
 
-export const DatePickerButtonLabel = styled(Text)`
+export const DatePickerButtonLabel = styled(Text)<{ isDarkMode: boolean }>`
   margin-left: 6px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const DatePickerButton = styled(TouchableOpacity)`
-  background-color: ${({ theme }) => theme.colors.purple[300]};
+  background-color: ${({ theme }) => theme.colors.magenta[100]};
   border-radius: 10px;
   padding: 5px 20px;
   margin-right: 20px;
@@ -221,7 +223,7 @@ export const DatePickerText = styled(Text)`
 export const DeleteFiltersButton = styled(TouchableOpacity)`
   width: 35px;
   height: 35px;
-  border-color: ${({ theme }) => theme.colors.purple[300]};
+  border-color: ${({ theme }) => theme.colors.magenta[100]};
   border-width: 2px;
   border-radius: 30px;
   align-items: center;
@@ -233,7 +235,7 @@ export const DeleteFiltersButton = styled(TouchableOpacity)`
 export const DownloadButton = styled(TouchableOpacity)`
   width: 35px;
   height: 35px;
-  border-color: ${({ theme }) => theme.colors.purple[300]};
+  border-color: ${({ theme }) => theme.colors.magenta[100]};
   border-width: 2px;
   border-radius: 30px;
   align-items: center;
@@ -252,10 +254,12 @@ export const NoPurchasesContainer = styled(View)`
   align-self: center;
 `;
 
-export const NoPurchasesText = styled(Text)`
+export const NoPurchasesText = styled(Text)<{ isDarkMode: boolean }>`
   text-align: center;
   font-family: 'NunitoSans-Light';
   font-size: 18px;
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const Loader = styled(ActivityIndicator)`

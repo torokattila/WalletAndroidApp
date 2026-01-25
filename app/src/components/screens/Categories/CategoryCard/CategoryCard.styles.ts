@@ -5,7 +5,7 @@ export const Container = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   width: 95%;
   padding: 15px;
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[500] : theme.colors.white[100]};
+    isDarkMode ? theme.colors.grey[900] : theme.colors.white[100]};
   border-radius: 14px;
   margin-top: 15px;
   margin-left: 5px;
@@ -31,7 +31,8 @@ export const TitleAndAmountContainer = styled(View)`
   margin-left: 10px;
 `;
 
-export const Title = styled(Text)`
+export const Title = styled(Text)<{ isDarkMode: boolean }>`
   font-family: 'NunitoSans-Bold';
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;

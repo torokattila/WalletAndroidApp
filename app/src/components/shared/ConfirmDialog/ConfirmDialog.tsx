@@ -47,9 +47,9 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <Background>
         <ContentContainer>
-          <Content style={!isDarkMode && shadow} isDarkMode={isDarkMode}>
-            <Title>{title}</Title>
-            <Description>{description}</Description>
+          <Content style={shadow} isDarkMode={isDarkMode}>
+            <Title isDarkMode={isDarkMode}>{title}</Title>
+            <Description isDarkMode={isDarkMode}>{description}</Description>
 
             <PrimaryButton onPress={onPressPrimaryButton}>
               <PrimaryButtonText>{primaryButtonText}</PrimaryButtonText>

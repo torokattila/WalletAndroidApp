@@ -48,7 +48,7 @@ export const Balance = styled(Text)`
 
 export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[200]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]};
   align-self: center;
   flex-direction: column;
   align-items: flex-start;
@@ -62,12 +62,13 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   position: relative;
 `;
 
-export const AllIncomeTitle = styled(Text)`
+export const AllIncomeTitle = styled(Text)<{ isDarkMode: boolean }>`
   font-family: 'NunitoSans-Bold';
   font-size: 20px;
   margin-top: 8px;
   margin-left: 20px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.magenta[100]};
 `;
 
 export const DatePickerContainer = styled(View)`
@@ -84,13 +85,14 @@ export const DatePickerButtonContainer = styled(View)`
   flex-direction: column;
 `;
 
-export const DatePickerButtonLabel = styled(Text)`
+export const DatePickerButtonLabel = styled(Text)<{ isDarkMode: boolean }>`
   margin-left: 6px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const DatePickerButton = styled(TouchableOpacity)`
-  background-color: ${({ theme }) => theme.colors.purple[300]};
+  background-color: ${({ theme }) => theme.colors.magenta[100]};
   border-radius: 10px;
   padding: 5px 20px;
   margin-right: 20px;
@@ -112,7 +114,7 @@ export const ClearFilterAndDownloadContainer = styled(View)`
 export const DeleteFiltersButton = styled(TouchableOpacity)`
   width: 35px;
   height: 35px;
-  border-color: ${({ theme }) => theme.colors.purple[300]};
+  border-color: ${({ theme }) => theme.colors.magenta[100]};
   border-width: 2px;
   border-radius: 30px;
   align-items: center;
@@ -124,7 +126,7 @@ export const DeleteFiltersButton = styled(TouchableOpacity)`
 export const DownloadButton = styled(TouchableOpacity)`
   width: 35px;
   height: 35px;
-  border-color: ${({ theme }) => theme.colors.purple[300]};
+  border-color: ${({ theme }) => theme.colors.magenta[100]};
   border-width: 2px;
   border-radius: 30px;
   align-items: center;
@@ -143,11 +145,12 @@ export const NoIncomesContainer = styled(View)`
   align-self: center;
 `;
 
-export const NoIncomesText = styled(Text)`
+export const NoIncomesText = styled(Text)<{ isDarkMode: boolean }>`
   text-align: center;
   font-family: 'NunitoSans-Light';
   font-size: 18px;
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const Loader = styled(ActivityIndicator)`

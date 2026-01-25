@@ -5,7 +5,7 @@ export const Container = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   width: 95%;
   padding: 15px;
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[500] : theme.colors.white[100]};
+    isDarkMode ? theme.colors.grey[900] : theme.colors.white[100]};
   border-radius: 14px;
   margin-top: 15px;
   margin-left: 5px;
@@ -13,12 +13,12 @@ export const Container = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
   position: relative;
 `;
 
-export const IconContainer = styled(View)<{ isDarkMode: boolean; categoryColor?: string }>`
-  background-color: ${({ theme, isDarkMode, categoryColor }) => {
+export const IconContainer = styled(View)<{ categoryColor?: string }>`
+  background-color: ${({ theme, categoryColor }) => {
     if (categoryColor) {
       return categoryColor;
     }
-    return isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100];
+    return theme.colors.magenta[100];
   }};
   padding: 7px;
   border-radius: 10px;
@@ -52,7 +52,7 @@ export const AmountAndDateContainer = styled(View)`
 `;
 
 export const Amount = styled(Text)`
-  color: ${({ theme }) => theme.colors.red};
+  color: ${({ theme }) => theme.colors.magenta[100]};
   font-family: 'NunitoSans-ExtraBold';
   margin-right: 20px;
 `;

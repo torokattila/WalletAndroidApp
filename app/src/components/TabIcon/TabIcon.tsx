@@ -13,8 +13,10 @@ export const TabIcon: FC<TabIconProps> = ({ icon, isHighlighted }) => {
 
   const iconColor = isHighlighted
     ? isDarkMode
-      ? theme.colors.purple[300]
-      : theme.colors.purple[100]
+      ? theme.colors.magenta[100]
+      : theme.colors.magenta[100]
+    : isDarkMode
+    ? theme.colors.grey[950]
     : theme.colors.grey[100];
 
   return <Icon type={icon} iconColor={iconColor} />;

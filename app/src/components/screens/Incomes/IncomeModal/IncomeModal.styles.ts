@@ -4,7 +4,7 @@ import { Button } from '@components/shared';
 
 export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[400] : theme.colors.white[100]};
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[100]};
   flex: 1;
   height: 85%;
   width: 100%;
@@ -15,8 +15,8 @@ export const ContentContainer = styled(View)<{ isDarkMode: boolean }>`
   padding: 20px;
 `;
 
-export const UpperLine = styled(View)`
-  background-color: silver;
+export const UpperLine = styled(View)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) => (isDarkMode ? theme.colors.white[100] : 'silver')};
   margin-top: 5px;
   height: 3px;
   width: 50px;
@@ -41,11 +41,12 @@ export const DeleteIconContainer = styled(TouchableOpacity)`
   top: 10px;
 `;
 
-export const Title = styled(Text)`
+export const Title = styled(Text)<{ isDarkMode: boolean }>`
   text-align: center;
   font-size: 17px;
   font-family: 'NunitoSans-ExtraBold';
-  color: ${({ theme }) => theme.colors.grey[600]};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.white[100] : theme.colors.grey[600]};
 `;
 
 export const InputNumberText = styled(Text)<{ isDarkMode: boolean }>`
@@ -62,14 +63,13 @@ export const InputNumberErrorText = styled(Text)`
 
 export const StyledTextInput = styled(TextInput)<{ isDarkMode: boolean }>`
   background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]};
+    isDarkMode ? theme.colors.grey[900] : theme.colors.grey[200]};
   border-radius: 30px;
   padding-left: 20px;
   padding-right: 20px;
   font-weight: bold;
   margin: 15px 15px 0px 15px;
-  color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.colors.grey[100] : theme.colors.grey[500]};
+  color: ${({ theme }) => theme.colors.magenta[100]};
 `;
 
 export const StyledButton = styled(Button)`

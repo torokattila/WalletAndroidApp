@@ -101,7 +101,7 @@ export const Purchases: FC = () => {
     <>
       <Container>
         <StyledLinearGradient
-          colors={['#8E65F7', '#4547B8']}
+          colors={['#e84393', '#e84393']}
           useAngle
           angle={140}
           start={{ x: 0, y: 0 }}
@@ -122,46 +122,51 @@ export const Purchases: FC = () => {
           </PurchasesThisMonthContainer>
 
           <ContentContainer isDarkMode={isDarkMode}>
-            <AllPurchasesTitle>{i18n.t('Purchases.AllPurchasesTitle')}</AllPurchasesTitle>
+            <AllPurchasesTitle isDarkMode={isDarkMode}>
+              {i18n.t('Purchases.AllPurchasesTitle')}
+            </AllPurchasesTitle>
 
             <ClearFilterAndDownloadContainer>
               {(isCategoryFilterChanged || isDateFilterChanged.current) && (
                 <Animated.View entering={FadeIn} exiting={FadeOut}>
                   <DeleteFiltersButton onPress={handleClearFilters}>
-                    <Icon type="delete-filters" iconColor={theme.colors.purple[300]} />
+                    <Icon type="delete-filters" iconColor={theme.colors.magenta[100]} />
                   </DeleteFiltersButton>
                 </Animated.View>
               )}
               <DownloadButton onPress={handleDownloadButtonClick}>
-                <Icon type="download" iconColor={theme.colors.purple[300]} />
+                <Icon type="download" iconColor={theme.colors.magenta[100]} />
               </DownloadButton>
             </ClearFilterAndDownloadContainer>
 
             <CategoryAndShowDateFiltersButtonContainer>
               <CategoryFilterContainer>
-                <CategoryFilterLabel>{i18n.t('Purchases.FilterForCategory')}</CategoryFilterLabel>
+                <CategoryFilterLabel isDarkMode={isDarkMode}>
+                  {i18n.t('Purchases.FilterForCategory')}
+                </CategoryFilterLabel>
                 <Dropdown
+                  iconColor="#e84393"
                   style={[
                     !isDarkMode && shadow,
                     dropdownStyle,
                     {
                       backgroundColor: isDarkMode
-                        ? theme.colors.grey[500]
+                        ? theme.colors.grey[800]
                         : theme.colors.white[100],
                     },
                   ]}
                   data={allCategories}
                   value={filterCategory.current}
                   placeholderStyle={{
-                    color: theme.colors.grey[600],
+                    color: theme.colors.magenta[100],
                   }}
                   placeholder={dropdownPlaceholder}
                   containerStyle={[
-                    !isDarkMode && shadow,
+                    shadow,
                     dropdownContainerStyle,
                     {
                       backgroundColor: isDarkMode
-                        ? theme.colors.grey[500]
+                        ? theme.colors.grey[800]
                         : theme.colors.white[100],
                       maxHeight: 230,
                       left: 65,
@@ -172,7 +177,7 @@ export const Purchases: FC = () => {
                   labelField={'label'}
                   valueField={'value'}
                   selectedTextStyle={selectedTextStyle}
-                  activeColor={isDarkMode ? theme.colors.grey[700] : theme.colors.grey[200]}
+                  activeColor={isDarkMode ? theme.colors.grey[900] : theme.colors.magenta[200]}
                   onChange={handleFilterCategoryChange}
                   mode="default"
                 />
@@ -196,7 +201,7 @@ export const Purchases: FC = () => {
                   exiting={FadeOutLeft}
                 >
                   <DatePickerButtonContainer>
-                    <DatePickerButtonLabel>
+                    <DatePickerButtonLabel isDarkMode={isDarkMode}>
                       {i18n.t('DatePicker.FilterFromDateText')}
                     </DatePickerButtonLabel>
                     <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
@@ -205,7 +210,7 @@ export const Purchases: FC = () => {
                   </DatePickerButtonContainer>
 
                   <DatePickerButtonContainer>
-                    <DatePickerButtonLabel>
+                    <DatePickerButtonLabel isDarkMode={isDarkMode}>
                       {i18n.t('DatePicker.FilterToDateText')}
                     </DatePickerButtonLabel>
                     <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
@@ -214,11 +219,11 @@ export const Purchases: FC = () => {
                   </DatePickerButtonContainer>
 
                   <CloseDateFiltersButton
-                    style={!isDarkMode && shadow}
+                    style={shadow}
                     onPress={hideDateFilters}
                     isDarkMode={isDarkMode}
                   >
-                    <Icon type="close" iconColor={theme.colors.purple[300]} />
+                    <Icon type="close" iconColor={theme.colors.magenta[100]} />
                   </CloseDateFiltersButton>
                 </DateFiltersContainer>
               )}
@@ -253,7 +258,7 @@ export const Purchases: FC = () => {
               theme={isDarkMode ? 'dark' : 'auto'}
             />
 
-            {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
+            {isLoading && <Loader color={theme.colors.magenta[100]} size="large" />}
 
             {purchases.length > 0 && !isLoading && (
               <ListContainer>
@@ -267,7 +272,7 @@ export const Purchases: FC = () => {
                     <RefreshControl
                       refreshing={screenRefreshing}
                       onRefresh={handlePullToRefresh}
-                      colors={['#4547B8', '#8E65F7']}
+                      colors={['#e84393', '#e84393']}
                     />
                   }
                   showsVerticalScrollIndicator={false}
@@ -282,7 +287,9 @@ export const Purchases: FC = () => {
             )}
             {!purchases.length && !isLoading && (
               <NoPurchasesContainer>
-                <NoPurchasesText>{i18n.t('NoPurchasesText')}</NoPurchasesText>
+                <NoPurchasesText isDarkMode={isDarkMode}>
+                  {i18n.t('NoPurchasesText')}
+                </NoPurchasesText>
               </NoPurchasesContainer>
             )}
             <AddButton onPress={handleModalOpen} />

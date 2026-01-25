@@ -26,11 +26,11 @@ type Props = {
 };
 
 const cardShadow = {
-  elevation: 4,
+  elevation: 3,
   shadowColor: theme.colors.black,
-  shadowOffset: { width: 0, height: 10 },
+  shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.5,
-  shadowRadius: 14,
+  shadowRadius: 3.84,
 };
 
 const PieChartPurchaseCard: FC<Props> = ({ donutChartData, onPress }) => {
@@ -42,7 +42,7 @@ const PieChartPurchaseCard: FC<Props> = ({ donutChartData, onPress }) => {
     : 'other-purchase';
 
   return (
-    <Container style={!isDarkMode && cardShadow} isDarkMode={isDarkMode} onPress={onPress}>
+    <Container style={cardShadow} isDarkMode={isDarkMode} onPress={onPress}>
       <View
         style={{
           width: 40,

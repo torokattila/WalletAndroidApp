@@ -81,12 +81,12 @@ export const Incomes: FC = () => {
           <RefreshControl
             refreshing={screenRefreshing}
             onRefresh={handlePullToRefresh}
-            colors={['#4547B8', '#8E65F7']}
+            colors={['#e84393', '#e84393']}
           />
         }
       >
         <StyledLinearGradient
-          colors={['#4547B8', '#8E65F7']}
+          colors={['#e84393', '#e84393']}
           useAngle
           angle={140}
           start={{ x: 0, y: 0 }}
@@ -102,11 +102,13 @@ export const Incomes: FC = () => {
             <Balance>{formatAmount(totalIncome)} Ft</Balance>
           </BalanceContainer>
           <ContentContainer isDarkMode={isDarkMode}>
-            <AllIncomeTitle>{i18n.t('Incomes.AllIncomeTitle')}</AllIncomeTitle>
+            <AllIncomeTitle isDarkMode={isDarkMode}>
+              {i18n.t('Incomes.AllIncomeTitle')}
+            </AllIncomeTitle>
 
             <DatePickerContainer>
               <DatePickerButtonContainer>
-                <DatePickerButtonLabel>
+                <DatePickerButtonLabel isDarkMode={isDarkMode}>
                   {i18n.t('DatePicker.FilterFromDateText')}
                 </DatePickerButtonLabel>
                 <DatePickerButton style={shadow} onPress={handleFromDatePickerOpen}>
@@ -115,7 +117,7 @@ export const Incomes: FC = () => {
               </DatePickerButtonContainer>
 
               <DatePickerButtonContainer>
-                <DatePickerButtonLabel>
+                <DatePickerButtonLabel isDarkMode={isDarkMode}>
                   {i18n.t('DatePicker.FilterToDateText')}
                 </DatePickerButtonLabel>
                 <DatePickerButton style={shadow} onPress={handleToDatePickerOpen}>
@@ -128,12 +130,12 @@ export const Incomes: FC = () => {
               {isFilterChanged && (
                 <Animated.View entering={FadeIn} exiting={FadeOut}>
                   <DeleteFiltersButton onPress={handleClearFilters}>
-                    <Icon type="delete-filters" iconColor={theme.colors.purple[300]} />
+                    <Icon type="delete-filters" iconColor={theme.colors.magenta[100]} />
                   </DeleteFiltersButton>
                 </Animated.View>
               )}
               <DownloadButton onPress={handleDownloadButtonClick}>
-                <Icon type="download" iconColor={theme.colors.purple[300]} />
+                <Icon type="download" iconColor={theme.colors.magenta[100]} />
               </DownloadButton>
             </ClearFilterAndDownloadContainer>
 
@@ -166,7 +168,7 @@ export const Incomes: FC = () => {
               theme={isDarkMode ? 'dark' : 'auto'}
             />
 
-            {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
+            {isLoading && <Loader color={theme.colors.magenta[100]} size="large" />}
 
             {incomes.length > 0 && !isLoading && (
               <ListContainer>
@@ -179,7 +181,7 @@ export const Incomes: FC = () => {
                     <RefreshControl
                       refreshing={screenRefreshing}
                       onRefresh={handlePullToRefresh}
-                      colors={['#4547B8', '#8E65F7']}
+                      colors={['#e84393', '#e84393']}
                     />
                   }
                   keyExtractor={(item) => item.id}
@@ -196,7 +198,9 @@ export const Incomes: FC = () => {
 
             {!incomes.length && !isLoading && (
               <NoIncomesContainer>
-                <NoIncomesText>{i18n.t('Incomes.NoIncomesText')}</NoIncomesText>
+                <NoIncomesText isDarkMode={isDarkMode}>
+                  {i18n.t('Incomes.NoIncomesText')}
+                </NoIncomesText>
               </NoIncomesContainer>
             )}
             <AddButton onPress={handleModalOpen} />

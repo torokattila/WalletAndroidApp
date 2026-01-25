@@ -36,7 +36,7 @@ export const LoadingScreen: FC<LoadingScreenProps> = ({ isAppReady, children }) 
         <SplashContainer style={{ opacity }}>
           <StyledImage source={require('../../../assets/wallet.png')} />
           <StyledTitle>Wallet</StyledTitle>
-          <Loader color={theme.colors.purple[100]} size="large" animating />
+          <Loader color={theme.colors.magenta[100]} size="large" animating />
         </SplashContainer>
       )}
     </AppContainer>

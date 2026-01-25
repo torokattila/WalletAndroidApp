@@ -21,24 +21,24 @@ type IncomeCardProps = {
 };
 
 const cardShadow = {
-  elevation: 4,
+  elevation: 3,
   shadowColor: theme.colors.black,
-  shadowOffset: { width: 0, height: 10 },
+  shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.5,
-  shadowRadius: 14,
+  shadowRadius: 3.84,
 };
 
 export const IncomeCard: FC<IncomeCardProps> = ({ income, onPress }) => {
   const { isDarkMode } = useDarkMode();
 
   return (
-    <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
+    <Container style={cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
       <IconContainer style={cardShadow} isDarkMode={isDarkMode}>
         <Icon type="dollar" iconColor={theme.colors.white[100]} />
       </IconContainer>
 
       <TitleAndAmountContainer>
-        {income.title && <Title>{income.title}</Title>}
+        {income.title && <Title isDarkMode={isDarkMode}>{income.title}</Title>}
       </TitleAndAmountContainer>
 
       <AmountAndDateContainer>

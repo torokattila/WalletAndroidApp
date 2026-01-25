@@ -54,7 +54,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
   return (
     <Container>
       <StyledLinearGradient
-        colors={['#2C1F5F', '#4c397a', '#9068ee', '#b296f1', '#ffffff', '#3f087a57']}
+        colors={['#e84393', '#e84393']}
         useAngle
         angle={140}
         start={{ x: 0, y: 0 }}
@@ -68,8 +68,8 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           <StyledImage source={require('../../../assets/wallet.png')} />
-          <StyledTitle isDarkMode={isDarkMode}>Wallet</StyledTitle>
-          <StyledSubtitle isDarkMode={isDarkMode}>{i18n.t('LoginSubtitle')}</StyledSubtitle>
+          <StyledTitle>Wallet</StyledTitle>
+          <StyledSubtitle>{i18n.t('LoginSubtitle')}</StyledSubtitle>
 
           <FormContainer>
             <KeyboardAvoidingView
@@ -85,11 +85,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 inputMode="text"
                 placeholder={errors.firstname ? errors.firstname : i18n.t('FirstNameLabel')}
                 placeholderTextColor={
-                  errors.firstname
-                    ? theme.colors.red
-                    : isDarkMode
-                    ? theme.colors.purple[400]
-                    : theme.colors.purple[200]
+                  errors.firstname ? theme.colors.red : theme.colors.magenta[200]
                 }
                 returnKeyType="next"
                 blurOnSubmit={false}
@@ -104,11 +100,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 hasError={!!errors.lastname}
                 placeholder={errors.lastname ? errors.lastname : i18n.t('LastNameLabel')}
                 placeholderTextColor={
-                  errors.lastname
-                    ? theme.colors.red
-                    : isDarkMode
-                    ? theme.colors.purple[400]
-                    : theme.colors.purple[200]
+                  errors.lastname ? theme.colors.red : theme.colors.magenta[200]
                 }
                 returnKeyType="next"
                 blurOnSubmit={false}
@@ -123,13 +115,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 hasError={!!errors.email}
                 autoCapitalize="none"
                 placeholder={errors.email ? errors.email : i18n.t('EmailAddressLabel')}
-                placeholderTextColor={
-                  errors.email
-                    ? theme.colors.red
-                    : isDarkMode
-                    ? theme.colors.purple[400]
-                    : theme.colors.purple[200]
-                }
+                placeholderTextColor={errors.email ? theme.colors.red : theme.colors.magenta[200]}
                 returnKeyType="next"
                 blurOnSubmit={false}
                 onSubmitEditing={() => passwordRef.current.focus()}
@@ -144,11 +130,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                   hasError={!!errors.password}
                   placeholder={errors.password ? errors.password : i18n.t('PasswordLabel')}
                   placeholderTextColor={
-                    errors.password
-                      ? theme.colors.red
-                      : isDarkMode
-                      ? theme.colors.purple[400]
-                      : theme.colors.purple[200]
+                    errors.password ? theme.colors.red : theme.colors.magenta[200]
                   }
                   returnKeyType="next"
                   blurOnSubmit={false}
@@ -158,7 +140,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 <StyledIconButton onPress={() => setIsPassword(!isPassword)}>
                   <Icon
                     type={isPassword ? 'eye' : 'eye-outlined'}
-                    iconColor={isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]}
+                    iconColor={theme.colors.magenta[100]}
                   />
                 </StyledIconButton>
               </View>
@@ -173,18 +155,14 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                     errors.passwordConfirm ? errors.passwordConfirm : i18n.t('PasswordConfirmLabel')
                   }
                   placeholderTextColor={
-                    errors.passwordConfirm
-                      ? theme.colors.red
-                      : isDarkMode
-                      ? theme.colors.purple[400]
-                      : theme.colors.purple[200]
+                    errors.passwordConfirm ? theme.colors.red : theme.colors.magenta[200]
                   }
                   isDarkMode={isDarkMode}
                 />
                 <StyledIconButton onPress={() => setIsPasswordConfirm(!isPasswordConfirm)}>
                   <Icon
                     type={isPasswordConfirm ? 'eye' : 'eye-outlined'}
-                    iconColor={isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]}
+                    iconColor={theme.colors.magenta[100]}
                   />
                 </StyledIconButton>
               </View>
@@ -199,11 +177,9 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
             </KeyboardAvoidingView>
           </FormContainer>
 
-          <VerifyEmailAddressText isDarkMode={isDarkMode}>
-            {i18n.t('VerifyEmailAddressText')}
-          </VerifyEmailAddressText>
+          <VerifyEmailAddressText>{i18n.t('VerifyEmailAddressText')}</VerifyEmailAddressText>
 
-          <StyledRedirectQuestionText isDarkMode={isDarkMode}>
+          <StyledRedirectQuestionText>
             {i18n.t('AlreadyHaveAnAccountLabel')}
           </StyledRedirectQuestionText>
           <StyledRedirectButton

@@ -40,7 +40,7 @@ export const Categories: FC = () => {
     <>
       <Container>
         <StyledLinearGradient
-          colors={['#5b1bff', '#4547B8']}
+          colors={['#e84393', '#e84393']}
           useAngle
           angle={140}
           start={{ x: 0, y: 0 }}
@@ -52,9 +52,11 @@ export const Categories: FC = () => {
           </ScreenTitleContainer>
 
           <ContentContainer isDarkMode={isDarkMode}>
-            <MyCategoriesTitle>{i18n.t('Categories.ScreenTitle')}</MyCategoriesTitle>
+            <MyCategoriesTitle isDarkMode={isDarkMode}>
+              {i18n.t('Categories.ScreenTitle')}
+            </MyCategoriesTitle>
 
-            {isLoading && <Loader color={theme.colors.purple[300]} size="large" />}
+            {isLoading && <Loader color={theme.colors.magenta[100]} size="large" />}
 
             {categories.length > 0 && !isLoading && (
               <ListContainer>
@@ -67,7 +69,7 @@ export const Categories: FC = () => {
                     <RefreshControl
                       refreshing={screenRefreshing}
                       onRefresh={handlePullToRefresh}
-                      colors={['#4547B8', '#8E65F7']}
+                      colors={['#e84393', '#e84393']}
                     />
                   }
                   keyExtractor={(item) => item.id}
@@ -84,7 +86,9 @@ export const Categories: FC = () => {
 
             {!categories.length && !isLoading && (
               <NoIncomesContainer>
-                <NoIncomesText>{i18n.t('Categories.NoCategoriesText')}</NoIncomesText>
+                <NoIncomesText isDarkMode={isDarkMode}>
+                  {i18n.t('Categories.NoCategoriesText')}
+                </NoIncomesText>
               </NoIncomesContainer>
             )}
 

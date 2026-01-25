@@ -53,7 +53,7 @@ export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onPress }) => {
   );
 
   return (
-    <Container style={!isDarkMode && cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
+    <Container style={cardShadow} onPress={onPress} isDarkMode={isDarkMode}>
       <IconContainer
         style={cardShadow}
         isDarkMode={isDarkMode}

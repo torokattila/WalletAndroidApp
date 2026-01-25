@@ -45,7 +45,7 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
   return (
     <Container contentContainerStyle={scrollViewStyle}>
       <StyledLinearGradient
-        colors={['#2C1F5F', '#4c397a', '#9068ee', '#b296f1', '#ffffff', '#3f087a57']}
+        colors={['#e84393', '#e84393']}
         useAngle
         angle={140}
         start={{ x: 0, y: 0 }}
@@ -66,13 +66,7 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
                 hasError={!!errors.email}
                 inputMode="email"
                 placeholder={errors.email ? errors.email : i18n.t('EmailAddressLabel')}
-                placeholderTextColor={
-                  errors.email
-                    ? theme.colors.red
-                    : isDarkMode
-                    ? theme.colors.purple[400]
-                    : theme.colors.purple[200]
-                }
+                placeholderTextColor={errors.email ? theme.colors.red : theme.colors.magenta[200]}
                 returnKeyType="next"
                 blurOnSubmit={false}
                 onSubmitEditing={() => passwordRef.current.focus()}
@@ -87,18 +81,14 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
                   secureTextEntry={isPassword}
                   placeholder={errors.password ? errors.password : i18n.t('PasswordLabel')}
                   placeholderTextColor={
-                    errors.password
-                      ? theme.colors.red
-                      : isDarkMode
-                      ? theme.colors.purple[400]
-                      : theme.colors.purple[200]
+                    errors.password ? theme.colors.red : theme.colors.magenta[200]
                   }
                   isDarkMode={isDarkMode}
                 />
                 <StyledIconButton onPress={() => setIsPassword(!isPassword)}>
                   <Icon
                     type={isPassword ? 'eye' : 'eye-outlined'}
-                    iconColor={isDarkMode ? theme.colors.purple[300] : theme.colors.purple[100]}
+                    iconColor={theme.colors.magenta[100]}
                   />
                 </StyledIconButton>
               </View>
