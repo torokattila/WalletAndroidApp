@@ -4,6 +4,7 @@
  * Improves performance and prevents memory leaks
  */
 
+import { BalanceManager } from '@core/balance-manager';
 import { AuthService } from './auth';
 import { CategoryService } from './category';
 import { IncomeService } from './income';
@@ -18,6 +19,7 @@ class ServiceContainer {
   private _incomeService: IncomeService;
   private _purchaseService: PurchaseService;
   private _userService: UserService;
+  private _balanceManager: BalanceManager;
 
   private constructor() {}
 
@@ -63,12 +65,20 @@ class ServiceContainer {
     return this._userService;
   }
 
+  get balanceManager(): BalanceManager {
+    if (!this._balanceManager) {
+      this._balanceManager = new BalanceManager(this.userService);
+    }
+    return this._balanceManager;
+  }
+
   public clear(): void {
     this._authService = null;
     this._categoryService = null;
     this._incomeService = null;
     this._purchaseService = null;
     this._userService = null;
+    this._balanceManager = null;
   }
 }
 
@@ -78,3 +88,4 @@ export const getCategoryService = () => getServices().categoryService;
 export const getIncomeService = () => getServices().incomeService;
 export const getPurchaseService = () => getServices().purchaseService;
 export const getUserService = () => getServices().userService;
+export const getBalanceManager = () => getServices().balanceManager;

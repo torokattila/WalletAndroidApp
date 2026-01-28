@@ -20,7 +20,7 @@ import {
 } from 'firebase/firestore';
 import i18n from 'i18n-js';
 import { BaseService } from '../base.service';
-import { getCategoryService, getUserService } from '../ServiceContainer';
+import { getBalanceManager, getCategoryService } from '../ServiceContainer';
 
 export type PurchaseModel = {
   id: string;
@@ -33,8 +33,8 @@ export type PurchaseModel = {
 };
 
 export class PurchaseService extends BaseService<PurchaseModel> {
-  private userService = getUserService();
   private categoryService = getCategoryService();
+  private balanceManager = getBalanceManager();
 
   constructor() {
     super('purchases');
@@ -46,7 +46,6 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     category: PurchaseCategory | string,
     secondaryCategory?: string | null
   ): Promise<Purchase> {
-    const userService = getUserService();
     const purchasesCollectionRef = collection(getDB(), 'purchases');
     const insertedPurchase = await addDoc(purchasesCollectionRef, {
       userId,
@@ -57,12 +56,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       updatedAt: Timestamp.now(),
     });
 
-    const currentUser = await userService.getUserByUserId(userId);
-    const currentBalance = currentUser?.balance;
-    await userService.updateBasicDetails(userId, {
-      ...currentUser,
-      balance: currentBalance - Number(amount),
-    });
+    await this.balanceManager.adjustBalance(userId, Number(amount), 'subtract');
 
     const purchaseRef = doc(
       getDB(),
@@ -131,16 +125,9 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     data: Partial<Purchase>
   ): Promise<Purchase> {
     const currentPurchase = await this.getPurchaseById(purchaseId);
-    const currentUser = await this.userService.getUserByUserId(userId);
-
-    const updatedUser = await this.userService.updateBasicDetails(userId, {
-      ...currentUser,
-      balance: currentUser.balance + Number(currentPurchase.amount),
-    });
+    await this.balanceManager.adjustBalance(userId, Number(currentPurchase.amount), 'add');
 
     const docRef = doc(this.collection, purchaseId);
-
-    // Normalize category to ensure it matches PurchaseModel (stored as PurchaseCategory/title string)
     const normalizedCategory =
       typeof data.category === 'object'
         ? (data.category as Category).title
@@ -153,11 +140,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       createdAt: data.createdAt as unknown as Timestamp,
     };
 
-    await this.userService.updateBasicDetails(userId, {
-      ...updatedUser,
-      balance: updatedUser.balance - Number(data.amount),
-    });
-
+    await this.balanceManager.adjustBalance(userId, Number(data.amount), 'subtract');
     await updateDoc(docRef, { ...purchaseData, updatedAt: Timestamp.now() });
 
     const purchaseSnap = await getDoc(docRef);
@@ -167,12 +150,8 @@ export class PurchaseService extends BaseService<PurchaseModel> {
 
   async deletePurchase(purchaseId: string, userId: string): Promise<void> {
     const currentPurchase = await this.getPurchaseById(purchaseId);
-    const currentUser = await this.userService.getUserByUserId(userId);
 
-    await this.userService.updateBasicDetails(userId, {
-      ...currentUser,
-      balance: currentUser.balance + Number(currentPurchase.amount),
-    });
+    await this.balanceManager.adjustBalance(userId, Number(currentPurchase.amount), 'add');
 
     const docRef = doc(this.collection, purchaseId);
     const purchaseSnapshot = await getDoc(docRef);

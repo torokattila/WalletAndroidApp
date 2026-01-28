@@ -17,7 +17,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { BaseService } from '../base.service';
-import { getUserService } from '../ServiceContainer';
+import { getBalanceManager } from '../ServiceContainer';
 
 export type IncomeModel = {
   id: string;
@@ -29,12 +29,13 @@ export type IncomeModel = {
 };
 
 export class IncomeService extends BaseService<IncomeModel> {
+  private balanceManager = getBalanceManager();
+
   constructor() {
     super('incomes');
   }
 
   async createIncome(userId: string, amount: string, title: string): Promise<Income> {
-    const userService = getUserService();
     const incomesCollectionRef = collection(getDB(), 'incomes');
     const insertedIncome = await addDoc(incomesCollectionRef, {
       userId,
@@ -44,12 +45,7 @@ export class IncomeService extends BaseService<IncomeModel> {
       updatedAt: Timestamp.now(),
     });
 
-    const currentUser = await userService.getUserByUserId(userId);
-    const currentBalance = currentUser?.balance;
-    await userService.updateBasicDetails(userId, {
-      ...currentUser,
-      balance: currentBalance + Number(amount),
-    });
+    await this.balanceManager.adjustBalance(userId, Number(amount), 'add');
 
     const incomeRef = doc(getDB(), 'incomes', insertedIncome?.id) as DocumentReference<IncomeModel>;
     const incomeSnapshot = await getDoc(incomeRef);
@@ -58,14 +54,9 @@ export class IncomeService extends BaseService<IncomeModel> {
   }
 
   async updateIncome(incomeId: string, userId: string, data: Partial<Income>): Promise<Income> {
-    const userService = getUserService();
     const currentIncome = await this.getIncomeById(incomeId);
-    const currentUser = await userService.getUserByUserId(userId);
 
-    const updatedUser = await userService.updateBasicDetails(userId, {
-      ...currentUser,
-      balance: currentUser.balance - Number(currentIncome.amount),
-    });
+    await this.balanceManager.adjustBalance(userId, Number(currentIncome.amount), 'subtract');
 
     const docRef = doc(this.collection, incomeId);
     const incomeData: Partial<Income> = {
@@ -73,11 +64,7 @@ export class IncomeService extends BaseService<IncomeModel> {
       title: data?.title?.trim(),
     };
 
-    await userService.updateBasicDetails(userId, {
-      ...updatedUser,
-      balance: updatedUser.balance + Number(data.amount),
-    });
-
+    await this.balanceManager.adjustBalance(userId, Number(data.amount), 'add');
     await updateDoc(docRef, { ...incomeData, updatedAt: Timestamp.now() });
 
     const incomeSnap = await getDoc(docRef);
@@ -86,14 +73,9 @@ export class IncomeService extends BaseService<IncomeModel> {
   }
 
   async deleteIncome(incomeId: string, userId: string): Promise<void> {
-    const userService = getUserService();
     const currentIncome = await this.getIncomeById(incomeId);
-    const currentUser = await userService.getUserByUserId(userId);
 
-    await userService.updateBasicDetails(userId, {
-      ...currentUser,
-      balance: currentUser.balance - Number(currentIncome.amount),
-    });
+    await this.balanceManager.adjustBalance(userId, Number(currentIncome.amount), 'subtract');
 
     const docRef = doc(this.collection, incomeId);
     const incomeSnapshot = await getDoc(docRef);
