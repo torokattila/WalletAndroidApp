@@ -25,6 +25,7 @@ import {
   StyledIconButton,
   VerifyEmailAddressText,
 } from './Registration.styles';
+import { ROUTES } from '@constants/routes';
 
 type RegistrationProps = NativeStackScreenProps<AuthStackParams, 'Registration'>;
 
@@ -183,7 +184,7 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
             {i18n.t('AlreadyHaveAnAccountLabel')}
           </StyledRedirectQuestionText>
           <StyledRedirectButton
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => navigation.navigate(ROUTES.LOGIN)}
             text={i18n.t('RedirectLoginLabel')}
           />
         </BottomContainer>

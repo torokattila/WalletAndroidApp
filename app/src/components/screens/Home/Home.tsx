@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
 import { Icon } from '@components/shared';
+import { ROUTES } from '@constants/routes';
 import { formatAmount } from '@core/format-amount';
 import { getLocale } from '@core/translation-utils';
 import { useDarkMode } from '@hooks/useDarkMode';
@@ -199,7 +200,7 @@ export const Home: FC = () => {
                 </NoLastFivePurchasesText>
                 <RedirectToPurchasesButton
                   style={!isDarkMode && buttonShadow}
-                  onPress={() => navigation.navigate('Purchases')}
+                  onPress={() => navigation.navigate(ROUTES.PURCHASES)}
                   text={i18n.t('Home.RedirectToPurchasesButtonText')}
                   size="small"
                 />

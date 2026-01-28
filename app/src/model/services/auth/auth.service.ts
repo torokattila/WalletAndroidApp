@@ -1,11 +1,8 @@
+import { STORAGE_KEYS } from '@constants/storage-keys';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as firebase from 'firebase/auth';
 import { deleteDoc, getDocs, query, where } from 'firebase/firestore';
 import { getApp, getCollection } from '../../firebase-config';
-
-const STORAGE_KEY = 'clientId';
-const AUTH_USER_STORAGE_KEY = 'authUser';
-const USER_UID = 'userUid';
 
 export class AuthService {
   private readonly auth: firebase.Auth = firebase.getAuth(getApp());
@@ -19,8 +16,8 @@ export class AuthService {
       await firebase.sendEmailVerification(user);
     }
 
-    await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
-    await AsyncStorage.setItem(USER_UID, JSON.stringify(user.uid));
+    await AsyncStorage.setItem(STORAGE_KEYS.AUTH_USER, JSON.stringify(user));
+    await AsyncStorage.setItem(STORAGE_KEYS.USER_UID, JSON.stringify(user.uid));
 
     return user;
   }
@@ -38,8 +35,8 @@ export class AuthService {
       await firebase.sendEmailVerification(user);
     }
 
-    await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
-    await AsyncStorage.setItem(USER_UID, JSON.stringify(user.uid));
+    await AsyncStorage.setItem(STORAGE_KEYS.AUTH_USER, JSON.stringify(user));
+    await AsyncStorage.setItem(STORAGE_KEYS.USER_UID, JSON.stringify(user.uid));
 
     return user;
   }
@@ -65,9 +62,9 @@ export class AuthService {
 
   async signOut(): Promise<void> {
     try {
-      await AsyncStorage.removeItem(STORAGE_KEY);
-      await AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY);
-      await AsyncStorage.removeItem(USER_UID);
+      await AsyncStorage.removeItem(STORAGE_KEYS.CLIENT_ID);
+      await AsyncStorage.removeItem(STORAGE_KEYS.AUTH_USER);
+      await AsyncStorage.removeItem(STORAGE_KEYS.USER_UID);
       await firebase.signOut(this.auth);
     } catch (error) {
       console.error(error);
@@ -87,7 +84,7 @@ export class AuthService {
       let user: firebase.User = await this.getCurrentUser();
 
       if (!user) {
-        user = JSON.parse(await AsyncStorage.getItem(AUTH_USER_STORAGE_KEY));
+        user = JSON.parse(await AsyncStorage.getItem(STORAGE_KEYS.AUTH_USER));
       }
 
       if (user) {

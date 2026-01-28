@@ -1,8 +1,7 @@
+import { STORAGE_KEYS } from '@constants/storage-keys';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import uuid from 'react-native-uuid';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const STORAGE_KEY = 'clientId';
 
 type ContextProps = {
   userId: string;
@@ -17,12 +16,12 @@ export const UserIdProvider = ({ children }) => {
   useEffect(() => {
     const init = async () => {
       try {
-        let id = await AsyncStorage.getItem(STORAGE_KEY);
+        let id = await AsyncStorage.getItem(STORAGE_KEYS.CLIENT_ID);
 
         if (!id) {
           id = uuid.v4() as string;
 
-          await AsyncStorage.setItem(STORAGE_KEY, id);
+          await AsyncStorage.setItem(STORAGE_KEYS.CLIENT_ID, id);
         }
 
         setUserId(id);

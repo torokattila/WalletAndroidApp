@@ -1,28 +1,29 @@
-import React, { FC, useRef } from 'react';
-import i18n from 'i18n-js';
-import { KeyboardAvoidingView, View } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Icon } from '@components/shared';
+import { ROUTES } from '@constants/routes';
+import { useDarkMode } from '@hooks/useDarkMode';
+import useLogin from '@hooks/useLogin';
 import { AuthStackParams } from '@navigation/AuthStack';
 import { RootStackParams } from '@navigation/Navigation';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { theme } from '@styles/theme';
-import { Icon } from '@components/shared';
-import useLogin from '@hooks/useLogin';
-import { useDarkMode } from '@hooks/useDarkMode';
+import i18n from 'i18n-js';
+import React, { FC, useRef } from 'react';
+import { KeyboardAvoidingView, View } from 'react-native';
 import {
-  Container,
-  scrollViewStyle,
   BottomContainer,
-  StyledLinearGradient,
-  StyledGradientText,
-  StyledImage,
-  StyledTitle,
+  Container,
   FormContainer,
-  StyledTextInput,
+  scrollViewStyle,
   StyledButton,
-  StyledSubtitle,
-  StyledRedirectQuestionText,
-  StyledRedirectButton,
+  StyledGradientText,
   StyledIconButton,
+  StyledImage,
+  StyledLinearGradient,
+  StyledRedirectButton,
+  StyledRedirectQuestionText,
+  StyledSubtitle,
+  StyledTextInput,
+  StyledTitle,
 } from './Login.styles';
 
 type LoginProps = NativeStackScreenProps<AuthStackParams & RootStackParams, 'Login'>;
@@ -107,7 +108,7 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
             {i18n.t('DontYouHaveAnAccountLabel')}
           </StyledRedirectQuestionText>
           <StyledRedirectButton
-            onPress={() => navigation.navigate('Registration')}
+            onPress={() => navigation.navigate(ROUTES.REGISTRATION)}
             text={i18n.t('RedirectSignupLabel')}
           />
         </BottomContainer>

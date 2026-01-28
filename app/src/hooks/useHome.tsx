@@ -1,3 +1,4 @@
+import { ROUTES } from '@constants/routes';
 import { Purchase } from '@model/domain';
 import type { TabStackParams } from '@navigation/Tabs/TabStack';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -36,7 +37,7 @@ export const useHome = () => {
   };
 
   const navigateToPurchases = (category: string, fromDate: Date, toDate: Date) => {
-    navigation.navigate('Purchases', { category, fromDate, toDate });
+    navigation.navigate(ROUTES.PURCHASES, { category, fromDate, toDate });
   };
 
   const aggregatePurchasesByCategory = (purchasesProp: Purchase[]) => {

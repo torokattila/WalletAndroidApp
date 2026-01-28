@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from '@constants/storage-keys';
 import { User } from '@model/domain';
 import { getDB } from '@model/firebase-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,7 +16,6 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import uuid from 'react-native-uuid';
 import { AuthService } from '../auth';
 import { BaseService } from '../base.service';
 import { getIncomeService, getPurchaseService } from '../ServiceContainer';
@@ -32,8 +32,6 @@ export type UserModel = {
   updatedAt: Timestamp;
 };
 
-const USER_UID = 'userUid';
-
 export class UserService extends BaseService<UserModel> {
   private authService: AuthService;
 
@@ -45,7 +43,7 @@ export class UserService extends BaseService<UserModel> {
   async getCurrentUser(): Promise<User> {
     const user = await this.authService.getCurrentUser();
 
-    let storageUid = await AsyncStorage.getItem(USER_UID);
+    let storageUid = await AsyncStorage.getItem(STORAGE_KEYS.USER_UID);
     storageUid = storageUid.replace(/"/g, '');
 
     let queryData = query(
@@ -159,24 +157,6 @@ export class UserService extends BaseService<UserModel> {
       throw error;
     }
   };
-
-  private async getUserId() {
-    const STORAGE_KEY = 'clientId';
-
-    try {
-      let userId = await AsyncStorage.getItem(STORAGE_KEY);
-
-      if (!userId) {
-        userId = uuid.v4() as string;
-
-        await AsyncStorage.setItem(STORAGE_KEY, userId);
-      }
-
-      return userId;
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
 
   private async setUserId(userId: string) {
     const STORAGE_KEY = 'clientId';
