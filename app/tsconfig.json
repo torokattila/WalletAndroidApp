@@ -28,6 +28,9 @@
       "@stores/*": [
         "stores/*"
       ],
+      "@modules/*": [
+        "modules/*"
+      ],
     },
     "allowJs": true,
     "skipLibCheck": true,

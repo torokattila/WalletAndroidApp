@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { theme } from '@styles/theme';
 import { Home, Incomes, Profile, Purchases } from '@components/screens';
@@ -7,6 +7,7 @@ import { TabIcon } from '@components/TabIcon';
 import { TabButton } from '@components/TabButton';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { Categories } from '@components/screens/Categories';
+import { getNavigationMode, NavigationModeInfo } from '@modules/NavigationMode';
 
 export type TabStackParams = {
   Home: {};
@@ -24,6 +25,14 @@ const BottomTabs = createBottomTabNavigator<TabStackParams>();
 
 export const TabStack: FC = () => {
   const { isDarkMode } = useDarkMode();
+  const [navigationMode, setNavigationMode] = useState<NavigationModeInfo | null>(null);
+
+  useEffect(() => {
+    getNavigationMode().then(setNavigationMode).catch(console.error);
+  }, []);
+
+  const tabBarHeight = navigationMode?.type === '3_button' ? 90 : 75;
+  const tabBarPaddingBottom = navigationMode?.type === '3_button' ? 30 : 7;
 
   return (
     <BottomTabs.Navigator
@@ -31,7 +40,8 @@ export const TabStack: FC = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          height: 75,
+          height: tabBarHeight,
+          paddingBottom: tabBarPaddingBottom,
           borderTopWidth: 0,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
