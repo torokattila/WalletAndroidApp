@@ -31,7 +31,7 @@ export const TabStack: FC = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          height: 70,
+          height: 75,
           borderTopWidth: 0,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
