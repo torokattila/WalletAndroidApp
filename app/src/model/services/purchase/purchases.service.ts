@@ -47,7 +47,8 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     userId: string,
     amount: string,
     category: PurchaseCategory | string,
-    secondaryCategory?: string | null
+    secondaryCategory?: string | null,
+    modifiedCreatedAt?: Timestamp
   ): Promise<Purchase> {
     const purchasesCollectionRef = collection(getDB(), 'purchases');
     const insertedPurchase = await addDoc(purchasesCollectionRef, {
@@ -55,7 +56,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       amount,
       category,
       secondaryCategory,
-      createdAt: Timestamp.now(),
+      createdAt: modifiedCreatedAt ?? Timestamp.now(),
       updatedAt: Timestamp.now(),
     });
 

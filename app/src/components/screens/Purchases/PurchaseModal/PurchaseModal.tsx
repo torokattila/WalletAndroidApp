@@ -119,16 +119,18 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
           <ContentContainer style={shadow} isDarkMode={isDarkMode}>
             <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
               <UpperLine isDarkMode={isDarkMode} />
-              {isEditMode && (
+              {
                 <>
                   <CalendarIconContainer onPress={handleCreatedAtPickerOpen}>
                     <Icon type="calendar" iconColor={theme.colors.white[100]} />
                   </CalendarIconContainer>
-                  <DeleteIconContainer onPress={handleConfirmDialogOpen}>
-                    <Icon type="trash" iconColor={theme.colors.white[100]} />
-                  </DeleteIconContainer>
+                  {isEditMode && (
+                    <DeleteIconContainer onPress={handleConfirmDialogOpen}>
+                      <Icon type="trash" iconColor={theme.colors.white[100]} />
+                    </DeleteIconContainer>
+                  )}
                 </>
-              )}
+              }
 
               <Content>
                 <Title isDarkMode={isDarkMode}>{modalTitle}</Title>
