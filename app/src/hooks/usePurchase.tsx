@@ -254,11 +254,18 @@ export const usePurchase = (purchase?: Purchase) => {
     if (isFormVerified) {
       try {
         setIsLoading(true);
-        await purchaseService.createdPurchase(userId, amount, category, secondaryCategory);
+        await purchaseService.createdPurchase(
+          userId,
+          amount,
+          category,
+          secondaryCategory,
+          Timestamp.fromDate(createdAt)
+        );
         fetchUser();
         setAmount('0');
         setCategory(null);
         setSecondaryCategory(null);
+        setCreatedAt(new Date());
         toast.show({
           type: 'success',
           title: i18n.t('ToastNotification.NewPurchaseSuccess'),
