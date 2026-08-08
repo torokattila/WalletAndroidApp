@@ -66,6 +66,10 @@ export const usePurchase = (purchase?: Purchase) => {
   const [screenRefreshing, setScreenRefreshing] = useState(false);
   const [allCategories, setAllCategories] = useState<CategoryDropdownValueType[]>([]);
 
+  const [isStatisticsModalOpen, setIsStatisticsModalOpen] = useState(false);
+  const [monthlyStatistics, setMonthlyStatistics] = useState<{ month: string; value: number }[]>([]);
+  const [isLoadingStatistics, setIsLoadingStatistics] = useState(false);
+
   const locale = getLocale();
 
   useEffect(() => {
@@ -270,6 +274,7 @@ export const usePurchase = (purchase?: Purchase) => {
           type: 'success',
           title: i18n.t('ToastNotification.NewPurchaseSuccess'),
         });
+        setMonthlyStatistics([]);
       } catch (error) {
         setErrors({
           generalError: error,
@@ -307,6 +312,7 @@ export const usePurchase = (purchase?: Purchase) => {
           type: 'success',
           title: i18n.t('ToastNotification.EditPurchaseSuccess'),
         });
+        setMonthlyStatistics([]);
       } catch (error) {
         setErrors({
           generalError: error,
@@ -335,6 +341,7 @@ export const usePurchase = (purchase?: Purchase) => {
         type: 'success',
         title: i18n.t('ToastNotification.DeletePurchaseSuccess'),
       });
+      setMonthlyStatistics([]);
     } catch (error) {
       setErrors({
         generalError: error,
@@ -445,6 +452,22 @@ export const usePurchase = (purchase?: Purchase) => {
   const handleSecondaryCategoryChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setSecondaryCategory(e.nativeEvent.text);
   };
+
+  const handleStatisticsModalOpen = async () => {
+    setIsStatisticsModalOpen(true);
+    if (userId && monthlyStatistics.length === 0) {
+      setIsLoadingStatistics(true);
+      try {
+        const data = await purchaseService.getMonthlySpendingForLastYear(userId);
+        setMonthlyStatistics(data);
+      } catch (error) {
+        console.error('Error fetching monthly statistics:', error);
+      } finally {
+        setIsLoadingStatistics(false);
+      }
+    }
+  };
+  const handleStatisticsModalClose = () => setIsStatisticsModalOpen(false);
 
   useEffect(() => {
     if (userId) {
@@ -563,5 +586,10 @@ export const usePurchase = (purchase?: Purchase) => {
     handleCreatedAtPickerOpen,
     handleCreatedAtPickerClose,
     handleCreatedAtChange,
+    handleStatisticsModalOpen,
+    handleStatisticsModalClose,
+    isStatisticsModalOpen,
+    monthlyStatistics,
+    isLoadingStatistics,
   };
 };

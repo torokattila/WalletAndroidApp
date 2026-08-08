@@ -1,16 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
+import { AddButton, Icon } from '@components/shared';
+import { formatDate } from '@core/date-utils';
+import { formatAmount } from '@core/format-amount';
+import { useDarkMode } from '@hooks/useDarkMode';
+import { usePurchase } from '@hooks/usePurchase';
+import { theme } from '@styles/theme';
+import i18n from 'i18n-js';
 import React, { FC } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 import Animated, { FadeIn, FadeInLeft, FadeOut, FadeOutLeft } from 'react-native-reanimated';
-import i18n from 'i18n-js';
-import { theme } from '@styles/theme';
-import { formatDate } from '@core/date-utils';
-import { formatAmount } from '@core/format-amount';
-import { AddButton, Icon } from '@components/shared';
-import { usePurchase } from '@hooks/usePurchase';
-import { useDarkMode } from '@hooks/useDarkMode';
+import { PurchaseCard } from './PurchaseCard';
+import { PurchaseModal } from './PurchaseModal';
 import {
   AllPurchasesTitle,
   CategoryAndShowDateFiltersButtonContainer,
@@ -44,10 +46,11 @@ import {
   selectedTextStyle,
   ShowDateFiltersButton,
   ShowDateFiltersButtonText,
+  StatisticsButton,
+  StatisticsText,
   StyledLinearGradient,
 } from './Purchases.styles';
-import { PurchaseModal } from './PurchaseModal';
-import { PurchaseCard } from './PurchaseCard';
+import { StatisticsModal } from './StatisticsModal';
 
 const shadow = {
   elevation: 10,
@@ -91,6 +94,11 @@ export const Purchases: FC = () => {
     handleDownloadButtonClick,
     screenRefreshing,
     handlePullToRefresh,
+    handleStatisticsModalClose,
+    handleStatisticsModalOpen,
+    isStatisticsModalOpen,
+    monthlyStatistics,
+    isLoadingStatistics,
   } = usePurchase();
 
   const dropdownPlaceholder = filterCategory.current
@@ -119,6 +127,13 @@ export const Purchases: FC = () => {
             <PurchasesThisMonth>
               {formatAmount(allPurchasesAmountForThisMonth)} Ft
             </PurchasesThisMonth>
+            <StatisticsButton
+              style={shadow}
+              onPress={handleStatisticsModalOpen}
+              isDarkMode={isDarkMode}
+            >
+              <StatisticsText>{i18n.t('Purchases.StatisticsButtonTitle')}</StatisticsText>
+            </StatisticsButton>
           </PurchasesThisMonthContainer>
 
           <ContentContainer isDarkMode={isDarkMode}>
@@ -302,6 +317,14 @@ export const Purchases: FC = () => {
         isEditMode={isEditModeModal}
         purchase={selectedPurchase}
       />
+      {isStatisticsModalOpen && (
+        <StatisticsModal
+          onClose={handleStatisticsModalClose}
+          isOpen={isStatisticsModalOpen}
+          monthlyData={monthlyStatistics}
+          isLoadingStatistics={isLoadingStatistics}
+        />
+      )}
     </>
   );
 };

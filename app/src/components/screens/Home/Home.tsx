@@ -40,6 +40,47 @@ import {
 } from './Home.styles';
 import PieChartPurchaseCard from './PieChartPurchaseCard/PieChartPurchaseCard';
 
+const shiftHue = (hex: string, degrees = 80): string => {
+  const clean = hex.replace('#', '');
+  if (clean.length !== 6) return hex;
+
+  // Hex → RGB → HSL
+  const r = parseInt(clean.slice(0, 2), 16) / 255;
+  const g = parseInt(clean.slice(2, 4), 16) / 255;
+  const b = parseInt(clean.slice(4, 6), 16) / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  const d = max - min;
+  let h = 0;
+  let s = 0;
+  if (d !== 0) {
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else h = ((r - g) / d + 4) / 6;
+  }
+
+  // Rotate hue, keep saturation & lightness
+  const newH = ((h * 360 + degrees) % 360) / 360;
+
+  // HSL → RGB → Hex
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  const hue2rgb = (t: number): number => {
+    const tc = ((t % 1) + 1) % 1;
+    if (tc < 1 / 6) return p + (q - p) * 6 * tc;
+    if (tc < 1 / 2) return q;
+    if (tc < 2 / 3) return p + (q - p) * (2 / 3 - tc) * 6;
+    return p;
+  };
+  const toHex = (v: number) =>
+    Math.round((s === 0 ? l : v) * 255)
+      .toString(16)
+      .padStart(2, '0');
+  return `#${toHex(hue2rgb(newH + 1 / 3))}${toHex(hue2rgb(newH))}${toHex(hue2rgb(newH - 1 / 3))}`;
+};
+
 const buttonShadow = {
   elevation: 10,
   shadowColor: theme.colors.black,
@@ -136,6 +177,7 @@ export const Home: FC = () => {
         text: `${category} - ${Math.round((amount / totalAmount) * 100)}%`,
         percentage: Math.round((amount / totalAmount) * 100),
         color,
+        gradientCenterColor: shiftHue(color),
         originalCategory,
         icon,
       }))
@@ -215,17 +257,24 @@ export const Home: FC = () => {
                   donut
                   radius={90}
                   innerRadius={60}
-                  strokeColor={!isDarkMode ? theme.colors.white[200] : theme.colors.grey[800]}
+                  showGradient
+                  strokeColor={isDarkMode ? theme.colors.grey[1000] : theme.colors.white[100]}
                   strokeWidth={1}
                   textSize={14}
                   innerCircleColor={isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]}
+                  innerCircleBorderWidth={2}
+                  innerCircleBorderColor={
+                    isDarkMode ? theme.colors.grey[950] : theme.colors.white[100]
+                  }
                   showTooltip
                   tooltipBackgroundColor={
                     isDarkMode ? theme.colors.grey[900] : theme.colors.white[200]
                   }
+                  tooltipBorderRadius={10}
+                  tooltipDuration={1900}
                   focusOnPress
                   showValuesAsTooltipText
-                  textColor={isDarkMode ? theme.colors.white[200] : theme.colors.purple[100]}
+                  textColor={isDarkMode ? theme.colors.white[200] : theme.colors.magenta[100]}
                   centerLabelComponent={() => (
                     <PieChartCenterAmount>
                       {formatAmount(donutChartData.reduce((sum, item) => sum + item.value, 0))} Ft

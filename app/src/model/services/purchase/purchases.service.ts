@@ -270,6 +270,62 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     return snapshot?.docs?.map(PurchaseService.toDomainObject);
   }
 
+  async getMonthlySpendingForLastYear(userId: string): Promise<{ month: string; value: number }[]> {
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth() - 11, 1);
+
+    const queryData = query(
+      this.collection,
+      where('userId', '==', userId),
+      where('createdAt', '>=', Timestamp.fromDate(startDate)),
+      orderBy('createdAt', 'asc'),
+      limit(9998)
+    );
+
+    const snapshot = await getDocs(queryData);
+
+    const monthKeys = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ] as const;
+
+    const monthlyMap: Record<string, number> = {};
+    const monthOrder: { key: string; month: string }[] = [];
+
+    for (let i = 11; i >= 0; i--) {
+      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = `${date.getFullYear()}-${date.getMonth()}`;
+      monthlyMap[key] = 0;
+      monthOrder.push({ key, month: i18n.t(`Months.${monthKeys[date.getMonth()]}`) });
+    }
+
+    if (!snapshot.empty) {
+      snapshot.docs.forEach((docSnap) => {
+        const purchase = PurchaseService.toDomainObject(docSnap);
+        const date = purchase.createdAt.toDate();
+        const key = `${date.getFullYear()}-${date.getMonth()}`;
+        if (key in monthlyMap) {
+          monthlyMap[key] += Number(purchase.amount);
+        }
+      });
+    }
+
+    return monthOrder.map(({ key, month }) => ({
+      month,
+      value: Math.round(monthlyMap[key]),
+    }));
+  }
+
   static toDomainObject(purchase: QueryDocumentSnapshot<PurchaseModel>): Purchase {
     const { ...purchaseData } = purchase.data();
     const normalizedCategory =

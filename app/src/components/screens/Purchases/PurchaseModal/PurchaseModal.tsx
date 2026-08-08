@@ -108,13 +108,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
   return (
     <>
       <GestureRecognizer onSwipeDown={onClose}>
-        <Modal
-          animationType="slide"
-          transparent
-          visible={isVisible}
-          onRequestClose={onClose}
-          animated
-        >
+        <Modal animationType="slide" transparent visible={isVisible} onRequestClose={onClose}>
           <ModalBackground onHide={onClose} isVisible={isVisible} />
           <ContentContainer style={shadow} isDarkMode={isDarkMode}>
             <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
