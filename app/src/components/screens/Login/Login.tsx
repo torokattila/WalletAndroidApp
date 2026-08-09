@@ -1,28 +1,29 @@
-import React, { FC, useRef } from 'react';
-import i18n from 'i18n-js';
-import { KeyboardAvoidingView, View } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Icon } from '@components/shared';
+import { useDarkMode } from '@hooks/useDarkMode';
+import useLogin from '@hooks/useLogin';
+import useVibration from '@hooks/useVibration';
 import { AuthStackParams } from '@navigation/AuthStack';
 import { RootStackParams } from '@navigation/Navigation';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { theme } from '@styles/theme';
-import { Icon } from '@components/shared';
-import useLogin from '@hooks/useLogin';
-import { useDarkMode } from '@hooks/useDarkMode';
+import i18n from 'i18n-js';
+import React, { FC, useRef } from 'react';
+import { KeyboardAvoidingView, View } from 'react-native';
 import {
-  Container,
-  scrollViewStyle,
   BottomContainer,
-  StyledLinearGradient,
-  StyledGradientText,
-  StyledImage,
-  StyledTitle,
+  Container,
   FormContainer,
-  StyledTextInput,
+  scrollViewStyle,
   StyledButton,
-  StyledSubtitle,
-  StyledRedirectQuestionText,
-  StyledRedirectButton,
+  StyledGradientText,
   StyledIconButton,
+  StyledImage,
+  StyledLinearGradient,
+  StyledRedirectButton,
+  StyledRedirectQuestionText,
+  StyledSubtitle,
+  StyledTextInput,
+  StyledTitle,
 } from './Login.styles';
 
 type LoginProps = NativeStackScreenProps<AuthStackParams & RootStackParams, 'Login'>;
@@ -39,6 +40,7 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
     isLoading,
     handleInputChange,
   } = useLogin();
+  const { vibrateLight } = useVibration();
 
   const passwordRef = useRef(null);
 
@@ -85,7 +87,12 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
                   }
                   isDarkMode={isDarkMode}
                 />
-                <StyledIconButton onPress={() => setIsPassword(!isPassword)}>
+                <StyledIconButton
+                  onPress={() => {
+                    vibrateLight();
+                    setIsPassword(!isPassword);
+                  }}
+                >
                   <Icon
                     type={isPassword ? 'eye' : 'eye-outlined'}
                     iconColor={theme.colors.magenta[100]}
@@ -93,7 +100,10 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
                 </StyledIconButton>
               </View>
               <StyledButton
-                onPress={handleSubmit}
+                onPress={() => {
+                  vibrateLight();
+                  handleSubmit();
+                }}
                 text={i18n.t('Login')}
                 size="large"
                 withActivityIndicator
@@ -107,7 +117,10 @@ export const Login: FC<LoginProps> = ({ navigation }) => {
             {i18n.t('DontYouHaveAnAccountLabel')}
           </StyledRedirectQuestionText>
           <StyledRedirectButton
-            onPress={() => navigation.navigate('Registration')}
+            onPress={() => {
+              vibrateLight();
+              navigation.navigate('Registration');
+            }}
             text={i18n.t('RedirectSignupLabel')}
           />
         </BottomContainer>

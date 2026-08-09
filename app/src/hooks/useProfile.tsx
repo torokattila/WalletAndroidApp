@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import i18n from 'i18n-js';
-import { FirebaseError } from 'firebase/app';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { getLocalizedName } from '@core/name';
 import { AuthService } from '@model/services';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '@navigation/Navigation';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
+import { FirebaseError } from 'firebase/app';
+import i18n from 'i18n-js';
+import { useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useUser } from './useUser';
+import useVibration from './useVibration';
 
 const authService = new AuthService();
 
@@ -15,6 +16,7 @@ export const useProfile = () => {
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
   const toast = useToastNotificationStore();
   const { user, retry: fetchUser, updateDetails } = useUser();
+  const { vibrateLight } = useVibration();
 
   const localizedName = getLocalizedName(user?.lastname, user?.firstname);
 
@@ -60,6 +62,7 @@ export const useProfile = () => {
   const handleTogglePasswordVisible = (
     type: 'oldPassword' | 'newPassword' | 'newPasswordConfirm'
   ): void => {
+    vibrateLight();
     switch (type) {
       case 'oldPassword':
         setIsOldPassword(!isOldPassword);
@@ -96,6 +99,7 @@ export const useProfile = () => {
   };
 
   const handleUpdateBasicDetailsSubmit = async (): Promise<void> => {
+    vibrateLight();
     const isFormVerified = verifyBasicDetails();
 
     if (isFormVerified) {
@@ -157,6 +161,7 @@ export const useProfile = () => {
   };
 
   const handleChangePasswordSubmit = async (): Promise<void> => {
+    vibrateLight();
     const isFormVerified = verifyPasswordChangeForm();
 
     if (isFormVerified) {

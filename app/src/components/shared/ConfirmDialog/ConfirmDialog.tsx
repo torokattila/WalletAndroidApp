@@ -13,6 +13,7 @@ import {
   SecondaryButtonText,
   Title,
 } from './ConfirmDialog.styles';
+import useVibration from '@hooks/useVibration';
 
 type ConfirmDialogProps = {
   isVisible: boolean;
@@ -42,6 +43,7 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
   onPressSecondaryButton,
 }) => {
   const { isDarkMode } = useDarkMode();
+  const { vibrateLight } = useVibration();
 
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
@@ -51,11 +53,22 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
             <Title isDarkMode={isDarkMode}>{title}</Title>
             <Description isDarkMode={isDarkMode}>{description}</Description>
 
-            <PrimaryButton onPress={onPressPrimaryButton}>
+            <PrimaryButton
+              onPress={() => {
+                vibrateLight();
+                onPressPrimaryButton();
+              }}
+            >
               <PrimaryButtonText>{primaryButtonText}</PrimaryButtonText>
             </PrimaryButton>
 
-            <SecondaryButton onPress={onPressSecondaryButton} isDarkMode={isDarkMode}>
+            <SecondaryButton
+              onPress={() => {
+                vibrateLight();
+                onPressSecondaryButton();
+              }}
+              isDarkMode={isDarkMode}
+            >
               <SecondaryButtonText isDarkMode={isDarkMode}>
                 {secondaryButtonText}
               </SecondaryButtonText>

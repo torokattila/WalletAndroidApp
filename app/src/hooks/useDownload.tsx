@@ -9,6 +9,7 @@ import PushNotification, { Importance } from 'react-native-push-notification';
 import uuid from 'react-native-uuid';
 import XLSX from 'xlsx';
 import { CategoryDropdownValueType } from './usePurchase';
+import useVibration from './useVibration';
 
 const categories: CategoryDropdownValueType[] = [
   { label: i18n.t('Purchases.Categories.food'), value: PurchaseCategory.FOOD },
@@ -25,6 +26,7 @@ export const useDownload = (
 ) => {
   const toast = useToastNotificationStore();
   const locale = getLocale();
+  const { vibrateLight } = useVibration();
 
   const exportToExcel = async (): Promise<void> => {
     const workBook = XLSX.utils.book_new();
@@ -131,6 +133,7 @@ export const useDownload = (
   };
 
   const handleDownloadButtonClick = async (): Promise<void> => {
+    vibrateLight();
     try {
       exportToExcel();
     } catch (error) {

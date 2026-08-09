@@ -4,6 +4,7 @@ import { formatDate } from '@core/date-utils';
 import { formatAmount } from '@core/format-amount';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { usePurchase } from '@hooks/usePurchase';
+import useVibration from '@hooks/useVibration';
 import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
 import React, { FC } from 'react';
@@ -62,6 +63,7 @@ const shadow = {
 
 export const Purchases: FC = () => {
   const { isDarkMode } = useDarkMode();
+  const { vibrateLight } = useVibration();
   const {
     isLoading,
     handleModalOpen,
@@ -200,7 +202,10 @@ export const Purchases: FC = () => {
 
               <ShowDateFiltersButton
                 style={!isDarkMode && shadow}
-                onPress={showDateFilters}
+                onPress={() => {
+                  vibrateLight();
+                  showDateFilters();
+                }}
                 isDarkMode={isDarkMode}
               >
                 <ShowDateFiltersButtonText>{i18n.t('FilterForDate')}</ShowDateFiltersButtonText>
@@ -235,7 +240,10 @@ export const Purchases: FC = () => {
 
                   <CloseDateFiltersButton
                     style={shadow}
-                    onPress={hideDateFilters}
+                    onPress={() => {
+                      vibrateLight();
+                      hideDateFilters();
+                    }}
                     isDarkMode={isDarkMode}
                   >
                     <Icon type="close" iconColor={theme.colors.magenta[100]} />
@@ -307,7 +315,12 @@ export const Purchases: FC = () => {
                 </NoPurchasesText>
               </NoPurchasesContainer>
             )}
-            <AddButton onPress={handleModalOpen} />
+            <AddButton
+              onPress={() => {
+                vibrateLight();
+                handleModalOpen();
+              }}
+            />
           </ContentContainer>
         </StyledLinearGradient>
       </Container>

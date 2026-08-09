@@ -281,6 +281,6 @@ export const StatisticsButton = styled(TouchableOpacity)<{ isDarkMode: boolean }
 `;
 
 export const StatisticsText = styled(Text)`
-  color: ${({ theme }) => theme.colors.magenta[100]};
+  color: ${({ theme }) => theme.colors.white[100]};
   font-family: 'NunitoSans-Bold';
 `;

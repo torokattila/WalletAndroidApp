@@ -16,7 +16,7 @@ import {
   TooltipBox,
   TooltipMonthLabel,
   UpperLine,
-} from './Statistics.styles';
+} from './StatisticsModal.styles';
 
 type StatisticsModalProps = {
   onClose: () => void;

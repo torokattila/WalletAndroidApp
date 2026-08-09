@@ -6,6 +6,7 @@ import { getLocale } from '@core/translation-utils';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { useHome } from '@hooks/useHome';
 import { usePurchase } from '@hooks/usePurchase';
+import useVibration from '@hooks/useVibration';
 import { Purchase } from '@model/domain';
 import { theme } from '@styles/theme';
 import { format } from 'date-fns';
@@ -102,6 +103,7 @@ export const Home: FC = () => {
     retry: reloadPurchases,
     isLoading,
   } = usePurchase();
+  const { vibrateLight } = useVibration();
   const { user, navigation } = useHome();
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
@@ -109,6 +111,7 @@ export const Home: FC = () => {
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
 
+    vibrateLight();
     await reloadPurchases();
   };
 
@@ -224,7 +227,12 @@ export const Home: FC = () => {
               <MonthlyStatementTitle isDarkMode={isDarkMode}>
                 {i18n.t('Home.MonthlyStatement')}:
               </MonthlyStatementTitle>
-              <DateSelectorButton onPress={() => setIsMonthPickerOpen(true)}>
+              <DateSelectorButton
+                onPress={() => {
+                  setIsMonthPickerOpen(true);
+                  vibrateLight();
+                }}
+              >
                 <Icon type="calendar" iconColor={theme.colors.white[100]} />
                 <DateSelectorText>
                   {format(selectedMonth, 'yyyy MMMM', { locale: locale === 'hun' ? hu : enUS })}
@@ -243,8 +251,12 @@ export const Home: FC = () => {
               onConfirm={(date) => {
                 setSelectedMonth(date);
                 setIsMonthPickerOpen(false);
+                vibrateLight();
               }}
-              onCancel={() => setIsMonthPickerOpen(false)}
+              onCancel={() => {
+                setIsMonthPickerOpen(false);
+                vibrateLight();
+              }}
               cancelText={i18n.t('DatePicker.CancelButtonText')}
               confirmText={i18n.t('DatePicker.ConfirmButtonText')}
               theme={isDarkMode ? 'dark' : 'auto'}

@@ -1,35 +1,37 @@
-import React, { FC, useRef } from 'react';
-import i18n from 'i18n-js';
-import { KeyboardAvoidingView, View } from 'react-native';
-import useRegistration from '@hooks/useRegistration';
+import { Icon } from '@components/shared';
 import { useDarkMode } from '@hooks/useDarkMode';
+import useRegistration from '@hooks/useRegistration';
+import useVibration from '@hooks/useVibration';
 import { AuthStackParams } from '@navigation/AuthStack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { theme } from '@styles/theme';
-import { Icon } from '@components/shared';
+import i18n from 'i18n-js';
+import React, { FC, useRef } from 'react';
+import { KeyboardAvoidingView, View } from 'react-native';
 import {
-  Container,
-  StyledLinearGradient,
-  StyledGradientText,
   BottomContainer,
-  StyledImage,
-  StyledTitle,
-  StyledSubtitle,
-  scrollViewStyle,
+  Container,
   FormContainer,
-  StyledTextInput,
   StyledButton,
-  StyledRedirectQuestionText,
-  StyledRedirectButton,
-  keyboardAvoidingContainerStyle,
+  StyledGradientText,
   StyledIconButton,
+  StyledImage,
+  StyledLinearGradient,
+  StyledRedirectButton,
+  StyledRedirectQuestionText,
+  StyledSubtitle,
+  StyledTextInput,
+  StyledTitle,
   VerifyEmailAddressText,
+  keyboardAvoidingContainerStyle,
+  scrollViewStyle,
 } from './Registration.styles';
 
 type RegistrationProps = NativeStackScreenProps<AuthStackParams, 'Registration'>;
 
 export const Registration: FC<RegistrationProps> = ({ navigation }) => {
   const { isDarkMode } = useDarkMode();
+  const { vibrateLight } = useVibration();
   const {
     firstname,
     lastname,
@@ -137,7 +139,12 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                   onSubmitEditing={() => passwordConfirmRef.current.focus()}
                   isDarkMode={isDarkMode}
                 />
-                <StyledIconButton onPress={() => setIsPassword(!isPassword)}>
+                <StyledIconButton
+                  onPress={() => {
+                    vibrateLight();
+                    setIsPassword(!isPassword);
+                  }}
+                >
                   <Icon
                     type={isPassword ? 'eye' : 'eye-outlined'}
                     iconColor={theme.colors.magenta[100]}
@@ -159,7 +166,12 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                   }
                   isDarkMode={isDarkMode}
                 />
-                <StyledIconButton onPress={() => setIsPasswordConfirm(!isPasswordConfirm)}>
+                <StyledIconButton
+                  onPress={() => {
+                    vibrateLight();
+                    setIsPasswordConfirm(!isPasswordConfirm);
+                  }}
+                >
                   <Icon
                     type={isPasswordConfirm ? 'eye' : 'eye-outlined'}
                     iconColor={theme.colors.magenta[100]}
@@ -167,7 +179,10 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
                 </StyledIconButton>
               </View>
               <StyledButton
-                onPress={handleSubmit}
+                onPress={() => {
+                  vibrateLight();
+                  handleSubmit();
+                }}
                 text={i18n.t('Registration')}
                 size="large"
                 withActivityIndicator
@@ -183,7 +198,10 @@ export const Registration: FC<RegistrationProps> = ({ navigation }) => {
             {i18n.t('AlreadyHaveAnAccountLabel')}
           </StyledRedirectQuestionText>
           <StyledRedirectButton
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => {
+              vibrateLight();
+              navigation.navigate('Login');
+            }}
             text={i18n.t('RedirectLoginLabel')}
           />
         </BottomContainer>

@@ -10,9 +10,11 @@ import { useEffect, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useUser } from './useUser';
 import { IconType } from '@components/shared';
+import useVibration from './useVibration';
 
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();
+  const { vibrateLight } = useVibration();
   const userId = user?.id;
 
   const [title, setTitle] = useState<string>('');
@@ -57,15 +59,18 @@ export const useCategory = (category?: Category) => {
       const translatedCategories: Category[] = [];
 
       for (const categ of allCategories) {
-        translatedCategories.push({
-          ...categ,
-          title: (await translate(categ.title, { to: locale === 'hun' ? 'hu' : 'en' })).text,
-        });
+        try {
+          const translated = (await translate(categ.title, { to: locale === 'hun' ? 'hu' : 'en' }))
+            .text;
+          translatedCategories.push({ ...categ, title: translated });
+        } catch {
+          translatedCategories.push(categ);
+        }
       }
 
-      setCategories([...defaultCategories, ...allCategories]);
+      setCategories([...defaultCategories, ...translatedCategories]);
     } catch (error) {
-      console.error(`Error during fetching categories: ${error}`);
+      console.error(`Error during fetching categories: ${error?.stack}`);
     } finally {
       setIsLoading(false);
     }
@@ -74,6 +79,7 @@ export const useCategory = (category?: Category) => {
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
 
+    vibrateLight();
     await fetchCategories();
   };
 
@@ -92,6 +98,7 @@ export const useCategory = (category?: Category) => {
   };
 
   const handleCreateCategory = async (): Promise<void> => {
+    vibrateLight();
     const isFormVerified = verifyForm();
 
     if (isFormVerified) {
@@ -120,6 +127,7 @@ export const useCategory = (category?: Category) => {
   };
 
   const handleUpdateCategory = async (): Promise<void> => {
+    vibrateLight();
     if (!category) {
       return;
     }
@@ -199,9 +207,15 @@ export const useCategory = (category?: Category) => {
 
   const handleColorChange = (c: string) => setColor(c);
 
-  const handleIconChange = (iconName: IconType) => setIcon(iconName);
+  const handleIconChange = (iconName: IconType) => {
+    vibrateLight();
+    setIcon(iconName);
+  };
 
-  const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
+  const handleConfirmDialogOpen = () => {
+    vibrateLight();
+    setIsConfirmDialogOpen(true);
+  };
   const handleConfirmDialogClose = () => setIsConfirmDialogOpen(false);
 
   const handleConfirmDialogDelete = async () => {

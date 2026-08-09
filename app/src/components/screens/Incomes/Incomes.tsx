@@ -35,6 +35,7 @@ import {
 } from './Incomes.styles';
 import { IncomeModal } from './IncomeModal';
 import { IncomeCard } from './IncomeCard';
+import useVibration from '@hooks/useVibration';
 
 const shadow = {
   elevation: 10,
@@ -46,6 +47,7 @@ const shadow = {
 
 export const Incomes: FC = () => {
   const { isDarkMode } = useDarkMode();
+  const { vibrateLight } = useVibration();
   const {
     isLoading,
     incomes,
@@ -203,7 +205,12 @@ export const Incomes: FC = () => {
                 </NoIncomesText>
               </NoIncomesContainer>
             )}
-            <AddButton onPress={handleModalOpen} />
+            <AddButton
+              onPress={() => {
+                vibrateLight();
+                handleModalOpen();
+              }}
+            />
           </ContentContainer>
         </StyledLinearGradient>
       </Container>
