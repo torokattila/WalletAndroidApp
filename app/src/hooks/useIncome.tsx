@@ -7,9 +7,11 @@ import { IncomeService } from '@model/services';
 import { Income } from '@model/domain';
 import { useUser } from './useUser';
 import { useDownload } from './useDownload';
+import useVibration from './useVibration';
 
 export const useIncome = (income?: Income) => {
   const { retry: fetchUser, user } = useUser();
+  const { vibrateLight } = useVibration();
   const userId = user?.id;
 
   const [amount, setAmount] = useState<string>('0');
@@ -64,6 +66,7 @@ export const useIncome = (income?: Income) => {
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
 
+    vibrateLight();
     await fetchIncomes();
   };
 
@@ -105,6 +108,7 @@ export const useIncome = (income?: Income) => {
   };
 
   const handleCreateIncome = async (): Promise<void> => {
+    vibrateLight();
     const isFormVerified = verifyForm();
 
     if (isFormVerified) {
@@ -133,6 +137,7 @@ export const useIncome = (income?: Income) => {
   };
 
   const handleUpdateIncome = async (): Promise<void> => {
+    vibrateLight();
     if (!income) {
       return;
     }
@@ -190,15 +195,28 @@ export const useIncome = (income?: Income) => {
     }
   };
 
-  const handleFromDatePickerOpen = (): void => setIsFromDatePickerOpen(true);
-  const handleFromDatePickerClose = (): void => setIsFromDatePickerOpen(false);
-  const handleToDatePickerOpen = (): void => setIsToDatePickerOpen(true);
-  const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
+  const handleFromDatePickerOpen = (): void => {
+    setIsFromDatePickerOpen(true);
+    vibrateLight();
+  };
+  const handleFromDatePickerClose = (): void => {
+    setIsFromDatePickerOpen(false);
+    vibrateLight();
+  };
+  const handleToDatePickerOpen = (): void => {
+    setIsToDatePickerOpen(true);
+    vibrateLight();
+  };
+  const handleToDatePickerClose = (): void => {
+    setIsToDatePickerOpen(false);
+    vibrateLight();
+  };
 
   const handleFromDateChange = async (date: Date): Promise<void> => {
     setIsFilterChanged(true);
     handleFromDatePickerClose();
     fromDate.current = date;
+    vibrateLight();
     await filterIncomes();
   };
 
@@ -206,6 +224,7 @@ export const useIncome = (income?: Income) => {
     setIsFilterChanged(true);
     handleToDatePickerClose();
     toDate.current = date;
+    vibrateLight();
     await filterIncomes();
   };
 
@@ -213,6 +232,7 @@ export const useIncome = (income?: Income) => {
     fromDate.current = new Date();
     toDate.current = new Date();
     setIsFilterChanged(false);
+    vibrateLight();
     await fetchIncomes();
   };
 
@@ -243,10 +263,12 @@ export const useIncome = (income?: Income) => {
       newInputNumber = amount + value;
     }
 
+    vibrateLight();
     setAmount(newInputNumber);
   };
 
   const handleBackspacePress = (): void => {
+    vibrateLight();
     if (amount.length <= 1) {
       setAmount('0');
     } else {
@@ -254,7 +276,10 @@ export const useIncome = (income?: Income) => {
     }
   };
 
-  const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
+  const handleConfirmDialogOpen = () => {
+    setIsConfirmDialogOpen(true);
+    vibrateLight();
+  };
   const handleConfirmDialogClose = () => setIsConfirmDialogOpen(false);
 
   const handleConfirmDialogDelete = async () => {

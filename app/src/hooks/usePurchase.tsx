@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useDownload } from './useDownload';
 import { useUser } from './useUser';
+import useVibration from './useVibration';
 
 export type CategoryDropdownValueType = {
   label: string;
@@ -66,7 +67,14 @@ export const usePurchase = (purchase?: Purchase) => {
   const [screenRefreshing, setScreenRefreshing] = useState(false);
   const [allCategories, setAllCategories] = useState<CategoryDropdownValueType[]>([]);
 
+  const [isStatisticsModalOpen, setIsStatisticsModalOpen] = useState(false);
+  const [monthlyStatistics, setMonthlyStatistics] = useState<{ month: string; value: number }[]>(
+    []
+  );
+  const [isLoadingStatistics, setIsLoadingStatistics] = useState(false);
+
   const locale = getLocale();
+  const { vibrateLight } = useVibration();
 
   useEffect(() => {
     const setAmountAndCategory = async () => {
@@ -249,6 +257,7 @@ export const usePurchase = (purchase?: Purchase) => {
   };
 
   const handleCreatePurchase = async (): Promise<void> => {
+    vibrateLight();
     const isFormVerified = verifyForm();
 
     if (isFormVerified) {
@@ -270,6 +279,7 @@ export const usePurchase = (purchase?: Purchase) => {
           type: 'success',
           title: i18n.t('ToastNotification.NewPurchaseSuccess'),
         });
+        setMonthlyStatistics([]);
       } catch (error) {
         setErrors({
           generalError: error,
@@ -285,6 +295,7 @@ export const usePurchase = (purchase?: Purchase) => {
   };
 
   const handleUpdatePurchase = async (): Promise<void> => {
+    vibrateLight();
     if (!purchase) {
       return;
     }
@@ -307,6 +318,7 @@ export const usePurchase = (purchase?: Purchase) => {
           type: 'success',
           title: i18n.t('ToastNotification.EditPurchaseSuccess'),
         });
+        setMonthlyStatistics([]);
       } catch (error) {
         setErrors({
           generalError: error,
@@ -335,6 +347,7 @@ export const usePurchase = (purchase?: Purchase) => {
         type: 'success',
         title: i18n.t('ToastNotification.DeletePurchaseSuccess'),
       });
+      setMonthlyStatistics([]);
     } catch (error) {
       setErrors({
         generalError: error,
@@ -366,7 +379,10 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsEditModeModal(true);
   };
 
-  const handleConfirmDialogOpen = () => setIsConfirmDialogOpen(true);
+  const handleConfirmDialogOpen = () => {
+    vibrateLight();
+    setIsConfirmDialogOpen(true);
+  };
   const handleConfirmDialogClose = () => setIsConfirmDialogOpen(false);
 
   const handleConfirmDialogDelete = async () => {
@@ -374,9 +390,13 @@ export const usePurchase = (purchase?: Purchase) => {
     handleConfirmDialogClose();
   };
 
-  const handleDropdownChange = (item: CategoryDropdownValueType): void => setCategory(item.value);
+  const handleDropdownChange = (item: CategoryDropdownValueType): void => {
+    vibrateLight();
+    setCategory(item.value);
+  };
 
   const handleFilterCategoryChange = async (item: CategoryDropdownValueType): Promise<void> => {
+    vibrateLight();
     if (item.value !== PurchaseCategory.ALL) {
       setIsCategoryFilterChanged(true);
     }
@@ -394,6 +414,7 @@ export const usePurchase = (purchase?: Purchase) => {
     }
 
     setAmount(newInputNumber);
+    vibrateLight();
   };
 
   const handleBackspacePress = (): void => {
@@ -402,22 +423,42 @@ export const usePurchase = (purchase?: Purchase) => {
     } else {
       setAmount(amount.slice(0, -1));
     }
+    vibrateLight();
   };
 
   const showDateFilters = (): void => setIsDateFiltersShown(true);
   const hideDateFilters = (): void => setIsDateFiltersShown(false);
 
-  const handleFromDatePickerOpen = (): void => setIsFromDatePickerOpen(true);
-  const handleFromDatePickerClose = (): void => setIsFromDatePickerOpen(false);
-  const handleToDatePickerOpen = (): void => setIsToDatePickerOpen(true);
-  const handleToDatePickerClose = (): void => setIsToDatePickerOpen(false);
-  const handleCreatedAtPickerOpen = (): void => setIsCreatedAtPickerOpen(true);
-  const handleCreatedAtPickerClose = (): void => setIsCreatedAtPickerOpen(false);
+  const handleFromDatePickerOpen = (): void => {
+    vibrateLight();
+    setIsFromDatePickerOpen(true);
+  };
+  const handleFromDatePickerClose = (): void => {
+    vibrateLight();
+    setIsFromDatePickerOpen(false);
+  };
+  const handleToDatePickerOpen = (): void => {
+    vibrateLight();
+    setIsToDatePickerOpen(true);
+  };
+  const handleToDatePickerClose = (): void => {
+    vibrateLight();
+    setIsToDatePickerOpen(false);
+  };
+  const handleCreatedAtPickerOpen = (): void => {
+    vibrateLight();
+    setIsCreatedAtPickerOpen(true);
+  };
+  const handleCreatedAtPickerClose = (): void => {
+    vibrateLight();
+    setIsCreatedAtPickerOpen(false);
+  };
 
   const handleFromDateChange = async (date: Date): Promise<void> => {
     isDateFilterChanged.current = true;
     handleFromDatePickerClose();
     fromDate.current = date;
+    vibrateLight();
     await filterPurchases();
   };
 
@@ -425,6 +466,7 @@ export const usePurchase = (purchase?: Purchase) => {
     isDateFilterChanged.current = true;
     handleToDatePickerClose();
     toDate.current = date;
+    vibrateLight();
     await filterPurchases();
   };
 
@@ -439,12 +481,30 @@ export const usePurchase = (purchase?: Purchase) => {
     filterCategory.current = PurchaseCategory.ALL;
     setIsCategoryFilterChanged(false);
     isDateFilterChanged.current = false;
+    vibrateLight();
     await fetchPurchases();
   };
 
   const handleSecondaryCategoryChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setSecondaryCategory(e.nativeEvent.text);
   };
+
+  const handleStatisticsModalOpen = async () => {
+    setIsStatisticsModalOpen(true);
+    vibrateLight();
+    if (userId && monthlyStatistics.length === 0) {
+      setIsLoadingStatistics(true);
+      try {
+        const data = await purchaseService.getMonthlySpendingForLastYear(userId);
+        setMonthlyStatistics(data);
+      } catch (error) {
+        console.error('Error fetching monthly statistics:', error);
+      } finally {
+        setIsLoadingStatistics(false);
+      }
+    }
+  };
+  const handleStatisticsModalClose = () => setIsStatisticsModalOpen(false);
 
   useEffect(() => {
     if (userId) {
@@ -563,5 +623,10 @@ export const usePurchase = (purchase?: Purchase) => {
     handleCreatedAtPickerOpen,
     handleCreatedAtPickerClose,
     handleCreatedAtChange,
+    handleStatisticsModalOpen,
+    handleStatisticsModalClose,
+    isStatisticsModalOpen,
+    monthlyStatistics,
+    isLoadingStatistics,
   };
 };

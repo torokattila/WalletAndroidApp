@@ -1,12 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { ModalBackground } from '@components/shared';
 import { useDarkMode } from '@hooks/useDarkMode';
+import useVibration from '@hooks/useVibration';
+import i18n from 'i18n-js';
 import React, { FC, useEffect, useState } from 'react';
 import { Modal } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import GestureRecognizer from 'react-native-swipe-detect';
 import type { ColorFormatsObject } from 'reanimated-color-picker';
-import i18n from 'i18n-js';
 import ColorPicker, { HueSlider, OpacitySlider, Panel1, Swatches } from 'reanimated-color-picker';
 import { buttonShadow, shadow } from '../CategoryModal';
 import { UpperLine } from '../CategoryModal/CategoryModal.styles';
@@ -43,6 +44,7 @@ export const CategoryColorPicker: FC<CategoryColorPickerProps> = ({
   existingColor,
 }) => {
   const { isDarkMode } = useDarkMode();
+  const { vibrateLight } = useVibration();
   const [resultColor, setResultColor] = useState(existingColor);
   const currentColor = useSharedValue(existingColor);
 
@@ -103,7 +105,10 @@ export const CategoryColorPicker: FC<CategoryColorPickerProps> = ({
 
             <StyledButton
               size="large"
-              onPress={onClose}
+              onPress={() => {
+                vibrateLight();
+                onClose();
+              }}
               style={!isDarkMode && buttonShadow}
               text={i18n.t('SaveButtonTitle')}
             />

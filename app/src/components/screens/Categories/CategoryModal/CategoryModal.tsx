@@ -28,6 +28,7 @@ import {
   PaginationDot,
 } from './CategoryModal.styles';
 import { IconCard } from '../IconCard';
+import useVibration from '@hooks/useVibration';
 
 type CategoryModalProps = {
   isVisible: boolean;
@@ -92,6 +93,7 @@ export const CategoryModal: FC<CategoryModalProps> = ({
   existingCategory,
 }) => {
   const { isDarkMode } = useDarkMode();
+  const { vibrateLight } = useVibration();
   const {
     isLoading,
     handleCreateCategory,
@@ -123,8 +125,13 @@ export const CategoryModal: FC<CategoryModalProps> = ({
 
   const iconPages = chunkIcons(icons, iconsPerPage);
 
-  const openColorPicker = () => setIsColorPickerOpen(true);
-  const closeColorPicker = () => setIsColorPickerOpen(false);
+  const openColorPicker = () => {
+    vibrateLight();
+    setIsColorPickerOpen(true);
+  };
+  const closeColorPicker = () => {
+    setIsColorPickerOpen(false);
+  };
 
   const modalTitle = isEditMode
     ? i18n.t('Dialog.Categories.EditCategoryTitle')

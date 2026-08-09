@@ -1,31 +1,32 @@
 /* eslint-disable react-native/no-inline-styles */
+import { ConfirmDialog, Icon } from '@components/shared';
+import { useDarkMode } from '@hooks/useDarkMode';
+import { useProfile } from '@hooks/useProfile';
+import useVibration from '@hooks/useVibration';
+import { theme } from '@styles/theme';
+import i18n from 'i18n-js';
 import React, { FC } from 'react';
 import { Switch } from 'react-native';
-import i18n from 'i18n-js';
-import { ConfirmDialog, Icon } from '@components/shared';
-import { theme } from '@styles/theme';
-import { useProfile } from '@hooks/useProfile';
-import { useDarkMode } from '@hooks/useDarkMode';
+import { Dialog } from './Dialog';
 import {
   Container,
   ContentContainer,
   Email,
-  OptionsContainer,
+  IconsAndSwitchContainer,
   ImageContainer,
   Name,
   NameEmailContainer,
+  OptionCard,
+  OptionCardTitle,
+  OptionsContainer,
   ScreenTitleContainer,
   ScreenTitleText,
   scrollViewStyle,
-  StyledLinearGradient,
-  OptionCard,
-  OptionCardTitle,
   StyledIcon,
-  SwitchDarkModeText,
+  StyledLinearGradient,
   SwitchDarkModeContainer,
-  IconsAndSwitchContainer,
+  SwitchDarkModeText,
 } from './Profile.styles';
-import { Dialog } from './Dialog';
 
 const cardShadow = {
   elevation: 4,
@@ -66,6 +67,7 @@ export const Profile: FC = () => {
     isNewPasswordConfirm,
   } = useProfile();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { vibrateLight } = useVibration();
 
   const cardIconColor = theme.colors.magenta[100];
 
@@ -141,7 +143,10 @@ export const Profile: FC = () => {
                   <Icon type="sun" iconColor={theme.colors.magenta[100]} />
                   <Switch
                     value={isDarkMode}
-                    onValueChange={toggleDarkMode}
+                    onValueChange={() => {
+                      vibrateLight();
+                      toggleDarkMode();
+                    }}
                     trackColor={{ false: '#f1c2d8', true: '#f3c6da' }}
                     thumbColor={theme.colors.magenta[100]}
                   />

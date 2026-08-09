@@ -46,6 +46,9 @@ export const PurchasesThisMonthContainer = styled(View)`
   align-self: flex-start;
   padding-left: 5%;
   margin-top: 25px;
+  width: 100%;
+  display: flex;
+  position: relative;
 `;
 
 export const PurchasesThisMonthTitle = styled(Text)`
@@ -265,4 +268,19 @@ export const NoPurchasesText = styled(Text)<{ isDarkMode: boolean }>`
 export const Loader = styled(ActivityIndicator)`
   padding-top: 20%;
   align-self: center;
+`;
+
+export const StatisticsButton = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.colors.grey[800] : theme.colors.white[100]};
+  border-radius: 12px;
+  padding: 8px 20px;
+  right: 10%;
+  bottom: 5%;
+  position: absolute;
+`;
+
+export const StatisticsText = styled(Text)`
+  color: ${({ theme }) => theme.colors.white[100]};
+  font-family: 'NunitoSans-Bold';
 `;

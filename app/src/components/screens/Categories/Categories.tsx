@@ -1,28 +1,30 @@
 /* eslint-disable react-native/no-inline-styles */
+import { AddButton, Icon } from '@components/shared';
+import { useCategory } from '@hooks/useCategory';
 import { useDarkMode } from '@hooks/useDarkMode';
-import React, { FC } from 'react';
+import useVibration from '@hooks/useVibration';
+import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
+import React, { FC } from 'react';
+import { FlatList, RefreshControl } from 'react-native';
 import {
   Container,
   ContentContainer,
+  ListContainer,
   Loader,
   MyCategoriesTitle,
+  NoIncomesContainer,
+  NoIncomesText,
   ScreenTitleContainer,
   ScreenTitleText,
   StyledLinearGradient,
-  ListContainer,
-  NoIncomesContainer,
-  NoIncomesText,
 } from './Categories.styles';
-import { theme } from '@styles/theme';
-import { AddButton, Icon } from '@components/shared';
-import { useCategory } from '@hooks/useCategory';
-import { CategoryModal } from './CategoryModal';
-import { FlatList, RefreshControl } from 'react-native';
 import { CategoryCard } from './CategoryCard';
+import { CategoryModal } from './CategoryModal';
 
 export const Categories: FC = () => {
   const { isDarkMode } = useDarkMode();
+  const { vibrateLight } = useVibration();
   const {
     handlePullToRefresh,
     isLoading,
@@ -92,7 +94,12 @@ export const Categories: FC = () => {
               </NoIncomesContainer>
             )}
 
-            <AddButton onPress={handleModalOpen} />
+            <AddButton
+              onPress={() => {
+                vibrateLight();
+                handleModalOpen();
+              }}
+            />
           </ContentContainer>
         </StyledLinearGradient>
       </Container>
