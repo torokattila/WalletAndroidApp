@@ -4,7 +4,6 @@ import { Vibration } from 'react-native';
 const useVibration = () => {
   const vibrateLight = useCallback(() => {
     Vibration.vibrate(10);
-    console.log('vibrateLight');
   }, []);
 
   const vibrateMedium = useCallback(() => {

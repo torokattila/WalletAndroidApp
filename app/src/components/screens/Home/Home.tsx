@@ -8,6 +8,7 @@ import { useHome } from '@hooks/useHome';
 import { usePurchase } from '@hooks/usePurchase';
 import useVibration from '@hooks/useVibration';
 import { Purchase } from '@model/domain';
+import { usePurchasesStore } from '@stores/purchases.store';
 import { theme } from '@styles/theme';
 import { format } from 'date-fns';
 import { enUS, hu } from 'date-fns/locale';
@@ -110,7 +111,7 @@ export const Home: FC = () => {
 
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
-
+    usePurchasesStore.getState().invalidate();
     vibrateLight();
     await reloadPurchases();
   };

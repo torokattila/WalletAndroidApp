@@ -1,28 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { IconType } from '@components/shared';
 import { getLocale } from '@core/translation-utils';
 import { Category } from '@model/domain';
 import { defaultCategories, ExtendedCategory } from '@model/domain/constants/categories';
 import { CategoryService } from '@model/services/category';
+import { useCategoriesStore } from '@stores/categories.store';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import translate from 'google-translate-api-x';
 import i18n from 'i18n-js';
 import { useEffect, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useUser } from './useUser';
-import { IconType } from '@components/shared';
 import useVibration from './useVibration';
 
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();
   const { vibrateLight } = useVibration();
   const userId = user?.id;
+  const { categories, setCategories, isDirty, invalidate } = useCategoriesStore();
 
   const [title, setTitle] = useState<string>('');
   const [color, setColor] = useState<string>(category?.color ?? '#fff');
   const [icon, setIcon] = useState<IconType | null>(category?.icon ?? null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [categories, setCategories] = useState<(Category | ExtendedCategory)[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -52,6 +53,9 @@ export const useCategory = (category?: Category) => {
   const categoryService = new CategoryService();
 
   const fetchCategories = async () => {
+    if (!isDirty && categories.length > 0) {
+      return;
+    }
     setIsLoading(true);
 
     try {
@@ -78,7 +82,7 @@ export const useCategory = (category?: Category) => {
 
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
-
+    invalidate();
     vibrateLight();
     await fetchCategories();
   };
@@ -106,6 +110,7 @@ export const useCategory = (category?: Category) => {
         setIsLoading(true);
         await categoryService.createCategory(userId, title, color, icon);
         fetchUser();
+        invalidate();
         setTitle('');
         setIcon(null);
         toast.show({
@@ -139,6 +144,7 @@ export const useCategory = (category?: Category) => {
         setIsLoading(true);
         await categoryService.updateCategory(category?.id, { title, color, icon });
         fetchUser();
+        invalidate();
         fetchCategories();
         toast.show({
           type: 'success',
@@ -167,6 +173,7 @@ export const useCategory = (category?: Category) => {
       setIsLoading(true);
       await categoryService.deleteCategory(category?.id);
       fetchUser();
+      invalidate();
       fetchCategories();
       toast.show({
         type: 'success',

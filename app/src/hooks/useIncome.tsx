@@ -1,24 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { Income } from '@model/domain';
+import { IncomeService } from '@model/services';
+import { useIncomesStore } from '@stores/incomes.store';
+import { useToastNotificationStore } from '@stores/toastNotification.store';
+import i18n from 'i18n-js';
 import { useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import i18n from 'i18n-js';
-import { useToastNotificationStore } from '@stores/toastNotification.store';
-import { IncomeService } from '@model/services';
-import { Income } from '@model/domain';
-import { useUser } from './useUser';
 import { useDownload } from './useDownload';
+import { useUser } from './useUser';
 import useVibration from './useVibration';
 
 export const useIncome = (income?: Income) => {
   const { retry: fetchUser, user } = useUser();
   const { vibrateLight } = useVibration();
   const userId = user?.id;
+  const { incomes, setIncomes, isDirty, invalidate } = useIncomesStore();
 
   const [amount, setAmount] = useState<string>('0');
   const [title, setTitle] = useState<string>('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [incomes, setIncomes] = useState<Income[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
   const fromDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
@@ -50,6 +51,9 @@ export const useIncome = (income?: Income) => {
   const incomeService = new IncomeService();
 
   const fetchIncomes = async () => {
+    if (!isDirty && incomes.length > 0) {
+      return;
+    }
     setIsLoading(true);
 
     try {
@@ -65,7 +69,7 @@ export const useIncome = (income?: Income) => {
 
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
-
+    invalidate();
     vibrateLight();
     await fetchIncomes();
   };
@@ -116,6 +120,7 @@ export const useIncome = (income?: Income) => {
         setIsLoading(true);
         await incomeService.createIncome(userId, amount, title);
         fetchUser();
+        invalidate();
         setAmount('0');
         setTitle('');
         toast.show({
@@ -149,6 +154,7 @@ export const useIncome = (income?: Income) => {
         setIsLoading(true);
         await incomeService.updateIncome(income?.id, userId, { amount, title });
         fetchUser();
+        invalidate();
         fetchIncomes();
         toast.show({
           type: 'success',
@@ -177,6 +183,7 @@ export const useIncome = (income?: Income) => {
       setIsLoading(true);
       await incomeService.deleteIncome(income?.id, userId);
       fetchUser();
+      invalidate();
       fetchIncomes();
       toast.show({
         type: 'success',
