@@ -6,6 +6,8 @@ import { PurchaseService } from '@model/services';
 import { CategoryService } from '@model/services/category';
 import { TabStackParams } from '@navigation/Tabs';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useCategoriesStore } from '@stores/categories.store';
+import { usePurchasesStore } from '@stores/purchases.store';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
 import { Timestamp } from 'firebase/firestore'; // Ensure this is imported
 import translate from 'google-translate-api-x';
@@ -45,7 +47,8 @@ export const usePurchase = (purchase?: Purchase) => {
   const [allPurchasesAmountForThisMonth, setAllPurchasesAmountForThisMonth] = useState(0);
   const [category, setCategory] = useState<PurchaseCategory | string | null>(null);
   const [secondaryCategory, setSecondaryCategory] = useState<string | null>(null);
-  const [purchases, setPurchases] = useState<Purchase[]>([]);
+  const { purchases, setPurchases, monthlyStatistics, setMonthlyStatistics, isDirty, invalidate } =
+    usePurchasesStore();
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,12 +68,10 @@ export const usePurchase = (purchase?: Purchase) => {
   const isDateFilterChanged = useRef(false);
   const [isDateFiltersShown, setIsDateFiltersShown] = useState(false);
   const [screenRefreshing, setScreenRefreshing] = useState(false);
-  const [allCategories, setAllCategories] = useState<CategoryDropdownValueType[]>([]);
+  const { dropdownCategories: allCategories, setDropdownCategories: setAllCategories } =
+    useCategoriesStore();
 
   const [isStatisticsModalOpen, setIsStatisticsModalOpen] = useState(false);
-  const [monthlyStatistics, setMonthlyStatistics] = useState<{ month: string; value: number }[]>(
-    []
-  );
   const [isLoadingStatistics, setIsLoadingStatistics] = useState(false);
 
   const locale = getLocale();
@@ -131,6 +132,10 @@ export const usePurchase = (purchase?: Purchase) => {
   );
 
   const fetchPurchases = async () => {
+    const { isDirty: currentDirty, purchases: currentPurchases } = usePurchasesStore.getState();
+    if (!currentDirty && currentPurchases.length > 0) {
+      return;
+    }
     setIsLoading(true);
 
     try {
@@ -145,6 +150,10 @@ export const usePurchase = (purchase?: Purchase) => {
   };
 
   const fetchAllCategories = async () => {
+    const { isDirty: catDirty, dropdownCategories } = useCategoriesStore.getState();
+    if (!catDirty && dropdownCategories.length > 0) {
+      return;
+    }
     setIsLoading(true);
 
     try {
@@ -173,7 +182,7 @@ export const usePurchase = (purchase?: Purchase) => {
 
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
-
+    invalidate();
     await fetchPurchases();
   };
 
@@ -279,7 +288,8 @@ export const usePurchase = (purchase?: Purchase) => {
           type: 'success',
           title: i18n.t('ToastNotification.NewPurchaseSuccess'),
         });
-        setMonthlyStatistics([]);
+        invalidate();
+        fetchPurchases();
       } catch (error) {
         setErrors({
           generalError: error,
@@ -313,12 +323,12 @@ export const usePurchase = (purchase?: Purchase) => {
         });
 
         fetchUser();
+        invalidate();
         fetchPurchases();
         toast.show({
           type: 'success',
           title: i18n.t('ToastNotification.EditPurchaseSuccess'),
         });
-        setMonthlyStatistics([]);
       } catch (error) {
         setErrors({
           generalError: error,
@@ -342,12 +352,12 @@ export const usePurchase = (purchase?: Purchase) => {
       setIsLoading(true);
       await purchaseService.deletePurchase(purchase?.id, userId);
       fetchUser();
+      invalidate();
       fetchPurchases();
       toast.show({
         type: 'success',
         title: i18n.t('ToastNotification.DeletePurchaseSuccess'),
       });
-      setMonthlyStatistics([]);
     } catch (error) {
       setErrors({
         generalError: error,
@@ -513,7 +523,6 @@ export const usePurchase = (purchase?: Purchase) => {
       fetchAllCategories();
     } else {
       setPurchases([]);
-      setAllCategories([]);
       setIsLoading(false);
     }
   }, [userId]);
@@ -544,13 +553,18 @@ export const usePurchase = (purchase?: Purchase) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
+      const hadFilters = isDateFilterChanged.current || filterCategory.current !== null;
+
       fromDate.current = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
       toDate.current = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
       filterCategory.current = null;
       setIsCategoryFilterChanged(false);
       isDateFilterChanged.current = false;
       setIsDateFiltersShown(false);
-      filterPurchases();
+
+      if (hadFilters) {
+        usePurchasesStore.getState().invalidate();
+      }
     });
 
     return unsubscribe;
@@ -559,12 +573,14 @@ export const usePurchase = (purchase?: Purchase) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (!route.params?.category && !route.params?.fromDate && !route.params?.toDate && userId) {
-        fetchPurchases();
+        if (isDirty || purchases.length === 0) {
+          fetchPurchases();
+        }
       }
     });
 
     return unsubscribe;
-  }, [navigation, route.params, userId]);
+  }, [navigation, route.params, userId, isDirty, purchases.length]);
 
   return {
     amount,
