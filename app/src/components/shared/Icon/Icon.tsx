@@ -38,6 +38,7 @@ import Hairdresser from './hairdresser';
 import HairdresserSmall from './hairdresser-small';
 import { Hamburger } from './hamburger';
 import { HamburgerBig } from './hamburger-big';
+import { HamburgerSmall } from './hamburger-small';
 import { Home } from './home';
 import House from './house';
 import HouseSmall from './house-small';
@@ -53,6 +54,7 @@ import NoSmoking from './no-smoking';
 import NoSmokingSmall from './no-smoking-small';
 import { OtherPurchase } from './other-purchase';
 import { OtherPurchaseBig } from './other-purchase-big';
+import { OtherPurchaseSmall } from './other-purchase-small';
 import Pills from './pills';
 import PillsSmall from './pills-small';
 import { Plus } from './plus';
@@ -63,6 +65,8 @@ import { ProfileImage } from './profile-image';
 import { Purchase } from './purchase';
 import Restaurant from './restaurant';
 import RestaurantSmall from './restaurant-small';
+import Shirt from './shirt';
+import ShirtSmall from './shirt-small';
 import ShoppingCart from './shopping-cart';
 import ShoppingCartSmall from './shopping-cart-small';
 import { SuccessTick } from './success-tick';
@@ -70,13 +74,11 @@ import { Sun } from './sun';
 import Train from './train';
 import TrainSmall from './train-small';
 import { Trash } from './trash';
+import { Vibration } from './vibration';
+import { VibrationOff } from './vibration-off';
 import { Visa } from './visa';
-import Shirt from './shirt';
-import ShirtSmall from './shirt-small';
 import WineGlasses from './wine-glasses';
 import WineGlassesSmall from './wine-glasses-small';
-import { OtherPurchaseSmall } from './other-purchase-small';
-import { HamburgerSmall } from './hamburger-small';
 
 export type IconType =
   | 'airplane'
@@ -153,6 +155,8 @@ export type IconType =
   | 'train'
   | 'train-small'
   | 'trash'
+  | 'vibration'
+  | 'vibration-off'
   | 'visa'
   | 'wine-glasses'
   | 'wine-glasses-small';
@@ -312,6 +316,10 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <TrainSmall iconColor={iconColor} {...props} />;
     case 'trash':
       return <Trash iconColor={iconColor} {...props} />;
+    case 'vibration':
+      return <Vibration iconColor={iconColor} {...props} />;
+    case 'vibration-off':
+      return <VibrationOff iconColor={iconColor} {...props} />;
     case 'visa':
       return <Visa iconColor={iconColor} {...props} />;
     case 'wine-glasses':

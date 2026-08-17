@@ -11,7 +11,7 @@ import i18n from 'i18n-js';
 import { useEffect, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useUser } from './useUser';
-import useVibration from './useVibration';
+import { useVibration } from './useVibration';
 
 export const useCategory = (category?: Category) => {
   const { retry: fetchUser, user } = useUser();

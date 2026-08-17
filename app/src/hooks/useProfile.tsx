@@ -8,7 +8,7 @@ import i18n from 'i18n-js';
 import { useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useUser } from './useUser';
-import useVibration from './useVibration';
+import { useVibration } from './useVibration';
 
 const authService = new AuthService();
 

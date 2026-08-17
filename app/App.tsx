@@ -8,7 +8,7 @@ import { DarkModeProvider } from '@hooks/useDarkMode';
 import { NavigationInterceptorProvider } from '@hooks/useNavigationInterceptor';
 import { UserProvider, useUser } from '@hooks/useUser';
 import { UserIdProvider } from '@hooks/useUserId';
-import { VibrationProvider } from '@hooks/useVibrationToggle';
+import { VibrationProvider } from '@hooks/useVibration';
 import { Navigation } from '@navigation/Navigation';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { useToastNotificationStore } from '@stores/toastNotification.store';

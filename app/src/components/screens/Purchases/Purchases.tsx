@@ -4,7 +4,7 @@ import { formatDate } from '@core/date-utils';
 import { formatAmount } from '@core/format-amount';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { usePurchase } from '@hooks/usePurchase';
-import useVibration from '@hooks/useVibration';
+import { useVibration } from '@hooks/useVibration';
 import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
 import React, { FC } from 'react';
@@ -303,7 +303,13 @@ export const Purchases: FC = () => {
                   keyExtractor={(item) => item.id}
                   scrollEnabled
                   renderItem={({ item }) => (
-                    <PurchaseCard purchase={item} onPress={() => handleEditModalOpen(item)} />
+                    <PurchaseCard
+                      purchase={item}
+                      onPress={() => {
+                        vibrateLight();
+                        handleEditModalOpen(item);
+                      }}
+                    />
                   )}
                 />
               </ListContainer>

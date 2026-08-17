@@ -16,7 +16,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { useDownload } from './useDownload';
 import { useUser } from './useUser';
-import useVibration from './useVibration';
+import { useVibration } from './useVibration';
 
 export type CategoryDropdownValueType = {
   label: string;
@@ -492,6 +492,7 @@ export const usePurchase = (purchase?: Purchase) => {
     setIsCategoryFilterChanged(false);
     isDateFilterChanged.current = false;
     vibrateLight();
+    invalidate();
     await fetchPurchases();
   };
 

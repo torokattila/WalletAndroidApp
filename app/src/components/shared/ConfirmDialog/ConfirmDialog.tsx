@@ -1,7 +1,8 @@
+import { useDarkMode } from '@hooks/useDarkMode';
+import { useVibration } from '@hooks/useVibration';
+import { theme } from '@styles/theme';
 import React, { FC } from 'react';
 import { Modal } from 'react-native';
-import { theme } from '@styles/theme';
-import { useDarkMode } from '@hooks/useDarkMode';
 import {
   Background,
   Content,
@@ -13,7 +14,6 @@ import {
   SecondaryButtonText,
   Title,
 } from './ConfirmDialog.styles';
-import useVibration from '@hooks/useVibration';
 
 type ConfirmDialogProps = {
   isVisible: boolean;

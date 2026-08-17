@@ -1,7 +1,7 @@
 import { Icon } from '@components/shared';
 import { useDarkMode } from '@hooks/useDarkMode';
 import useRegistration from '@hooks/useRegistration';
-import useVibration from '@hooks/useVibration';
+import { useVibration } from '@hooks/useVibration';
 import { AuthStackParams } from '@navigation/AuthStack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { theme } from '@styles/theme';

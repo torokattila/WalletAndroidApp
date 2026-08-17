@@ -2,7 +2,7 @@
 import { AddButton, Icon } from '@components/shared';
 import { useCategory } from '@hooks/useCategory';
 import { useDarkMode } from '@hooks/useDarkMode';
-import useVibration from '@hooks/useVibration';
+import { useVibration } from '@hooks/useVibration';
 import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
 import React, { FC } from 'react';
@@ -79,7 +79,10 @@ export const Categories: FC = () => {
                     <CategoryCard
                       key={item.id}
                       category={item}
-                      onPress={() => handleEditModalOpen(item)}
+                      onPress={() => {
+                        vibrateLight();
+                        handleEditModalOpen(item);
+                      }}
                     />
                   )}
                 />

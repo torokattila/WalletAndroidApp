@@ -9,7 +9,7 @@ import PushNotification, { Importance } from 'react-native-push-notification';
 import uuid from 'react-native-uuid';
 import XLSX from 'xlsx';
 import { CategoryDropdownValueType } from './usePurchase';
-import useVibration from './useVibration';
+import { useVibration } from './useVibration';
 
 const categories: CategoryDropdownValueType[] = [
   { label: i18n.t('Purchases.Categories.food'), value: PurchaseCategory.FOOD },
