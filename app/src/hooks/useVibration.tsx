@@ -43,7 +43,6 @@ export const VibrationProvider = ({ children }: { children: React.ReactNode }) =
 
   const vibrateLight = () => {
     if (isVibrationEnabled) {
-      console.log('vibrated');
       Vibration.vibrate(10);
     }
   };

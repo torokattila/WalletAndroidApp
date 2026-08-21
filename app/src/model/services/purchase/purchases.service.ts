@@ -1,27 +1,26 @@
+import { Category, Purchase, PurchaseCategory } from '@model/domain';
+import { defaultCategories } from '@model/domain/constants/categories';
+import { getDB } from '@model/firebase-config';
+import { UserService } from '@model/services/user';
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
-  DocumentReference,
+  DocumentSnapshot,
   getDoc,
   getDocs,
   limit,
   orderBy,
-  Query,
   query,
-  QueryDocumentSnapshot,
+  QueryConstraint,
   Timestamp,
   updateDoc,
   where,
 } from 'firebase/firestore';
 import i18n from 'i18n-js';
-import { Category, Purchase, PurchaseCategory } from '@model/domain';
-import { getDB } from '@model/firebase-config';
 import { BaseService } from '../base.service';
-import { UserService } from '@model/services/user';
 import { CategoryService } from '../category';
-import { defaultCategories } from '@model/domain/constants/categories';
 
 export type PurchaseModel = {
   id: string;
@@ -29,7 +28,7 @@ export type PurchaseModel = {
   amount: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
-  category: PurchaseCategory;
+  category: PurchaseCategory | string;
   secondaryCategory?: string | null;
 };
 
@@ -50,31 +49,37 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     secondaryCategory?: string | null,
     modifiedCreatedAt?: Timestamp
   ): Promise<Purchase> {
+    const createdAtTimestamp = modifiedCreatedAt ?? Timestamp.now();
+    const updatedAtTimestamp = Timestamp.now();
+
     const purchasesCollectionRef = collection(getDB(), 'purchases');
     const insertedPurchase = await addDoc(purchasesCollectionRef, {
       userId,
       amount,
       category,
-      secondaryCategory,
-      createdAt: modifiedCreatedAt ?? Timestamp.now(),
-      updatedAt: Timestamp.now(),
+      secondaryCategory: secondaryCategory ?? null,
+      createdAt: createdAtTimestamp,
+      updatedAt: updatedAtTimestamp,
     });
 
     const currentUser = await this.userService.getUserByUserId(userId);
-    const currentBalance = currentUser?.balance;
-    await this.userService.updateBasicDetails(userId, {
-      ...currentUser,
-      balance: currentBalance - Number(amount),
+    if (currentUser) {
+      const currentBalance = Number(currentUser.balance) || 0;
+      await this.userService.updateBasicDetails(userId, {
+        ...currentUser,
+        balance: currentBalance - Number(amount),
+      });
+    }
+
+    return new Purchase({
+      id: insertedPurchase.id,
+      userId,
+      amount,
+      category: typeof category === 'string' ? category : (category as Category)?.title ?? '',
+      secondaryCategory: secondaryCategory ?? null,
+      createdAt: createdAtTimestamp,
+      updatedAt: updatedAtTimestamp,
     });
-
-    const purchaseRef = doc(
-      getDB(),
-      'purchases',
-      insertedPurchase?.id
-    ) as DocumentReference<PurchaseModel>;
-    const purchaseSnapshot = await getDoc(purchaseRef);
-
-    return PurchaseService.toDomainObject(purchaseSnapshot);
   }
 
   async getAllPurchases(userId: string): Promise<Purchase[]> {
@@ -86,12 +91,9 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     );
 
     const snapshot = await getDocs(queryData);
+    if (snapshot.empty) return [];
 
-    if (snapshot.empty) {
-      return [];
-    }
-
-    return snapshot?.docs?.map(PurchaseService.toDomainObject);
+    return snapshot.docs.map(PurchaseService.toDomainObject);
   }
 
   async joinCategoriesIntoPurchases(userId: string): Promise<Purchase[]> {
@@ -99,22 +101,20 @@ export class PurchaseService extends BaseService<PurchaseModel> {
       const userCategories = await this.categoryService.getAllCategories(userId);
       const allCategories = [...defaultCategories, ...userCategories];
       const purchases = await this.getAllPurchases(userId);
-      const purchasesWithCategories = purchases.map((purchase) => {
-        const category = allCategories.find((cat) => {
+
+      return purchases.map((purchase) => {
+        const categoryObj = allCategories.find((cat) => {
           if (cat.isDefault) {
             return cat.title === i18n.t(`Purchases.Categories.${purchase.category}`);
           }
-
           return cat.title === purchase.category;
         });
 
         return {
           ...purchase,
-          categoryObject: category || null,
+          categoryObject: categoryObj || null,
         };
       });
-
-      return purchasesWithCategories;
     } catch (error) {
       console.error('Error joining categories into purchases:', error);
       throw error;
@@ -122,9 +122,8 @@ export class PurchaseService extends BaseService<PurchaseModel> {
   }
 
   async getPurchaseById(purchaseId: string): Promise<Purchase> {
-    const queryData = doc(this.collection, purchaseId);
-    const purchaseSnapshot = await getDoc(queryData);
-
+    const docRef = doc(this.collection, purchaseId);
+    const purchaseSnapshot = await getDoc(docRef);
     return PurchaseService.toDomainObject(purchaseSnapshot);
   }
 
@@ -136,35 +135,36 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     const currentPurchase = await this.getPurchaseById(purchaseId);
     const currentUser = await this.userService.getUserByUserId(userId);
 
-    const updatedUser = await this.userService.updateBasicDetails(userId, {
-      ...currentUser,
-      balance: currentUser.balance + Number(currentPurchase.amount),
-    });
+    if (currentUser) {
+      const oldAmount = Number(currentPurchase.amount) || 0;
+      const newAmount = data.amount !== undefined ? Number(data.amount) : oldAmount;
+      const balanceDifference = oldAmount - newAmount;
+
+      if (balanceDifference !== 0) {
+        await this.userService.updateBasicDetails(userId, {
+          ...currentUser,
+          balance: currentUser.balance + balanceDifference,
+        });
+      }
+    }
 
     const docRef = doc(this.collection, purchaseId);
-
-    // Normalize category to ensure it matches PurchaseModel (stored as PurchaseCategory/title string)
     const normalizedCategory =
-      typeof data.category === 'object'
-        ? (data.category as Category).title
-        : (data.category as PurchaseCategory | undefined);
+      typeof data.category === 'object' ? (data.category as Category).title : data.category;
 
-    const purchaseData: Partial<PurchaseModel> = {
-      amount: data.amount,
-      category: normalizedCategory as PurchaseCategory,
-      secondaryCategory: data.secondaryCategory ?? null,
-      createdAt: data.createdAt as unknown as Timestamp,
+    const updatePayload: Record<string, any> = {
+      updatedAt: Timestamp.now(),
     };
 
-    await this.userService.updateBasicDetails(userId, {
-      ...updatedUser,
-      balance: updatedUser.balance - Number(data.amount),
-    });
+    if (data.amount !== undefined) updatePayload.amount = data.amount;
+    if (normalizedCategory !== undefined) updatePayload.category = normalizedCategory;
+    if (data.secondaryCategory !== undefined)
+      updatePayload.secondaryCategory = data.secondaryCategory ?? null;
+    if (data.createdAt !== undefined) updatePayload.createdAt = data.createdAt;
 
-    await updateDoc(docRef, { ...purchaseData, updatedAt: Timestamp.now() });
+    await updateDoc(docRef, updatePayload);
 
     const purchaseSnap = await getDoc(docRef);
-
     return PurchaseService.toDomainObject(purchaseSnap);
   }
 
@@ -172,102 +172,71 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     const currentPurchase = await this.getPurchaseById(purchaseId);
     const currentUser = await this.userService.getUserByUserId(userId);
 
-    await this.userService.updateBasicDetails(userId, {
-      ...currentUser,
-      balance: currentUser.balance + Number(currentPurchase.amount),
-    });
-
-    const docRef = doc(this.collection, purchaseId);
-    const purchaseSnapshot = await getDoc(docRef);
-
-    if (!purchaseSnapshot.exists()) {
-      return;
+    if (currentUser) {
+      await this.userService.updateBasicDetails(userId, {
+        ...currentUser,
+        balance: currentUser.balance + (Number(currentPurchase.amount) || 0),
+      });
     }
 
+    const docRef = doc(this.collection, purchaseId);
     await deleteDoc(docRef);
   }
 
   async getAllPurchaseAmountInCurrentMonth(userId: string): Promise<number> {
     const currentDate = new Date();
-    const firstDayOfTheMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const lastDayOfTheMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 31);
-    let sum = 0;
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1, 0, 0, 0, 0);
+    const endOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+      999
+    );
 
     const queryData = query(
       this.collection,
       where('userId', '==', userId),
-      where('createdAt', '>=', firstDayOfTheMonth),
-      where('createdAt', '<=', lastDayOfTheMonth)
+      where('createdAt', '>=', Timestamp.fromDate(startOfMonth)),
+      where('createdAt', '<=', Timestamp.fromDate(endOfMonth))
     );
 
     const snapshot = await getDocs(queryData);
+    if (snapshot.empty) return 0;
 
-    if (snapshot.empty) {
-      return 0;
-    }
-
-    const resultPurchases = snapshot?.docs?.map(PurchaseService.toDomainObject);
-
-    resultPurchases.forEach((purchase) => {
-      sum += Number(purchase.amount);
-    });
-
-    return sum;
+    return snapshot.docs.reduce((sum, docSnap) => {
+      const purchase = PurchaseService.toDomainObject(docSnap);
+      return sum + (Number(purchase.amount) || 0);
+    }, 0);
   }
 
   async filterPurchases(
     userId: string,
-    dates: {
-      startDate: Date;
-      endDate: Date;
-    } | null,
+    dates: { startDate: Date; endDate: Date } | null,
     category: string | null
   ): Promise<Purchase[]> {
-    let queryData: Query<PurchaseModel>;
+    const constraints: QueryConstraint[] = [where('userId', '==', userId)];
 
-    if ((!category || category === PurchaseCategory.ALL) && dates) {
-      queryData = query(
-        this.collection,
-        where('userId', '==', userId),
-        where('createdAt', '>=', dates.startDate),
-        where('createdAt', '<=', dates.endDate),
-        orderBy('createdAt', 'desc'),
-        limit(9998)
-      );
-    } else if (category && dates) {
-      queryData = query(
-        this.collection,
-        where('userId', '==', userId),
-        where('createdAt', '>=', dates.startDate),
-        where('createdAt', '<=', dates.endDate),
-        where('category', '==', category),
-        orderBy('createdAt', 'desc'),
-        limit(9998)
-      );
-    } else if (category && !dates) {
-      queryData = query(
-        this.collection,
-        where('userId', '==', userId),
-        where('category', '==', category),
-        orderBy('createdAt', 'desc'),
-        limit(9998)
-      );
-    } else {
-      queryData = query(
-        this.collection,
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc'),
-        limit(9998)
+    if (dates) {
+      constraints.push(
+        where('createdAt', '>=', Timestamp.fromDate(dates.startDate)),
+        where('createdAt', '<=', Timestamp.fromDate(dates.endDate))
       );
     }
 
+    if (category && category !== PurchaseCategory.ALL) {
+      constraints.push(where('category', '==', category));
+    }
+
+    constraints.push(orderBy('createdAt', 'desc'), limit(9998));
+
+    const queryData = query(this.collection, ...constraints);
     const snapshot = await getDocs(queryData);
 
-    if (snapshot.empty) {
-      return [];
-    }
-
-    return snapshot?.docs?.map(PurchaseService.toDomainObject);
+    if (snapshot.empty) return [];
+    return snapshot.docs.map(PurchaseService.toDomainObject);
   }
 
   async getMonthlySpendingForLastYear(userId: string): Promise<{ month: string; value: number }[]> {
@@ -315,7 +284,7 @@ export class PurchaseService extends BaseService<PurchaseModel> {
         const date = purchase.createdAt.toDate();
         const key = `${date.getFullYear()}-${date.getMonth()}`;
         if (key in monthlyMap) {
-          monthlyMap[key] += Number(purchase.amount);
+          monthlyMap[key] += Number(purchase.amount) || 0;
         }
       });
     }
@@ -326,17 +295,25 @@ export class PurchaseService extends BaseService<PurchaseModel> {
     }));
   }
 
-  static toDomainObject(purchase: QueryDocumentSnapshot<PurchaseModel>): Purchase {
-    const { ...purchaseData } = purchase.data();
+  static toDomainObject(docSnap: DocumentSnapshot<PurchaseModel>): Purchase {
+    const purchaseData = docSnap.data();
+
     const normalizedCategory =
       typeof purchaseData?.category === 'string'
         ? purchaseData.category
         : (purchaseData?.category as Category)?.title ?? '';
 
+    let validCreatedAt = purchaseData?.createdAt;
+
+    if (!(validCreatedAt instanceof Timestamp) && validCreatedAt) {
+      validCreatedAt = Timestamp.fromDate(new Date(validCreatedAt as any));
+    }
+
     return new Purchase({
       ...purchaseData,
-      id: purchase.id,
+      id: docSnap.id,
       category: normalizedCategory,
+      createdAt: validCreatedAt ?? Timestamp.now(),
     });
   }
 }
