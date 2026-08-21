@@ -1,41 +1,41 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { FC } from 'react';
-import i18n from 'i18n-js';
-import { FlatList, RefreshControl } from 'react-native';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import DatePicker from 'react-native-date-picker';
 import { AddButton, Icon } from '@components/shared';
-import { useIncome } from '@hooks/useIncome';
-import { useDarkMode } from '@hooks/useDarkMode';
-import { theme } from '@styles/theme';
 import { formatDate } from '@core/date-utils';
 import { formatAmount } from '@core/format-amount';
+import { useDarkMode } from '@hooks/useDarkMode';
+import { useIncome } from '@hooks/useIncome';
+import { useVibration } from '@hooks/useVibration';
+import { theme } from '@styles/theme';
+import i18n from 'i18n-js';
+import React, { FC } from 'react';
+import { FlatList, RefreshControl } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { IncomeCard } from './IncomeCard';
+import { IncomeModal } from './IncomeModal';
 import {
+  AllIncomeTitle,
+  Balance,
   BalanceContainer,
   BalanceTitle,
-  Balance,
+  ClearFilterAndDownloadContainer,
   Container,
   ContentContainer,
+  DatePickerButton,
+  DatePickerButtonContainer,
+  DatePickerButtonLabel,
+  DatePickerContainer,
+  DatePickerText,
+  DeleteFiltersButton,
+  DownloadButton,
+  ListContainer,
+  Loader,
+  NoIncomesContainer,
+  NoIncomesText,
   ScreenTitleContainer,
   ScreenTitleText,
   StyledLinearGradient,
-  AllIncomeTitle,
-  ListContainer,
-  DatePickerContainer,
-  DatePickerButton,
-  DatePickerText,
-  DatePickerButtonContainer,
-  DatePickerButtonLabel,
-  DeleteFiltersButton,
-  DownloadButton,
-  NoIncomesContainer,
-  NoIncomesText,
-  Loader,
-  ClearFilterAndDownloadContainer,
 } from './Incomes.styles';
-import { IncomeModal } from './IncomeModal';
-import { IncomeCard } from './IncomeCard';
-import useVibration from '@hooks/useVibration';
 
 const shadow = {
   elevation: 10,
@@ -191,7 +191,10 @@ export const Incomes: FC = () => {
                     <IncomeCard
                       key={item.id}
                       income={item}
-                      onPress={() => handleEditModalOpen(item)}
+                      onPress={() => {
+                        vibrateLight();
+                        handleEditModalOpen(item);
+                      }}
                     />
                   )}
                 />

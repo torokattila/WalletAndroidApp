@@ -6,7 +6,7 @@ import { getLocale } from '@core/translation-utils';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { useHome } from '@hooks/useHome';
 import { usePurchase } from '@hooks/usePurchase';
-import useVibration from '@hooks/useVibration';
+import { useVibration } from '@hooks/useVibration';
 import { Purchase } from '@model/domain';
 import { usePurchasesStore } from '@stores/purchases.store';
 import { theme } from '@styles/theme';
@@ -317,6 +317,7 @@ export const Home: FC = () => {
                       <PieChartPurchaseCard
                         donutChartData={item}
                         onPress={() => {
+                          vibrateLight();
                           const firstDayOfSelectedMonth = new Date(
                             selectedMonth.getFullYear(),
                             selectedMonth.getMonth(),

@@ -3,32 +3,32 @@
 import { ConfirmDialog, Icon, IconType, ModalBackground } from '@components/shared';
 import { useCategory } from '@hooks/useCategory';
 import { useDarkMode } from '@hooks/useDarkMode';
+import { useVibration } from '@hooks/useVibration';
 import { Category } from '@model/domain';
 import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
 import React, { FC, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Modal, TouchableOpacity, View, Dimensions } from 'react-native';
-import GestureRecognizer from 'react-native-swipe-detect';
+import { Dimensions, KeyboardAvoidingView, Modal, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
+import GestureRecognizer from 'react-native-swipe-detect';
 import CategoryColorPicker from '../CategoryColorPicker';
+import { IconCard } from '../IconCard';
 import {
+  CarouselContainer,
   ColorPickerContainer,
   Content,
   ContentContainer,
   DeleteIconContainer,
   IconPickerContainer,
+  PaginationContainer,
+  PaginationDot,
   PickColorText,
   PickIconText,
   StyledButton,
   StyledTextInput,
   Title,
   UpperLine,
-  CarouselContainer,
-  PaginationContainer,
-  PaginationDot,
 } from './CategoryModal.styles';
-import { IconCard } from '../IconCard';
-import useVibration from '@hooks/useVibration';
 
 type CategoryModalProps = {
   isVisible: boolean;

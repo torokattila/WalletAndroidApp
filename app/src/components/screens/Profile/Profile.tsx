@@ -2,7 +2,7 @@
 import { ConfirmDialog, Icon } from '@components/shared';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { useProfile } from '@hooks/useProfile';
-import useVibration from '@hooks/useVibration';
+import { useVibration } from '@hooks/useVibration';
 import { theme } from '@styles/theme';
 import i18n from 'i18n-js';
 import React, { FC } from 'react';
@@ -26,6 +26,9 @@ import {
   StyledLinearGradient,
   SwitchDarkModeContainer,
   SwitchDarkModeText,
+  SwitchVibrationContainer,
+  SwitchVibrationText,
+  VibrationIconsAndSwitchContainer,
 } from './Profile.styles';
 
 const cardShadow = {
@@ -67,7 +70,7 @@ export const Profile: FC = () => {
     isNewPasswordConfirm,
   } = useProfile();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const { vibrateLight } = useVibration();
+  const { isVibrationEnabled, toggleVibration, vibrateLight } = useVibration();
 
   const cardIconColor = theme.colors.magenta[100];
 
@@ -137,13 +140,13 @@ export const Profile: FC = () => {
               </OptionCard>
 
               <SwitchDarkModeContainer>
-                <SwitchDarkModeText>{i18n.t('DarkThemeText')}</SwitchDarkModeText>
+                <SwitchDarkModeText>{i18n.t('ThemeText')}</SwitchDarkModeText>
 
                 <IconsAndSwitchContainer>
                   <Icon type="sun" iconColor={theme.colors.magenta[100]} />
                   <Switch
                     value={isDarkMode}
-                    onValueChange={() => {
+                    onValueChange={async () => {
                       vibrateLight();
                       toggleDarkMode();
                     }}
@@ -157,6 +160,25 @@ export const Profile: FC = () => {
                   />
                 </IconsAndSwitchContainer>
               </SwitchDarkModeContainer>
+
+              <SwitchVibrationContainer>
+                <SwitchVibrationText>{i18n.t('VibrationText')}</SwitchVibrationText>
+
+                <VibrationIconsAndSwitchContainer>
+                  <Icon type="vibration-off" iconColor={theme.colors.magenta[100]} />
+                  <Switch
+                    value={isVibrationEnabled}
+                    onValueChange={toggleVibration}
+                    trackColor={{ false: '#f1c2d8', true: '#f3c6da' }}
+                    thumbColor={theme.colors.magenta[100]}
+                  />
+                  <Icon
+                    type="vibration"
+                    iconColor={theme.colors.magenta[100]}
+                    style={{ marginLeft: 5 }}
+                  />
+                </VibrationIconsAndSwitchContainer>
+              </SwitchVibrationContainer>
             </OptionsContainer>
           </ContentContainer>
         </StyledLinearGradient>

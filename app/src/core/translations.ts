@@ -150,8 +150,9 @@ export const Hungarian = {
     Category: 'Kategória',
     Total: 'Összesen',
   },
-  DarkThemeText: 'Sötét téma',
+  ThemeText: 'Téma',
   ChooseMonth: 'Hónap kiválasztása',
+  VibrationText: 'Rezgés',
 };
 
 export const English = {
@@ -306,6 +307,7 @@ export const English = {
     Category: 'Category',
     Total: 'Total',
   },
-  DarkThemeText: 'Dark theme',
+  ThemeText: 'Theme',
   ChooseMonth: 'Choose month',
+  VibrationText: 'Vibration',
 };

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import useVibration from '@hooks/useVibration';
+import { useVibration } from '@hooks/useVibration';
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import React, { FC, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';

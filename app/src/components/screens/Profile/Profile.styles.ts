@@ -95,7 +95,7 @@ export const Email = styled(Text)<{ isDarkMode: boolean }>`
 
 export const OptionsContainer = styled(ScrollView)`
   flex: 1;
-  margin-top: 40px;
+  margin-top: 10px;
 `;
 
 export const OptionCard = styled(TouchableOpacity)<{ isDarkMode: boolean }>`
@@ -135,7 +135,28 @@ export const SwitchDarkModeText = styled(Text)`
 `;
 
 export const IconsAndSwitchContainer = styled(View)`
+  margin-top: 5px;
+  flex-direction: row;
+  align-items: center;
+  width: 30%;
+  justify-content: space-evenly;
+`;
+
+export const SwitchVibrationContainer = styled(View)`
+  flex-direction: column;
+  align-self: flex-start;
+  margin-left: 30px;
+  width: 100%;
+`;
+
+export const SwitchVibrationText = styled(Text)`
+  align-self: flex-start;
   margin-top: 10px;
+  color: ${({ theme }) => theme.colors.magenta[100]};
+`;
+
+export const VibrationIconsAndSwitchContainer = styled(View)`
+  margin-top: 5px;
   flex-direction: row;
   align-items: center;
   width: 30%;

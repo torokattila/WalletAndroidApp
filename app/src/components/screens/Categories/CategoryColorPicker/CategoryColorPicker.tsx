@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { ModalBackground } from '@components/shared';
 import { useDarkMode } from '@hooks/useDarkMode';
-import useVibration from '@hooks/useVibration';
+import { useVibration } from '@hooks/useVibration';
 import i18n from 'i18n-js';
 import React, { FC, useEffect, useState } from 'react';
 import { Modal } from 'react-native';
