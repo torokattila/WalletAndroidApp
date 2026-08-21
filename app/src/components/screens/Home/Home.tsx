@@ -8,6 +8,7 @@ import { useHome } from '@hooks/useHome';
 import { usePurchase } from '@hooks/usePurchase';
 import { useVibration } from '@hooks/useVibration';
 import { Purchase } from '@model/domain';
+import { useIsFocused } from '@react-navigation/native';
 import { usePurchasesStore } from '@stores/purchases.store';
 import { theme } from '@styles/theme';
 import { format } from 'date-fns';
@@ -92,6 +93,8 @@ const buttonShadow = {
 };
 
 export const Home: FC = () => {
+  const isFocused = useIsFocused();
+  const isDirty = usePurchasesStore((state) => state.isDirty);
   const { isDarkMode } = useDarkMode();
   const locale = getLocale();
   const { screenRefreshing, setScreenRefreshing } = useHome();
@@ -104,6 +107,7 @@ export const Home: FC = () => {
     retry: reloadPurchases,
     isLoading,
   } = usePurchase();
+  const isFetchingData = isLoading || screenRefreshing || (isFocused && isDirty);
   const { vibrateLight } = useVibration();
   const { user, navigation } = useHome();
   const [selectedMonth, setSelectedMonth] = useState(new Date());
@@ -343,9 +347,9 @@ export const Home: FC = () => {
               </PieChartContainer>
             )}
 
-            {isLoading && <Loader color={theme.colors.magenta[100]} size="large" />}
+            {isFetchingData && <Loader color={theme.colors.magenta[100]} size="large" />}
 
-            {!donutChartData.length && !isLoading && (
+            {!donutChartData.length && !isFetchingData && (
               <NoLastFivePurchasesContainer>
                 <NoLastFivePurchasesText isDarkMode={isDarkMode}>
                   {i18n.t('NoPurchasesText')}

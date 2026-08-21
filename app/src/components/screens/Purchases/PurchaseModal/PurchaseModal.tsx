@@ -85,25 +85,24 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
     handleCreatedAtChange,
     handleCreatedAtPickerClose,
     handleCreatedAtPickerOpen,
-  } = usePurchase(purchase);
+  } = usePurchase(purchase, isVisible);
 
   const modalTitle = isEditMode
     ? i18n.t('Dialog.Purchases.EditPurchaseTitle')
     : i18n.t('Dialog.Purchases.Title');
+
   const dropdownPlaceholder = category ?? i18n.t('Purchases.ChooseCategory');
 
+  // Clear modal-level errors whenever modal closes
   useEffect(() => {
-    if (!isLoading && !errors) {
-      onClose();
+    if (!isVisible) {
+      setErrors({});
     }
-  }, [isLoading, errors]);
+  }, [isVisible]);
 
-  useEffect(() => {
-    setErrors({});
-  }, [onClose]);
-
-  // eslint-disable-next-line curly
-  if (!isVisible) return null;
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <>
@@ -113,18 +112,16 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
           <ContentContainer style={shadow} isDarkMode={isDarkMode}>
             <KeyboardAvoidingView keyboardVerticalOffset={10} behavior="position" enabled>
               <UpperLine isDarkMode={isDarkMode} />
-              {
-                <>
-                  <CalendarIconContainer onPress={handleCreatedAtPickerOpen}>
-                    <Icon type="calendar" iconColor={theme.colors.white[100]} />
-                  </CalendarIconContainer>
-                  {isEditMode && (
-                    <DeleteIconContainer onPress={handleConfirmDialogOpen}>
-                      <Icon type="trash" iconColor={theme.colors.white[100]} />
-                    </DeleteIconContainer>
-                  )}
-                </>
-              }
+
+              <CalendarIconContainer onPress={handleCreatedAtPickerOpen}>
+                <Icon type="calendar" iconColor={theme.colors.white[100]} />
+              </CalendarIconContainer>
+
+              {isEditMode && (
+                <DeleteIconContainer onPress={handleConfirmDialogOpen}>
+                  <Icon type="trash" iconColor={theme.colors.white[100]} />
+                </DeleteIconContainer>
+              )}
 
               <Content>
                 <Title isDarkMode={isDarkMode}>{modalTitle}</Title>
@@ -166,8 +163,8 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
                     ]}
                     itemTextStyle={dropdownTextStyle}
                     itemContainerStyle={[dropdownItemContaineStyle]}
-                    labelField={'label'}
-                    valueField={'value'}
+                    labelField="label"
+                    valueField="value"
                     onChange={handleDropdownChange}
                     selectedTextStyle={selectedTextStyle}
                     activeColor={isDarkMode ? theme.colors.grey[900] : theme.colors.magenta[200]}
@@ -204,6 +201,7 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
           </ContentContainer>
         </Modal>
       </GestureRecognizer>
+
       <ConfirmDialog
         isVisible={isConfirmDialogOpen}
         onPressPrimaryButton={handleConfirmDialogDelete}
@@ -213,12 +211,13 @@ export const PurchaseModal: FC<PurchaseModalProps> = ({
         title={i18n.t('Dialog.AreYouSureTitle')}
         description={i18n.t('Dialog.CannotBeUndoneTitle')}
       />
+
       <DatePicker
         modal
         mode="date"
         title={null}
         open={isCreatedAtPickerOpen}
-        date={createdAt}
+        date={createdAt || new Date()}
         maximumDate={new Date()}
         androidVariant="iosClone"
         onConfirm={handleCreatedAtChange}

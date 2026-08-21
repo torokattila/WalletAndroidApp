@@ -9,7 +9,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCategoriesStore } from '@stores/categories.store';
 import { usePurchasesStore } from '@stores/purchases.store';
 import { useToastNotificationStore } from '@stores/toastNotification.store';
-import { Timestamp } from 'firebase/firestore'; // Ensure this is imported
+import { Timestamp } from 'firebase/firestore';
 import translate from 'google-translate-api-x';
 import i18n from 'i18n-js';
 import { useEffect, useRef, useState } from 'react';
@@ -35,39 +35,46 @@ const filterCategories: CategoryDropdownValueType[] = [
   ...categories,
 ];
 
-export const usePurchase = (purchase?: Purchase) => {
+export const usePurchase = (purchase?: Purchase, isVisible?: boolean) => {
   const { retry: fetchUser, user } = useUser();
   const route = useRoute<RouteProp<TabStackParams, 'Purchases'>>();
   const navigation = useNavigation();
   const userId = user?.id;
 
   const categoryService = new CategoryService();
+  const purchaseService = new PurchaseService();
+  const toast = useToastNotificationStore();
 
   const [amount, setAmount] = useState('0');
   const [allPurchasesAmountForThisMonth, setAllPurchasesAmountForThisMonth] = useState(0);
   const [category, setCategory] = useState<PurchaseCategory | string | null>(null);
   const [secondaryCategory, setSecondaryCategory] = useState<string | null>(null);
+
   const { purchases, setPurchases, monthlyStatistics, setMonthlyStatistics, isDirty, invalidate } =
     usePurchasesStore();
+
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
   const [isEditModeModal, setIsEditModeModal] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  // Date Pickers State
   const [isFromDatePickerOpen, setIsFromDatePickerOpen] = useState(false);
-  const fromDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
-  const [createdAt, setCreatedAt] = useState<Date>(
-    purchase?.createdAt ? purchase.createdAt.toDate() : new Date()
-  );
-  const [isCreatedAtPickerOpen, setIsCreatedAtPickerOpen] = useState(false);
   const [isToDatePickerOpen, setIsToDatePickerOpen] = useState(false);
+  const [isCreatedAtPickerOpen, setIsCreatedAtPickerOpen] = useState(false);
+
+  const fromDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
   const toDate = useRef(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0));
   const filterCategory = useRef(null);
+
+  const [createdAt, setCreatedAt] = useState<Date>(new Date());
   const [isCategoryFilterChanged, setIsCategoryFilterChanged] = useState(false);
   const isDateFilterChanged = useRef(false);
   const [isDateFiltersShown, setIsDateFiltersShown] = useState(false);
   const [screenRefreshing, setScreenRefreshing] = useState(false);
+
   const { dropdownCategories: allCategories, setDropdownCategories: setAllCategories } =
     useCategoriesStore();
 
@@ -77,59 +84,45 @@ export const usePurchase = (purchase?: Purchase) => {
   const locale = getLocale();
   const { vibrateLight } = useVibration();
 
-  useEffect(() => {
-    const setAmountAndCategory = async () => {
-      if (purchase) {
-        setAmount(purchase.amount);
-        setSecondaryCategory(purchase.secondaryCategory ?? null);
-
-        const isCategoryExistsInDefaultCategories = categories.find(
-          (cat) => cat.value.toLowerCase().trim() === purchase.category
-        );
-
-        if (isCategoryExistsInDefaultCategories) {
-          setCategory(purchase.category as PurchaseCategory | string);
-        } else {
-          const isCategoryAString = typeof purchase.category === 'string';
-          const categoryText = isCategoryAString ? purchase.category : purchase.category.title;
-          const categoryTextWithoutTranslation = isCategoryAString
-            ? purchase.category
-            : purchase.category.title;
-          const translatedCategory = (
-            await translate(categoryText, {
-              to: locale === 'hun' ? 'hu' : 'en',
-            })
-          ).text;
-
-          if (
-            !isCategoryAString &&
-            purchase.category &&
-            typeof purchase.category === 'object' &&
-            'isDefault' in purchase.category &&
-            !purchase.category.isDefault
-          ) {
-            setCategory(translatedCategory);
-          } else {
-            setCategory(categoryTextWithoutTranslation);
-          }
-        }
-      } else {
-        setAmount('0');
-        setCategory(null);
-      }
-    };
-
-    setAmountAndCategory();
-  }, [purchase]);
-
-  const purchaseService = new PurchaseService();
-  const toast = useToastNotificationStore();
   const { handleDownloadButtonClick } = useDownload(
     purchases,
     fromDate.current,
     toDate.current,
     'purchases'
   );
+
+  useEffect(() => {
+    if (purchase) {
+      let rawDate: Date;
+      if (purchase.createdAt && typeof (purchase.createdAt as any).toDate === 'function') {
+        rawDate = (purchase.createdAt as any).toDate();
+      } else if (purchase.createdAt instanceof Date) {
+        rawDate = purchase.createdAt;
+      } else {
+        rawDate = new Date(purchase.createdAt ?? Date.now());
+      }
+
+      const normalized = new Date(
+        rawDate.getFullYear(),
+        rawDate.getMonth(),
+        rawDate.getDate(),
+        12,
+        0,
+        0
+      );
+
+      setCreatedAt(normalized);
+      setAmount(purchase.amount ?? '0');
+      setCategory(purchase.category ?? null);
+      setSecondaryCategory(purchase.secondaryCategory ?? null);
+    } else {
+      const now = new Date();
+      setCreatedAt(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0));
+      setAmount('0');
+      setCategory(null);
+      setSecondaryCategory(null);
+    }
+  }, [purchase, isVisible]);
 
   const fetchPurchases = async () => {
     const { isDirty: currentDirty, purchases: currentPurchases } = usePurchasesStore.getState();
@@ -140,10 +133,9 @@ export const usePurchase = (purchase?: Purchase) => {
 
     try {
       const allPurchases = await purchaseService.joinCategoriesIntoPurchases(userId);
-
       setPurchases(allPurchases);
     } catch (error) {
-      console.error(`Error during fetching purchases: ${error}`);
+      console.error(`Error fetching purchases: ${error}`);
     } finally {
       setIsLoading(false);
     }
@@ -158,7 +150,6 @@ export const usePurchase = (purchase?: Purchase) => {
 
     try {
       const categoriesList = await categoryService.getAllCategories(userId);
-
       const categoriesWithLabelAndValue: CategoryDropdownValueType[] = [];
 
       for (const categ of categoriesList) {
@@ -174,7 +165,7 @@ export const usePurchase = (purchase?: Purchase) => {
 
       setAllCategories([...filterCategories, ...categoriesWithLabelAndValue]);
     } catch (error) {
-      console.error(`Error during fetching categories: ${error}`);
+      console.error(`Error fetching categories: ${error}`);
     } finally {
       setIsLoading(false);
     }
@@ -190,12 +181,10 @@ export const usePurchase = (purchase?: Purchase) => {
 
   const fetchThisMonthPurchasesAmount = async (): Promise<void> => {
     setIsLoading(true);
-
     try {
       const purchasesAmountCurrentMonth = await purchaseService.getAllPurchaseAmountInCurrentMonth(
         userId
       );
-
       setAllPurchasesAmountForThisMonth(purchasesAmountCurrentMonth);
     } catch (error) {
       console.error(error);
@@ -259,6 +248,7 @@ export const usePurchase = (purchase?: Purchase) => {
       setErrors({
         category: i18n.t('Purchases.CategoryError'),
       });
+      return false;
     } else {
       setErrors({});
       return true;
@@ -267,9 +257,7 @@ export const usePurchase = (purchase?: Purchase) => {
 
   const handleCreatePurchase = async (): Promise<void> => {
     vibrateLight();
-    const isFormVerified = verifyForm();
-
-    if (isFormVerified) {
+    if (verifyForm()) {
       try {
         setIsLoading(true);
         await purchaseService.createdPurchase(
@@ -291,9 +279,7 @@ export const usePurchase = (purchase?: Purchase) => {
         invalidate();
         fetchPurchases();
       } catch (error) {
-        setErrors({
-          generalError: error,
-        });
+        setErrors({ generalError: error as string });
         toast.show({
           type: 'error',
           title: i18n.t('ToastNotification.SomethingWentWrong'),
@@ -306,33 +292,47 @@ export const usePurchase = (purchase?: Purchase) => {
 
   const handleUpdatePurchase = async (): Promise<void> => {
     vibrateLight();
-    if (!purchase) {
-      return;
-    }
+    if (!purchase) return;
 
-    const isFormVerified = verifyForm();
-
-    if (isFormVerified) {
+    if (verifyForm()) {
       try {
         setIsLoading(true);
-        await purchaseService.updatePurchase(purchase?.id, userId, {
+        const updatedTimestamp = Timestamp.fromDate(createdAt);
+
+        await purchaseService.updatePurchase(purchase.id, userId, {
           amount,
           category,
           secondaryCategory,
-          createdAt: Timestamp.fromDate(createdAt),
+          createdAt: updatedTimestamp,
         });
 
         fetchUser();
-        invalidate();
-        fetchPurchases();
+
+        const currentPurchases = usePurchasesStore.getState().purchases;
+        const updatedList = currentPurchases.map((item) => {
+          if (item.id === purchase.id) {
+            return new Purchase({
+              ...item,
+              amount,
+              category,
+              secondaryCategory,
+              createdAt: updatedTimestamp,
+            });
+          }
+          return item;
+        });
+
+        updatedList.sort((a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime());
+
+        usePurchasesStore.getState().setPurchases(updatedList);
+        usePurchasesStore.getState().invalidate();
+
         toast.show({
           type: 'success',
           title: i18n.t('ToastNotification.EditPurchaseSuccess'),
         });
       } catch (error) {
-        setErrors({
-          generalError: error,
-        });
+        setErrors({ generalError: error as string });
         toast.show({
           type: 'error',
           title: i18n.t('ToastNotification.SomethingWentWrong'),
@@ -344,13 +344,11 @@ export const usePurchase = (purchase?: Purchase) => {
   };
 
   const handleDeletePurchase = async (): Promise<void> => {
-    if (!purchase) {
-      return;
-    }
+    if (!purchase) return;
 
     try {
       setIsLoading(true);
-      await purchaseService.deletePurchase(purchase?.id, userId);
+      await purchaseService.deletePurchase(purchase.id, userId);
       fetchUser();
       invalidate();
       fetchPurchases();
@@ -359,9 +357,7 @@ export const usePurchase = (purchase?: Purchase) => {
         title: i18n.t('ToastNotification.DeletePurchaseSuccess'),
       });
     } catch (error) {
-      setErrors({
-        generalError: error,
-      });
+      setErrors({ generalError: error as string });
       toast.show({
         type: 'error',
         title: i18n.t('ToastNotification.SomethingWentWrong'),
@@ -378,15 +374,14 @@ export const usePurchase = (purchase?: Purchase) => {
   const handleModalClose = (): void => {
     setIsModalOpen(false);
     setSelectedPurchase(null);
-    setIsModalOpen(false);
     setIsEditModeModal(false);
-    setCategory(PurchaseCategory.ALL);
+    setCategory(null);
   };
 
-  const handleEditModalOpen = (editableIncome: Purchase) => {
-    handleModalOpen();
-    setSelectedPurchase(editableIncome);
+  const handleEditModalOpen = (editablePurchase: Purchase) => {
+    setSelectedPurchase(editablePurchase);
     setIsEditModeModal(true);
+    setIsModalOpen(true);
   };
 
   const handleConfirmDialogOpen = () => {
@@ -415,24 +410,12 @@ export const usePurchase = (purchase?: Purchase) => {
   };
 
   const handleNumberChange = (value: string): void => {
-    let newInputNumber = '';
-
-    if (amount === '0') {
-      newInputNumber = '' + value;
-    } else {
-      newInputNumber = amount + value;
-    }
-
-    setAmount(newInputNumber);
+    setAmount(amount === '0' ? value : amount + value);
     vibrateLight();
   };
 
   const handleBackspacePress = (): void => {
-    if (amount.length <= 1) {
-      setAmount('0');
-    } else {
-      setAmount(amount.slice(0, -1));
-    }
+    setAmount(amount.length <= 1 ? '0' : amount.slice(0, -1));
     vibrateLight();
   };
 
@@ -480,8 +463,16 @@ export const usePurchase = (purchase?: Purchase) => {
     await filterPurchases();
   };
 
-  const handleCreatedAtChange = (date: Date): void => {
-    setCreatedAt(date);
+  const handleCreatedAtChange = (selectedDate: Date): void => {
+    const normalizedDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+      12,
+      0,
+      0
+    );
+    setCreatedAt(normalizedDate);
     handleCreatedAtPickerClose();
   };
 
@@ -535,12 +526,6 @@ export const usePurchase = (purchase?: Purchase) => {
   }, [isLoading, purchases, screenRefreshing]);
 
   useEffect(() => {
-    if (purchase) {
-      setCreatedAt(purchase.createdAt.toDate());
-    }
-  }, [purchase]);
-
-  useEffect(() => {
     if (route.params?.category && route.params?.fromDate && route.params?.toDate && userId) {
       filterCategory.current = route.params.category;
       setIsCategoryFilterChanged(true);
@@ -564,7 +549,8 @@ export const usePurchase = (purchase?: Purchase) => {
       setIsDateFiltersShown(false);
 
       if (hadFilters) {
-        usePurchasesStore.getState().invalidate();
+        invalidate();
+        fetchPurchases();
       }
     });
 
