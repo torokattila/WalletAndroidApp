@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
-import { Icon } from '@components/shared';
+import { Icon, SlideInFade } from '@components/shared';
 import { formatAmount } from '@core/format-amount';
 import { getLocale } from '@core/translation-utils';
 import { useDarkMode } from '@hooks/useDarkMode';
@@ -18,6 +18,7 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { PieChart } from 'react-native-gifted-charts';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { PurchaseModal } from '../Purchases/PurchaseModal';
 import {
   Balance,
@@ -269,35 +270,37 @@ export const Home: FC = () => {
 
             {donutChartData.length > 0 && (
               <PieChartContainer>
-                <PieChart
-                  data={donutChartData ?? []}
-                  donut
-                  radius={90}
-                  innerRadius={60}
-                  showGradient
-                  strokeColor={isDarkMode ? theme.colors.grey[1000] : theme.colors.white[100]}
-                  strokeWidth={1}
-                  textSize={14}
-                  innerCircleColor={isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]}
-                  innerCircleBorderWidth={2}
-                  innerCircleBorderColor={
-                    isDarkMode ? theme.colors.grey[950] : theme.colors.white[100]
-                  }
-                  showTooltip
-                  tooltipBackgroundColor={
-                    isDarkMode ? theme.colors.grey[900] : theme.colors.white[200]
-                  }
-                  tooltipBorderRadius={10}
-                  tooltipDuration={1900}
-                  focusOnPress
-                  showValuesAsTooltipText
-                  textColor={isDarkMode ? theme.colors.white[200] : theme.colors.magenta[100]}
-                  centerLabelComponent={() => (
-                    <PieChartCenterAmount>
-                      {formatAmount(donutChartData.reduce((sum, item) => sum + item.value, 0))} Ft
-                    </PieChartCenterAmount>
-                  )}
-                />
+                <Animated.View needsOffscreenAlphaCompositing entering={FadeInDown.duration(500)}>
+                  <PieChart
+                    data={donutChartData ?? []}
+                    donut
+                    radius={90}
+                    innerRadius={60}
+                    showGradient
+                    strokeColor={isDarkMode ? theme.colors.grey[1000] : theme.colors.white[100]}
+                    strokeWidth={1}
+                    textSize={14}
+                    innerCircleColor={isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]}
+                    innerCircleBorderWidth={2}
+                    innerCircleBorderColor={
+                      isDarkMode ? theme.colors.grey[950] : theme.colors.white[100]
+                    }
+                    showTooltip
+                    tooltipBackgroundColor={
+                      isDarkMode ? theme.colors.grey[900] : theme.colors.white[200]
+                    }
+                    tooltipBorderRadius={10}
+                    tooltipDuration={1900}
+                    focusOnPress
+                    showValuesAsTooltipText
+                    textColor={isDarkMode ? theme.colors.white[200] : theme.colors.magenta[100]}
+                    centerLabelComponent={() => (
+                      <PieChartCenterAmount>
+                        {formatAmount(donutChartData.reduce((sum, item) => sum + item.value, 0))} Ft
+                      </PieChartCenterAmount>
+                    )}
+                  />
+                </Animated.View>
 
                 <ListContainer>
                   <FlatList
@@ -317,29 +320,31 @@ export const Home: FC = () => {
                     data={donutChartData}
                     scrollEnabled
                     keyExtractor={(item, index) => `${item.label}-${index.toString()}`}
-                    renderItem={({ item }) => (
-                      <PieChartPurchaseCard
-                        donutChartData={item}
-                        onPress={() => {
-                          vibrateLight();
-                          const firstDayOfSelectedMonth = new Date(
-                            selectedMonth.getFullYear(),
-                            selectedMonth.getMonth(),
-                            1
-                          );
-                          const lastDayOfSelectedMonth = new Date(
-                            selectedMonth.getFullYear(),
-                            selectedMonth.getMonth() + 1,
-                            0
-                          );
+                    renderItem={({ item, index }) => (
+                      <SlideInFade index={index}>
+                        <PieChartPurchaseCard
+                          donutChartData={item}
+                          onPress={() => {
+                            vibrateLight();
+                            const firstDayOfSelectedMonth = new Date(
+                              selectedMonth.getFullYear(),
+                              selectedMonth.getMonth(),
+                              1
+                            );
+                            const lastDayOfSelectedMonth = new Date(
+                              selectedMonth.getFullYear(),
+                              selectedMonth.getMonth() + 1,
+                              0
+                            );
 
-                          navigation.navigate('Purchases', {
-                            category: item.originalCategory,
-                            fromDate: firstDayOfSelectedMonth,
-                            toDate: lastDayOfSelectedMonth,
-                          });
-                        }}
-                      />
+                            navigation.navigate('Purchases', {
+                              category: item.originalCategory,
+                              fromDate: firstDayOfSelectedMonth,
+                              toDate: lastDayOfSelectedMonth,
+                            });
+                          }}
+                        />
+                      </SlideInFade>
                     )}
                     showsVerticalScrollIndicator={false}
                   />

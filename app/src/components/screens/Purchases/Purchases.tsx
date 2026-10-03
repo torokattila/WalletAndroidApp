@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { AddButton, Icon } from '@components/shared';
+import { AddButton, Icon, SlideInFade } from '@components/shared';
 import { formatDate } from '@core/date-utils';
 import { formatAmount } from '@core/format-amount';
 import { useDarkMode } from '@hooks/useDarkMode';
@@ -302,14 +302,16 @@ export const Purchases: FC = () => {
                   data={purchases}
                   keyExtractor={(item) => item.id}
                   scrollEnabled
-                  renderItem={({ item }) => (
-                    <PurchaseCard
-                      purchase={item}
-                      onPress={() => {
-                        vibrateLight();
-                        handleEditModalOpen(item);
-                      }}
-                    />
+                  renderItem={({ item, index }) => (
+                    <SlideInFade index={index}>
+                      <PurchaseCard
+                        purchase={item}
+                        onPress={() => {
+                          vibrateLight();
+                          handleEditModalOpen(item);
+                        }}
+                      />
+                    </SlideInFade>
                   )}
                 />
               </ListContainer>
