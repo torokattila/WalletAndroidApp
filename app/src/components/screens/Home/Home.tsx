@@ -18,6 +18,7 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { PieChart } from 'react-native-gifted-charts';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { PurchaseModal } from '../Purchases/PurchaseModal';
 import {
   Balance,
@@ -42,7 +43,6 @@ import {
   WelcomeText,
 } from './Home.styles';
 import PieChartPurchaseCard from './PieChartPurchaseCard/PieChartPurchaseCard';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 const shiftHue = (hex: string, degrees = 80): string => {
   const clean = hex.replace('#', '');

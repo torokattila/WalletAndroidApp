@@ -67,6 +67,7 @@ export const icons: IconType[] = [
   'guitar',
   'hairdresser',
   'restaurant',
+  'pacifier',
   'pills',
   'present',
   'shirt',

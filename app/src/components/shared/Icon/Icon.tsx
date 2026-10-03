@@ -55,6 +55,8 @@ import NoSmokingSmall from './no-smoking-small';
 import { OtherPurchase } from './other-purchase';
 import { OtherPurchaseBig } from './other-purchase-big';
 import { OtherPurchaseSmall } from './other-purchase-small';
+import Pacifier from './pacifier';
+import PacifierSmall from './pacifier-small';
 import Pills from './pills';
 import PillsSmall from './pills-small';
 import { Plus } from './plus';
@@ -136,6 +138,8 @@ export type IconType =
   | 'other-purchase'
   | 'other-purchase-small'
   | 'other-purchase-big'
+  | 'pacifier'
+  | 'pacifier-small'
   | 'pills'
   | 'pills-small'
   | 'present'
@@ -278,6 +282,10 @@ export const Icon: FC<IconProps> = ({ type, iconColor = '#000', ...props }) => {
       return <OtherPurchaseBig iconColor={iconColor} {...props} />;
     case 'other-purchase-small':
       return <OtherPurchaseSmall iconColor={iconColor} {...props} />;
+    case 'pacifier':
+      return <Pacifier iconColor={iconColor} {...props} />;
+    case 'pacifier-small':
+      return <PacifierSmall iconColor={iconColor} {...props} />;
     case 'pills':
       return <Pills iconColor={iconColor} {...props} />;
     case 'pills-small':
