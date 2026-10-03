@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { AddButton, Icon } from '@components/shared';
+import { AddButton, Icon, SlideInFade } from '@components/shared';
 import { useCategory } from '@hooks/useCategory';
 import { useDarkMode } from '@hooks/useDarkMode';
 import { useVibration } from '@hooks/useVibration';
@@ -75,15 +75,17 @@ export const Categories: FC = () => {
                     />
                   }
                   keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => (
-                    <CategoryCard
-                      key={item.id}
-                      category={item}
-                      onPress={() => {
-                        vibrateLight();
-                        handleEditModalOpen(item);
-                      }}
-                    />
+                  renderItem={({ item, index }) => (
+                    <SlideInFade index={index}>
+                      <CategoryCard
+                        key={item.id}
+                        category={item}
+                        onPress={() => {
+                          vibrateLight();
+                          handleEditModalOpen(item);
+                        }}
+                      />
+                    </SlideInFade>
                   )}
                 />
               </ListContainer>

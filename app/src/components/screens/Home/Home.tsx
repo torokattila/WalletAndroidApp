@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
-import { Icon } from '@components/shared';
+import { Icon, SlideInFade } from '@components/shared';
 import { formatAmount } from '@core/format-amount';
 import { getLocale } from '@core/translation-utils';
 import { useDarkMode } from '@hooks/useDarkMode';
@@ -317,29 +317,31 @@ export const Home: FC = () => {
                     data={donutChartData}
                     scrollEnabled
                     keyExtractor={(item, index) => `${item.label}-${index.toString()}`}
-                    renderItem={({ item }) => (
-                      <PieChartPurchaseCard
-                        donutChartData={item}
-                        onPress={() => {
-                          vibrateLight();
-                          const firstDayOfSelectedMonth = new Date(
-                            selectedMonth.getFullYear(),
-                            selectedMonth.getMonth(),
-                            1
-                          );
-                          const lastDayOfSelectedMonth = new Date(
-                            selectedMonth.getFullYear(),
-                            selectedMonth.getMonth() + 1,
-                            0
-                          );
+                    renderItem={({ item, index }) => (
+                      <SlideInFade index={index}>
+                        <PieChartPurchaseCard
+                          donutChartData={item}
+                          onPress={() => {
+                            vibrateLight();
+                            const firstDayOfSelectedMonth = new Date(
+                              selectedMonth.getFullYear(),
+                              selectedMonth.getMonth(),
+                              1
+                            );
+                            const lastDayOfSelectedMonth = new Date(
+                              selectedMonth.getFullYear(),
+                              selectedMonth.getMonth() + 1,
+                              0
+                            );
 
-                          navigation.navigate('Purchases', {
-                            category: item.originalCategory,
-                            fromDate: firstDayOfSelectedMonth,
-                            toDate: lastDayOfSelectedMonth,
-                          });
-                        }}
-                      />
+                            navigation.navigate('Purchases', {
+                              category: item.originalCategory,
+                              fromDate: firstDayOfSelectedMonth,
+                              toDate: lastDayOfSelectedMonth,
+                            });
+                          }}
+                        />
+                      </SlideInFade>
                     )}
                     showsVerticalScrollIndicator={false}
                   />
