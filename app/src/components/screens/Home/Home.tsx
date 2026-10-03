@@ -42,6 +42,7 @@ import {
   WelcomeText,
 } from './Home.styles';
 import PieChartPurchaseCard from './PieChartPurchaseCard/PieChartPurchaseCard';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 const shiftHue = (hex: string, degrees = 80): string => {
   const clean = hex.replace('#', '');
@@ -269,35 +270,37 @@ export const Home: FC = () => {
 
             {donutChartData.length > 0 && (
               <PieChartContainer>
-                <PieChart
-                  data={donutChartData ?? []}
-                  donut
-                  radius={90}
-                  innerRadius={60}
-                  showGradient
-                  strokeColor={isDarkMode ? theme.colors.grey[1000] : theme.colors.white[100]}
-                  strokeWidth={1}
-                  textSize={14}
-                  innerCircleColor={isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]}
-                  innerCircleBorderWidth={2}
-                  innerCircleBorderColor={
-                    isDarkMode ? theme.colors.grey[950] : theme.colors.white[100]
-                  }
-                  showTooltip
-                  tooltipBackgroundColor={
-                    isDarkMode ? theme.colors.grey[900] : theme.colors.white[200]
-                  }
-                  tooltipBorderRadius={10}
-                  tooltipDuration={1900}
-                  focusOnPress
-                  showValuesAsTooltipText
-                  textColor={isDarkMode ? theme.colors.white[200] : theme.colors.magenta[100]}
-                  centerLabelComponent={() => (
-                    <PieChartCenterAmount>
-                      {formatAmount(donutChartData.reduce((sum, item) => sum + item.value, 0))} Ft
-                    </PieChartCenterAmount>
-                  )}
-                />
+                <Animated.View needsOffscreenAlphaCompositing entering={FadeInDown.duration(500)}>
+                  <PieChart
+                    data={donutChartData ?? []}
+                    donut
+                    radius={90}
+                    innerRadius={60}
+                    showGradient
+                    strokeColor={isDarkMode ? theme.colors.grey[1000] : theme.colors.white[100]}
+                    strokeWidth={1}
+                    textSize={14}
+                    innerCircleColor={isDarkMode ? theme.colors.grey[800] : theme.colors.white[200]}
+                    innerCircleBorderWidth={2}
+                    innerCircleBorderColor={
+                      isDarkMode ? theme.colors.grey[950] : theme.colors.white[100]
+                    }
+                    showTooltip
+                    tooltipBackgroundColor={
+                      isDarkMode ? theme.colors.grey[900] : theme.colors.white[200]
+                    }
+                    tooltipBorderRadius={10}
+                    tooltipDuration={1900}
+                    focusOnPress
+                    showValuesAsTooltipText
+                    textColor={isDarkMode ? theme.colors.white[200] : theme.colors.magenta[100]}
+                    centerLabelComponent={() => (
+                      <PieChartCenterAmount>
+                        {formatAmount(donutChartData.reduce((sum, item) => sum + item.value, 0))} Ft
+                      </PieChartCenterAmount>
+                    )}
+                  />
+                </Animated.View>
 
                 <ListContainer>
                   <FlatList
