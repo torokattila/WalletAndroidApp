@@ -50,8 +50,8 @@ export const useIncome = (income?: Income) => {
   );
   const incomeService = new IncomeService();
 
-  const fetchIncomes = async () => {
-    if (!isDirty && incomes.length > 0) {
+  const fetchIncomes = async (force = false) => {
+    if (!force && !isDirty && incomes.length > 0) {
       return;
     }
     setIsLoading(true);
@@ -69,9 +69,8 @@ export const useIncome = (income?: Income) => {
 
   const handlePullToRefresh = async () => {
     setScreenRefreshing(true);
-    invalidate();
     vibrateLight();
-    await fetchIncomes();
+    await fetchIncomes(true);
   };
 
   const stopRefreshing = () => setScreenRefreshing(false);
