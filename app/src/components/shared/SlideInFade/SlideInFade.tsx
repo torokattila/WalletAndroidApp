@@ -12,6 +12,7 @@ const MAX_STAGGER_DELAY = 525;
 
 export const SlideInFade: FC<SlideInFadeProps> = ({ children, index = 0 }) => (
   <Animated.View
+    needsOffscreenAlphaCompositing
     entering={FadeInLeft.duration(ANIMATION_DURATION).delay(
       Math.min(index * STAGGER_DELAY, MAX_STAGGER_DELAY)
     )}
